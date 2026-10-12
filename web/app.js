@@ -197,12 +197,17 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
     : '';
   const base = baseline == null ? '' : `<line class="baseline" x1="${L}" x2="${W - R}" y1="${y(baseline)}" y2="${y(baseline)}"/>
     <text class="axis" x="${W - R}" y="${y(baseline) - 3}" text-anchor="end">${num(baseline)} = PRE-STRIKE</text>`;
-  // Event labels run vertically down their marker, so close events never collide.
-  const ev = events.filter((e) => e.ts >= start && e.ts <= end).map((e) => {
-    const ex = x(e.ts);
-    return `<line class="event" x1="${ex}" x2="${ex}" y1="${T}" y2="${H - B}"/>
-     <text class="event-label" transform="translate(${ex - 3},${T + 2}) rotate(-90)" text-anchor="end">${esc(e.short)}</text>`;
-  }).join('');
+  // Event labels run vertically down their marker. Markers closer than one
+  // label's width (narrow charts) share a single label, joined with " · ".
+  const shown = events.filter((e) => e.ts >= start && e.ts <= end);
+  const labels = [];
+  for (const e of shown) {
+    const last = labels[labels.length - 1];
+    if (last && x(e.ts) - last.x < 12) last.text += ` · ${e.short}`;
+    else labels.push({ x: x(e.ts), text: e.short });
+  }
+  const ev = shown.map((e) => `<line class="event" x1="${x(e.ts)}" x2="${x(e.ts)}" y1="${T}" y2="${H - B}"/>`).join('')
+    + labels.map((l) => `<text class="event-label" transform="translate(${l.x - 3},${T + 2}) rotate(-90)" text-anchor="end">${esc(l.text)}</text>`).join('');
 
   // Each line is named at its last point, so lines are told apart by text, not colour alone.
   const endLabels = lines.length < 2 ? '' : lines.map((l) => {

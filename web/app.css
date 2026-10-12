@@ -109,6 +109,9 @@ html:not([data-crt="on"]) .crt { display: none; }
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
+/* Keep absolutely positioned screen-reader text inside its scroll box; otherwise
+   hidden header labels in wide tables stretch the page sideways on phones. */
+.table-wrap { position: relative; }
 
 /* Headings keep the kit's look */
 .band h1 { margin: 0; font: inherit; letter-spacing: inherit; }
@@ -180,3 +183,28 @@ button.legend-item[aria-pressed="false"] .swatch { opacity: .35; }
 
 /* Scrollable tables are focusable regions (set in app.js) */
 .table-wrap[role="region"]:focus-visible { outline: 1px solid var(--a1); outline-offset: 2px; }
+
+/* ── Scale with the screen ─────────────────────────────────────────────────
+   The kit is drawn in px for a phone-width column. On wider screens the whole
+   interface is zoomed in steps, so text, spacing, charts and the column width
+   grow together and keep the kit's proportions. Media queries read the real
+   viewport width, so they are not affected by the zoom itself. */
+@media (min-width: 480px)  { body { zoom: 1.1; } }
+@media (min-width: 768px)  { body { zoom: 1.2; } }
+@media (min-width: 1024px) { body { zoom: 1.3; } }
+@media (min-width: 1280px) { body { zoom: 1.4; } }
+@media (min-width: 1600px) { body { zoom: 1.6; } }
+@media (min-width: 2000px) { body { zoom: 1.85; } }
+@media (min-width: 2600px) { body { zoom: 2.2; } }
+@media print { body { zoom: 1; } }
+
+/* Phosphor: the kit's muted green (#5c8c68) reads dim at small sizes; brighter
+   labels lift contrast on the near-black background from about 5:1 to about 9:1. */
+[data-palette="term-phosphor"] { --term-muted: #8cc49a; }
+
+/* Phones keep the kit's 1:1 scale, so the smallest running text is raised a
+   step instead; nav labels drop most of their tracking so six fit side by side. */
+@media (max-width: 479px) {
+  .note, .sub, .tile-label, .tile-sub, .table th, .readout, .end, .bar-label, .bar-value, .data-table summary { font-size: 11px; }
+  .nav a { font-size: 10px; letter-spacing: .04em; }
+}
