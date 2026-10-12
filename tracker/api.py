@@ -52,13 +52,13 @@ def _daily_report(config: Config, settings: Settings) -> None:
 
 
 async def collection_loop(config: Config, settings: Settings, cache: SnapshotCache,
-                          correlation: SnapshotCache) -> None:
+                          *derived: SnapshotCache) -> None:
     while True:
         started = time.time()
         try:
             await collectors.run(config, settings)
-            cache.invalidate()
-            correlation.invalidate()
+            for c in (cache, *derived):
+                c.invalidate()
             snap = await asyncio.to_thread(cache.get)
             with db.session(settings.db_path) as conn:
                 await alerts.run(conn, snap, settings)
@@ -84,12 +84,14 @@ def _iso(ts: int) -> str:
 def create_app(config: Config, settings: Settings, collect: bool = False) -> FastAPI:
     cache = SnapshotCache(config, settings)
     correlation = SnapshotCache(config, settings, analysis.correlation_view)
+    aligned = SnapshotCache(config, settings, analysis.strike_aligned)
+    heat = SnapshotCache(config, settings, analysis.heatmap)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         with db.session(settings.db_path) as conn:
             db.init(conn, config.series)
-        task = asyncio.create_task(collection_loop(config, settings, cache, correlation)) if collect else None
+        task = asyncio.create_task(collection_loop(config, settings, cache, correlation, aligned, heat)) if collect else None
         yield
         if task:
             task.cancel()
@@ -112,6 +114,29 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
     def get_correlation() -> dict:
         """Daily indices (100 = pre-strike mean) for Yandex reachability and each group."""
         return correlation.get()
+
+    @app.get("/api/strike-aligned")
+    def get_strike_aligned() -> dict:
+        """Each group's activity around the strikes, all strikes lined up at hour 0, with
+        the range of ordinary days (5th-95th percentile of random pre-strike windows)."""
+        return aligned.get()
+
+    @app.get("/api/heatmap")
+    def get_heatmap() -> dict:
+        """Every community's daily index (100 = pre-strike mean), grouped."""
+        return heat.get()
+
+    @app.get("/api/series/{key}/strike-hours")
+    def get_strike_hours(key: str, event: int = Query(0, ge=0)) -> dict:
+        """Hour of day x day around one strike, vs the same weekday-hour 1-3 weeks earlier."""
+        now = int(time.time())
+        with db.session(settings.db_path) as conn:
+            if db.get_series(conn, key) is None:
+                raise HTTPException(404, f"unknown series {key!r}")
+            out = analysis.strike_hours(conn, config, key, event, now)
+        if out is None:
+            raise HTTPException(404, f"no past strike with index {event}")
+        return out
 
     @app.get("/api/series/{key}/points")
     def get_points(key: str, days: int = Query(30, ge=1, le=3650),

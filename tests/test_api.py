@@ -110,6 +110,20 @@ def test_static_export_mirrors_api(client, tmp_path):
     hour = json.loads((out / "api" / "series" / "ioda.asn200350.ping-slash24" / "hour.json").read_text(encoding="utf-8"))
     assert hour["points"] and hour["bucket"] == "hour"
     assert (out / "api" / "export" / "daily.csv").read_text(encoding="utf-8").startswith("date_utc,series")
+    for name in ("strike-aligned.json", "heatmap.json"):
+        assert json.loads((out / "api" / name).read_text(encoding="utf-8"))
+    assert (out / "api" / "series" / "reddit.conservative.comments" / "strike-hours-0.json").exists()
+
+
+def test_chart_endpoints(client):
+    aligned = client.get("/api/strike-aligned").json()
+    assert aligned["offsets"][0] == -48 and aligned["groups"]
+    heat = client.get("/api/heatmap").json()
+    assert heat["rows"] and len(heat["rows"][0]["values"]) == len(heat["days"])
+    hours = client.get("/api/series/reddit.conservative.comments/strike-hours?event=0").json()
+    assert len(hours["values"]) == 15
+    assert client.get("/api/series/reddit.conservative.comments/strike-hours?event=99").status_code == 404
+    assert client.get("/api/series/nope/strike-hours").status_code == 404
 
 
 def test_static_rmtree_removes_read_only_files(tmp_path):

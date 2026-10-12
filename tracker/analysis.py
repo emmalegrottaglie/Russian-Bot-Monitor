@@ -267,21 +267,26 @@ def _ref_mean(hours: dict[int, float], config: Config) -> float | None:
     return m if m > 0 else None
 
 
+def daily_index(conn: sqlite3.Connection, config: Config, key: str, first_day: int, now: int) -> dict[int, float]:
+    """A series' daily means from `first_day` on, as an index: 100 = its mean over the
+    pre-strike reference period. Empty when the reference period has too little data."""
+    hours = hourly(db.points(conn, key, min(config.reference_start, first_day), now))
+    base = _ref_mean(hours, config)
+    if base is None:
+        return {}
+    return {d: v / base * 100 for d, v in daily(list(hours.items())).items() if d >= first_day}
+
+
 def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: int = 45) -> dict:
     """Daily activity indices (100 = pre-strike mean) for the reference infrastructure
     series and each community group, plus each group's correlation with it.
 
     A group's index on a day is the median index of its communities that have data
     that day (at least two), so one large community cannot dominate the line."""
-    start = min(config.reference_start, now - days * DAY)
     first_day = (now - days * DAY) // DAY * DAY
 
     def index(key: str) -> dict[int, float]:
-        hours = hourly(db.points(conn, key, start, now))
-        base = _ref_mean(hours, config)
-        if base is None:
-            return {}
-        return {d: v / base * 100 for d, v in daily([(h, v) for h, v in hours.items()]).items() if d >= first_day}
+        return daily_index(conn, config, key, first_day, now)
 
     ref_key = config.correlation_ref
     ref_series = db.get_series(conn, ref_key) if ref_key else None
@@ -321,3 +326,163 @@ def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: i
         "groups": groups,
         "events": [e.__dict__ for e in config.events],
     }
+
+
+# ── Chart data (docs/CHARTS.md) ──────────────────────────────────────────────
+
+GROUP_ORDER = ("political-right", "political", "regional", "russia", "control")
+ALIGNED_SPAN = 48  # hours either side of a strike; decide after backfill (48 or 72)
+ALIGNED_SMOOTH = 3  # centred rolling mean, hours; decide after backfill (1, 3 or 6)
+MIN_POOL = 50  # placebo start times needed before a chance band is drawn
+
+
+def past_events(config: Config, now: int) -> list:
+    """Strikes at least a day old: earlier ones have no "after" to compare yet."""
+    return [e for e in config.events if e.ts <= now - DAY]
+
+
+def _ratios(hours: dict[int, float]) -> dict[int, float]:
+    """Each hour vs the mean of the same weekday-hour 1-3 weeks earlier (2 of 3 needed),
+    the baseline the event study uses."""
+    out = {}
+    for h, v in hours.items():
+        past = [hours[h - w * WEEK] for w in (1, 2, 3) if h - w * WEEK in hours]
+        if len(past) >= 2:
+            base = sum(past) / len(past)
+            if base > 0:
+                out[h] = v / base
+    return out
+
+
+def _smooth(values: list[float | None], width: int) -> list[float | None]:
+    """Centred rolling mean. A missing value stays missing, so gaps are not bridged."""
+    if width <= 1:
+        return values
+    half = width // 2
+    out = []
+    for i, v in enumerate(values):
+        if v is None:
+            out.append(None)
+            continue
+        near = [x for x in values[max(0, i - half):i + half + 1] if x is not None]
+        out.append(sum(near) / len(near))
+    return out
+
+
+def _aligned_curve(members: list[dict[int, float]], starts: list[int], offsets: list[int]) -> list[float | None]:
+    """Median over communities (2 or more) of each community's ratio averaged over `starts`."""
+    curve = []
+    for o in offsets:
+        per_member = []
+        for r in members:
+            vs = [r[s + o * HOUR] for s in starts if s + o * HOUR in r]
+            if vs:
+                per_member.append(sum(vs) / len(vs))
+        curve.append(statistics.median(per_member) if len(per_member) >= 2 else None)
+    return curve
+
+
+def _quantile(sorted_vs: list[float], q: float) -> float:
+    pos = q * (len(sorted_vs) - 1)
+    lo = int(pos)
+    hi = min(lo + 1, len(sorted_vs) - 1)
+    return sorted_vs[lo] + (sorted_vs[hi] - sorted_vs[lo]) * (pos - lo)
+
+
+def _primary_members(conn: sqlite3.Connection) -> dict[str, list[dict]]:
+    """Primary community series by tag; a series with several tags is in each."""
+    members: dict[str, list[dict]] = defaultdict(list)
+    for s in db.list_series(conn):
+        if s["kind"] == "community" and is_primary(s):
+            for tag in s["tags"]:
+                members[tag].append(s)
+    return members
+
+
+def _group_order(tags) -> list[str]:
+    return sorted(tags, key=lambda t: (GROUP_ORDER.index(t) if t in GROUP_ORDER else len(GROUP_ORDER), t))
+
+
+def strike_aligned(conn: sqlite3.Connection, config: Config, now: int, span: int = ALIGNED_SPAN,
+                   smooth: int = ALIGNED_SMOOTH, draws: int = PLACEBO_DRAWS) -> dict:
+    """Chart 1: each group's activity in the hours around the strikes, all strikes lined
+    up at hour 0, as an index (100 = normal for that weekday-hour). The chance band is
+    the 5th-95th percentile of the same curve built from random pre-strike start times."""
+    events = past_events(config, now)
+    offsets = list(range(-span, span + 1))
+    out = {"offsets": offsets, "events": [e.__dict__ for e in events], "smoothing_h": smooth, "groups": []}
+    if not events:
+        return out
+    starts = [-(-e.ts // HOUR) * HOUR for e in events]  # first full hour, as in window_effect
+    first = min(starts)
+
+    members_by_tag = _primary_members(conn)
+    ratios: dict[str, dict[int, float]] = {}
+    for series in members_by_tag.values():
+        for s in series:
+            if s["key"] not in ratios:
+                ratios[s["key"]] = _ratios(hourly(db.points(conn, s["key"], first - 10 * WEEK, now)))
+
+    for tag in _group_order(members_by_tag):
+        members = [ratios[s["key"]] for s in members_by_tag[tag] if ratios[s["key"]]]
+        curve = _smooth(_aligned_curve(members, starts, offsets), smooth)
+        n = [sum(1 for r in members if any(s + o * HOUR in r for s in starts)) for o in offsets]
+
+        # Placebo starts: the whole span ends before the first strike, and the span
+        # starts no earlier than the first hour that has a baseline.
+        earliest = min((min(r) for r in members), default=None)
+        pool = [] if earliest is None else list(range(
+            -(-(earliest + span * HOUR) // HOUR) * HOUR, first - span * HOUR, HOUR))
+        band = None
+        if len(pool) >= MIN_POOL and len(members) >= 2:
+            rng = random.Random(f"aligned:{tag}:{span}")  # reproducible per group
+            sims = [_smooth(_aligned_curve(members, [rng.choice(pool) for _ in starts], offsets), smooth)
+                    for _ in range(draws)]
+            lo, hi = [], []
+            for i in range(len(offsets)):
+                vs = sorted(c[i] for c in sims if c[i] is not None)
+                ok = len(vs) >= MIN_POOL
+                lo.append(round(_quantile(vs, 0.05) * 100, 2) if ok else None)
+                hi.append(round(_quantile(vs, 0.95) * 100, 2) if ok else None)
+            band = {"lo": lo, "hi": hi, "draws": draws, "pool": len(pool)}
+        out["groups"].append({"tag": tag, "members": len(members), "n": n, "band": band,
+                              "values": [None if v is None else round(v * 100, 2) for v in curve]})
+    return out
+
+
+def heatmap(conn: sqlite3.Connection, config: Config, now: int, days: int = 50) -> dict:
+    """Chart 2: every community's daily index (100 = pre-strike mean), one row each,
+    grouped. A community with several tags appears once, under its first tag."""
+    first_day = (now - days * DAY) // DAY * DAY
+    day_list = list(range(first_day, now - now % DAY + 1, DAY))
+    rows = []
+    for s in db.list_series(conn):
+        if s["kind"] != "community" or not is_primary(s):
+            continue
+        idx = daily_index(conn, config, s["key"], first_day, now)
+        values = [round(idx[d], 2) if d in idx else None for d in day_list]
+        rows.append({"key": s["key"], "label": s["label"], "group": s["tags"][0] if s["tags"] else None,
+                     "values": values, "coverage": round(sum(v is not None for v in values) / len(values), 3)})
+    order = {t: i for i, t in enumerate(_group_order({r["group"] for r in rows if r["group"]}))}
+    rows.sort(key=lambda r: (order.get(r["group"], len(order)), r["label"].lower()))
+    return {"days": day_list, "events": [e.__dict__ for e in config.events], "rows": rows}
+
+
+def strike_hours(conn: sqlite3.Connection, config: Config, key: str, event: int, now: int,
+                 days_around: int = 7) -> dict | None:
+    """Chart 5: one community, hour of day x day, for the days around one strike. Each
+    cell is that hour vs the same weekday-hour 1-3 weeks earlier, as an index.
+    None when the event index is out of range."""
+    events = past_events(config, now)
+    if not 0 <= event < len(events):
+        return None
+    e = events[event]
+    day0 = e.ts - e.ts % DAY
+    hours = hourly(db.points(conn, key, day0 - days_around * DAY - 4 * WEEK, day0 + (days_around + 1) * DAY))
+    ratios = _ratios(hours)
+    day_list = [day0 + d * DAY for d in range(-days_around, days_around + 1)]
+    # A cell for hour H holds the point stamped at the end of that hour (H + 1).
+    values = [[round(ratios[d + (h + 1) * HOUR] * 100, 1) if d + (h + 1) * HOUR in ratios else None
+               for h in range(24)] for d in day_list]
+    return {"key": key, "event": e.__dict__, "event_index": event, "days": day_list, "hours": list(range(24)),
+            "values": values, "strike_hour": (e.ts % DAY) // HOUR if e.timed else None}

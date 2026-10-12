@@ -68,6 +68,8 @@ def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Pa
     api = out / "api"
     _json(api / "snapshot.json", analysis.snapshot(conn, config, now))
     _json(api / "correlation.json", analysis.correlation_view(conn, config, now))
+    _json(api / "strike-aligned.json", analysis.strike_aligned(conn, config, now))
+    _json(api / "heatmap.json", analysis.heatmap(conn, config, now))
     _json(api / "alerts.json", db.recent_alerts(conn, limit=100))
 
     event_ts = [e.ts for e in config.events if e.ts <= now - 24 * 3600]
@@ -85,6 +87,9 @@ def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Pa
             grid = []
         _json(api / "series" / key / "event-study.json",
               {"events": [e.__dict__ for e in config.events if e.ts in event_ts], "grid": grid})
+        if s["kind"] == "community":
+            for i in range(len(analysis.past_events(config, now))):
+                _json(api / "series" / key / f"strike-hours-{i}.json", analysis.strike_hours(conn, config, key, i, now))
         csv_path = api / "export" / "series" / f"{key}.csv"
         csv_path.parent.mkdir(parents=True, exist_ok=True)
         with csv_path.open("w", newline="", encoding="utf-8") as f:

@@ -86,12 +86,13 @@ const STATIC = document.querySelector('meta[name="data-mode"]')?.content === 'st
 function staticFile(path) {
   const url = new URL(path, 'http://local');
   const q = url.searchParams;
-  const series = url.pathname.match(/^\/api\/series\/([^/]+)\/(points|event-study)$/);
+  const series = url.pathname.match(/^\/api\/series\/([^/]+)\/(points|event-study|strike-hours)$/);
   if (series && series[2] === 'points') {
     const bucket = q.get('bucket') === 'day' ? 'day' : 'hour';
     const since = (snap?.now ?? Date.now() / 1000) - Number(q.get('days') || 30) * 86400;
     return [`api/series/${series[1]}/${bucket}.json`, (d) => ({ ...d, points: d.points.filter((p) => p[0] >= since) })];
   }
+  if (series && series[2] === 'strike-hours') return [`api/series/${series[1]}/strike-hours-${Number(q.get('event') || 0)}.json`, (d) => d];
   if (series) return [`api/series/${series[1]}/event-study.json`, (d) => d];
   if (url.pathname === '/api/alerts') return ['api/alerts.json', (d) => d.slice(0, Number(q.get('limit') || 100))];
   if (url.pathname === '/api/health') return ['api/snapshot.json', () => ({ ok: true })];
