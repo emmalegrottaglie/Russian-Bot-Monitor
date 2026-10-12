@@ -110,3 +110,19 @@ def test_static_export_mirrors_api(client, tmp_path):
     hour = json.loads((out / "api" / "series" / "ioda.asn200350.ping-slash24" / "hour.json").read_text(encoding="utf-8"))
     assert hour["points"] and hour["bucket"] == "hour"
     assert (out / "api" / "export" / "daily.csv").read_text(encoding="utf-8").startswith("date_utc,series")
+
+
+def test_static_rmtree_removes_read_only_files(tmp_path):
+    # A pushed site folder holds git objects that git marks read-only.
+    import os
+    import stat
+
+    from tracker import static
+
+    site = tmp_path / "site"
+    (site / ".git" / "objects").mkdir(parents=True)
+    obj = site / ".git" / "objects" / "ab"
+    obj.write_text("x")
+    os.chmod(obj, stat.S_IREAD)
+    static._rmtree(site)
+    assert not site.exists()

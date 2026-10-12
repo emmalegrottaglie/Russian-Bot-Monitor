@@ -11,9 +11,12 @@ from __future__ import annotations
 import csv
 import json
 import logging
+import os
 import shutil
 import sqlite3
+import stat
 import subprocess
+import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -36,10 +39,24 @@ def _iso(ts: int) -> str:
     return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _clear_readonly(func, path, _exc) -> None:
+    # Git writes its object files read-only; on Windows rmtree cannot delete
+    # them until the read-only bit is cleared.
+    os.chmod(path, stat.S_IWRITE)
+    func(path)
+
+
+def _rmtree(path: Path) -> None:
+    if sys.version_info >= (3, 12):
+        shutil.rmtree(path, onexc=_clear_readonly)
+    else:
+        shutil.rmtree(path, onerror=_clear_readonly)
+
+
 def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Path, now: int | None = None) -> Path:
     now = now or int(time.time())
     if out.exists():
-        shutil.rmtree(out)
+        _rmtree(out)
     shutil.copytree(ROOT / "web", out)
     (out / "design").mkdir()
     shutil.copy2(ROOT / "terminal-design-guide" / "terminal.css", out / "design" / "terminal.css")
