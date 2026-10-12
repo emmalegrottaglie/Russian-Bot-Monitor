@@ -113,4 +113,4 @@ Correlation is not attribution. Activity can fall after an outage for reasons ot
 
 ## Licence
 
-No licence has been chosen yet. Note that Cloudflare Radar data is CC BY-NC 4.0.
+The code is MIT licensed (see [LICENSE](LICENSE)). The data has its own terms: Cloudflare Radar data is CC BY-NC 4.0, so any published dataset that includes it is non-commercial only.
