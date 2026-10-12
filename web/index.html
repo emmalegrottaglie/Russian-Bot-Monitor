@@ -12,9 +12,10 @@
 </head>
 <body>
 <main>
-  <div class="band"><span id="title">// BOT MONITOR</span><span id="state">● CONNECTING</span></div>
-  <div class="sub"><span>YANDEX AS13238 · AS200350</span><span id="updated">—</span></div>
-  <div class="prompt" id="prompt">monitor --live</div>
+  <header class="band"><h1 id="title" tabindex="-1"><span aria-hidden="true">// </span>BOT MONITOR</h1><span id="state"><span aria-hidden="true">●</span> CONNECTING</span></header>
+  <div class="sub"><span>YANDEX AS13238 · AS200350</span><span class="sub-right"><span id="updated">—</span>
+    <button class="pause" id="pause" aria-pressed="false">PAUSE UPDATES</button></span></div>
+  <div class="prompt" id="prompt" aria-hidden="true">monitor --live</div>
 
   <section id="boot" class="boot" aria-live="polite">
     <div class="boot-line cmd">❯ monitor --connect</div>

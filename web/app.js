@@ -40,6 +40,12 @@ function pct(x) {
   return `${s > 0 ? '+' : s < 0 ? '−' : '±'}${Math.abs(s)}%`;
 }
 const dirClass = (x) => (x == null ? '' : x < 0 ? 't-down' : 't-up');
+// Table header with a short visible label and a full name for screen readers.
+const th = (short, long, cls = '') =>
+  `<th scope="col"${cls ? ` class="${cls}"` : ''}><span aria-hidden="true">${short}</span><span class="sr-only">${long}</span></th>`;
+// Decorative glyphs (▼ ● ▤) are hidden from screen readers.
+const glyph = (g) => `<span aria-hidden="true">${g}</span>`;
+function setState(text) { $('state').innerHTML = `${glyph('●')} ${esc(text)}`; }
 
 // ── API ─────────────────────────────────────────────────────────────────────
 // Static mode: the site was exported by `python -m tracker publish` and is served
@@ -165,14 +171,26 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
      <text class="event-label" transform="translate(${ex - 3},${T + 2}) rotate(-90)" text-anchor="end">${esc(e.short)}</text>`;
   }).join('');
 
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(lines.map((l) => l.label).join(', '))}: ${esc(unit)} from ${mmdd(start)} to ${mmdd(end)}">
+  // Each line is named at its last point, so lines are told apart by text, not colour alone.
+  const endLabels = lines.length < 2 ? '' : lines.map((l) => {
+    const p = l.points[l.points.length - 1];
+    return `<text class="line-label ${l.cls || ''}" x="${(x(p[0]) - 3).toFixed(1)}" y="${(y(p[1]) - 4).toFixed(1)}" text-anchor="end">${esc(l.label)}</text>`;
+  }).join('');
+  const summary = lines.map((l) => {
+    const vs = l.points.map((p) => p[1]);
+    return `${l.label}: latest ${num(vs[vs.length - 1])}, range ${num(Math.min(...vs))} to ${num(Math.max(...vs))}`;
+  }).join('; ');
+
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" tabindex="0"
+    aria-label="Chart, ${esc(unit)}, ${mmdd(start)} to ${mmdd(end)}. ${esc(summary)}. Left and right arrow keys read values; the data table below lists them.">
     ${refBand}
     ${yTicks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
       <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${num(v)}</text>`).join('')}
     ${xTicks.map((t) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${mmdd(t)}</text>`).join('')}
-    ${base}${drawn}${ev}
+    ${base}${drawn}${endLabels}${ev}
     <line class="cursor" y1="${T}" y2="${H - B}" visibility="hidden"/>
-  </svg>`;
+  </svg>
+  <details class="data-table"><summary>Data table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>`;
 
   const svg = el.querySelector('svg'), cur = svg.querySelector('.cursor');
   const near = (pts, t) => pts.reduce((best, p) => (Math.abs(p[0] - t) < Math.abs(best[0] - t) ? p : best), pts[0]);
@@ -196,6 +214,51 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
     readout.innerHTML = describe(t, '');
   });
   svg.addEventListener('pointerleave', () => { cur.setAttribute('visibility', 'hidden'); idle(); });
+
+  // Keyboard: arrows step through the first line's points; the readout is announced.
+  let idx = lines[0].points.length - 1;
+  const show = () => {
+    const p = lines[0].points[idx];
+    cur.setAttribute('visibility', 'visible');
+    cur.setAttribute('x1', x(p[0])); cur.setAttribute('x2', x(p[0]));
+    readout.innerHTML = describe(p[0], '');
+  };
+  readout.setAttribute('aria-live', 'polite');
+  svg.addEventListener('blur', () => { cur.setAttribute('visibility', 'hidden'); idle(); });
+  svg.addEventListener('keydown', (e) => {
+    const last = lines[0].points.length - 1;
+    const moves = { ArrowLeft: -1, ArrowRight: 1, PageUp: -24, PageDown: 24, Home: -Infinity, End: Infinity };
+    if (!(e.key in moves)) return;
+    e.preventDefault();
+    idx = Math.max(0, Math.min(last, idx + moves[e.key]));
+    show();
+  });
+
+  // Data table, built when opened. Long hourly series are shown as daily means.
+  const details = el.querySelector('details');
+  details.addEventListener('toggle', () => {
+    if (!details.open || details.dataset.built) return;
+    details.dataset.built = '1';
+    const daily = lines[0].points.length > 120;
+    const rowsBy = new Map();
+    lines.forEach((l, li) => {
+      const sums = new Map();
+      for (const [t, v] of l.points) {
+        const k = daily ? t - (t % 86400) : t;
+        const a = sums.get(k) || [0, 0]; a[0] += v; a[1] += 1; sums.set(k, a);
+      }
+      for (const [k, [sum, n]] of sums) {
+        if (!rowsBy.has(k)) rowsBy.set(k, new Array(lines.length).fill(null));
+        rowsBy.get(k)[li] = sum / n;
+      }
+    });
+    const keys = [...rowsBy.keys()].sort((a, b) => b - a);
+    const when = (t) => (daily ? mmdd(t) : stamp(t));
+    details.querySelector('.table-wrap').innerHTML = `<table class="table" aria-label="${esc(unit)} data">
+      <thead><tr><th scope="col">${daily ? 'DATE UTC' : 'TIME'}</th>${lines.map((l) => `<th scope="col" class="t-num">${esc(l.label)}</th>`).join('')}</tr></thead>
+      <tbody>${keys.map((k) => `<tr><td class="t-key">${when(k)}</td>${rowsBy.get(k).map((v) => `<td class="t-num">${num(v)}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table>`;
+  });
 }
 
 function lineChart(el, readout, points, opts) {
@@ -217,9 +280,10 @@ function renderCorrelation(c) {
   chart($('corr-chart'), $('corr-readout'), lines,
     { start, end, unit: '% OF PRE-STRIKE', events: c.events, ref: c.reference, baseline: 100 });
 
-  $('corr-legend').innerHTML = `<span class="chip">YANDEX CLOUD</span>${c.groups.map((g) =>
-    `<button class="chip" data-v="${esc(g.tag)}" aria-pressed="${state.corrTags.has(g.tag)}">${esc(label(g.tag))}
-      ${g.r == null ? '' : `R ${g.r.toFixed(2)}`}</button>`).join('')}`;
+  const swatch = (cls) => `<svg class="swatch" viewBox="0 0 22 8" aria-hidden="true"><line class="line ${cls}" x1="1" x2="21" y1="4" y2="4"/></svg>`;
+  $('corr-legend').innerHTML = `<span class="legend-item">${swatch('l-a1')}YANDEX CLOUD</span>${c.groups.map((g) =>
+    `<button class="legend-item" data-v="${esc(g.tag)}" aria-pressed="${state.corrTags.has(g.tag)}">${swatch(TAG_LINE[g.tag] || 'l-ink')}${esc(label(g.tag))}
+      ${g.r == null ? '' : `<span class="sr-only">correlation</span> R ${g.r.toFixed(2)}`}</button>`).join('')}`;
   $('corr-legend').onclick = (e) => {
     const b = e.target.closest('button'); if (!b) return;
     if (state.corrTags.has(b.dataset.v)) state.corrTags.delete(b.dataset.v); else state.corrTags.add(b.dataset.v);
@@ -274,8 +338,8 @@ const views = {
       value: g[mode.field], label: TAG_SHORT[g.tag] || g.tag.toUpperCase(),
       text: g[mode.field] == null ? '—' : `${pct(g[mode.field])} n${g[mode.n]}`,
     })));
-    const sigTable = state.compare !== 'event' ? '' : `<div class="table-wrap"><table class="table">
-      <thead><tr><th scope="col">GROUP</th><th scope="col" class="t-num">MEDIAN Δ</th><th scope="col" class="t-num">P &lt; 0.05</th><th scope="col" class="t-num">N</th></tr></thead>
+    const sigTable = state.compare !== 'event' ? '' : `<div class="table-wrap"><table class="table" aria-label="Change after strikes by group">
+      <thead><tr><th scope="col">GROUP</th>${th('MEDIAN Δ', 'Median change after strikes', 't-num')}${th('P &lt; 0.05', 'Share with placebo p below 0.05', 't-num')}${th('N', 'Communities', 't-num')}</tr></thead>
       <tbody>${groups.map((g) => `<tr><td class="t-value">${esc(TAG_SHORT[g.tag] || g.tag)}</td>
         <td class="t-num ${dirClass(g.event_effect)}">${pct(g.event_effect)}</td>
         <td class="t-num">${g.share_sig == null ? '—' : Math.round(g.share_sig * 100) + '%'}</td>
@@ -288,18 +352,18 @@ const views = {
     const stale = snap.series.filter((s) => !s.fresh && !snap.runs.find((r) => r.platform === s.platform && (r.error || '').startsWith('not configured')));
 
     view.innerHTML = `${hero}
-      <div class="sect">Correlation · activity vs Yandex Cloud · % of pre-strike</div>
-      <div class="switch" id="corr-legend"></div>
+      <h2 class="sect">Correlation · activity vs Yandex Cloud · % of pre-strike</h2>
+      <div class="legend" id="corr-legend" role="group" aria-label="Lines shown on the correlation chart"></div>
       <div class="readout" id="corr-readout"></div>
       <div class="chart" id="corr-chart"><p class="note">LOADING…</p></div>
       <div class="tiles" id="corr-tiles"></div>
       <p class="note">DAILY MEDIAN OF EACH GROUP'S COMMUNITIES · 100 = PRE-STRIKE MEAN · R = PEARSON CORRELATION OF DAILY VALUES
         WITH YANDEX CLOUD REACHABILITY · CONTROL = NON-POLITICAL COMMUNITIES · CORRELATION, NOT PROOF OF CAUSE — METHODS ON ABOUT</p>
       <div class="chips" style="margin-top:14px">${chips}</div>
-      <div class="sect">Infrastructure · latest value</div>
+      <h2 class="sect">Infrastructure · latest value</h2>
       <div class="tiles">${tiles}</div>
-      <div class="sect">Community activity · median change by group</div>
-      <div class="switch" data-compare>
+      <h2 class="sect">Community activity · median change by group</h2>
+      <div class="switch" data-compare role="group" aria-label="Compare community activity">
         <button class="chip" data-v="ref" aria-pressed="${state.compare === 'ref'}">VS PRE-STRIKE</button>
         <button class="chip" data-v="7d" aria-pressed="${state.compare === '7d'}">VS LAST 7 DAYS</button>
         <button class="chip" data-v="event" aria-pressed="${state.compare === 'event'}">STRIKE WINDOWS</button>
@@ -308,22 +372,25 @@ const views = {
       <p class="note">${mode.note} · n = COMMUNITIES WITH A BASELINE · CONTROL = NON-POLITICAL</p>
       ${sigTable}
       <div class="qband"><span class="qband-label">DATA COVERAGE ${cov == null ? '—' : Math.round(cov * 100) + '%'}</span>
-        <span class="qband-ticks">${ticks}</span><button class="qband-action" data-why aria-expanded="false">WHY?&gt;</button></div>
+        <span class="qband-ticks">${ticks}</span><button class="qband-action" data-why aria-expanded="false" aria-controls="why">WHY?&gt;</button></div>
       <div class="explain note" hidden id="why">SHARE OF CONFIGURED SERIES UPDATED IN THE LAST 3 H.
         ${stale.length ? 'STALE: ' + stale.slice(0, 12).map((s) => esc(s.key)).join(' · ') + (stale.length > 12 ? ` · +${stale.length - 12} MORE` : '') : 'ALL SERIES CURRENT.'}</div>
-      <div class="sect">${esc(ref ? ref.label : 'Infrastructure')} · ${esc(ref ? ref.unit : '')} · 14 days</div>
+      <h2 class="sect">${esc(ref ? ref.label : 'Infrastructure')} · ${esc(ref ? ref.unit : '')} · 14 days</h2>
       <div class="readout" id="live-readout"></div>
       <div class="chart" id="live-chart"></div>
       <p class="note">SHADED = PRE-STRIKE REFERENCE · DASHED = REPORTED STRIKES (SEE ABOUT)</p>
-      <div class="sect">Latest alerts</div>
+      <h2 class="sect">Latest alerts</h2>
       <div id="live-alerts"><p class="note">LOADING…</p></div>`;
 
     view.querySelector('[data-compare]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
       state.compare = b.dataset.v; views.live();
     });
-    view.querySelector('[data-why]').addEventListener('click', (e) => {
-      const open = $('why').hidden; $('why').hidden = !open; e.target.setAttribute('aria-expanded', String(open));
+    const why = view.querySelector('[data-why]');
+    const setWhy = (open) => { $('why').hidden = !open; why.setAttribute('aria-expanded', String(open)); };
+    why.addEventListener('click', () => setWhy($('why').hidden));
+    view.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !$('why').hidden) { setWhy(false); why.focus(); }
     });
 
     api('/api/correlation').then(renderCorrelation).catch(() => {
@@ -353,20 +420,20 @@ const views = {
       .sort((a, b) => (a.change_ref ?? 9) - (b.change_ref ?? 9));
     const refLabel = byKey(snap.correlation_ref)?.label || snap.correlation_ref;
 
-    view.innerHTML = `<div class="sect">Filter</div>
-      <div class="switch" data-tags>${tags.map((t) =>
+    view.innerHTML = `<h2 class="sect">Filter</h2>
+      <div class="switch" data-tags role="group" aria-label="Filter by group">${tags.map((t) =>
         `<button class="chip" data-v="${esc(t)}" aria-pressed="${state.tag === t}">${esc(t === 'all' ? 'ALL' : TAG_SHORT[t] || t)}</button>`).join('')}</div>
-      <div class="switch" data-metrics>
+      <div class="switch" data-metrics role="group" aria-label="Metrics shown">
         <button class="chip" data-v="primary" aria-pressed="${!state.allMetrics}">MAIN METRIC</button>
         <button class="chip" data-v="all" aria-pressed="${state.allMetrics}">ALL METRICS</button>
       </div>
-      <div class="sect">Communities · ${rows.length} series</div>
-      <div class="table-wrap"><table class="table">
-        <thead><tr><th scope="col">COMMUNITY</th><th scope="col">REGION</th><th scope="col" class="t-num">NOW</th><th scope="col">UNIT</th>
-          <th scope="col" class="t-num">Δ 7D</th><th scope="col" class="t-num">Δ REF</th>
-          <th scope="col" class="t-num">STRIKE Δ</th><th scope="col" class="t-num">P</th><th scope="col" class="t-num">R</th></tr></thead>
-        <tbody>${rows.map((s) => `<tr data-key="${esc(s.key)}" tabindex="0">
-          <td class="t-value">${esc(s.label)}</td><td class="t-key">${esc(s.region)}</td>
+      <h2 class="sect">Communities · ${rows.length} series</h2>
+      <div class="table-wrap"><table class="table" aria-label="Communities">
+        <thead><tr><th scope="col">COMMUNITY</th><th scope="col">REGION</th>${th('NOW', 'Latest rate', 't-num')}<th scope="col">UNIT</th>
+          ${th('Δ 7D', 'Change vs last 7 days', 't-num')}${th('Δ REF', 'Change vs pre-strike', 't-num')}
+          ${th('STRIKE Δ', 'Change after strikes', 't-num')}${th('P', 'Placebo p-value', 't-num')}${th('R', 'Correlation with Yandex Cloud reachability', 't-num')}</tr></thead>
+        <tbody>${rows.map((s) => `<tr>
+          <td class="t-value"><a class="row-link" href="#history" data-key="${esc(s.key)}">${esc(s.label)}</a></td><td class="t-key">${esc(s.region)}</td>
           <td class="t-num">${num(s.latest)}</td><td class="t-key">${esc(s.unit)}</td>
           <td class="t-num ${dirClass(s.change_7d)}">${pct(s.change_7d)}</td>
           <td class="t-num ${dirClass(s.change_ref)}">${pct(s.change_ref)}</td>
@@ -377,7 +444,7 @@ const views = {
       <p class="note">NOW = LATEST RATE · Δ 7D = LAST 3 H VS SAME HOURS PREVIOUS 7 DAYS · Δ REF = LAST 24 H VS PRE-STRIKE MEAN
         · STRIKE Δ = ${snap.event_window} H AFTER EACH STRIKE VS SAME WEEKDAY-HOUR 1–3 WEEKS EARLIER · P = PLACEBO TEST AGAINST RANDOM PRE-STRIKE WINDOWS
         (WITH ${rows.length} SERIES, ~${Math.round(rows.length * 0.05)} WILL SHOW P &lt; 0.05 BY CHANCE)
-        · R = PEARSON CORRELATION OF DAILY MEANS WITH ${esc(refLabel)}, LAST 30 DAYS · — = NOT ENOUGH DATA · TAP A ROW FOR HISTORY</p>`;
+        · R = PEARSON CORRELATION OF DAILY MEANS WITH ${esc(refLabel)}, LAST 30 DAYS · — = NOT ENOUGH DATA · SELECT A COMMUNITY NAME FOR ITS HISTORY</p>`;
 
     view.querySelector('[data-tags]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (b) { state.tag = b.dataset.v; views.communities(); }
@@ -385,11 +452,7 @@ const views = {
     view.querySelector('[data-metrics]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (b) { state.allMetrics = b.dataset.v === 'all'; views.communities(); }
     });
-    const open = (tr) => { state.b = tr.dataset.key; location.hash = 'history'; };
-    view.querySelectorAll('tr[data-key]').forEach((tr) => {
-      tr.addEventListener('click', () => open(tr));
-      tr.addEventListener('keydown', (e) => { if (e.key === 'Enter') open(tr); });
-    });
+    view.querySelectorAll('a[data-key]').forEach((a) => a.addEventListener('click', () => { state.b = a.dataset.key; }));
   },
 
   history() {
@@ -402,23 +465,23 @@ const views = {
     const csv = (key) => (STATIC ? `api/export/series/${encodeURIComponent(key)}.csv`
       : `api/export/series.csv?key=${encodeURIComponent(key)}&days=${state.days}&bucket=hour`);
 
-    view.innerHTML = `<div class="sect">Range</div>
-      <div class="switch" data-days>${[7, 14, 30, 90].map((d) =>
+    view.innerHTML = `<h2 class="sect">Range</h2>
+      <div class="switch" data-days role="group" aria-label="Time range">${[7, 14, 30, 90].map((d) =>
         `<button class="chip" data-v="${d}" aria-pressed="${state.days === d}">${d}D</button>`).join('')}</div>
       <label class="field"><span>Infrastructure series</span><select id="sel-a">${opt(infra, state.a)}</select></label>
       <div class="readout" id="ro-a"></div><div class="chart" id="chart-a"></div>
       <label class="field" style="margin-top:14px"><span>Community series</span><select id="sel-b">${opt(comm, state.b)}</select></label>
       <div class="readout" id="ro-b"></div><div class="chart" id="chart-b"></div>
       <p class="note">HOURLY MEANS, UTC · SHADED = PRE-STRIKE REFERENCE · DASHED = REPORTED STRIKES</p>
-      <div class="sect" id="daily-title">Daily mean · last 14 days</div>
+      <h2 class="sect" id="daily-title">Daily mean · last 14 days</h2>
       <div id="daily-bars"></div>
-      <div class="sect" id="es-title">Event study · robustness</div>
+      <h2 class="sect" id="es-title">Event study · robustness</h2>
       <div id="es-grid"><p class="note">LOADING…</p></div>
-      <div class="sect">Download</div>
+      <h2 class="sect">Download</h2>
       <div class="links">
-        <a class="chip ghost" href="${csv(state.a)}">▼ ${esc(state.a)}.CSV</a>
-        <a class="chip ghost" href="${csv(state.b)}">▼ ${esc(state.b)}.CSV</a>
-        <a class="chip" href="api/export/daily.csv?days=365">▼ ALL SERIES · DAILY CSV</a>
+        <a class="chip ghost" href="${csv(state.a)}">${glyph('▼')} ${esc(state.a)}.CSV</a>
+        <a class="chip ghost" href="${csv(state.b)}">${glyph('▼')} ${esc(state.b)}.CSV</a>
+        <a class="chip" href="api/export/daily.csv?days=365">${glyph('▼')} ALL SERIES · DAILY CSV</a>
         ${STATIC ? '' : '<a class="chip two" href="docs">API DOCS</a>'}
       </div>`;
 
@@ -443,7 +506,7 @@ const views = {
       const cell = (c) => (c.effect == null ? '—' : `${pct(c.effect)} p${c.p == null ? ' —' : c.p.toFixed(2)}`);
       const at = (w, o) => d.grid.find((c) => c.window === w && c.offset_h === o);
       const main = at(12, 0);
-      $('es-grid').innerHTML = `<div class="table-wrap"><table class="table">
+      $('es-grid').innerHTML = `<div class="table-wrap"><table class="table" aria-label="Event study robustness grid">
         <thead><tr><th scope="col">WINDOW</th><th scope="col">START −3 H</th><th scope="col">AT EVENT</th><th scope="col">START +3 H</th></tr></thead>
         <tbody>${[6, 12, 24].map((w) => `<tr><td class="t-key">${w} H</td>${[-3, 0, 3].map((o) => {
           const c = at(w, o);
@@ -467,10 +530,10 @@ const views = {
 
   async alerts() {
     $('prompt').textContent = 'alerts --list --limit 100';
-    view.innerHTML = '<div class="sect">Alert log</div><p class="note">LOADING…</p>';
+    view.innerHTML = '<h2 class="sect">Alert log</h2><p class="note">LOADING…</p>';
     const list = await api('/api/alerts?limit=100');
-    view.innerHTML = `<div class="sect">Alert log · ${list.length}</div>
-      <div class="table-wrap"><table class="table">
+    view.innerHTML = `<h2 class="sect">Alert log · ${list.length}</h2>
+      <div class="table-wrap"><table class="table" aria-label="Alert log">
         <thead><tr><th scope="col">TIME UTC</th><th scope="col">ALERT</th><th scope="col">POSTED</th></tr></thead>
         <tbody>${list.map((a) => `<tr><td class="t-key">${esc(stamp(a.ts))}</td><td class="wrap">${esc(a.message)}</td>
           <td class="${a.posted ? 't-data' : 't-delta'}">${a.posted ? 'X' : esc(a.error ? 'FAILED' : 'LOG ONLY')}</td></tr>`).join('')
@@ -481,13 +544,13 @@ const views = {
 
   async report() {
     $('prompt').textContent = 'report --latest --format csv,json,zip';
-    view.innerHTML = '<div class="sect">Report</div><p class="note">LOADING…</p>';
+    view.innerHTML = '<h2 class="sect">Report</h2><p class="note">LOADING…</p>';
     const [list, rep] = await Promise.all([
       api('/api/reports'),
       api('/api/reports/latest').catch(() => null),
     ]);
     if (!rep) {
-      view.innerHTML = '<div class="sect">Report</div><p class="note">NO REPORT YET — THE FIRST ONE IS BUILT AFTER THE NEXT COLLECTION PASS, OR RUN: python -m tracker report</p>';
+      view.innerHTML = '<h2 class="sect">Report</h2><p class="note">NO REPORT YET — THE FIRST ONE IS BUILT AFTER THE NEXT COLLECTION PASS, OR RUN: python -m tracker report</p>';
       return;
     }
     const base = `reports/${encodeURIComponent(rep.report_date)}`;
@@ -507,20 +570,20 @@ const views = {
           ${rep.communities.filter((c) => c.main_metric === 'yes').length} COMMUNITIES · ${rep.events.length} EVENTS</div>
       </div>
       <div class="links">
-        ${zip ? `<a class="chip" href="${base}/${encodeURIComponent(zip)}">▼ FULL BUNDLE .ZIP</a>` : ''}
-        <a class="chip two" href="${base}/groups.csv">▼ GROUPS.CSV</a>
-        <a class="chip two" href="${base}/communities.csv">▼ COMMUNITIES.CSV</a>
-        <a class="chip ghost" href="${base}/infrastructure.csv">▼ INFRASTRUCTURE.CSV</a>
-        <a class="chip ghost" href="${base}/daily.csv">▼ DAILY.CSV</a>
-        <a class="chip ghost" href="${base}/report.json">▼ JSON</a>
+        ${zip ? `<a class="chip" href="${base}/${encodeURIComponent(zip)}">${glyph('▼')} FULL BUNDLE .ZIP</a>` : ''}
+        <a class="chip two" href="${base}/groups.csv">${glyph('▼')} GROUPS.CSV</a>
+        <a class="chip two" href="${base}/communities.csv">${glyph('▼')} COMMUNITIES.CSV</a>
+        <a class="chip ghost" href="${base}/infrastructure.csv">${glyph('▼')} INFRASTRUCTURE.CSV</a>
+        <a class="chip ghost" href="${base}/daily.csv">${glyph('▼')} DAILY.CSV</a>
+        <a class="chip ghost" href="${base}/report.json">${glyph('▼')} JSON</a>
         <a class="chip ghost" href="${base}/README.md">METHODS</a>
       </div>
 
-      <div class="sect">Groups · headline</div>
-      <div class="table-wrap"><table class="table">
-        <thead><tr><th scope="col">GROUP</th><th scope="col" class="t-num">N</th><th scope="col" class="t-num">Δ PRE-STRIKE</th>
-          <th scope="col" class="t-num">STRIKE Δ</th><th scope="col" class="t-num">P &lt; .05</th><th scope="col" class="t-num">ROBUST</th>
-          <th scope="col" class="t-num">R</th><th scope="col" class="t-num">INDEX NOW</th></tr></thead>
+      <h2 class="sect">Groups · headline</h2>
+      <div class="table-wrap"><table class="table" aria-label="Groups, headline">
+        <thead><tr><th scope="col">GROUP</th>${th('N', 'Communities', 't-num')}${th('Δ PRE-STRIKE', 'Median change vs pre-strike', 't-num')}
+          ${th('STRIKE Δ', 'Median change after strikes', 't-num')}${th('P &lt; .05', 'Share with placebo p below 0.05', 't-num')}${th('ROBUST', 'Share robust across timing checks', 't-num')}
+          ${th('R', 'Correlation with Yandex Cloud reachability', 't-num')}${th('INDEX NOW', 'Latest index, 100 equals pre-strike', 't-num')}</tr></thead>
         <tbody>${rep.groups.map((g) => `<tr><td class="t-value">${esc(label(g.group))}</td><td class="t-num">${g.communities}</td>
           <td class="t-num ${dirClass(g.median_change_vs_pre_strike)}">${pct(g.median_change_vs_pre_strike)}</td>
           <td class="t-num ${dirClass(g.median_strike_window_change)}">${pct(g.median_strike_window_change)}</td>
@@ -532,26 +595,26 @@ const views = {
         ROBUST = SHARE WITH A ≥5% DROP AT P &lt; .05 IN 5+ OF 9 TIMING CHECKS · R = CORRELATION WITH YANDEX CLOUD REACHABILITY ·
         INDEX 100 = PRE-STRIKE</p>
 
-      <div class="sect">Infrastructure</div>
-      <div class="table-wrap"><table class="table">
+      <h2 class="sect">Infrastructure</h2>
+      <div class="table-wrap"><table class="table" aria-label="Infrastructure">
         <thead><tr><th scope="col">SIGNAL</th><th scope="col">UNIT</th><th scope="col" class="t-num">LATEST</th>
-          <th scope="col" class="t-num">PRE-STRIKE</th><th scope="col" class="t-num">Δ PRE-STRIKE</th><th scope="col" class="t-num">STRIKE Δ</th></tr></thead>
+          ${th('PRE-STRIKE', 'Pre-strike mean', 't-num')}${th('Δ PRE-STRIKE', 'Change vs pre-strike', 't-num')}${th('STRIKE Δ', 'Change after strikes', 't-num')}</tr></thead>
         <tbody>${rep.infrastructure.map((r) => `<tr><td class="t-value">${esc(r.signal)}</td><td class="t-key">${esc(r.unit)}</td>
           <td class="t-num">${num(r.latest)}</td><td class="t-num">${num(r.pre_strike_mean)}</td>
           <td class="t-num ${dirClass(r.change_vs_pre_strike)}">${pct(r.change_vs_pre_strike)}</td>
           <td class="t-num ${dirClass(r.strike_window_change)}">${pct(r.strike_window_change)}</td></tr>`).join('')}</tbody>
       </table></div>
 
-      <div class="sect">Communities · ${rows.length}</div>
-      <div class="switch" data-metrics>
+      <h2 class="sect">Communities · ${rows.length}</h2>
+      <div class="switch" data-metrics role="group" aria-label="Metrics shown">
         <button class="chip" data-v="primary" aria-pressed="${!state.allMetrics}">MAIN METRIC</button>
         <button class="chip" data-v="all" aria-pressed="${state.allMetrics}">ALL METRICS</button>
       </div>
-      <div class="table-wrap"><table class="table">
+      <div class="table-wrap"><table class="table" aria-label="Communities">
         <thead><tr><th scope="col">COMMUNITY</th><th scope="col">GROUP</th><th scope="col">UNIT</th>
-          <th scope="col" class="t-num">PRE-STRIKE</th><th scope="col" class="t-num">LAST 7D</th><th scope="col" class="t-num">Δ PRE</th>
-          <th scope="col" class="t-num">STRIKE Δ</th><th scope="col" class="t-num">P</th><th scope="col" class="t-num">ROBUST</th>
-          <th scope="col" class="t-num">R</th></tr></thead>
+          ${th('PRE-STRIKE', 'Pre-strike mean', 't-num')}${th('LAST 7D', 'Last 7 days mean', 't-num')}${th('Δ PRE', 'Change vs pre-strike', 't-num')}
+          ${th('STRIKE Δ', 'Change after strikes', 't-num')}${th('P', 'Placebo p-value', 't-num')}${th('ROBUST', 'Timing checks passed, of 9', 't-num')}
+          ${th('R', 'Correlation with Yandex Cloud reachability', 't-num')}</tr></thead>
         <tbody>${rows.map((c) => `<tr><td class="t-value">${esc(c.community)}</td>
           <td class="t-key">${esc(c.groups.split('|').map(label).join(' '))}</td><td class="t-key">${esc(c.unit)}</td>
           <td class="t-num">${num(c.pre_strike_mean)}</td><td class="t-num">${num(c.last_7d_mean)}</td>
@@ -564,10 +627,10 @@ const views = {
       <p class="note">RATES PER HOUR · STRIKE Δ = 12 H AFTER EACH STRIKE VS SAME WEEKDAY-HOUR 1–3 WEEKS EARLIER · P = PLACEBO TEST ·
         ROBUST = TIMING CHECKS (OF 9) WITH A ≥5% DROP AT P &lt; .05 · FULL COLUMN DEFINITIONS IN THE BUNDLE README</p>
 
-      <button class="action" id="print">▤ PRINT / SAVE AS PDF</button>
+      <button class="action" id="print">${glyph('▤')} PRINT / SAVE AS PDF</button>
 
-      <div class="sect">Archive · ${list.length} report${list.length === 1 ? '' : 's'}</div>
-      <div class="table-wrap"><table class="table">
+      <h2 class="sect">Archive · ${list.length} report${list.length === 1 ? '' : 's'}</h2>
+      <div class="table-wrap"><table class="table" aria-label="Report archive">
         <thead><tr><th scope="col">DATE</th><th scope="col">DOWNLOAD</th></tr></thead>
         <tbody>${list.map((r) => {
           const z = r.files.find((f) => f.endsWith('.zip'));
@@ -589,12 +652,12 @@ const views = {
     const ev = snap.events.map((e) => `<li><b>${mmdd(e.ts)}</b> — ${esc(e.label)} <span class="muted">(${esc(e.status)}; ${esc(e.source)})</span></li>`).join('');
     const pal = document.documentElement.dataset.palette;
     const crt = document.documentElement.dataset.crt;
-    view.innerHTML = `<div class="sect">What this is</div>
+    view.innerHTML = `<h2 class="sect">What this is</h2>
       <div class="prose">
         <p>An open monitor for one question: when Yandex data centres go dark, does activity in online political communities change, and does it change more than in non-political ones?</p>
         <p>It records two kinds of signal side by side. <b>Infrastructure</b>: how much of Yandex's network is reachable (IODA active probing and BGP routing) and, when configured, the share of HTTP requests from Yandex's network that Cloudflare classifies as bots. <b>Communities</b>: comments and posts per hour in selected subreddits, and posts per hour matching keywords on Bluesky. Only timestamps are counted; no usernames or content are stored.</p>
       </div>
-      <div class="sect">Read this before citing a number</div>
+      <h2 class="sect">Read this before citing a number</h2>
       <div class="prose"><ul>
         <li>Correlation is not attribution. A drop in a community after an outage is consistent with bot or troll accounts going offline, but also with news cycles, weekends, moderation changes, Reddit's own systems, or real users in Russia losing service.</li>
         <li>Compare against the <b>control</b> group. A drop that also appears in non-political communities is not evidence of anything political.</li>
@@ -602,7 +665,7 @@ const views = {
         <li>Group tags (right, political, regional, russia, control) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
         <li>Reddit history before this site started collecting comes from the Arctic Shift archive and is backfilled hourly; days missing from the archive are left as gaps, never filled.</li>
       </ul></div>
-      <div class="sect">Definitions</div>
+      <h2 class="sect">Definitions</h2>
       <div class="prose"><ul>
         <li><b>Δ 7D</b>: the last 3 hours vs the median of the same hours of day over the previous 7 days. Drives alerts.</li>
         <li><b>Δ REF</b>: the last 24 hours (3 for infrastructure) vs the mean of the pre-strike reference period, ${mmdd(snap.reference.start)} to ${mmdd(snap.reference.end)}.</li>
@@ -611,14 +674,14 @@ const views = {
         <li><b>P</b>: a placebo test. The same statistic is computed for random start times before the first strike (500 draws); P is the share of those that drop at least as much. It answers "how often does a dip this size happen with no strike?". Placebo windows overlap, so treat P as a rough guide, and with many communities about 5% will pass P &lt; 0.05 by chance. Check the robustness grid on the History tab: an effect that appears for only one window length or start time is not robust. Baselines come from the weeks before each strike, so a lasting drop from an earlier strike also shows up in the windows of later ones; the per-strike tiles make that visible.</li>
         <li><b>Rates</b>: each poll reads the newest 100 items; if they span more than an hour the last hour is counted exactly, otherwise the rate is extrapolated from the span covered.</li>
       </ul></div>
-      <div class="sect">Prior work</div>
+      <h2 class="sect">Prior work</h2>
       <div class="prose"><p>The event-study design follows a community analysis posted to r/theydidthemath,
         <a href="https://www.reddit.com/r/theydidthemath/comments/1x3q43a/" rel="noopener">"Comparing Reddit activity around three reported Yandex attacks"</a>.
         It used hourly Syften counts for 968 subreddits and found 90 that declined after all three strikes, none of which held across every timing check.
         Commenters asked for random-date comparisons and controls; the placebo test, the control group and the robustness grid here answer that.</p></div>
-      <div class="sect">Annotated events</div>
+      <h2 class="sect">Annotated events</h2>
       <div class="prose"><ul>${ev || '<li>None.</li>'}</ul></div>
-      <div class="sect">Sources</div>
+      <h2 class="sect">Sources</h2>
       <div class="prose"><ul>
         <li>IODA, Georgia Tech Internet Intelligence Lab — outage signals.</li>
         <li>Cloudflare Radar — CC BY-NC 4.0.</li>
@@ -626,12 +689,13 @@ const views = {
         <li>Bluesky public AppView search.</li>
         <li>All data: <a href="api/export/daily.csv?days=365">daily CSV</a>${STATIC ? '' : ' · <a href="docs">API</a>'} · <a href="#report">dated reports</a>.</li>
       </ul></div>
-      <div class="sect">Display</div>
-      <div class="switch" data-palette>${[['term-phosphor', 'PHOSPHOR'], ['term-amber', 'AMBER'], ['term-navy', 'BROADCAST 8S'], ['term-light', 'LIGHT']]
+      <h2 class="sect">Display</h2>
+      <div class="switch" data-palette role="group" aria-label="Colour palette">${[['term-phosphor', 'PHOSPHOR'], ['term-amber', 'AMBER'], ['term-navy', 'BROADCAST 8S'], ['term-light', 'LIGHT']]
         .map(([v, l]) => `<button class="chip" data-v="${v}" aria-pressed="${pal === v}">${l}</button>`).join('')}</div>
-      <div class="switch" data-crt>
-        <button class="chip" data-v="on" aria-pressed="${crt !== 'off'}">CRT SCANLINES ON</button>
-        <button class="chip" data-v="off" aria-pressed="${crt === 'off'}">OFF</button>
+      <p class="note" id="crt-note">CRT SCANLINES · OFF BY DEFAULT: THE EFFECT LOWERS TEXT CONTRAST</p>
+      <div class="switch" data-crt role="group" aria-label="CRT scanlines" aria-describedby="crt-note">
+        <button class="chip" data-v="on" aria-pressed="${crt === 'on'}">ON</button>
+        <button class="chip" data-v="off" aria-pressed="${crt !== 'on'}">OFF</button>
       </div>`;
     view.querySelector('[data-palette]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
@@ -649,28 +713,37 @@ const views = {
 };
 
 // ── Routing, refresh, clock ─────────────────────────────────────────────────
-const TITLES = { live: '// BOT MONITOR', communities: '// COMMUNITIES', history: '// HISTORY', report: '// REPORT', alerts: '// ALERTS', about: '// ABOUT' };
+const TITLES = { live: 'BOT MONITOR', communities: 'COMMUNITIES', history: 'HISTORY', report: 'REPORT', alerts: 'ALERTS', about: 'ABOUT' };
+const PAGE_TITLES = { live: 'Live', communities: 'Communities', history: 'History', report: 'Report', alerts: 'Alerts', about: 'About' };
+let paused = false;
 
-function route() {
+// moveFocus: true when the visitor switched tabs, so focus lands on the new
+// view's heading instead of staying on the nav link while content swaps silently.
+function route(moveFocus = false) {
   const name = (location.hash.slice(1) || 'live').split('?')[0];
   const key = views[name] ? name : 'live';
   document.querySelectorAll('.nav a').forEach((a) => {
     if (a.getAttribute('href') === `#${key}`) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
-  $('title').textContent = TITLES[key];
+  $('title').innerHTML = `${glyph('// ')}${TITLES[key]}`;
+  document.title = key === 'live' ? 'Bot Traffic Monitor' : `${PAGE_TITLES[key]} · Bot Traffic Monitor`;
   if (!snap) return;
-  Promise.resolve(views[key]()).catch((e) => toast(`VIEW FAILED: ${e.message}`));
+  Promise.resolve(views[key]())
+    .then(() => { if (moveFocus) $('title').focus(); })
+    .catch((e) => toast(`VIEW FAILED: ${e.message}`));
 }
 
 async function refresh() {
   try {
     snap = await api('/api/snapshot');
-    $('state').textContent = STATIC ? '● SNAPSHOT' : '● LIVE';
+    setState(STATIC ? 'SNAPSHOT' : paused ? 'PAUSED' : 'LIVE');
     $('updated').textContent = `UPDATED ${hhmm(snap.now)} UTC`;
+    // Never redraw under someone: not while paused, and not while focus is inside the view.
+    if (paused || view.contains(document.activeElement)) return;
     const name = (location.hash.slice(1) || 'live');
     if (name === 'live' || name === 'communities') route();
   } catch {
-    $('state').textContent = '● OFFLINE';
+    setState('OFFLINE');
   }
 }
 
@@ -683,11 +756,17 @@ async function start() {
   try {
     const saved = localStorage.getItem('palette');
     if (saved) document.documentElement.dataset.palette = saved;
-    const crt = localStorage.getItem('crt');
+    const crt = localStorage.getItem('crt');  // CRT overlay is opt-in: it lowers contrast
     if (crt) document.documentElement.dataset.crt = crt;
   } catch { /* storage unavailable */ }
   tickClock();
   setInterval(tickClock, 30_000);
+  $('pause').addEventListener('click', () => {
+    paused = !paused;
+    $('pause').setAttribute('aria-pressed', String(paused));
+    setState(STATIC ? 'SNAPSHOT' : paused ? 'PAUSED' : 'LIVE');
+    if (!paused) refresh();
+  });
 
   boot.line('fetch /api/health');
   try {
@@ -695,19 +774,22 @@ async function start() {
     boot.line('fetch /api/snapshot · compute baselines');
     snap = await api('/api/snapshot'); boot.ok();
   } catch (e) {
-    $('state').textContent = '● OFFLINE';
+    setState('OFFLINE');
     $('boot-pct').textContent = 'API UNREACHABLE';
     toast(`API UNREACHABLE — ${e.message}`);
     return;
   }
-  $('state').textContent = STATIC ? '● SNAPSHOT' : '● LIVE';
+  setState(STATIC ? 'SNAPSHOT' : 'LIVE');
   $('updated').textContent = `UPDATED ${hhmm(snap.now)} UTC`;
   setTimeout(() => { boot.done(); route(); }, reduced ? 0 : 360);
   setInterval(refresh, REFRESH_MS);
 }
 
-window.addEventListener('hashchange', route);
+window.addEventListener('hashchange', () => route(true));
 let resizeTimer;
-window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(route, 250); });
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => { if (!view.contains(document.activeElement)) route(); }, 250);
+});
 route();
 start();
