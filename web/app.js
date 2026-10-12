@@ -588,6 +588,7 @@ const views = {
     $('prompt').textContent = 'man monitor';
     const ev = snap.events.map((e) => `<li><b>${mmdd(e.ts)}</b> — ${esc(e.label)} <span class="muted">(${esc(e.status)}; ${esc(e.source)})</span></li>`).join('');
     const pal = document.documentElement.dataset.palette;
+    const crt = document.documentElement.dataset.crt;
     view.innerHTML = `<div class="sect">What this is</div>
       <div class="prose">
         <p>An open monitor for one question: when Yandex data centres go dark, does activity in online political communities change, and does it change more than in non-political ones?</p>
@@ -627,11 +628,21 @@ const views = {
       </ul></div>
       <div class="sect">Display</div>
       <div class="switch" data-palette>${[['term-phosphor', 'PHOSPHOR'], ['term-amber', 'AMBER'], ['term-navy', 'BROADCAST 8S'], ['term-light', 'LIGHT']]
-        .map(([v, l]) => `<button class="chip" data-v="${v}" aria-pressed="${pal === v}">${l}</button>`).join('')}</div>`;
+        .map(([v, l]) => `<button class="chip" data-v="${v}" aria-pressed="${pal === v}">${l}</button>`).join('')}</div>
+      <div class="switch" data-crt>
+        <button class="chip" data-v="on" aria-pressed="${crt !== 'off'}">CRT SCANLINES ON</button>
+        <button class="chip" data-v="off" aria-pressed="${crt === 'off'}">OFF</button>
+      </div>`;
     view.querySelector('[data-palette]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
       document.documentElement.dataset.palette = b.dataset.v;
       try { localStorage.setItem('palette', b.dataset.v); } catch { /* storage unavailable: setting lasts this visit */ }
+      views.about();
+    });
+    view.querySelector('[data-crt]').addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      document.documentElement.dataset.crt = b.dataset.v;
+      try { localStorage.setItem('crt', b.dataset.v); } catch { /* storage unavailable: setting lasts this visit */ }
       views.about();
     });
   },
@@ -672,6 +683,8 @@ async function start() {
   try {
     const saved = localStorage.getItem('palette');
     if (saved) document.documentElement.dataset.palette = saved;
+    const crt = localStorage.getItem('crt');
+    if (crt) document.documentElement.dataset.crt = crt;
   } catch { /* storage unavailable */ }
   tickClock();
   setInterval(tickClock, 30_000);

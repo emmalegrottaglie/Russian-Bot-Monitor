@@ -26,6 +26,9 @@ PATHS = {"comments": "comments", "posts": "new"}
 DELAY_OAUTH = 1.0
 DELAY_FEED = 6.0
 RETRY_AFTER_MAX = 120
+REQUEST_TIMEOUT = 20      # seconds; a throttled feed can stall instead of refusing
+MAX_FAILURES = 3          # consecutive failures before giving up on this pass
+PASS_BUDGET = 10 * 60     # seconds; leave room before the next 15-minute pass
 
 _token: dict = {"value": "", "expires": 0.0}
 
@@ -70,10 +73,11 @@ async def fetch_timestamps(client: httpx.AsyncClient, settings, subreddit: str, 
     if settings.reddit_client_id and settings.reddit_client_secret:
         headers["Authorization"] = f"Bearer {await _oauth_token(client, settings)}"
         r = await client.get(f"https://oauth.reddit.com/r/{subreddit}/{path}", params={"limit": 100, "raw_json": 1},
-                             headers=headers)
+                             headers=headers, timeout=REQUEST_TIMEOUT)
         r.raise_for_status()
         return parse_listing(r.json())
-    r = await client.get(f"https://www.reddit.com/r/{subreddit}/{path}/.rss", params={"limit": 100}, headers=headers)
+    r = await client.get(f"https://www.reddit.com/r/{subreddit}/{path}/.rss", params={"limit": 100}, headers=headers,
+                         timeout=REQUEST_TIMEOUT)
     r.raise_for_status()
     return parse_atom(r.text)
 
@@ -93,18 +97,30 @@ async def _get_with_retry(client: httpx.AsyncClient, settings, subreddit: str, m
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
                   start: int | None = None) -> Result:
     result = Result()
-    delay = DELAY_OAUTH if settings.reddit_client_id else DELAY_FEED
+    oauth = bool(settings.reddit_client_id and settings.reddit_client_secret)
+    delay = DELAY_OAUTH if oauth else DELAY_FEED
+    if not oauth:
+        # The public feeds allow roughly one request a minute: spend them on comments,
+        # the main metric. Post rates resume once OAuth keys are configured.
+        specs = [s for s in specs if s.params["metric"] == "comments"]
+    started, failures = time.monotonic(), 0
     for i, s in enumerate(specs):
+        if time.monotonic() - started > PASS_BUDGET:
+            result.errors.append(f"stopped: pass took over {PASS_BUDGET // 60} min, {len(specs) - i} series skipped")
+            break
         if i:
             await asyncio.sleep(delay)
         try:
             stamps = await _get_with_retry(client, settings, s.params["subreddit"], s.params["metric"])
         except (httpx.HTTPError, ET.ParseError, KeyError, ValueError) as e:
-            result.errors.append(f"{s.key}: {e}")
-            if isinstance(e, httpx.HTTPStatusError) and e.response.status_code in (401, 403, 429):
-                result.errors.append(f"stopped after HTTP {e.response.status_code}")
+            result.errors.append(f"{s.key}: {type(e).__name__}: {e}")
+            failures += 1
+            blocked = isinstance(e, httpx.HTTPStatusError) and e.response.status_code in (401, 403, 429)
+            if blocked or failures >= MAX_FAILURES:
+                result.errors.append(f"stopped after {failures} consecutive failure(s)")
                 break
             continue
+        failures = 0
         rate = hourly_rate(stamps, int(time.time()))
         if rate is not None:
             result.points[s.key] = [(int(time.time()), round(rate, 2))]

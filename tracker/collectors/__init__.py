@@ -55,6 +55,12 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
             name = BACKFILL.get(platform, platform) if backfill else platform
             if backfill and platform not in BACKFILL:
                 continue
+            if not backfill:
+                # Stalest series first: when a throttled source only gets partway through
+                # a pass, the next pass picks up where it stopped.
+                with db.session(settings.db_path) as conn:
+                    last = {s.key: (db.latest_point(conn, s.key) or (0, 0))[0] for s in specs}
+                specs = sorted(specs, key=lambda s: last[s.key])
             # Backfills are long: write each series as it finishes so an interruption keeps progress.
             batches = [[s] for s in specs] if backfill else [specs]
             result, n = Result(), 0
