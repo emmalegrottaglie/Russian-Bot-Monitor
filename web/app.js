@@ -752,8 +752,8 @@ const views = {
 };
 
 // ── Routing, refresh, clock ─────────────────────────────────────────────────
-const TITLES = { live: 'BOT MONITOR', communities: 'COMMUNITIES', history: 'HISTORY', report: 'REPORT', alerts: 'ALERTS', about: 'ABOUT' };
-const PAGE_TITLES = { live: 'Live', communities: 'Communities', history: 'History', report: 'Report', alerts: 'Alerts', about: 'About' };
+const TITLES = { live: 'BOT MONITOR', communities: 'GROUPS', history: 'HISTORY', report: 'REPORT', alerts: 'ALERTS', about: 'ABOUT' };
+const PAGE_TITLES = { live: 'Live', communities: 'Groups', history: 'History', report: 'Report', alerts: 'Alerts', about: 'About' };
 let paused = false;
 
 // moveFocus: true when the visitor switched tabs, so focus lands on the new
