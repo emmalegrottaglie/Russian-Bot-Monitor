@@ -6,6 +6,8 @@ In October 2026, reported strikes on Yandex data centres (Sasovo on Oct 8, Kalug
 
 It collects data on its own every 15 minutes and logs an alert when a signal moves sharply. It can also post those alerts to an X account.
 
+**Live site: <https://emmalegrottaglie.github.io/Russian-Bot-Monitor/>**. This is a static snapshot, refreshed about every 30 minutes; see [Deploying](#deploying).
+
 ## What it measures
 
 | Signal | Source | Key needed |
