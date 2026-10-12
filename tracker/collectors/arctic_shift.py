@@ -22,7 +22,7 @@ log = logging.getLogger(__name__)
 KINDS = {"comments": "comments", "posts": "posts"}
 LAG = 2 * 86400
 MIN_CHUNK = 6 * 3600
-DELAY = 2.0
+DELAY = 4.0  # seconds between requests; the archive is volunteer-run and throttles bursts
 COOLDOWNS = (30, 90, 180)  # seconds to back off when even the smallest chunk fails
 
 
