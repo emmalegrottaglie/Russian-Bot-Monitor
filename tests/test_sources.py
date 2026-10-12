@@ -83,3 +83,57 @@ def test_arctic_shift_fills_quiet_hours_but_not_missing_days():
     assert out[day + 3 * 3600] == 5.0 and out[day + 4 * 3600] == 0.0
     assert not any(day + 86400 < t <= day + 2 * 86400 for t in out)  # gap kept
     assert len(out) == 48
+
+
+def _archive(bad):
+    """Mock archive: one count per hour, 422 for any request overlapping a `bad` window."""
+    import httpx
+
+    def handler(request):
+        after = int(ts(request.url.params["after"]))
+        before = int(ts(request.url.params["before"]))
+        if any(after < b and a < before for a, b in bad):
+            return httpx.Response(422, json={"error": "Timeout. Maybe slow down a bit"})
+        data = [{"created_utc": arctic_shift._iso(h), "count": 1} for h in range(after, before, 3600)]
+        return httpx.Response(200, json={"data": data})
+    return httpx.AsyncClient(transport=httpx.MockTransport(handler))
+
+
+def test_arctic_shift_skips_a_failing_window_and_keeps_the_rest(monkeypatch):
+    import asyncio
+
+    monkeypatch.setattr(arctic_shift, "DELAY", 0)
+    monkeypatch.setattr(arctic_shift, "COOLDOWNS", (0, 0))
+    day = 20000 * 86400
+    bad = [(day + 6 * 3600, day + 12 * 3600)]
+
+    async def go():
+        async with _archive(bad) as client:
+            return await arctic_shift._range(client, "x", "comments", day, day + 2 * 86400, 86400)
+    pts, gaps = asyncio.run(go())
+    assert gaps == bad
+    have = dict(pts)
+    assert len(have) == 48 - 6
+    assert not any(day + 6 * 3600 < h <= day + 12 * 3600 for h in have)
+    # the skipped hours stay missing after quiet-hour filling, never zero
+    filled = dict(arctic_shift.fill_quiet_hours(pts, day + 2 * 86400, gaps))
+    assert not any(day + 6 * 3600 < h <= day + 12 * 3600 for h in filled)
+    assert len(filled) == 42
+
+
+def test_arctic_shift_stops_when_the_archive_keeps_refusing(monkeypatch):
+    import asyncio
+
+    monkeypatch.setattr(arctic_shift, "DELAY", 0)
+    monkeypatch.setattr(arctic_shift, "COOLDOWNS", (0,))
+    day = 20000 * 86400
+    end = day + 4 * 86400
+    bad = [(day + 86400, end)]  # first day fine, then the archive refuses everything
+
+    async def go():
+        async with _archive(bad) as client:
+            return await arctic_shift._range(client, "x", "comments", day, end, 86400)
+    pts, gaps = asyncio.run(go())
+    assert len(pts) == 24
+    assert gaps[-1][1] == end and gaps[0][0] == day + 86400
+    assert len(gaps) == arctic_shift.MAX_SKIPPED + 1  # skipped windows, then the untried rest

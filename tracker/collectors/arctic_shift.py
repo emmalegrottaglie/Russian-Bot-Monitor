@@ -24,6 +24,7 @@ LAG = 2 * 86400
 MIN_CHUNK = 6 * 3600
 DELAY = 4.0  # seconds between requests; the archive is volunteer-run and throttles bursts
 COOLDOWNS = (30, 90, 180)  # seconds to back off when even the smallest chunk fails
+MAX_SKIPPED = 4  # windows skipped in a row before a series is abandoned for this run
 
 
 def _iso(ts: int) -> str:
@@ -56,12 +57,20 @@ def parse(payload: dict, after: int | None = None, before: int | None = None,
 
 
 async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: int, end: int,
-                 chunk: int) -> list[tuple[int, float]]:
-    """Walk [start, end) in chunks. On failure halve the chunk and keep the smaller
-    size for the rest of the range: a busy subreddit stays busy."""
+                 chunk: int) -> tuple[list[tuple[int, float]], list[tuple[int, int]]]:
+    """Walk [start, end) in chunks. Returns (points, gaps), gaps being the
+    [after, before) windows that could not be fetched.
+
+    On failure the chunk is halved and kept smaller for the rest of the range: a
+    busy subreddit stays busy. A smallest-size window that keeps failing after every
+    cooldown is skipped and reported as a gap, so one bad window no longer costs the
+    whole series. After MAX_SKIPPED skips in a row the archive is treated as down:
+    the rest of the range becomes a gap and what was fetched is kept."""
     out: list[tuple[int, float]] = []
+    gaps: list[tuple[int, int]] = []
     shift = 0
     strikes = 0
+    skipped = 0
     t = start
     while t < end:
         until = min(t + chunk, end)
@@ -76,7 +85,16 @@ async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: 
             if chunk <= MIN_CHUNK:
                 # Small requests failing means the archive is asking us to slow down.
                 if strikes >= len(COOLDOWNS):
-                    raise
+                    log.warning("r/%s %s: skipping %s to %s after repeated errors; left as a gap",
+                                subreddit, metric, _iso(t), _iso(until))
+                    gaps.append((t, until))
+                    t, strikes, skipped = until, 0, skipped + 1
+                    if skipped >= MAX_SKIPPED:
+                        log.warning("r/%s %s: archive keeps refusing; stopping at %s", subreddit, metric, _iso(t))
+                        if t < end:
+                            gaps.append((t, end))
+                        break
+                    continue
                 log.info("r/%s %s: %s; backing off %d s", subreddit, metric, e, COOLDOWNS[strikes])
                 await asyncio.sleep(COOLDOWNS[strikes])
                 strikes += 1
@@ -86,9 +104,9 @@ async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: 
             await asyncio.sleep(DELAY)
             continue
         t = until
-        strikes = 0
+        strikes = skipped = 0
         await asyncio.sleep(DELAY)
-    return out
+    return out, gaps
 
 
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
@@ -97,18 +115,18 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
     end = (now - LAG) // 3600 * 3600
     begin = (start if start is not None else end - 7 * 86400) // 3600 * 3600
     for s in specs:
-        try:
-            pts = await _range(client, s.params["subreddit"], s.params["metric"], begin, end, 7 * 86400)
-        except (httpx.HTTPError, ValueError) as e:
-            log.warning("%s: gave up: %s", s.key, e)
-            result.errors.append(f"{s.key}: {e}")
+        pts, gaps = await _range(client, s.params["subreddit"], s.params["metric"], begin, end, 7 * 86400)
+        for after, before in gaps:
+            result.errors.append(f"{s.key}: no data {_iso(after)} to {_iso(before)}")
+        if not pts:
             continue
-        result.points[s.key] = fill_quiet_hours(pts, end)
-        log.info("%s: %d hourly points", s.key, len(result.points[s.key]))
+        result.points[s.key] = fill_quiet_hours(pts, end, gaps)
+        log.info("%s: %d hourly points, %d gaps", s.key, len(result.points[s.key]), len(gaps))
     return result
 
 
-def fill_quiet_hours(pts: list[tuple[int, float]], end: int) -> list[tuple[int, float]]:
+def fill_quiet_hours(pts: list[tuple[int, float]], end: int,
+                     gaps: list[tuple[int, int]] = ()) -> list[tuple[int, float]]:
     """Hours with no activity are absent from the aggregate. Fill them with zero, but
     only on UTC days that have some data: a whole missing day is more likely an
     archive gap than a silent community, and must stay a gap rather than a fake zero."""
@@ -117,6 +135,7 @@ def fill_quiet_hours(pts: list[tuple[int, float]], end: int) -> list[tuple[int, 
     out = []
     for day in sorted(days):
         for h in range(day * 86400 + 3600, day * 86400 + 86400 + 1, 3600):
-            if h <= end:
+            # Hours inside a window that was never fetched stay missing, not zero.
+            if h <= end and (h in have or not any(a < h <= b for a, b in gaps)):
                 out.append((h, have.get(h, 0.0)))
     return out
