@@ -45,7 +45,38 @@ const th = (short, long, cls = '') =>
   `<th scope="col"${cls ? ` class="${cls}"` : ''}><span aria-hidden="true">${short}</span><span class="sr-only">${long}</span></th>`;
 // Decorative glyphs (▼ ● ▤) are hidden from screen readers.
 const glyph = (g) => `<span aria-hidden="true">${g}</span>`;
-function setState(text) { $('state').innerHTML = `${glyph('●')} ${esc(text)}`; }
+function setState(text) {
+  const el = $('state');
+  if (el.dataset.v === text) return;
+  el.dataset.v = text;
+  el.innerHTML = `${glyph('●')} ${esc(text)}`;
+}
+
+// Fixes applied to whatever a view renders, including parts filled in later:
+// a lone "—" is read as "no data" (screen readers often skip the dash), and a
+// table that scrolls becomes a focusable, named region so keyboards can scroll it.
+function enhance(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const dashes = [];
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    if (n.nodeValue.trim() === '—' && !n.parentElement.closest('[aria-hidden="true"], svg, option')) dashes.push(n);
+  }
+  for (const n of dashes) {
+    const span = document.createElement('span');
+    span.innerHTML = '<span aria-hidden="true">—</span><span class="sr-only">no data</span>';
+    n.replaceWith(span);
+  }
+  for (const wrap of root.querySelectorAll('.table-wrap')) {
+    const scrolls = wrap.scrollWidth > wrap.clientWidth + 1 || wrap.scrollHeight > wrap.clientHeight + 1;
+    if (scrolls) {
+      wrap.tabIndex = 0;
+      wrap.setAttribute('role', 'region');
+      wrap.setAttribute('aria-label', `${wrap.querySelector('table')?.getAttribute('aria-label') || 'Table'}, scrollable`);
+    } else if (wrap.getAttribute('role') === 'region') {
+      wrap.removeAttribute('tabindex'); wrap.removeAttribute('role'); wrap.removeAttribute('aria-label');
+    }
+  }
+}
 
 // ── API ─────────────────────────────────────────────────────────────────────
 // Static mode: the site was exported by `python -m tracker publish` and is served
@@ -92,7 +123,7 @@ const boot = {
 
 function toast(message, kind = 'err') {
   $('toast-slot').insertAdjacentHTML('beforeend',
-    `<div class="toast ${kind}" role="status"><span class="led${kind === 'err' ? ' three' : ''}"></span>${esc(message)}</div>`);
+    `<div class="toast ${kind}"><span class="led${kind === 'err' ? ' three' : ''}"></span>${esc(message)}</div>`);
 }
 
 // ── Components ──────────────────────────────────────────────────────────────
@@ -102,12 +133,14 @@ function bars(items) {
   if (!vals.length) return '<p class="note">NO DATA YET — NEEDS A BASELINE PERIOD</p>';
   const lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1;
   const peak = items.findIndex((i) => i.value === hi);
-  return `<div class="bars">${items.map((it, i) => {
+  // Screen readers get one "label: value" item per bar (items may pass `sr`).
+  return `<div class="bars" role="list">${items.map((it, i) => {
     const h = it.value == null ? 0 : 12 + ((it.value - lo) / span) * 88;
-    return `<div class="bar${i === peak ? ' peak' : ''}">
-      <div class="bar-value">${esc(it.text)}</div>
-      <div class="bar-track"><div class="bar-fill" style="--pct:${h}%"></div></div>
-      <div class="bar-label">${esc(it.label)}</div></div>`;
+    const sr = it.sr || `${it.label}: ${it.value == null ? 'no data' : it.text}`;
+    return `<div class="bar${i === peak ? ' peak' : ''}" role="listitem"><span class="sr-only">${esc(sr)}</span>
+      <div class="bar-value" aria-hidden="true">${esc(it.text)}</div>
+      <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--pct:${h}%"></div></div>
+      <div class="bar-label" aria-hidden="true">${esc(it.label)}</div></div>`;
   }).join('')}</div>`;
 }
 
@@ -291,7 +324,7 @@ function renderCorrelation(c) {
   };
 
   const latest = (vals) => { for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) return vals[i]; return null; };
-  $('corr-tiles').innerHTML = c.groups.map((g) => `<div class="tile">
+  $('corr-tiles').innerHTML = c.groups.map((g) => `<div class="tile" role="listitem">
     <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${g.r == null ? '—' : g.r.toFixed(2)}</div>
     <div class="tile-label">R · ${esc(label(g.tag))} VS YANDEX</div>
     <div class="tile-sub">${latest(g.values) == null ? 'NO DATA' : `NOW ${Math.round(latest(g.values))}% · ${g.r_days} DAYS`}</div></div>`).join('');
@@ -319,13 +352,13 @@ const views = {
     const chips = snap.runs.map((r) => {
       const off = (r.error || '').startsWith('not configured');
       const cls = off ? 'ghost' : r.ok ? '' : 'three';
-      return `<span class="chip ${cls}" title="${esc(r.error || '')}">${esc(PLATFORM_SHORT[r.platform] || r.platform)} ${off ? 'OFF' : r.ok ? 'OK' : 'ERR'}</span>`;
+      return `<span class="chip ${cls}" role="listitem" title="${esc(r.error || '')}">${esc(PLATFORM_SHORT[r.platform] || r.platform)} ${off ? 'OFF' : r.ok ? 'OK' : 'ERR'}</span>`;
     }).join('');
 
-    const tiles = infra.map((s) => `<div class="tile">
+    const tiles = infra.map((s) => `<div class="tile" role="listitem">
       <div class="tile-value${s.key === ref?.key ? ' hl' : ''}">${num(s.latest)}</div>
       <div class="tile-label">${esc(s.unit)} · ${esc(s.label)}</div>
-      <div class="tile-sub">REF ${pct(s.change_ref)} · 7D ${pct(s.change_7d)}</div></div>`).join('');
+      <div class="tile-sub">REF <span>${pct(s.change_ref)}</span> · 7D <span>${pct(s.change_7d)}</span></div></div>`).join('');
 
     const MODES = {
       ref: { field: 'change_ref', n: 'n_ref', note: `LAST 24 H VS ${mmdd(snap.reference.start)} – ${mmdd(snap.reference.end)} MEAN` },
@@ -337,6 +370,7 @@ const views = {
     const groupBars = bars(groups.map((g) => ({
       value: g[mode.field], label: TAG_SHORT[g.tag] || g.tag.toUpperCase(),
       text: g[mode.field] == null ? '—' : `${pct(g[mode.field])} n${g[mode.n]}`,
+      sr: `${TAG_SHORT[g.tag] || g.tag}: ${g[mode.field] == null ? 'no data' : `${pct(g[mode.field])}, ${g[mode.n]} communities`}`,
     })));
     const sigTable = state.compare !== 'event' ? '' : `<div class="table-wrap"><table class="table" aria-label="Change after strikes by group">
       <thead><tr><th scope="col">GROUP</th>${th('MEDIAN Δ', 'Median change after strikes', 't-num')}${th('P &lt; 0.05', 'Share with placebo p below 0.05', 't-num')}${th('N', 'Communities', 't-num')}</tr></thead>
@@ -356,12 +390,12 @@ const views = {
       <div class="legend" id="corr-legend" role="group" aria-label="Lines shown on the correlation chart"></div>
       <div class="readout" id="corr-readout"></div>
       <div class="chart" id="corr-chart"><p class="note">LOADING…</p></div>
-      <div class="tiles" id="corr-tiles"></div>
+      <div class="tiles" role="list" id="corr-tiles"></div>
       <p class="note">DAILY MEDIAN OF EACH GROUP'S COMMUNITIES · 100 = PRE-STRIKE MEAN · R = PEARSON CORRELATION OF DAILY VALUES
         WITH YANDEX CLOUD REACHABILITY · CONTROL = NON-POLITICAL COMMUNITIES · CORRELATION, NOT PROOF OF CAUSE — METHODS ON ABOUT</p>
-      <div class="chips" style="margin-top:14px">${chips}</div>
+      <div class="chips" style="margin-top:14px" role="list" aria-label="Source status">${chips}</div>
       <h2 class="sect">Infrastructure · latest value</h2>
-      <div class="tiles">${tiles}</div>
+      <div class="tiles" role="list">${tiles}</div>
       <h2 class="sect">Community activity · median change by group</h2>
       <div class="switch" data-compare role="group" aria-label="Compare community activity">
         <button class="chip" data-v="ref" aria-pressed="${state.compare === 'ref'}">VS PRE-STRIKE</button>
@@ -372,7 +406,7 @@ const views = {
       <p class="note">${mode.note} · n = COMMUNITIES WITH A BASELINE · CONTROL = NON-POLITICAL</p>
       ${sigTable}
       <div class="qband"><span class="qband-label">DATA COVERAGE ${cov == null ? '—' : Math.round(cov * 100) + '%'}</span>
-        <span class="qband-ticks">${ticks}</span><button class="qband-action" data-why aria-expanded="false" aria-controls="why">WHY?&gt;</button></div>
+        <span class="qband-ticks" aria-hidden="true">${ticks}</span><button class="qband-action" data-why aria-expanded="false" aria-controls="why">WHY?<span aria-hidden="true">&gt;</span></button></div>
       <div class="explain note" hidden id="why">SHARE OF CONFIGURED SERIES UPDATED IN THE LAST 3 H.
         ${stale.length ? 'STALE: ' + stale.slice(0, 12).map((s) => esc(s.key)).join(' · ') + (stale.length > 12 ? ` · +${stale.length - 12} MORE` : '') : 'ALL SERIES CURRENT.'}</div>
       <h2 class="sect">${esc(ref ? ref.label : 'Infrastructure')} · ${esc(ref ? ref.unit : '')} · 14 days</h2>
@@ -512,7 +546,7 @@ const views = {
           const c = at(w, o);
           return `<td class="${c.p != null && c.p < 0.05 ? 't-delta' : 't-value'}">${cell(c)}</td>`;
         }).join('')}</tr>`).join('')}</tbody></table></div>
-        <div class="tiles">${d.events.map((e, i) => `<div class="tile">
+        <div class="tiles" role="list">${d.events.map((e, i) => `<div class="tile" role="listitem">
           <div class="tile-value">${pct(main.per_event[i])}</div>
           <div class="tile-label">${esc(e.short)} · ${stamp(e.ts)}</div>
           <div class="tile-sub">${e.timed ? 'MEASURED TIME' : 'MIDNIGHT UTC · TIME UNKNOWN'}</div></div>`).join('')}</div>
@@ -524,7 +558,7 @@ const views = {
     api(`/api/series/${encodeURIComponent(state.b)}/points?days=14&bucket=day`).then((d) => {
       const s = byKey(state.b);
       $('daily-title').textContent = `${s.label} · ${s.unit} · daily mean, 14 days`;
-      $('daily-bars').innerHTML = bars(d.points.map(([t, v]) => ({ value: v, label: mmdd(t).slice(3), text: num(v) })));
+      $('daily-bars').innerHTML = bars(d.points.map(([t, v]) => ({ value: v, label: mmdd(t).slice(3), text: num(v), sr: `${mmdd(t)}: ${num(v)}` })));
     }).catch(() => { $('daily-bars').innerHTML = '<p class="note">UNAVAILABLE</p>'; });
   },
 
@@ -786,6 +820,12 @@ async function start() {
 }
 
 window.addEventListener('hashchange', () => route(true));
+let enhancePending = false;
+new MutationObserver(() => {
+  if (enhancePending) return;
+  enhancePending = true;
+  requestAnimationFrame(() => { enhancePending = false; enhance(view); });
+}).observe(view, { childList: true, subtree: true });
 let resizeTimer;
 window.addEventListener('resize', () => {
   clearTimeout(resizeTimer);

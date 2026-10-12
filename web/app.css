@@ -177,3 +177,6 @@ button.legend-item[aria-pressed="false"] .swatch { opacity: .35; }
 
 /* When switched on, the overlay runs at reduced strength */
 .crt { opacity: calc(var(--crt-chrome-opacity) * .6); }
+
+/* Scrollable tables are focusable regions (set in app.js) */
+.table-wrap[role="region"]:focus-visible { outline: 1px solid var(--a1); outline-offset: 2px; }

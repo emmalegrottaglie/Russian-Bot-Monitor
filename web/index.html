@@ -2,6 +2,7 @@
 <html lang="en" data-palette="term-phosphor">
 <head>
 <meta charset="utf-8">
+<link rel="icon" href="data:,">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bot Traffic Monitor</title>
 <meta name="description" content="Live and historical data on Yandex data-centre health and activity in online political communities.">
@@ -11,10 +12,12 @@
 <link rel="stylesheet" href="app.css">
 </head>
 <body>
-<main>
-  <header class="band"><h1 id="title" tabindex="-1"><span aria-hidden="true">// </span>BOT MONITOR</h1><span id="state"><span aria-hidden="true">●</span> CONNECTING</span></header>
+<header>
+  <div class="band"><h1 id="title" tabindex="-1"><span aria-hidden="true">// </span>BOT MONITOR</h1><span id="state" role="status"><span aria-hidden="true">●</span> CONNECTING</span></div>
   <div class="sub"><span>YANDEX AS13238 · AS200350</span><span class="sub-right"><span id="updated">—</span>
     <button class="pause" id="pause" aria-pressed="false">PAUSE UPDATES</button></span></div>
+</header>
+<main>
   <div class="prompt" id="prompt" aria-hidden="true">monitor --live</div>
 
   <section id="boot" class="boot" aria-live="polite">
@@ -24,11 +27,11 @@
     <div class="boot-pct" id="boot-pct">0% — CONNECTING</div>
   </section>
 
-  <div id="toast-slot"></div>
+  <div id="toast-slot" role="status"></div>
   <section id="view" hidden></section>
 
-  <div class="end"><span>END TRANSMISSION — <span id="clock">--:--</span> UTC</span><span>DATA: IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY</span></div>
 </main>
+<footer class="end"><span>END TRANSMISSION — <span id="clock">--:--</span> UTC</span><span>DATA: IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY</span></footer>
 
 <nav class="nav" aria-label="Sections">
   <a href="#live">Live</a><a href="#communities">Communities</a><a href="#history">History</a><a href="#report">Report</a><a href="#alerts">Alerts</a><a href="#about">About</a>
