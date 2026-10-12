@@ -1,0 +1,98 @@
+/* Page layout and the few pieces the terminal kit does not have (line chart,
+   select, prose). Everything else comes from /design/terminal.css. */
+
+body { max-width: 720px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+[hidden] { display: none !important; }
+
+a { color: var(--a1); }
+
+/* Toggle chips (same pattern as the specimen's switchers) */
+.switch { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 var(--gutter) 6px; }
+.switch button.chip:not([aria-pressed="true"]) { background: transparent; color: var(--a1); border-color: var(--term-line); }
+
+/* Small uppercase notes under charts and tables */
+.note { padding: 6px var(--gutter) 0; color: var(--term-muted); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; line-height: 1.7; }
+
+/* Wide tables scroll inside their own box instead of the page */
+.table-wrap { overflow-x: auto; }
+.table tbody tr[data-key] { cursor: pointer; }
+.table tbody tr[data-key]:hover td, .table tbody tr[data-key]:focus-visible td { background: var(--term-faint); }
+.table td.t-num { text-align: right; }
+.table th.t-num { text-align: right; }
+.table .t-up { color: var(--a2); }
+.table .t-down { color: var(--a3); }
+.table td.wrap { white-space: pre-line; min-width: 220px; }
+
+/* Line chart */
+.chart { position: relative; margin: 0 var(--gutter); }
+.chart svg { display: block; width: 100%; height: 170px; overflow: visible; }
+.chart .grid { stroke: var(--term-faint); stroke-width: 1; }
+.chart .axis { fill: var(--term-muted); font: 500 8px var(--font); letter-spacing: .06em; }
+.chart .line { fill: none; stroke: var(--a2); stroke-width: 1.5; }
+.chart .area { fill: color-mix(in srgb, var(--a2) 12%, transparent); stroke: none; }
+.chart .ref-band { fill: color-mix(in srgb, var(--a1) 7%, transparent); }
+.chart .event { stroke: var(--a3); stroke-width: 1; stroke-dasharray: 2 3; }
+.chart .event-label { fill: var(--a3); font: 800 8px var(--font); letter-spacing: .12em; }
+.chart .cursor { stroke: var(--a1); stroke-width: 1; }
+.chart .dot { fill: var(--a1); }
+.readout {
+  min-height: 16px; padding: 0 var(--gutter) 6px; color: var(--term-ink);
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.readout .muted { color: var(--term-muted); font-weight: 500; }
+
+/* Native select dressed as a terminal field */
+.field { display: block; padding: 0 var(--gutter) 8px; }
+.field span { display: block; margin-bottom: 5px; color: var(--term-muted); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; }
+.field select {
+  width: 100%; padding: 8px 9px; border: 1px solid var(--term-line); background: var(--term-card); color: var(--term-ink);
+  font: 700 11px var(--font); letter-spacing: .05em; appearance: none;
+}
+
+/* Download links styled as ghost chips */
+.links { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px var(--gutter) 0; }
+.links a { text-decoration: none; }
+
+/* Toasts stack under the prompt */
+#toast-slot:not(:empty) { display: grid; gap: 6px; padding: 12px var(--gutter) 0; }
+.toast.err { border-color: var(--a3); }
+.toast.info { border-color: var(--a2); }
+.toast .led.three { background: var(--a3); box-shadow: 0 0 8px var(--a3); }
+
+/* Explanation revealed by the quality band's WHY?> */
+.explain { margin: 0 var(--gutter); padding: 10px 12px; border: 1px solid var(--term-line); border-top: 0; }
+
+/* Prose (ABOUT tab): sentence case, readable measure */
+.prose { padding: 0 var(--gutter); color: var(--term-ink); font-size: 12px; line-height: 1.65; letter-spacing: .01em; }
+.prose p { margin: 0 0 12px; }
+.prose ul { margin: 0 0 12px; padding-left: 18px; }
+.prose li { margin-bottom: 6px; }
+.prose code { color: var(--a2); }
+.prose .muted { color: var(--term-muted); }
+
+/* Multi-line correlation chart: Yandex in a1, groups in their roles */
+.chart .line.l-a1 { stroke: var(--a1); stroke-width: 2; }
+.chart .line.l-a2 { stroke: var(--a2); }
+.chart .line.l-a3 { stroke: var(--a3); stroke-width: 2; }
+.chart .line.l-ink { stroke: var(--term-ink); }
+.chart .line.l-muted { stroke: var(--term-muted); stroke-dasharray: 4 3; }
+.chart .line.l-dash { stroke-dasharray: 2 2; }
+.chart .dot.l-a1 { fill: var(--a1); } .chart .dot.l-a3 { fill: var(--a3); } .chart .dot.l-muted { fill: var(--term-muted); }
+.chart .baseline { stroke: var(--term-line); stroke-width: 1; stroke-dasharray: 1 3; }
+
+/* Print / Save as PDF (REPORT tab): paper colours from the Terminal Light palette,
+   no chrome, tables allowed to wrap. */
+@media print {
+  :root, [data-palette] {
+    --term-bg: #fff; --term-card: #f4f2ea; --term-ink: #14170f; --term-muted: #5a6050;
+    --term-line: rgba(20,23,15,.3); --term-faint: rgba(20,23,15,.12);
+    --a1: #1a7030; --a2: #0a5f7d; --a3: #8f4e00;
+  }
+  body { max-width: none; }
+  .nav, .crt, .action, .switch, .links, .prompt, #toast-slot { display: none !important; }
+  .hero-value { text-shadow: none; }
+  .table-wrap { overflow: visible; }
+  .table th, .table td { white-space: normal; }
+  tr { break-inside: avoid; }
+}

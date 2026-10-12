@@ -1,0 +1,30 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tracker",
+      "runtimeExecutable": ".venv/Scripts/python.exe",
+      "runtimeArgs": [
+        "-m",
+        "tracker",
+        "serve",
+        "--no-collect",
+        "--port",
+        "8000"
+      ],
+      "port": 8000
+    },
+    {
+      "name": "static-preview",
+      "runtimeExecutable": ".venv/Scripts/python.exe",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8001",
+        "--directory",
+        "data"
+      ],
+      "port": 8001
+    }
+  ]
+}

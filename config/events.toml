@@ -1,0 +1,28 @@
+# Annotations drawn on every chart. Keep a source for each entry and say how sure
+# it is: "reported" = claimed in news or social media, "confirmed" = corroborated
+# by an independent measurement or official statement. `short` is the chart label.
+# `at` (UTC, optional) is the moment the event-study windows start from; without it
+# the start is midnight UTC of `date`, which is coarse, so prefer a measured time.
+
+[[event]]
+date = "2026-10-08"
+short = "SASOVO"
+at = "2026-10-07T23:30:00Z"
+label = "Strike reported: Yandex Sasovo (Ryazan)"
+status = "reported"
+source = "Social media reports. Time: IODA active probing of Yandex Cloud (AS200350) falls from 23:30 UTC on Oct 7 (02:30 Moscow time, Oct 8)"
+
+[[event]]
+date = "2026-10-09"
+short = "KALUGA"
+label = "Strike reported: Yandex Kaluga"
+status = "reported"
+source = "Social media reports. Time unknown: no matching step in IODA signals, so windows start at midnight UTC"
+
+[[event]]
+date = "2026-10-11"
+short = "VLADIMIR"
+at = "2026-10-11T01:50:00Z"
+label = "Strike reported: Yandex Vladimir"
+status = "reported"
+source = "Social media reports. Time: second step down in IODA Yandex Cloud reachability at 01:50 UTC"

@@ -1,0 +1,29 @@
+# docker compose up -d                      app only, on 127.0.0.1:8000
+# docker compose --profile tunnel up -d     app + Cloudflare Tunnel (no open ports;
+#                                           point the tunnel hostname at http://app:8000)
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      TRACKER_DB: /data/tracker.db
+    volumes:
+      - tracker-data:/data
+    ports:
+      - "127.0.0.1:8000:8000"
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    profiles: ["tunnel"]
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${TUNNEL_TOKEN:-}  # from the Cloudflare Zero Trust dashboard; put it in .env
+    depends_on:
+      - app
+
+volumes:
+  tracker-data:

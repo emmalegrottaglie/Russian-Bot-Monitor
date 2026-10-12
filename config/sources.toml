@@ -1,0 +1,144 @@
+# What the collector watches. Edit freely; series are created from this file on start.
+#
+# kind = "infrastructure": network-level signals for the data centres themselves.
+# kind = "community":      activity rates in online communities.
+#
+# Tags are the research grouping. They are a judgement call and are documented on
+# the site's ABOUT tab, so keep them honest and keep a "control" group of
+# non-political communities: a drop that also shows up in controls is not evidence
+# of bot removal.
+#
+#   political-right  communities organised around right-wing politics
+#   political        general political discussion
+#   regional         country / state communities
+#   russia           Russia-focused communities
+#   control          non-political baseline
+
+[analysis]
+# Pre-strike window used for the "vs reference" comparison (UTC dates, inclusive).
+reference_start = "2026-09-15"
+reference_end = "2026-10-07"
+# Series correlations are computed against this one by default.
+correlation_ref = "ioda.asn200350.ping-slash24"
+
+# ── Infrastructure ────────────────────────────────────────────────────────────
+
+[[infrastructure]]
+source = "ioda"
+asn = 200350
+name = "Yandex Cloud"
+signals = ["ping-slash24", "bgp", "merit-nt"]
+
+[[infrastructure]]
+source = "ioda"
+asn = 13238
+name = "Yandex"
+# IODA only publishes BGP visibility for this ASN; active probing covers AS200350.
+signals = ["bgp"]
+
+[[infrastructure]]
+source = "cloudflare"
+asn = 13238
+name = "Yandex"
+
+# ── Reddit ────────────────────────────────────────────────────────────────────
+# Seeded with the communities from the r/theydidthemath analysis plus explicit
+# right-wing communities and non-political controls.
+
+[[reddit]]
+subreddits = ["Conservative", "Republican", "conservatives", "asktrumpsupporters"]
+region = "US"
+tags = ["political-right"]
+
+[[reddit]]
+subreddits = ["politics", "news", "neoliberal", "worldnews"]
+region = "US"
+tags = ["political"]
+
+[[reddit]]
+subreddits = ["newjersey", "kansas", "alabama", "maryland", "illinois"]
+region = "US"
+tags = ["regional"]
+
+[[reddit]]
+subreddits = ["de"]
+region = "DE"
+tags = ["regional"]
+
+[[reddit]]
+subreddits = ["ukpolitics"]
+region = "UK"
+tags = ["political"]
+
+[[reddit]]
+subreddits = ["irishpolitics"]
+region = "IE"
+tags = ["political"]
+
+[[reddit]]
+subreddits = ["spainpolitics"]
+region = "ES"
+tags = ["political"]
+
+[[reddit]]
+subreddits = ["czech"]
+region = "CZ"
+tags = ["regional"]
+
+[[reddit]]
+subreddits = ["sweden"]
+region = "SE"
+tags = ["regional"]
+
+[[reddit]]
+subreddits = ["Polska"]
+region = "PL"
+tags = ["regional"]
+
+[[reddit]]
+subreddits = ["AskARussian"]
+region = "RU"
+tags = ["russia"]
+
+[[reddit]]
+subreddits = ["aww", "gardening", "Cooking", "personalfinance"]
+region = "GLOBAL"
+tags = ["control"]
+
+# ── Bluesky keyword search ────────────────────────────────────────────────────
+
+[[bluesky]]
+query = "AfD"
+lang = "de"
+region = "DE"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "MAGA"
+lang = "en"
+region = "US"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "Reform UK"
+lang = "en"
+region = "UK"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "Konfederacja"
+lang = "pl"
+region = "PL"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "Bundestag"
+lang = "de"
+region = "DE"
+tags = ["political"]
+
+[[bluesky]]
+query = "weather"
+lang = "en"
+region = "GLOBAL"
+tags = ["control"]

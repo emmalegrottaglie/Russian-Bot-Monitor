@@ -1,0 +1,116 @@
+# Bot Traffic Monitor
+
+An open dashboard for one question: **when Yandex data centres go offline, does activity in online political communities change, and does it change more than in non-political ones?**
+
+In October 2026, reported strikes on Yandex data centres (Sasovo on Oct 8, Kaluga on Oct 9, Vladimir on Oct 11) coincided with sharp drops in Yandex Cloud reachability. In the same days, people reported lower activity in political subreddits and right-wing social media. This project records both kinds of signal side by side, keeps the history, and makes it downloadable, so the claim can be checked rather than repeated.
+
+It collects data on its own every 15 minutes and logs an alert when a signal moves sharply. It can also post those alerts to an X account.
+
+## What it measures
+
+| Signal | Source | Key needed |
+|---|---|---|
+| Yandex Cloud (AS200350) /24 blocks answering pings, BGP prefixes, telescope traffic | [IODA](https://ioda.inetintel.cc.gatech.edu) | no |
+| Yandex (AS13238) BGP prefixes | IODA | no |
+| Share of HTTP requests from AS13238 classified as bots | [Cloudflare Radar](https://radar.cloudflare.com) | free token |
+| Comments and posts per hour in selected subreddits | Reddit API (or public feeds) | OAuth recommended |
+| Historical subreddit activity (backfill) | [Arctic Shift](https://arctic-shift.photon-reddit.com) | no |
+| Posts per hour matching keywords | Bluesky public search | no |
+
+Communities are tagged `political-right`, `political`, `regional`, `russia` or `control` in [config/sources.toml](config/sources.toml). The **control** group of non-political communities is the point of the exercise: a drop that also shows up there is not evidence of bot removal. The tags are editorial judgements and are documented on the site.
+
+Only timestamps are counted. No usernames or content are stored.
+
+## Run it locally
+
+Requires Python 3.11 or newer.
+
+```bash
+python -m venv .venv
+.venv/Scripts/activate        # Windows; use `source .venv/bin/activate` elsewhere
+pip install -e ".[dev]"
+cp .env.example .env          # optional: add API keys
+python -m tracker backfill --days 45          # IODA, Cloudflare and Reddit history
+python -m tracker serve                       # site + API on http://127.0.0.1:8000, collects every 15 min
+```
+
+Other commands:
+
+- `python -m tracker collect` runs one collection pass, the alert check and today's report if it is missing, for cron.
+- `python -m tracker report` builds or rebuilds today's shareable report.
+- `python -m tracker publish --collect` collects, then pushes a static copy of the site to GitHub Pages. This is the free hosting mode.
+- `python -m tracker serve --no-collect` serves the site without collecting.
+- `python -m tracker backfill --platform reddit --days 90` backfills one platform.
+- `python -m pytest` runs the tests.
+
+The Reddit backfill is slow. Arctic Shift is a volunteer-run archive, and it times out on large subreddits such as r/Conservative and r/politics. The collector shrinks its requests and backs off when that happens, so allow several hours for the default list. Comment series go first. If the run is interrupted, resume it with `--missing-only`.
+
+## The site
+
+The UI follows the terminal design system in [terminal-design-guide/](terminal-design-guide/DESIGN_GUIDE.md).
+
+- **Live** leads with the correlation. One chart puts Yandex Cloud reachability and the daily activity of each community group on the same scale, where 100 means the pre-strike average. It shows each group's correlation with Yandex (Pearson r), right-wing communities against the non-political control group by default. Below the chart are every infrastructure signal, the median change per group, data coverage and the latest alerts.
+- **Communities** lists every tracked community with its current rate, its change against the last 7 days and against the pre-strike reference, and its correlation with Yandex Cloud reachability.
+- **History** shows any infrastructure series against any community series on a shared time axis, with the reference period and reported strikes marked. Series download as CSV.
+- **Report** shows the latest dated report: the group headline table, infrastructure, and every community. It links to downloads (a zip bundle with a methods README, CSVs and JSON) and to the archive of earlier reports. It also prints cleanly to PDF.
+- **Alerts** is the alert log, including whether each alert was posted.
+- **About** covers methodology, caveats, sources and the theme switch.
+
+## Event study
+
+The headline question is tested the way the [r/theydidthemath analysis](https://www.reddit.com/r/theydidthemath/comments/1x3q43a/) tried to, with the checks its commenters asked for:
+
+- **Effect**: total activity in the 12 hours after each strike, compared with the same weekday and hour one, two and three weeks earlier. The strikes are averaged with equal weight. Strike times are in [config/events.toml](config/events.toml). Where IODA shows the outage, its measured time is used: Sasovo at 23:30 UTC on Oct 7, Vladimir at 01:50 UTC on Oct 11.
+- **Placebo p-value**: the same statistic is computed for random start times before the first strike. p is the share of those that drop at least as much.
+- **Robustness grid**: the effect is recomputed for windows of 6, 12 and 24 hours and for starts 3 hours early or late. A real effect should hold across the grid.
+- **Controls**: non-political communities go through the same test. With many communities, about 5% pass p < 0.05 by chance.
+
+Run as a sanity check on Yandex Cloud reachability itself, the test gives about −48% with p = 0.002 (the floor for 500 draws) in every cell of the grid.
+
+## API
+
+Interactive docs are at `/docs`. Main endpoints:
+
+- `GET /api/correlation` returns daily indices (100 = pre-strike average) for Yandex Cloud and each group, with each group's r.
+- `GET /api/snapshot` returns every series with its latest value, `change_7d`, `change_ref` and `r`, plus group medians, source health and events.
+- `GET /api/series/{key}/points?days=30&bucket=hour|day|raw` returns a time series.
+- `GET /api/series/{key}/event-study` returns the event study and its robustness grid.
+- `GET /api/export/series.csv?key=…` and `GET /api/export/daily.csv` export the data.
+- `GET /api/alerts` returns the alert log.
+
+Responses carry `Cache-Control: public, max-age=60` so a CDN can absorb traffic.
+
+## Alerts
+
+An alert fires when either of these moves against its 7-day same-hour baseline:
+
+- an infrastructure signal moves 25% or more
+- a community group's median moves 30% or more (groups with at least 3 communities)
+
+Each signal-direction pair has a 12-hour cooldown. Every alert also quotes the control group's change. Alerts are always logged on the site. To post them to X, set the four `X_*` credentials and `TRACKER_POST_ALERTS=1`. X charges per post, and much more for posts with links, so alerts leave the link out by default and are capped at `TRACKER_MAX_POSTS_PER_DAY`.
+
+## Reports
+
+A report is built every day and saved under `data/reports/YYYY-MM-DD/`. Reports are never changed after their day, so each one can be cited. Each contains:
+
+- `groups.csv`: the headline table, one row per research group, including the control group.
+- `communities.csv`: one row per community, with pre-strike and recent rates, change, strike-window effect, placebo p, robustness and correlation.
+- `infrastructure.csv` and `daily.csv`: the network signals and the daily data behind everything.
+- `report.json`: all of the above in one file.
+- `README.md`: methods, column definitions, sources and how to cite.
+- `bot-traffic-report-YYYY-MM-DD.zip`: all of these files in one download.
+
+## Deploying
+
+See [docs/HOSTING.md](docs/HOSTING.md) for a step-by-step guide in two phases:
+
+1. **Free, now.** Your computer collects every 30 minutes and publishes a static copy of the site to GitHub Pages.
+2. **About $7 a month, later.** A VPS behind a Cloudflare Tunnel and cache, with Litestream backups and X alerts.
+
+## Caveats
+
+Correlation is not attribution. Activity can fall after an outage for reasons other than bots going offline: news cycles, weekends, moderation, platform changes, or real users in Russia losing service. Cloudflare's bot share for AS13238 is mostly Yandex's own search crawler. Read the About tab before citing a number.
+
+## Licence
+
+No licence has been chosen yet. Note that Cloudflare Radar data is CC BY-NC 4.0.
