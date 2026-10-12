@@ -1,6 +1,6 @@
 # Chart specs
 
-Status: draft, 2026-10-12. Several values below are placeholders marked **decide after backfill**. They depend on how noisy the real Reddit history turns out to be, and the Arctic Shift backfill is still loading as of this writing.
+Status: draft, 2026-10-12. Built so far: the data endpoints for charts 1, 2 and 5, chart 3, and PNG export (chart 4) on every line chart. Several values below are placeholders marked **decide after backfill**. They depend on how noisy the real Reddit history turns out to be, and the Arctic Shift backfill is still loading as of this writing.
 
 Charts in build order:
 
@@ -42,7 +42,7 @@ A group's curve is the median, at each offset, of its communities' curves, using
 
 **Smoothing:** a centred rolling mean over **3 hours**, applied to both the curves and the band. **Decide after backfill:** 1, 3 or 6 hours, judged by how noisy small subreddits are.
 
-**Endpoint:** `GET /api/strike-aligned?span=48` returns:
+**Endpoint:** `GET /api/strike-aligned` (built; the span and smoothing are `ALIGNED_SPAN` and `ALIGNED_SMOOTH` in `tracker/analysis.py`, not query parameters, so the response can be cached) returns:
 
 ```json
 {
@@ -96,7 +96,7 @@ Arrow keys step by hour. The readout gives "+6 H: right 84, control 98, normal r
 
 Each community's daily index, 100 = pre-strike mean: the per-series `index()` already computed inside `correlation_view`, which currently throws it away after taking group medians. Return it instead of recomputing it.
 
-**Endpoint:** `GET /api/heatmap?days=50` returns:
+**Endpoint:** `GET /api/heatmap` (built; 50 days) returns:
 
 ```json
 {
@@ -151,7 +151,7 @@ From `correlation_view`: for each day, the selected group's index minus the cont
 
 **Normal range:** the 5th to 95th percentile of the daily difference over the pre-strike reference period. This is a simple descriptive band, not a significance test, and the caption says so.
 
-No new endpoint: computed in the browser from `/api/correlation`, which already returns both series.
+No new endpoint: computed in the browser from `/api/correlation`, which already returns both series. **Built** and on Live; it shows "no data yet" until the control group has history.
 
 ### Visual
 

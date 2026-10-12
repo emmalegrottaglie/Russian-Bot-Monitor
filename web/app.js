@@ -14,7 +14,7 @@ const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT
 
 let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
-  corrTags: new Set(['political-right', 'control']) };
+  corrTags: new Set(['political-right', 'control']), diffTag: 'political-right' };
 // Line style per group on the correlation chart; Yandex itself is always a1.
 const TAG_LINE = { 'political-right': 'l-a3', political: 'l-a2', regional: 'l-a2 l-dash', russia: 'l-ink', control: 'l-muted' };
 
@@ -153,8 +153,12 @@ function niceMax(v) {
 
 // SVG line chart with labeled axes, event markers, reference band and a hover readout.
 // `lines`: [{label, cls, points: [[ts, value], ...], area?}] drawn in order (last on top).
-function chart(el, readout, lines, { start, end, unit, events = [], ref = null, baseline = null }) {
-  const W = Math.max(el.clientWidth, 280), H = 170, L = 40, R = 6, T = 6, B = 18;
+// `band`: {lo, hi, label} shades a horizontal normal range. `share`: {name, title,
+// caption, sources?} adds a PNG download that redraws the chart with that context.
+function chart(el, readout, lines, opts) {
+  const { start, end, unit, events = [], ref = null, baseline = null, band = null, share = null } = opts;
+  const baselineLabel = opts.baselineLabel ?? `${num(baseline)} = PRE-STRIKE`;
+  const W = Math.max(el.clientWidth, 280), H = opts.height || 170, L = 40, R = 6, T = 6, B = 18;
   lines = lines.filter((l) => l.points.length);
   if (!lines.length) {
     el.innerHTML = '';
@@ -163,19 +167,22 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
   }
   const values = lines.flatMap((l) => l.points.map((p) => p[1]));
   if (baseline != null) values.push(baseline);
-  const lo = Math.min(0, ...values), hi = niceMax(Math.max(...values));
+  if (band) values.push(band.lo, band.hi);
+  const min = Math.min(...values);
+  const lo = min < 0 ? -niceMax(-min) : 0, hi = niceMax(Math.max(...values));
   const x = (t) => L + ((t - start) / (end - start)) * (W - L - R);
   const y = (v) => T + (1 - (v - lo) / (hi - lo || 1)) * (H - T - B);
   const xy = (p) => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`;
 
   const drawn = lines.map((line) => {
-    // Break the line where samples are missing for more than 3 steps.
+    // Break the line where samples are missing for more than `maxGap` steps (default 3,
+    // so hourly polling hiccups stay joined; daily charts pass 1 so a missing day shows).
     const pts = line.points;
     const steps = pts.slice(1).map((p, i) => p[0] - pts[i][0]).sort((m, n) => m - n);
     const step = steps[Math.floor(steps.length / 2)] || 3600;
     const segs = [[]];
     pts.forEach((p, i) => {
-      if (i && p[0] - pts[i - 1][0] > step * 3) segs.push([]);
+      if (i && p[0] - pts[i - 1][0] > step * (opts.maxGap ?? 3)) segs.push([]);
       segs[segs.length - 1].push(p);
     });
     const path = segs.filter((g) => g.length).map((g) => `M${g.map(xy).join('L')}`).join('');
@@ -197,7 +204,9 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
     ? `<rect class="ref-band" x="${x(Math.max(ref.start, start))}" y="${T}" width="${x(Math.min(ref.end, end)) - x(Math.max(ref.start, start))}" height="${H - T - B}"/>`
     : '';
   const base = baseline == null ? '' : `<line class="baseline" x1="${L}" x2="${W - R}" y1="${y(baseline)}" y2="${y(baseline)}"/>
-    <text class="axis" x="${W - R}" y="${y(baseline) - 3}" text-anchor="end">${num(baseline)} = PRE-STRIKE</text>`;
+    <text class="axis" x="${L + 4}" y="${y(baseline) - 3}">${esc(baselineLabel)}</text>`;  // left: line names sit at the right end
+  const normBand = !band ? '' : `<rect class="norm-band" x="${L}" y="${y(band.hi)}" width="${W - L - R}" height="${Math.max(1, y(band.lo) - y(band.hi))}"/>
+    <text class="axis" x="${L + 4}" y="${y(band.hi) - 3}">${esc(band.label || 'NORMAL RANGE')}</text>`;
   // Event labels run vertically down their marker. Markers closer than one
   // label's width (narrow charts) share a single label, joined with " · ".
   const shown = events.filter((e) => e.ts >= start && e.ts <= end);
@@ -220,16 +229,25 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
     return `${l.label}: latest ${num(vs[vs.length - 1])}, range ${num(Math.min(...vs))} to ${num(Math.max(...vs))}`;
   }).join('; ');
 
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" tabindex="0"
-    aria-label="Chart, ${esc(unit)}, ${mmdd(start)} to ${mmdd(end)}. ${esc(summary)}. Left and right arrow keys read values; the data table below lists them.">
-    ${refBand}
+  const bandText = band ? ` Shaded band: ${esc(band.label || 'normal range').toLowerCase()}, ${num(band.lo)} to ${num(band.hi)}.` : '';
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" tabindex="0"${H !== 170 ? ` style="height:${H}px"` : ''}
+    aria-label="Chart, ${esc(unit)}, ${mmdd(start)} to ${mmdd(end)}. ${esc(summary)}.${bandText} Left and right arrow keys read values; the data table below lists them.">
+    ${refBand}${normBand}
     ${yTicks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
       <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${num(v)}</text>`).join('')}
     ${xTicks.map((t) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${mmdd(t)}</text>`).join('')}
     ${base}${drawn}${endLabels}${ev}
     <line class="cursor" y1="${T}" y2="${H - B}" visibility="hidden"/>
   </svg>
-  <details class="data-table"><summary>Data table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>`;
+  <div class="chart-tools"><details class="data-table"><summary>Data table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>
+  ${share ? `<button type="button" class="chart-png" aria-label="Download this chart as a PNG image">${glyph('▼')} PNG</button>` : ''}</div>`;
+  if (share) {
+    const btn = el.querySelector('.chart-png');
+    btn.addEventListener('click', () => {
+      btn.disabled = true;
+      exportPng(lines, opts).catch((e) => toast(`PNG FAILED: ${e.message}`)).finally(() => { btn.disabled = false; });
+    });
+  }
 
   const svg = el.querySelector('svg'), cur = svg.querySelector('.cursor');
   const near = (pts, t) => pts.reduce((best, p) => (Math.abs(p[0] - t) < Math.abs(best[0] - t) ? p : best), pts[0]);
@@ -300,6 +318,121 @@ function chart(el, readout, lines, { start, end, unit, events = [], ref = null, 
   });
 }
 
+// ── Chart images ────────────────────────────────────────────────────────────
+// A chart is redrawn off-screen at a fixed size, its computed styles and font are
+// inlined so the SVG renders the same as an image, and it is composed on a canvas
+// with its title, caption, data date and sources: the context travels with it.
+const PNG_W = 1200, PNG_H = 675, PNG_SCALE = 2;
+const SVG_PROPS = ['fill', 'fill-opacity', 'stroke', 'stroke-width', 'stroke-dasharray', 'stroke-opacity', 'opacity',
+  'font-family', 'font-size', 'font-weight', 'letter-spacing', 'paint-order', 'visibility'];
+let fontFaces = null;
+
+function toBase64(buf) {
+  const bytes = new Uint8Array(buf);
+  let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+
+// The page's web font as data-URI @font-face rules (Latin subset only). An SVG drawn
+// as an image cannot load external fonts; without this it falls back to a system font.
+async function embeddedFonts() {
+  if (fontFaces != null) return fontFaces;
+  try {
+    const link = [...document.querySelectorAll('link[rel="stylesheet"]')].find((l) => l.href.includes('fonts.googleapis.com'));
+    const family = getComputedStyle(document.body).fontFamily.split(',')[0].replace(/["']/g, '').trim();
+    const css = await (await fetch(link.href)).text();
+    const blocks = css.match(/@font-face\s*{[^}]*}/g) || [];
+    const wanted = blocks.filter((b) => b.includes(`'${family}'`) && b.includes('U+0000-00FF'));
+    const data = new Map();
+    for (const b of wanted) {
+      const url = b.match(/url\((https:[^)]+)\)/)[1];
+      if (!data.has(url)) data.set(url, `data:font/woff2;base64,${toBase64(await (await fetch(url)).arrayBuffer())}`);
+    }
+    fontFaces = wanted.map((b) => b.replace(/url\((https:[^)]+)\)/, (_, u) => `url(${data.get(u)})`)).join('\n');
+  } catch {
+    return '';  // offline or blocked: this export uses a fallback monospace; the next one retries
+  }
+  return fontFaces;
+}
+
+function wrapText(ctx, text, width) {
+  const out = [];
+  let line = '';
+  for (const word of text.split(' ')) {
+    const next = line ? `${line} ${word}` : word;
+    if (ctx.measureText(next).width > width && line) { out.push(line); line = word; } else line = next;
+  }
+  if (line) out.push(line);
+  return out;
+}
+
+async function exportPng(lines, opts) {
+  const { share } = opts;
+  const host = document.createElement('div');
+  host.className = 'chart';
+  host.style.cssText = 'position:absolute;left:-10000px;top:0;width:760px;margin:0';
+  document.body.append(host);
+  try {
+    chart(host, document.createElement('div'), lines, { ...opts, share: null, height: 300 });
+    const svg = host.querySelector('svg');
+    const clone = svg.cloneNode(true);
+    const src = [...svg.querySelectorAll('*')], dst = [...clone.querySelectorAll('*')];
+    src.forEach((node, i) => {
+      const cs = getComputedStyle(node);
+      dst[i].setAttribute('style', SVG_PROPS.map((p) => `${p}:${cs.getPropertyValue(p)}`).join(';'));
+    });
+    clone.querySelector('.cursor')?.remove();
+    const [, , vw, vh] = clone.getAttribute('viewBox').split(' ').map(Number);
+    clone.setAttribute('width', vw); clone.setAttribute('height', vh);
+    clone.removeAttribute('style');
+    const style = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+    style.textContent = await embeddedFonts();
+    clone.prepend(style);
+    const img = new Image();
+    img.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(new XMLSerializer().serializeToString(clone))}`;
+    await img.decode();
+
+    const root = getComputedStyle(document.documentElement);
+    const token = (n) => root.getPropertyValue(n).trim();
+    const family = getComputedStyle(document.body).fontFamily;
+    await document.fonts.ready;
+    const canvas = document.createElement('canvas');
+    canvas.width = PNG_W * PNG_SCALE; canvas.height = PNG_H * PNG_SCALE;
+    const ctx = canvas.getContext('2d');
+    ctx.scale(PNG_SCALE, PNG_SCALE);
+    ctx.fillStyle = getComputedStyle(document.body).backgroundColor;
+    ctx.fillRect(0, 0, PNG_W, PNG_H);
+    const pad = 48;
+    ctx.textBaseline = 'alphabetic';
+    ctx.fillStyle = token('--a2'); ctx.font = `800 26px ${family}`;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '3px';
+    ctx.fillText(share.title.toUpperCase(), pad, 64);
+    ctx.fillStyle = token('--term-muted'); ctx.font = `500 15px ${family}`;
+    if ('letterSpacing' in ctx) ctx.letterSpacing = '0.5px';
+    wrapText(ctx, share.caption, PNG_W - 2 * pad).slice(0, 3).forEach((t, i) => ctx.fillText(t, pad, 98 + i * 22));
+    const chartTop = 176, chartH = 430;
+    const chartW = Math.min(PNG_W - 2 * pad + 16, chartH * (vw / vh));
+    ctx.drawImage(img, pad - 16, chartTop, chartW, chartW * (vh / vw));
+    ctx.strokeStyle = token('--term-line'); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad, PNG_H - 52); ctx.lineTo(PNG_W - pad, PNG_H - 52); ctx.stroke();
+    const dataTo = Math.max(...lines.map((l) => l.points[l.points.length - 1][0]));
+    ctx.fillStyle = token('--term-muted'); ctx.font = `500 13px ${family}`;
+    ctx.fillText(`DATA TO ${stamp(dataTo)} · ${share.sources || 'IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY'}`, pad, PNG_H - 26);
+    ctx.textAlign = 'right'; ctx.fillStyle = token('--a1');
+    ctx.fillText(`${location.host}${location.pathname.replace(/\/$/, '')}`, PNG_W - pad, PNG_H - 26);
+
+    const blob = await new Promise((res, rej) => canvas.toBlob((b) => (b ? res(b) : rej(new Error('canvas export'))), 'image/png'));
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `bot-monitor-${share.name}-${new Date(snap.now * 1000).toISOString().slice(0, 10)}.png`;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 10_000);
+  } finally {
+    host.remove();
+  }
+}
+
 function lineChart(el, readout, points, opts) {
   chart(el, readout, [{ label: opts.unit, points, area: true }], opts);
 }
@@ -317,7 +450,10 @@ function renderCorrelation(c) {
     { label: 'YANDEX', cls: 'l-a1', points: pts(c.infra.values) },
   ];
   chart($('corr-chart'), $('corr-readout'), lines,
-    { start, end, unit: '% OF PRE-STRIKE', events: c.events, ref: c.reference, baseline: 100 });
+    { start, end, unit: '% OF PRE-STRIKE', events: c.events, ref: c.reference, baseline: 100, maxGap: 1,
+      share: { name: 'correlation', title: 'Community activity vs Yandex Cloud',
+        caption: "Daily median of each group's communities and Yandex Cloud reachability, as % of their pre-strike mean (100). Shaded: pre-strike reference period. Dashed: reported strikes. Correlation, not proof of cause." } });
+  renderDiff(c);
 
   const swatch = (cls) => `<svg class="swatch" viewBox="0 0 22 8" aria-hidden="true"><line class="line ${cls}" x1="1" x2="21" y1="4" y2="4"/></svg>`;
   $('corr-legend').innerHTML = `<span class="legend-item">${swatch('l-a1')}YANDEX CLOUD</span>${c.groups.map((g) =>
@@ -334,6 +470,42 @@ function renderCorrelation(c) {
     <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${g.r == null ? '—' : g.r.toFixed(2)}</div>
     <div class="tile-label">R · ${esc(label(g.tag))} VS YANDEX</div>
     <div class="tile-sub">${latest(g.values) == null ? 'NO DATA' : `NOW ${Math.round(latest(g.values))}% · ${g.r_days} DAYS`}</div></div>`).join('');
+}
+
+// Chart 3 in docs/CHARTS.md: one group's daily index minus the control group's.
+const DIFF_CAPTION = (g) => `${g} communities minus the non-political control group, in percentage points of their pre-strike level. Shaded: range of 90% of pre-strike days. Dashed: reported strikes.`;
+
+function renderDiff(c) {
+  const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
+  const control = c.groups.find((g) => g.tag === 'control');
+  const options = c.groups.filter((g) => g.tag !== 'control');
+  if (!options.some((g) => g.tag === state.diffTag) && options.length) state.diffTag = options[0].tag;
+  $('diff-switch').innerHTML = options.map((g) =>
+    `<button class="chip" data-v="${esc(g.tag)}" aria-pressed="${g.tag === state.diffTag}">${esc(label(g.tag))}</button>`).join('');
+  $('diff-switch').onclick = (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.diffTag = b.dataset.v; renderDiff(c);
+  };
+  const g = options.find((o) => o.tag === state.diffTag);
+  if (!g || !control) {
+    $('diff-chart').innerHTML = '';
+    $('diff-readout').innerHTML = '<span class="muted">NO DATA YET — NEEDS BOTH A GROUP AND THE CONTROL GROUP</span>';
+    $('diff-note').textContent = '';
+    return;
+  }
+  // A day where either index is missing is missing, never zero.
+  const diffs = c.days.map((d, i) => (g.values[i] != null && control.values[i] != null ? g.values[i] - control.values[i] : null));
+  const mid = (d) => d + 43200;
+  const ref = c.days.map((d, i) => [mid(d), diffs[i]])
+    .filter(([t, v]) => v != null && t >= c.reference.start && t <= c.reference.end).map(([, v]) => v).sort((a, b) => a - b);
+  const q = (p) => { const pos = p * (ref.length - 1), i = Math.floor(pos); return ref[i] + (ref[Math.min(i + 1, ref.length - 1)] - ref[i]) * (pos - i); };
+  const band = ref.length >= 10 ? { lo: q(0.05), hi: q(0.95), label: 'NORMAL RANGE' } : null;
+  const caption = DIFF_CAPTION(label(g.tag));
+  chart($('diff-chart'), $('diff-readout'),
+    [{ label: `${label(g.tag)} − CONTROL`, cls: 'l-a3', points: c.days.map((d, i) => [mid(d), diffs[i]]).filter((p) => p[1] != null) }],
+    { start: c.days[0], end: snap.now, unit: 'PTS VS CONTROL', events: c.events, baseline: 0, baselineLabel: '0 = NO DIFFERENCE', band, maxGap: 1,
+      share: { name: `${g.tag}-minus-control`, title: `${label(g.tag)} minus control`, caption } });
+  $('diff-note').textContent = band ? caption : `${caption} No normal range yet: fewer than 10 pre-strike days have both indices.`;
 }
 
 // ── Views ───────────────────────────────────────────────────────────────────
@@ -399,6 +571,11 @@ const views = {
       <div class="tiles" role="list" id="corr-tiles"></div>
       <p class="note">DAILY MEDIAN OF EACH GROUP'S COMMUNITIES · 100 = PRE-STRIKE MEAN · R = PEARSON CORRELATION OF DAILY VALUES
         WITH YANDEX CLOUD REACHABILITY · CONTROL = NON-POLITICAL COMMUNITIES · CORRELATION, NOT PROOF OF CAUSE — METHODS ON ABOUT</p>
+      <h2 class="sect">Difference · group minus control · percentage points</h2>
+      <div class="switch" id="diff-switch" role="group" aria-label="Group compared with the control group"></div>
+      <div class="readout" id="diff-readout"></div>
+      <div class="chart" id="diff-chart"><p class="note">LOADING…</p></div>
+      <p class="note" id="diff-note"></p>
       <div class="chips" style="margin-top:14px" role="list" aria-label="Source status">${chips}</div>
       <h2 class="sect">Infrastructure · latest value</h2>
       <div class="tiles" role="list">${tiles}</div>
@@ -440,7 +617,9 @@ const views = {
     if (ref) {
       const end = snap.now, start = end - 14 * 86400;
       api(`/api/series/${encodeURIComponent(ref.key)}/points?days=14&bucket=hour`).then((d) =>
-        lineChart($('live-chart'), $('live-readout'), d.points, { start, end, unit: ref.unit, events: snap.events, ref: snap.reference }))
+        lineChart($('live-chart'), $('live-readout'), d.points, { start, end, unit: ref.unit, events: snap.events, ref: snap.reference,
+          share: { name: ref.key, title: `${ref.label} · ${ref.unit}`, sources: ref.platform === 'ioda' ? 'IODA, GEORGIA TECH' : 'CLOUDFLARE RADAR',
+            caption: 'Hourly, last 14 days. Shaded: pre-strike reference period. Dashed: reported strikes.' } }))
         .catch(() => toast('CHART DATA UNAVAILABLE'));
     }
     api('/api/alerts?limit=3').then((list) => {
@@ -535,7 +714,8 @@ const views = {
     const draw = async (key, chart, ro) => {
       const s = byKey(key);
       const d = await api(`/api/series/${encodeURIComponent(key)}/points?days=${state.days}&bucket=hour`);
-      lineChart($(chart), $(ro), d.points, { start, end, unit: s.unit, events: snap.events, ref: snap.reference });
+      lineChart($(chart), $(ro), d.points, { start, end, unit: s.unit, events: snap.events, ref: snap.reference,
+        share: { name: key, title: `${s.label} · ${s.unit}`, caption: `Hourly means, UTC, last ${state.days} days. Shaded: pre-strike reference period. Dashed: reported strikes.` } });
     };
     draw(state.a, 'chart-a', 'ro-a').catch(() => toast('SERIES A UNAVAILABLE'));
     draw(state.b, 'chart-b', 'ro-b').catch(() => toast('SERIES B UNAVAILABLE'));
