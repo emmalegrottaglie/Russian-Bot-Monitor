@@ -56,8 +56,12 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
 
 7. **Schedule it every 30 minutes.** Run this once in PowerShell, with your own path:
    ```powershell
-   schtasks /Create /SC MINUTE /MO 30 /TN "BotTrafficMonitor" /TR "\"C:\Russian bot tracker\scripts\collect-and-publish.cmd\""
+   $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c "C:\Russian bot tracker\scripts\collect-and-publish.cmd"' -WorkingDirectory 'C:\Russian bot tracker'
+   $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)
+   Register-ScheduledTask -TaskName 'BotTrafficMonitor' -Action $action -Trigger $trigger
    ```
+   - Don't use `schtasks /TR` with a path containing spaces: PowerShell drops the inner quotes, and the task then tries to run `C:\Russian` and fails with "file not found" (`0x80070002`).
+   - Check it works: `Get-ScheduledTaskInfo -TaskName BotTrafficMonitor` should show `LastTaskResult : 0` after a run, and `data\publish.log` should exist.
    - Output goes to `data\publish.log`.
    - In *Settings → System → Power*, set sleep to *Never* while the computer is plugged in.
    - To stop the schedule: `schtasks /Delete /TN "BotTrafficMonitor" /F`.

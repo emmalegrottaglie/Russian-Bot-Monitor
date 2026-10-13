@@ -14,8 +14,16 @@
 <body>
 <header>
   <div class="band"><h1 id="title" tabindex="-1"><span aria-hidden="true">// </span>BOT MONITOR</h1><span id="state" role="status"><span aria-hidden="true">●</span> CONNECTING</span></div>
-  <div class="sub"><span>YANDEX AS13238 · AS200350</span><span class="sub-right"><span id="updated">—</span>
+  <div class="sub"><button class="asn" id="asn" aria-expanded="false" aria-controls="asn-info">YANDEX AS13238 · AS200350 <span class="asn-i" aria-hidden="true">?</span><span class="sr-only">: what are these?</span></button><span class="sub-right"><span id="updated">—</span>
     <button class="pause" id="pause" aria-pressed="false">PAUSE UPDATES</button></span></div>
+  <div class="asn-info" id="asn-info" hidden>
+    <ul class="notes">
+      <li>These are the two Yandex networks this site watches. An <b>AS</b> (autonomous system) is a block of internet addresses run by one organisation.</li>
+      <li><b>AS13238</b> is Yandex's main network: search, mail, maps and its other services.</li>
+      <li><b>AS200350</b> is Yandex Cloud: data centres that rent servers to other companies. Its reachability fell at the times of the reported strikes.</li>
+      <li>IODA (Georgia Tech) measures how much of each network still answers. Cloudflare Radar measures how much of its traffic is automated.</li>
+    </ul>
+  </div>
 </header>
 <main>
   <div class="prompt" id="prompt" aria-hidden="true">monitor --live</div>

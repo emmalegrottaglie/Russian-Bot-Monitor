@@ -7,9 +7,34 @@ const REFRESH_MS = 60_000;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TAG_SHORT = {
-  'political-right': 'RIGHT', political: 'POLITICS', regional: 'REGIONAL',
-  russia: 'RUSSIA', control: 'CONTROL',
+  'political-right': 'RIGHT-WING', political: 'POLITICS', regional: 'REGIONAL',
+  russia: 'RUSSIA', control: 'NON-POLITICAL',
 };
+// One line per group for the "who is in each group" panels. The tags themselves
+// are editorial labels set in config/sources.toml.
+const TAG_ABOUT = {
+  'political-right': 'Communities organised around right-wing or conservative politics.',
+  political: 'General news and politics communities, across the spectrum.',
+  regional: 'Local communities for US states and European countries.',
+  russia: 'Communities about Russia.',
+  control: 'Hobby and lifestyle communities. They are the control group: a drop that shows up here too is not about politics.',
+};
+
+// Explanatory notes as a short list, one point per line, in sentence case.
+const notes = (items, attrs = '') => `<ul class="notes"${attrs}>${items.filter(Boolean).map((i) => `<li>${i}</li>`).join('')}</ul>`;
+
+function groupsPanel() {
+  const byTag = new Map();
+  for (const s of snap.series) {
+    if (s.kind !== 'community' || !s.primary) continue;
+    for (const t of s.tags) (byTag.get(t) || byTag.set(t, []).get(t)).push(s.label);
+  }
+  const order = Object.keys(TAG_SHORT).filter((t) => byTag.has(t));
+  return `<details class="explain-groups"><summary>Who is in each group?</summary>
+    <dl>${order.map((t) => `<dt>${esc(TAG_SHORT[t])}</dt>
+      <dd>${esc(TAG_ABOUT[t] || '')} <span class="members">${byTag.get(t).map(esc).join(' · ')}</span></dd>`).join('')}</dl>
+    <p class="notes-tail">Groups are editorial labels, open to challenge in <code>config/sources.toml</code>.</p></details>`;
+}
 const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT', bluesky: 'BLUESKY' };
 
 let snap = null;
@@ -239,7 +264,7 @@ function chart(el, readout, lines, opts) {
     ${base}${drawn}${endLabels}${ev}
     <line class="cursor" y1="${T}" y2="${H - B}" visibility="hidden"/>
   </svg>
-  <div class="chart-tools"><details class="data-table"><summary>Data table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>
+  <div class="chart-tools"><details class="data-table"><summary>Show data as a table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>
   ${share ? `<button type="button" class="chart-png" aria-label="Download this chart as a PNG image">${glyph('▼')} PNG</button>` : ''}</div>`;
   if (share) {
     const btn = el.querySelector('.chart-png');
@@ -457,8 +482,7 @@ function renderCorrelation(c) {
 
   const swatch = (cls) => `<svg class="swatch" viewBox="0 0 22 8" aria-hidden="true"><line class="line ${cls}" x1="1" x2="21" y1="4" y2="4"/></svg>`;
   $('corr-legend').innerHTML = `<span class="legend-item">${swatch('l-a1')}YANDEX CLOUD</span>${c.groups.map((g) =>
-    `<button class="legend-item" data-v="${esc(g.tag)}" aria-pressed="${state.corrTags.has(g.tag)}">${swatch(TAG_LINE[g.tag] || 'l-ink')}${esc(label(g.tag))}
-      ${g.r == null ? '' : `<span class="sr-only">correlation</span> R ${g.r.toFixed(2)}`}</button>`).join('')}`;
+    `<button class="legend-item" data-v="${esc(g.tag)}" aria-pressed="${state.corrTags.has(g.tag)}">${swatch(TAG_LINE[g.tag] || 'l-ink')}${esc(label(g.tag))}</button>`).join('')}`;
   $('corr-legend').onclick = (e) => {
     const b = e.target.closest('button'); if (!b) return;
     if (state.corrTags.has(b.dataset.v)) state.corrTags.delete(b.dataset.v); else state.corrTags.add(b.dataset.v);
@@ -466,10 +490,18 @@ function renderCorrelation(c) {
   };
 
   const latest = (vals) => { for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) return vals[i]; return null; };
+  // Strength words follow the usual reading of a correlation coefficient.
+  const strength = (r) => {
+    if (r == null) return 'NOT ENOUGH DAYS YET';
+    if (Math.abs(r) < 0.3) return 'NO CLEAR LINK';
+    return `${Math.abs(r) < 0.6 ? 'MODERATE' : 'STRONG'} · ${r > 0 ? 'MOVES WITH' : 'MOVES OPPOSITE TO'} YANDEX`;
+  };
+  const signed = (r) => (r == null ? '—' : `${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r).toFixed(2)}`);
   $('corr-tiles').innerHTML = c.groups.map((g) => `<div class="tile" role="listitem">
-    <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${g.r == null ? '—' : g.r.toFixed(2)}</div>
-    <div class="tile-label">R · ${esc(label(g.tag))} VS YANDEX</div>
-    <div class="tile-sub">${latest(g.values) == null ? 'NO DATA' : `NOW ${Math.round(latest(g.values))}% · ${g.r_days} DAYS`}</div></div>`).join('');
+    <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${signed(g.r)}</div>
+    <div class="tile-label">${esc(label(g.tag))}</div>
+    <div class="tile-sub">${strength(g.r)}</div>
+    <div class="tile-sub">${latest(g.values) == null ? 'NO DATA TODAY' : `TODAY ${Math.round(latest(g.values))}% OF NORMAL`}</div></div>`).join('');
 }
 
 // Chart 3 in docs/CHARTS.md: one group's daily index minus the control group's.
@@ -490,7 +522,7 @@ function renderDiff(c) {
   if (!g || !control) {
     $('diff-chart').innerHTML = '';
     $('diff-readout').innerHTML = '<span class="muted">NO DATA YET — NEEDS BOTH A GROUP AND THE CONTROL GROUP</span>';
-    $('diff-note').textContent = '';
+    $('diff-note').innerHTML = '';
     return;
   }
   // A day where either index is missing is missing, never zero.
@@ -505,7 +537,11 @@ function renderDiff(c) {
     [{ label: `${label(g.tag)} − CONTROL`, cls: 'l-a3', points: c.days.map((d, i) => [mid(d), diffs[i]]).filter((p) => p[1] != null) }],
     { start: c.days[0], end: snap.now, unit: 'PTS VS CONTROL', events: c.events, baseline: 0, baselineLabel: '0 = NO DIFFERENCE', band, maxGap: 1,
       share: { name: `${g.tag}-minus-control`, title: `${label(g.tag)} minus control`, caption } });
-  $('diff-note').textContent = band ? caption : `${caption} No normal range yet: fewer than 10 pre-strike days have both indices.`;
+  $('diff-note').innerHTML = notes([
+    `The line is ${esc(label(g.tag).toLowerCase())} activity minus non-political activity, both as a % of their usual pre-strike level.`,
+    'Above 0: the group is busier than usual compared with non-political communities. Below 0: quieter.',
+    band ? 'The shaded band is the normal range: 90% of pre-strike days fell inside it.' : 'No normal range yet: fewer than 10 pre-strike days have data for both groups.',
+  ]);
 }
 
 // ── Views ───────────────────────────────────────────────────────────────────
@@ -539,10 +575,10 @@ const views = {
       <div class="tile-sub">REF <span>${pct(s.change_ref)}</span> · 7D <span>${pct(s.change_7d)}</span></div></div>`).join('');
 
     const MODES = {
-      ref: { field: 'change_ref', n: 'n_ref', note: `LAST 24 H VS ${mmdd(snap.reference.start)} – ${mmdd(snap.reference.end)} MEAN` },
-      '7d': { field: 'change_7d', n: 'n_7d', note: 'LAST 3 H VS SAME HOURS, PREVIOUS 7 DAYS (MEDIAN)' },
+      ref: { field: 'change_ref', n: 'n_ref', note: `Each bar: the last 24 hours compared with the average from ${mmdd(snap.reference.start)} to ${mmdd(snap.reference.end)}, before the strikes.` },
+      '7d': { field: 'change_7d', n: 'n_7d', note: 'Each bar: the last 3 hours compared with the same hours of day over the previous 7 days.' },
       event: { field: 'event_effect', n: 'n_event',
-        note: `${snap.event_window} H AFTER EACH STRIKE VS SAME WEEKDAY-HOUR 1–3 WEEKS EARLIER, EQUAL WEIGHT PER STRIKE` },
+        note: `Each bar: the ${snap.event_window} hours after each strike compared with the same weekday and hour 1 to 3 weeks earlier, averaged over the strikes.` },
     };
     const mode = MODES[state.compare];
     const groupBars = bars(groups.map((g) => ({
@@ -556,8 +592,10 @@ const views = {
         <td class="t-num ${dirClass(g.event_effect)}">${pct(g.event_effect)}</td>
         <td class="t-num">${g.share_sig == null ? '—' : Math.round(g.share_sig * 100) + '%'}</td>
         <td class="t-num">${g.n_event}</td></tr>`).join('')}</tbody></table></div>
-      <p class="note">P &lt; 0.05 = SHARE OF THE GROUP'S COMMUNITIES WHOSE STRIKE-WINDOW DROP IS RARER THAN 5% OF RANDOM PRE-STRIKE WINDOWS.
-        ABOUT 5% WOULD PASS BY CHANCE ALONE — COMPARE WITH CONTROL.</p>`;
+      ${notes([
+        'P &lt; 0.05: the share of the group\'s communities whose drop after the strikes was bigger than on 95% of ordinary days before them.',
+        'About 5% would pass by chance alone, so compare with the non-political group.',
+      ])}`;
 
     const cov = snap.coverage;
     const ticks = cov == null ? '········' : '|'.repeat(Math.round(cov * 8)).padEnd(8, '·');
@@ -566,16 +604,23 @@ const views = {
     view.innerHTML = `${hero}
       <h2 class="sect">Correlation · activity vs Yandex Cloud · % of pre-strike</h2>
       <div class="legend" id="corr-legend" role="group" aria-label="Lines shown on the correlation chart"></div>
+      ${groupsPanel()}
       <div class="readout" id="corr-readout"></div>
       <div class="chart" id="corr-chart"><p class="note">LOADING…</p></div>
+      <h3 class="tiles-title">How closely each group follows Yandex Cloud</h3>
       <div class="tiles" role="list" id="corr-tiles"></div>
-      <p class="note">DAILY MEDIAN OF EACH GROUP'S COMMUNITIES · 100 = PRE-STRIKE MEAN · R = PEARSON CORRELATION OF DAILY VALUES
-        WITH YANDEX CLOUD REACHABILITY · CONTROL = NON-POLITICAL COMMUNITIES · CORRELATION, NOT PROOF OF CAUSE — METHODS ON ABOUT</p>
-      <h2 class="sect">Difference · group minus control · percentage points</h2>
+      ${notes([
+        'Each line is a group\'s daily activity as a % of its usual level before the strikes: 100 means normal.',
+        'The Yandex Cloud line is the share of its network still answering, against the same pre-strike level.',
+        'The number on each tile is a correlation from −1 to +1, over the days both lines have data (up to 45). Near +1: the group rises and falls with Yandex. Near 0: no link. Near −1: it moves the opposite way.',
+        'A drop in the non-political group as well means the cause is probably not political.',
+        'Correlation is not proof of cause. Methods are on the About tab.',
+      ])}
+      <h2 class="sect">Difference · group minus non-political · percentage points</h2>
       <div class="switch" id="diff-switch" role="group" aria-label="Group compared with the control group"></div>
       <div class="readout" id="diff-readout"></div>
       <div class="chart" id="diff-chart"><p class="note">LOADING…</p></div>
-      <p class="note" id="diff-note"></p>
+      <div id="diff-note"></div>
       <div class="chips" style="margin-top:14px" role="list" aria-label="Source status">${chips}</div>
       <h2 class="sect">Infrastructure · latest value</h2>
       <div class="tiles" role="list">${tiles}</div>
@@ -586,7 +631,7 @@ const views = {
         <button class="chip" data-v="event" aria-pressed="${state.compare === 'event'}">STRIKE WINDOWS</button>
       </div>
       ${groupBars}
-      <p class="note">${mode.note} · n = COMMUNITIES WITH A BASELINE · CONTROL = NON-POLITICAL</p>
+      ${notes([mode.note, 'The value is the median across the group\'s communities; n is how many have enough history to compare.'])}
       ${sigTable}
       <div class="qband"><span class="qband-label">DATA COVERAGE ${cov == null ? '—' : Math.round(cov * 100) + '%'}</span>
         <span class="qband-ticks" aria-hidden="true">${ticks}</span><button class="qband-action" data-why aria-expanded="false" aria-controls="why">WHY?<span aria-hidden="true">&gt;</span></button></div>
@@ -595,7 +640,7 @@ const views = {
       <h2 class="sect">${esc(ref ? ref.label : 'Infrastructure')} · ${esc(ref ? ref.unit : '')} · 14 days</h2>
       <div class="readout" id="live-readout"></div>
       <div class="chart" id="live-chart"></div>
-      <p class="note">SHADED = PRE-STRIKE REFERENCE · DASHED = REPORTED STRIKES (SEE ABOUT)</p>
+      ${notes(['Shaded: the pre-strike reference period.', 'Dashed lines: reported strikes (sources on the About tab).'])}
       <h2 class="sect">Latest alerts</h2>
       <div id="live-alerts"><p class="note">LOADING…</p></div>`;
 
@@ -640,6 +685,7 @@ const views = {
     const refLabel = byKey(snap.correlation_ref)?.label || snap.correlation_ref;
 
     view.innerHTML = `<h2 class="sect">Filter</h2>
+      ${groupsPanel()}
       <div class="switch" data-tags role="group" aria-label="Filter by group">${tags.map((t) =>
         `<button class="chip" data-v="${esc(t)}" aria-pressed="${state.tag === t}">${esc(t === 'all' ? 'ALL' : TAG_SHORT[t] || t)}</button>`).join('')}</div>
       <div class="switch" data-metrics role="group" aria-label="Metrics shown">
@@ -660,10 +706,15 @@ const views = {
           <td class="t-num">${s.event_p == null ? '—' : s.event_p.toFixed(2)}</td>
           <td class="t-num">${s.r == null ? '—' : s.r.toFixed(2)}</td></tr>`).join('')}</tbody>
       </table></div>
-      <p class="note">NOW = LATEST RATE · Δ 7D = LAST 3 H VS SAME HOURS PREVIOUS 7 DAYS · Δ REF = LAST 24 H VS PRE-STRIKE MEAN
-        · STRIKE Δ = ${snap.event_window} H AFTER EACH STRIKE VS SAME WEEKDAY-HOUR 1–3 WEEKS EARLIER · P = PLACEBO TEST AGAINST RANDOM PRE-STRIKE WINDOWS
-        (WITH ${rows.length} SERIES, ~${Math.round(rows.length * 0.05)} WILL SHOW P &lt; 0.05 BY CHANCE)
-        · R = PEARSON CORRELATION OF DAILY MEANS WITH ${esc(refLabel)}, LAST 30 DAYS · — = NOT ENOUGH DATA · SELECT A COMMUNITY NAME FOR ITS HISTORY</p>`;
+      ${notes([
+        '<b>Now</b>: the latest hourly rate.',
+        '<b>Δ 7D</b>: the last 3 hours compared with the same hours over the previous 7 days.',
+        '<b>Δ REF</b>: the last 24 hours compared with the average before the strikes.',
+        `<b>Strike Δ</b>: the ${snap.event_window} hours after each strike compared with the same weekday and hour 1 to 3 weeks earlier.`,
+        `<b>P</b>: how often a drop this big happens on an ordinary day before the strikes. With ${rows.length} series, about ${Math.round(rows.length * 0.05)} will show P &lt; 0.05 by chance.`,
+        `<b>R</b>: correlation of daily activity with ${esc(refLabel)} over the last 30 days, from −1 to +1.`,
+        '— means not enough data yet. Select a community name to see its history.',
+      ])}`;
 
     view.querySelector('[data-tags]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (b) { state.tag = b.dataset.v; views.communities(); }
@@ -736,10 +787,14 @@ const views = {
           <div class="tile-value">${pct(main.per_event[i])}</div>
           <div class="tile-label">${esc(e.short)} · ${stamp(e.ts)}</div>
           <div class="tile-sub">${e.timed ? 'MEASURED TIME' : 'MIDNIGHT UTC · TIME UNKNOWN'}</div></div>`).join('')}</div>
-        <p class="note">EACH CELL: CHANGE IN TOTAL ACTIVITY VS SAME WEEKDAY-HOUR 1–3 WEEKS EARLIER, AVERAGED OVER STRIKES · ${main.placebo_n >= 50
-          ? `p = SHARE OF 500 DRAWS FROM ${main.placebo_n} RANDOM PRE-STRIKE WINDOWS WITH A DROP AT LEAST THIS LARGE`
-          : 'p NEEDS 4+ WEEKS OF HISTORY BEFORE THE FIRST STRIKE — RUN THE BACKFILL'} · ○ = p &lt; 0.05 ·
-          TILES = EACH STRIKE, 12 H WINDOW. A REAL EFFECT SHOULD HOLD ACROSS THE GRID, NOT IN ONE CELL.</p>`;
+        ${notes([
+          'Each cell: total activity after the strikes compared with the same weekday and hour 1 to 3 weeks earlier, averaged over the strikes.',
+          main.placebo_n >= 50
+            ? `p: the share of 500 draws from ${main.placebo_n} random pre-strike windows with a drop at least this large. ○ marks p &lt; 0.05.`
+            : 'p needs 4 or more weeks of history before the first strike; it appears once the backfill has loaded it.',
+          'Tiles: each strike on its own, 12-hour window.',
+          'A real effect should hold across the grid, not in one cell.',
+        ])}`;
     }).catch(() => { $('es-grid').innerHTML = '<p class="note">UNAVAILABLE</p>'; });
     api(`/api/series/${encodeURIComponent(state.b)}/points?days=14&bucket=day`).then((d) => {
       const s = byKey(state.b);
@@ -759,7 +814,10 @@ const views = {
           <td class="${a.posted ? 't-data' : 't-delta'}">${a.posted ? 'X' : esc(a.error ? 'FAILED' : 'LOG ONLY')}</td></tr>`).join('')
           || '<tr><td colspan="3" class="t-key">NO ALERTS YET</td></tr>'}</tbody>
       </table></div>
-      <p class="note">AN ALERT FIRES WHEN AN INFRASTRUCTURE SIGNAL MOVES ≥25% OR A COMMUNITY GROUP MEDIAN MOVES ≥30% VS ITS 7-DAY SAME-HOUR BASELINE · 12 H COOLDOWN PER SIGNAL</p>`;
+      ${notes([
+        'An alert fires when an infrastructure signal moves 25% or more, or a group\'s median moves 30% or more, against the same hours over the previous 7 days.',
+        'Each signal then waits 12 hours before it can alert again.',
+      ])}`;
   },
 
   async report() {
@@ -811,9 +869,12 @@ const views = {
           <td class="t-num">${p2(g.r_vs_infrastructure)}</td>
           <td class="t-num">${g.latest_index == null ? '—' : Math.round(g.latest_index)}</td></tr>`).join('')}</tbody>
       </table></div>
-      <p class="note">MEDIANS ACROSS EACH GROUP'S COMMUNITIES · P &lt; .05 = SHARE WITH A PLACEBO P BELOW 0.05 (~5% BY CHANCE) ·
-        ROBUST = SHARE WITH A ≥5% DROP AT P &lt; .05 IN 5+ OF 9 TIMING CHECKS · R = CORRELATION WITH YANDEX CLOUD REACHABILITY ·
-        INDEX 100 = PRE-STRIKE</p>
+      ${notes([
+        'Values are medians across each group\'s communities.',
+        'P &lt; .05: the share with a placebo p below 0.05; about 5% would pass by chance.',
+        'Robust: the share with a drop of 5% or more at p &lt; .05 in at least 5 of 9 timing checks.',
+        'R: correlation with Yandex Cloud reachability. Index 100 = the pre-strike level.',
+      ])}
 
       <h2 class="sect">Infrastructure</h2>
       <div class="table-wrap"><table class="table" aria-label="Infrastructure">
@@ -844,8 +905,12 @@ const views = {
           <td class="t-num">${c.robust_cells == null ? '—' : `${c.robust_cells}/9`}</td>
           <td class="t-num">${p2(c.r_vs_infrastructure)}</td></tr>`).join('')}</tbody>
       </table></div>
-      <p class="note">RATES PER HOUR · STRIKE Δ = 12 H AFTER EACH STRIKE VS SAME WEEKDAY-HOUR 1–3 WEEKS EARLIER · P = PLACEBO TEST ·
-        ROBUST = TIMING CHECKS (OF 9) WITH A ≥5% DROP AT P &lt; .05 · FULL COLUMN DEFINITIONS IN THE BUNDLE README</p>
+      ${notes([
+        'Rates are per hour.',
+        'Strike Δ: the 12 hours after each strike compared with the same weekday and hour 1 to 3 weeks earlier. P: the placebo test.',
+        'Robust: timing checks, of 9, with a drop of 5% or more at p &lt; .05.',
+        'Full column definitions are in the bundle\'s README.',
+      ])}
 
       <button class="action" id="print">${glyph('▤')} PRINT / SAVE AS PDF</button>
 
@@ -981,6 +1046,12 @@ async function start() {
   } catch { /* storage unavailable */ }
   tickClock();
   setInterval(tickClock, 30_000);
+  const asn = $('asn');
+  const setAsn = (open) => { $('asn-info').hidden = !open; asn.setAttribute('aria-expanded', String(open)); };
+  asn.addEventListener('click', () => setAsn($('asn-info').hidden));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !$('asn-info').hidden) { setAsn(false); asn.focus(); }
+  });
   $('pause').addEventListener('click', () => {
     paused = !paused;
     $('pause').setAttribute('aria-pressed', String(paused));
