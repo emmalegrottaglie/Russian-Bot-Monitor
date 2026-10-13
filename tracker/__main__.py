@@ -12,6 +12,30 @@ from . import alerts, analysis, collectors, db, report, static
 from .config import Settings, load_config
 
 
+def backfill_order(series, conn, now: int) -> list:
+    """Order for a backfill: infrastructure first, then comments (the main metric) before
+    posts. Within each, take one community per group in turn, starting with the control
+    group, so every group reaches the two communities its median needs early instead of
+    one group finishing at a time. Within a group the quietest community goes first (by
+    its recent live rate): small ones load in minutes."""
+    def rate(spec) -> float:
+        pts = db.points(conn, spec.key, now - 3 * 86400, now)
+        return sum(v for _, v in pts) / len(pts) if pts else float("inf")
+
+    out = [s for s in series if s.kind != "community"]
+    rotation = ["control"] + [t for t in analysis.GROUP_ORDER if t != "control"]
+    for posts in (False, True):
+        queues: dict[str, list] = {}
+        for spec in sorted((s for s in series if s.kind == "community" and s.key.endswith(".posts") == posts), key=rate):
+            queues.setdefault(spec.tags[0] if spec.tags else "", []).append(spec)
+        order = [t for t in rotation if t in queues] + [t for t in queues if t not in rotation]
+        while any(queues.values()):
+            for tag in order:
+                if queues[tag]:
+                    out.append(queues[tag].pop(0))
+    return out
+
+
 def collect_once(config, settings) -> None:
     """One collection pass, then the alert check and today's report if missing."""
     asyncio.run(collectors.run(config, settings))
@@ -80,8 +104,9 @@ def main() -> None:
                         if db.points(conn, s.key, 0, start + 2 * 86400)}
             config = dataclasses.replace(config, series=tuple(s for s in config.series if s.key not in done))
             logging.info("skipping %d series that are already backfilled", len(done))
-        # Primary series first (Reddit comments), so a partial run already covers the main metric.
-        config = dataclasses.replace(config, series=tuple(sorted(config.series, key=lambda s: s.key.endswith(".posts"))))
+        with db.session(settings.db_path) as conn:
+            ordered = backfill_order(config.series, conn, int(time.time()))
+        config = dataclasses.replace(config, series=tuple(ordered))
         asyncio.run(collectors.run(config, settings, platforms=platforms, start=start, backfill=True))
 
 
