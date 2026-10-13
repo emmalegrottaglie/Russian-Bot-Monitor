@@ -96,7 +96,11 @@ region = "PL"
 tags = ["regional"]
 
 [[reddit]]
-subreddits = ["AskARussian"]
+# AskARussian: English-language questions to Russians. Pikabu: Russian-language
+# everyday community (mirror of the Russian site). tjournal_refugees: Russian-language
+# news and politics, émigré and opposition leaning. Russian speakers losing service
+# in an outage is one explanation for drops elsewhere; this group helps check it.
+subreddits = ["AskARussian", "Pikabu", "tjournal_refugees"]
 region = "RU"
 tags = ["russia"]
 

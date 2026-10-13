@@ -16,7 +16,7 @@ const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states and European countries.',
-  russia: 'Communities about Russia.',
+  russia: 'Communities about Russia and Russian-language communities: everyday (r/Pikabu), questions to Russians (r/AskARussian) and émigré-leaning news (r/tjournal_refugees).',
   control: 'Hobby and lifestyle communities. They are the control group: a drop that shows up here too is not about politics.',
 };
 
