@@ -261,3 +261,37 @@ button.legend-item[aria-pressed="false"] .swatch { opacity: .35; }
 
 /* Group names can be long; let bar labels wrap rather than spill */
 .bar-label { white-space: normal; line-height: 1.25; overflow-wrap: anywhere; }
+
+/* ── Chart zoom ─────────────────────────────────────────────────────────── */
+.chart-zoom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 4px; }
+.chart-range { color: var(--term-muted); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.chart-zoom-btns { display: flex; gap: 4px; flex: none; }
+.chart-zoom-btns button {
+  min-width: 30px; min-height: 28px; padding: 0 8px; border: 1px solid var(--term-line);
+  color: var(--a1); font-size: 12px; font-weight: 800; letter-spacing: .1em;
+}
+.chart-zoom-btns button:disabled { color: var(--term-muted); opacity: .5; cursor: default; }
+.chart-main svg { touch-action: pan-y; }  /* vertical swipes still scroll the page */
+.chart-main svg.zoomed { cursor: grab; }
+.chart-main svg.dragging { cursor: grabbing; }
+.chart svg.chart-overview { height: 30px; margin-top: 6px; overflow: hidden; touch-action: none; cursor: ew-resize; }
+.chart-overview .ov-bg { fill: var(--term-faint); }
+.chart-overview .line { stroke-width: 1; opacity: .75; }
+.chart-overview .ov-shade { fill: color-mix(in srgb, var(--term-bg) 70%, transparent); }
+.chart-overview .ov-window { fill: none; stroke: var(--a1); stroke-width: 1; }
+.chart-overview .ov-handle { fill: var(--a1); }
+.chart-overview.dragging { cursor: grabbing; }
+@media print { .chart-zoom, .chart-overview { display: none; } }
+
+/* ── Scrollbars in the palette: square, thin, accent thumb ──────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: var(--term-bg); }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--a1) 70%, var(--term-bg)); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--a1); }
+.table-wrap::-webkit-scrollbar-track { background: var(--term-card); }
+/* Firefox has no ::-webkit-scrollbar; Chromium ignores those rules once scrollbar-color is set, so scope this to Firefox */
+@supports (-moz-appearance: none) {
+  html, .table-wrap { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--a1) 70%, var(--term-bg)) var(--term-bg); }
+}
+/* A click or drag focuses the chart (so its keys work); only keyboard focus draws the ring */
+.chart-svg:focus:not(:focus-visible) { outline: none; }

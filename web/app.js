@@ -180,8 +180,32 @@ function niceMax(v) {
 // `lines`: [{label, cls, points: [[ts, value], ...], area?}] drawn in order (last on top).
 // `band`: {lo, hi, label} shades a horizontal normal range. `share`: {name, title,
 // caption, sources?} adds a PNG download that redraws the chart with that context.
+//
+// The time axis zooms: an overview strip under the chart holds a window that can be
+// dragged (pan) or resized from its edges (zoom); the chart itself pans by dragging and
+// zooms with Ctrl/⌘ + scroll or a trackpad pinch; buttons and +/−/0 keys do the same.
+// The value axis is fixed to the whole period, so zooming never exaggerates a change.
+let chartSeq = 0;
+const OV_H = 30;
+const zoomMemory = new Map();  // chart → zoomed window, kept across the 60 s refresh
+
+function timeTicks(start, end) {
+  const span = end - start, out = [];
+  if (span > 2.5 * 86400) {
+    const days = span / 86400;
+    const every = (days <= 8 ? 1 : days <= 16 ? 2 : days <= 35 ? 7 : 14) * 86400;
+    for (let t = Math.ceil(start / 86400) * 86400; t <= end; t += every) out.push([t, mmdd(t)]);
+  } else {
+    const step = (span <= 8 * 3600 ? 1 : span <= 18 * 3600 ? 3 : span <= 36 * 3600 ? 6 : 12) * 3600;
+    for (let t = Math.ceil(start / step) * step; t <= end; t += step) out.push([t, t % 86400 === 0 ? mmdd(t) : hhmm(t)]);
+  }
+  return out;
+}
+
 function chart(el, readout, lines, opts) {
-  const { start, end, unit, events = [], ref = null, baseline = null, band = null, share = null } = opts;
+  const { unit, events = [], ref = null, baseline = null, band = null, share = null } = opts;
+  const full = { start: opts.start, end: opts.end };
+  const fullSpan = full.end - full.start;
   const baselineLabel = opts.baselineLabel ?? `${num(baseline)} = PRE-STRIKE`;
   const W = Math.max(el.clientWidth, 280), H = opts.height || 170, L = 40, R = 6, T = 6, B = 18;
   lines = lines.filter((l) => l.points.length);
@@ -190,91 +214,53 @@ function chart(el, readout, lines, opts) {
     readout.innerHTML = '<span class="muted">NO DATA IN THIS RANGE</span>';
     return;
   }
+  const zoomable = !opts.still;
+  const id = ++chartSeq;
+
+  // Value axis from the whole period: stable while panning, honest while zoomed.
   const values = lines.flatMap((l) => l.points.map((p) => p[1]));
   if (baseline != null) values.push(baseline);
   if (band) values.push(band.lo, band.hi);
   const min = Math.min(...values);
   const lo = min < 0 ? -niceMax(-min) : 0, hi = niceMax(Math.max(...values));
-  const x = (t) => L + ((t - start) / (end - start)) * (W - L - R);
   const y = (v) => T + (1 - (v - lo) / (hi - lo || 1)) * (H - T - B);
-  const xy = (p) => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`;
 
-  const drawn = lines.map((line) => {
-    // Break the line where samples are missing for more than `maxGap` steps (default 3,
-    // so hourly polling hiccups stay joined; daily charts pass 1 so a missing day shows).
-    const pts = line.points;
+  const stepOf = (pts) => {
     const steps = pts.slice(1).map((p, i) => p[0] - pts[i][0]).sort((m, n) => m - n);
-    const step = steps[Math.floor(steps.length / 2)] || 3600;
-    const segs = [[]];
+    return steps[Math.floor(steps.length / 2)] || 3600;
+  };
+  // Break a line where samples are missing for more than `maxGap` steps (default 3, so
+  // hourly polling hiccups stay joined; daily charts pass 1 so a missing day shows).
+  const segments = (pts) => {
+    const step = stepOf(pts), segs = [[]];
     pts.forEach((p, i) => {
       if (i && p[0] - pts[i - 1][0] > step * (opts.maxGap ?? 3)) segs.push([]);
       segs[segs.length - 1].push(p);
     });
-    const path = segs.filter((g) => g.length).map((g) => `M${g.map(xy).join('L')}`).join('');
-    const area = !line.area ? '' : segs.filter((g) => g.length > 1).map((g) =>
-      `M${x(g[0][0]).toFixed(1)},${y(lo)}L${g.map(xy).join('L')}L${x(g[g.length - 1][0]).toFixed(1)},${y(lo)}Z`).join('');
-    // Isolated samples (no neighbour within 3 steps) get a dot, or they'd be invisible.
-    const lone = segs.filter((g) => g.length === 1).map(([p]) =>
-      `<circle class="dot ${line.cls || ''}" r="2" cx="${x(p[0]).toFixed(1)}" cy="${y(p[1]).toFixed(1)}"/>`).join('');
-    return `${area ? `<path class="area" d="${area}"/>` : ''}<path class="line ${line.cls || ''}" d="${path}"/>${lone}`;
-  }).join('');
+    return segs.filter((g) => g.length);
+  };
+  const minSpan = Math.min(fullSpan, Math.max(6 * stepOf(lines[0].points), 6 * 3600));
 
-  const yTicks = [lo, (lo + hi) / 2, hi];
-  const days = (end - start) / 86400;
-  const every = days <= 8 ? 1 : days <= 16 ? 2 : days <= 35 ? 7 : 14;
-  const xTicks = [];
-  for (let t = Math.ceil(start / 86400) * 86400; t <= end; t += every * 86400) xTicks.push(t);
+  const memKey = `${el.id}|${unit}|${lines.map((l) => l.label).join()}`;
+  let view = { ...full };
+  const mem = zoomable && zoomMemory.get(memKey);
+  if (mem && mem.start >= full.start && mem.end <= full.end && mem.end - mem.start >= minSpan) view = { ...mem };
+  const zoomed = () => view.end - view.start < fullSpan - 1;
 
-  const refBand = ref && ref.end > start && ref.start < end
-    ? `<rect class="ref-band" x="${x(Math.max(ref.start, start))}" y="${T}" width="${x(Math.min(ref.end, end)) - x(Math.max(ref.start, start))}" height="${H - T - B}"/>`
-    : '';
-  const base = baseline == null ? '' : `<line class="baseline" x1="${L}" x2="${W - R}" y1="${y(baseline)}" y2="${y(baseline)}"/>
-    <text class="axis" x="${L + 4}" y="${y(baseline) - 3}">${esc(baselineLabel)}</text>`;  // left: line names sit at the right end
-  const normBand = !band ? '' : `<rect class="norm-band" x="${L}" y="${y(band.hi)}" width="${W - L - R}" height="${Math.max(1, y(band.lo) - y(band.hi))}"/>
-    <text class="axis" x="${L + 4}" y="${y(band.hi) - 3}">${esc(band.label || 'NORMAL RANGE')}</text>`;
-  // Event labels run vertically down their marker. Markers closer than one
-  // label's width (narrow charts) share a single label, joined with " · ".
-  const shown = events.filter((e) => e.ts >= start && e.ts <= end);
-  const labels = [];
-  for (const e of shown) {
-    const last = labels[labels.length - 1];
-    if (last && x(e.ts) - last.x < 12) last.text += ` · ${e.short}`;
-    else labels.push({ x: x(e.ts), text: e.short });
-  }
-  const ev = shown.map((e) => `<line class="event" x1="${x(e.ts)}" x2="${x(e.ts)}" y1="${T}" y2="${H - B}"/>`).join('')
-    + labels.map((l) => `<text class="event-label" transform="translate(${l.x - 3},${T + 2}) rotate(-90)" text-anchor="end">${esc(l.text)}</text>`).join('');
+  el.innerHTML = `${zoomable ? `<div class="chart-zoom">
+      <span class="chart-range" aria-live="polite"></span>
+      <span class="chart-zoom-btns" role="group" aria-label="Zoom the time axis">
+        <button type="button" data-zoom="out" aria-label="Zoom out">−</button>
+        <button type="button" data-zoom="in" aria-label="Zoom in">+</button>
+        <button type="button" data-zoom="all" aria-label="Show the whole period">ALL</button></span></div>` : ''}
+    <div class="chart-main"><svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" tabindex="0"${H !== 170 ? ` style="height:${H}px"` : ''}></svg></div>
+    ${zoomable ? `<svg class="chart-overview" viewBox="0 0 ${W} ${OV_H}" aria-hidden="true"></svg>` : ''}
+    <div class="chart-tools"><details class="data-table"><summary>Show data as a table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>
+    ${share ? `<button type="button" class="chart-png" aria-label="Download this chart, as currently zoomed, as a PNG image">${glyph('▼')} PNG</button>` : ''}</div>`;
 
-  // Each line is named at its last point, so lines are told apart by text, not colour alone.
-  const endLabels = lines.length < 2 ? '' : lines.map((l) => {
-    const p = l.points[l.points.length - 1];
-    return `<text class="line-label ${l.cls || ''}" x="${(x(p[0]) - 3).toFixed(1)}" y="${(y(p[1]) - 4).toFixed(1)}" text-anchor="end">${esc(l.label)}</text>`;
-  }).join('');
-  const summary = lines.map((l) => {
-    const vs = l.points.map((p) => p[1]);
-    return `${l.label}: latest ${num(vs[vs.length - 1])}, range ${num(Math.min(...vs))} to ${num(Math.max(...vs))}`;
-  }).join('; ');
-
-  const bandText = band ? ` Shaded band: ${esc(band.label || 'normal range').toLowerCase()}, ${num(band.lo)} to ${num(band.hi)}.` : '';
-  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" tabindex="0"${H !== 170 ? ` style="height:${H}px"` : ''}
-    aria-label="Chart, ${esc(unit)}, ${mmdd(start)} to ${mmdd(end)}. ${esc(summary)}.${bandText} Left and right arrow keys read values; the data table below lists them.">
-    ${refBand}${normBand}
-    ${yTicks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
-      <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${num(v)}</text>`).join('')}
-    ${xTicks.map((t) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${mmdd(t)}</text>`).join('')}
-    ${base}${drawn}${endLabels}${ev}
-    <line class="cursor" y1="${T}" y2="${H - B}" visibility="hidden"/>
-  </svg>
-  <div class="chart-tools"><details class="data-table"><summary>Show data as a table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>
-  ${share ? `<button type="button" class="chart-png" aria-label="Download this chart as a PNG image">${glyph('▼')} PNG</button>` : ''}</div>`;
-  if (share) {
-    const btn = el.querySelector('.chart-png');
-    btn.addEventListener('click', () => {
-      btn.disabled = true;
-      exportPng(lines, opts).catch((e) => toast(`PNG FAILED: ${e.message}`)).finally(() => { btn.disabled = false; });
-    });
-  }
-
-  const svg = el.querySelector('svg'), cur = svg.querySelector('.cursor');
+  const svg = el.querySelector('.chart-svg');
+  const ov = el.querySelector('.chart-overview');
+  const rangeLabel = el.querySelector('.chart-range');
   const near = (pts, t) => pts.reduce((best, p) => (Math.abs(p[0] - t) < Math.abs(best[0] - t) ? p : best), pts[0]);
   const describe = (t, prefix) => {
     if (lines.length === 1) {
@@ -285,36 +271,252 @@ function chart(el, readout, lines, opts) {
     return `${prefix}<span class="muted">${stamp(p0[0])} ·</span> ${lines.map((l) =>
       `${esc(l.label)} ${num(near(l.points, p0[0])[1])}`).join(' · ')} <span class="muted">${esc(unit)}</span>`;
   };
-  const idle = () => { readout.innerHTML = describe(end, 'LATEST '); };
-  idle();
-  svg.addEventListener('pointermove', (e) => {
-    const box = svg.getBoundingClientRect();
-    const t = start + ((e.clientX - box.left) / box.width * W - L) / (W - L - R) * (end - start);
-    const p = near(lines[0].points, t);
-    cur.setAttribute('visibility', 'visible');
-    cur.setAttribute('x1', x(p[0])); cur.setAttribute('x2', x(p[0]));
-    readout.innerHTML = describe(t, '');
-  });
-  svg.addEventListener('pointerleave', () => { cur.setAttribute('visibility', 'hidden'); idle(); });
-
-  // Keyboard: arrows step through the first line's points; the readout is announced.
-  let idx = lines[0].points.length - 1;
-  const show = () => {
-    const p = lines[0].points[idx];
-    cur.setAttribute('visibility', 'visible');
-    cur.setAttribute('x1', x(p[0])); cur.setAttribute('x2', x(p[0]));
-    readout.innerHTML = describe(p[0], '');
+  let cursorT = null;  // time under the hover or keyboard cursor
+  const idle = () => { readout.innerHTML = describe(view.end, view.end >= full.end ? 'LATEST ' : 'END OF VIEW '); };
+  let labelTimer = null;
+  const describeRange = () => {
+    const span = view.end - view.start;
+    const fmt = (t) => (span <= 2.5 * 86400 ? `${mmdd(t)} ${hhmm(t)}` : mmdd(t));
+    const len = span >= 2 * 86400 ? `${Math.round(span / 86400)}\u00a0DAYS` : `${Math.round(span / 3600)}\u00a0H`;  // keep number and unit together
+    return zoomed() ? `${fmt(view.start)} – ${fmt(view.end)} · ${len}` : `ALL ${Math.round(fullSpan / 86400)} DAYS · DRAG THE STRIP OR PRESS + TO ZOOM`;
   };
+
+  const draw = () => {
+    const { start, end } = view;
+    const x = (t) => L + ((t - start) / (end - start)) * (W - L - R);
+    const xy = (p) => `${x(p[0]).toFixed(1)},${y(p[1]).toFixed(1)}`;
+    const pad = (end - start) * 0.02;
+    const drawn = lines.map((line) => {
+      // Only what is near the window is drawn; the clip path trims the edges.
+      const segs = segments(line.points).map((g) => g.filter((p) => p[0] >= start - pad - 4 * stepOf(line.points) && p[0] <= end + pad + 4 * stepOf(line.points))).filter((g) => g.length);
+      const path = segs.map((g) => `M${g.map(xy).join('L')}`).join('');
+      const area = !line.area ? '' : segs.filter((g) => g.length > 1).map((g) =>
+        `M${x(g[0][0]).toFixed(1)},${y(lo)}L${g.map(xy).join('L')}L${x(g[g.length - 1][0]).toFixed(1)},${y(lo)}Z`).join('');
+      // Isolated samples (no neighbour within the gap limit) get a dot, or they'd be invisible.
+      const lone = segs.filter((g) => g.length === 1).map(([p]) =>
+        `<circle class="dot ${line.cls || ''}" r="2" cx="${x(p[0]).toFixed(1)}" cy="${y(p[1]).toFixed(1)}"/>`).join('');
+      return `${area ? `<path class="area" d="${area}"/>` : ''}<path class="line ${line.cls || ''}" d="${path}"/>${lone}`;
+    }).join('');
+
+    const yTicks = [lo, (lo + hi) / 2, hi];
+    const refBand = ref && ref.end > start && ref.start < end
+      ? `<rect class="ref-band" x="${x(Math.max(ref.start, start))}" y="${T}" width="${x(Math.min(ref.end, end)) - x(Math.max(ref.start, start))}" height="${H - T - B}"/>`
+      : '';
+    const base = baseline == null ? '' : `<line class="baseline" x1="${L}" x2="${W - R}" y1="${y(baseline)}" y2="${y(baseline)}"/>
+      <text class="axis" x="${L + 4}" y="${y(baseline) - 3}">${esc(baselineLabel)}</text>`;  // left: line names sit at the right end
+    const normBand = !band ? '' : `<rect class="norm-band" x="${L}" y="${y(band.hi)}" width="${W - L - R}" height="${Math.max(1, y(band.lo) - y(band.hi))}"/>
+      <text class="axis" x="${L + 4}" y="${y(band.hi) - 3}">${esc(band.label || 'NORMAL RANGE')}</text>`;
+    // Event labels run vertically down their marker. Markers closer than one
+    // label's width (narrow or zoomed-out charts) share a single label, joined with " · ".
+    const shown = events.filter((e) => e.ts >= start && e.ts <= end);
+    const labels = [];
+    for (const e of shown) {
+      const last = labels[labels.length - 1];
+      if (last && x(e.ts) - last.x < 12) last.text += ` · ${e.short}`;
+      else labels.push({ x: x(e.ts), text: e.short });
+    }
+    const ev = shown.map((e) => `<line class="event" x1="${x(e.ts)}" x2="${x(e.ts)}" y1="${T}" y2="${H - B}"/>`).join('')
+      + labels.map((l) => `<text class="event-label" transform="translate(${l.x - 3},${T + 2}) rotate(-90)" text-anchor="end">${esc(l.text)}</text>`).join('');
+
+    // Each line is named at its last visible point, so lines are told apart by text, not colour alone.
+    const visible = lines.map((l) => ({ ...l, pts: l.points.filter((p) => p[0] >= start && p[0] <= end) }));
+    const endLabels = lines.length < 2 ? '' : visible.filter((l) => l.pts.length).map((l) => {
+      const p = l.pts[l.pts.length - 1];
+      return `<text class="line-label ${l.cls || ''}" x="${(x(p[0]) - 3).toFixed(1)}" y="${(y(p[1]) - 4).toFixed(1)}" text-anchor="end">${esc(l.label)}</text>`;
+    }).join('');
+    const summary = visible.filter((l) => l.pts.length).map((l) => {
+      const vs = l.pts.map((p) => p[1]);
+      return `${l.label}: last ${num(vs[vs.length - 1])}, range ${num(Math.min(...vs))} to ${num(Math.max(...vs))}`;
+    }).join('; ') || 'no data in this window';
+    const bandText = band ? ` Shaded band: ${(band.label || 'normal range').toLowerCase()}, ${num(band.lo)} to ${num(band.hi)}.` : '';
+    svg.setAttribute('aria-label', `Chart, ${unit}, ${stamp(start)} to ${stamp(end)}. ${summary}.${bandText} Left and right arrow keys read values, plus and minus zoom; the data table below lists every value.`);
+
+    svg.innerHTML = `<clipPath id="clip-${id}"><rect x="${L}" y="0" width="${W - L - R}" height="${H}"/></clipPath>
+      ${yTicks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
+        <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${num(v)}</text>`).join('')}
+      ${timeTicks(start, end).map(([t, s]) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${s}</text>`).join('')}
+      <g clip-path="url(#clip-${id})">${refBand}${normBand}${drawn}${ev}</g>
+      ${base}${endLabels}
+      <line class="cursor" y1="${T}" y2="${H - B}" visibility="hidden"/>`;
+    svg.classList.toggle('zoomed', zoomed());
+    if (cursorT != null && cursorT >= start && cursorT <= end) {
+      const cur = svg.querySelector('.cursor');
+      cur.setAttribute('visibility', 'visible');
+      cur.setAttribute('x1', x(cursorT)); cur.setAttribute('x2', x(cursorT));
+    }
+
+    if (zoomable) {
+      const ovX = (t) => L + ((t - full.start) / fullSpan) * (W - L - R);
+      const a = ovX(start), b = ovX(end);
+      ov.querySelector('.ov-shade-l').setAttribute('width', Math.max(0, a - L));
+      ov.querySelector('.ov-shade-r').setAttribute('x', b);
+      ov.querySelector('.ov-shade-r').setAttribute('width', Math.max(0, W - R - b));
+      const win = ov.querySelector('.ov-window');
+      win.setAttribute('x', a); win.setAttribute('width', Math.max(1, b - a));
+      ov.querySelector('.ov-handle-l').setAttribute('x', a - 2);
+      ov.querySelector('.ov-handle-r').setAttribute('x', b - 2);
+      el.querySelector('[data-zoom="in"]').disabled = end - start <= minSpan + 1;
+      el.querySelector('[data-zoom="out"]').disabled = !zoomed();
+      el.querySelector('[data-zoom="all"]').disabled = !zoomed();
+      if (zoomed()) zoomMemory.set(memKey, { ...view }); else zoomMemory.delete(memKey);
+      clearTimeout(labelTimer);  // announce the range once movement settles, not on every frame
+      labelTimer = setTimeout(() => { rangeLabel.textContent = describeRange(); }, 250);
+    }
+    if (cursorT == null) idle();
+  };
+
+  let pending = false;
+  const schedule = () => {
+    if (pending) return;
+    pending = true;
+    requestAnimationFrame(() => { pending = false; draw(); });
+  };
+  const setView = (s, e) => {
+    const span = Math.max(minSpan, Math.min(fullSpan, e - s));
+    const start = Math.max(full.start, Math.min(s, full.end - span));
+    view = { start, end: start + span };
+    schedule();
+  };
+  const zoomAround = (t, factor) => {
+    const span = (view.end - view.start) * factor;
+    setView(t - (t - view.start) * factor, t - (t - view.start) * factor + span);
+  };
+  const timeAt = (clientX) => {
+    const box = svg.getBoundingClientRect();
+    return view.start + ((clientX - box.left) / box.width * W - L) / (W - L - R) * (view.end - view.start);
+  };
+
+  if (!zoomable) draw();
+
+  if (share) {
+    const btn = el.querySelector('.chart-png');
+    btn.addEventListener('click', () => {
+      btn.disabled = true;
+      exportPng(lines, { ...opts, start: view.start, end: view.end })
+        .catch((e) => toast(`PNG FAILED: ${e.message}`)).finally(() => { btn.disabled = false; });
+    });
+  }
+
+  // Pointer: hover reads values; when zoomed, dragging pans; Ctrl/⌘ + wheel (and trackpad pinch) zooms.
+  let drag = null;
+  svg.addEventListener('pointermove', (e) => {
+    if (drag) {
+      const dt = -((e.clientX - drag.x) / drag.w) * (W / (W - L - R)) * (drag.end - drag.start);
+      setView(drag.start + dt, drag.end + dt);
+      return;
+    }
+    const p = near(lines[0].points, timeAt(e.clientX));
+    cursorT = p[0];
+    const cur = svg.querySelector('.cursor');
+    const x = L + ((p[0] - view.start) / (view.end - view.start)) * (W - L - R);
+    cur.setAttribute('visibility', 'visible');
+    cur.setAttribute('x1', x); cur.setAttribute('x2', x);
+    readout.innerHTML = describe(p[0], '');
+  });
+  svg.addEventListener('pointerdown', (e) => {
+    if (!zoomable || !zoomed() || e.button !== 0) return;
+    drag = { x: e.clientX, w: svg.getBoundingClientRect().width, start: view.start, end: view.end };
+    svg.setPointerCapture(e.pointerId);
+    svg.classList.add('dragging');
+  });
+  const endDrag = () => { drag = null; svg.classList.remove('dragging'); };
+  svg.addEventListener('pointerup', endDrag);
+  svg.addEventListener('pointercancel', endDrag);
+  svg.addEventListener('pointerleave', () => {
+    if (drag) return;
+    cursorT = null;
+    svg.querySelector('.cursor').setAttribute('visibility', 'hidden');
+    idle();
+  });
+  if (zoomable) {
+    svg.addEventListener('wheel', (e) => {
+      if (!e.ctrlKey && !e.metaKey) return;  // plain scrolling still scrolls the page
+      e.preventDefault();
+      zoomAround(timeAt(e.clientX), Math.min(2, Math.max(0.5, Math.exp(e.deltaY * 0.01))));
+    }, { passive: false });
+  }
+
+  // Keyboard: arrows step through the first line's points (the view follows), +/− zoom, 0 shows all.
+  let idx = lines[0].points.length - 1;
   readout.setAttribute('aria-live', 'polite');
-  svg.addEventListener('blur', () => { cur.setAttribute('visibility', 'hidden'); idle(); });
+  svg.addEventListener('blur', () => { cursorT = null; svg.querySelector('.cursor').setAttribute('visibility', 'hidden'); idle(); });
   svg.addEventListener('keydown', (e) => {
-    const last = lines[0].points.length - 1;
+    const pts = lines[0].points;
     const moves = { ArrowLeft: -1, ArrowRight: 1, PageUp: -24, PageDown: 24, Home: -Infinity, End: Infinity };
+    if (zoomable && ['+', '=', '-', '_', '0'].includes(e.key)) {
+      e.preventDefault();
+      const centre = cursorT ?? (view.start + view.end) / 2;
+      if (e.key === '0') setView(full.start, full.end);
+      else zoomAround(centre, e.key === '-' || e.key === '_' ? 2 : 0.5);
+      return;
+    }
     if (!(e.key in moves)) return;
     e.preventDefault();
-    idx = Math.max(0, Math.min(last, idx + moves[e.key]));
-    show();
+    idx = Math.max(0, Math.min(pts.length - 1, idx + moves[e.key]));
+    const t = pts[idx][0];
+    cursorT = t;
+    if (t < view.start || t > view.end) {
+      const span = view.end - view.start;
+      setView(t - span / 2, t + span / 2);
+    } else {
+      draw();
+    }
+    readout.innerHTML = describe(t, '');
   });
+
+  if (zoomable) {
+    el.querySelector('.chart-zoom-btns').addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.zoom === 'all') setView(full.start, full.end);
+      else zoomAround((view.start + view.end) / 2, b.dataset.zoom === 'in' ? 0.5 : 2);
+    });
+
+    // Overview strip: the whole period, with the visible window outlined.
+    const ovX = (t) => L + ((t - full.start) / fullSpan) * (W - L - R);
+    const ovY = (v) => 3 + (1 - (v - lo) / (hi - lo || 1)) * (OV_H - 6);
+    ov.innerHTML = `<rect class="ov-bg" x="${L}" y="0" width="${W - L - R}" height="${OV_H}"/>
+      ${lines.map((l) => `<path class="line ${l.cls || ''}" d="${segments(l.points).map((g) =>
+        `M${g.map((p) => `${ovX(p[0]).toFixed(1)},${ovY(p[1]).toFixed(1)}`).join('L')}`).join('')}"/>`).join('')}
+      <rect class="ov-shade ov-shade-l" x="${L}" y="0" height="${OV_H}"/>
+      <rect class="ov-shade ov-shade-r" y="0" height="${OV_H}"/>
+      <rect class="ov-window" y="0.5" height="${OV_H - 1}"/>
+      <rect class="ov-handle ov-handle-l" y="0" width="4" height="${OV_H}"/>
+      <rect class="ov-handle ov-handle-r" y="0" width="4" height="${OV_H}"/>`;
+    draw();
+    rangeLabel.textContent = describeRange();
+
+    const ovT = (clientX) => {
+      const box = ov.getBoundingClientRect();
+      return full.start + (((clientX - box.left) / box.width) * W - L) / (W - L - R) * fullSpan;
+    };
+    let ovDrag = null;
+    ov.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      const t = ovT(e.clientX);
+      const box = ov.getBoundingClientRect();
+      const grab = 10 / ((box.width / W) * (W - L - R)) * fullSpan;  // 10 px either side of an edge
+      let mode;
+      if (Math.abs(t - view.start) <= grab && zoomed()) mode = 'l';
+      else if (Math.abs(t - view.end) <= grab && zoomed()) mode = 'r';
+      else if (t > view.start && t < view.end && zoomed()) mode = 'move';
+      else if (!zoomed()) mode = t - full.start < fullSpan / 2 ? 'l' : 'r';  // start a zoom from the nearer edge
+      else { const span = view.end - view.start; setView(t - span / 2, t + span / 2); mode = 'move'; }
+      ovDrag = { mode, t0: t, start: view.start, end: view.end };
+      ov.setPointerCapture(e.pointerId);
+      ov.classList.add('dragging');
+      e.preventDefault();
+    });
+    ov.addEventListener('pointermove', (e) => {
+      if (!ovDrag) return;
+      const t = ovT(e.clientX), d = t - ovDrag.t0;
+      if (ovDrag.mode === 'move') setView(ovDrag.start + d, ovDrag.end + d);
+      else if (ovDrag.mode === 'l') setView(Math.max(full.start, Math.min(t, ovDrag.end - minSpan)), ovDrag.end);
+      else setView(ovDrag.start, Math.min(full.end, Math.max(t, ovDrag.start + minSpan)));
+    });
+    const endOv = () => { ovDrag = null; ov.classList.remove('dragging'); };
+    ov.addEventListener('pointerup', endOv);
+    ov.addEventListener('pointercancel', endOv);
+  }
 
   // Data table, built when opened. Long hourly series are shown as daily means.
   const details = el.querySelector('details');
@@ -399,8 +601,8 @@ async function exportPng(lines, opts) {
   host.style.cssText = 'position:absolute;left:-10000px;top:0;width:760px;margin:0';
   document.body.append(host);
   try {
-    chart(host, document.createElement('div'), lines, { ...opts, share: null, height: 300 });
-    const svg = host.querySelector('svg');
+    chart(host, document.createElement('div'), lines, { ...opts, share: null, still: true, height: 300 });
+    const svg = host.querySelector('.chart-svg');
     const clone = svg.cloneNode(true);
     const src = [...svg.querySelectorAll('*')], dst = [...clone.querySelectorAll('*')];
     src.forEach((node, i) => {
@@ -441,7 +643,7 @@ async function exportPng(lines, opts) {
     ctx.drawImage(img, pad - 16, chartTop, chartW, chartW * (vh / vw));
     ctx.strokeStyle = token('--term-line'); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(pad, PNG_H - 52); ctx.lineTo(PNG_W - pad, PNG_H - 52); ctx.stroke();
-    const dataTo = Math.max(...lines.map((l) => l.points[l.points.length - 1][0]));
+    const dataTo = Math.max(...lines.flatMap((l) => l.points.filter((p) => p[0] <= opts.end).map((p) => p[0])));
     ctx.fillStyle = token('--term-muted'); ctx.font = `500 13px ${family}`;
     ctx.fillText(`DATA TO ${stamp(dataTo)} · ${share.sources || 'IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY'}`, pad, PNG_H - 26);
     ctx.textAlign = 'right'; ctx.fillStyle = token('--a1');
