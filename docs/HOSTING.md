@@ -56,10 +56,11 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
 
 7. **Schedule it every 30 minutes.** Run this once in PowerShell, with your own path:
    ```powershell
-   $action = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c "C:\Russian bot tracker\scripts\collect-and-publish.cmd"' -WorkingDirectory 'C:\Russian bot tracker'
+   $action = New-ScheduledTaskAction -Execute 'conhost.exe' -Argument '--headless cmd.exe /c "C:\Russian bot tracker\scripts\collect-and-publish.cmd"' -WorkingDirectory 'C:\Russian bot tracker'
    $trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)
    Register-ScheduledTask -TaskName 'BotTrafficMonitor' -Action $action -Trigger $trigger
    ```
+   - `conhost --headless` runs it without a window. With a visible window, closing it stops that run (`0xC000013A`).
    - Don't use `schtasks /TR` with a path containing spaces: PowerShell drops the inner quotes, and the task then tries to run `C:\Russian` and fails with "file not found" (`0x80070002`).
    - Check it works: `Get-ScheduledTaskInfo -TaskName BotTrafficMonitor` should show `LastTaskResult : 0` after a run, and `data\publish.log` should exist.
    - Output goes to `data\publish.log`.
