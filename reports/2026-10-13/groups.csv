@@ -1,0 +1,6 @@
+group,communities,median_change_vs_pre_strike,median_strike_window_change,share_p_below_0_05,share_robust,r_vs_infrastructure,r_days,latest_index
+control,5,,,,,,0,
+political,8,,-0.1151,0.0,0.0,0.158,44,76.06
+political-right,8,,0.3089,0.0,0.0,-0.155,44,102.18
+regional,9,,,,,,0,
+russia,1,,,,,,0,

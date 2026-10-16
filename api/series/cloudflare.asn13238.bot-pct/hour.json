@@ -1,0 +1,1 @@
+{"series":{"key":"cloudflare.asn13238.bot-pct","kind":"infrastructure","platform":"cloudflare","label":"Yandex AS13238","unit":"% HTTP REQUESTS FROM BOTS","region":"RU","tags":["infrastructure"],"active":true},"bucket":"hour","points":[]}

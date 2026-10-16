@@ -1,0 +1,1320 @@
+date_utc,series,platform,unit,tags,daily_mean
+2026-08-28,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-29,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-30,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-31,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-01,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-02,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-03,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-04,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-05,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-06,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-07,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-08,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-09,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-10,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-11,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-12,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-13,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-14,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-15,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-16,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-17,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-18,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-19,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-20,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-21,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-22,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-23,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-24,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-25,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-26,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-27,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-28,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-29,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-30,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-01,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-02,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-03,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-04,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-05,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-06,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-07,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-08,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-09,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-10,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-11,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-12,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-13,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-14,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-15,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-16,ioda.asn13238.bgp,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-28,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,857.8889
+2026-08-29,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-08-30,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-08-31,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-01,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-02,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-03,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-04,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-05,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-06,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-07,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-08,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-09,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-10,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-11,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-12,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-13,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-14,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-15,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-16,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-17,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-18,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-19,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-20,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-21,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-22,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-23,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-24,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-25,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-26,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-27,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-28,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-29,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-30,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-01,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-02,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-03,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-04,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-05,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-06,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-07,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-08,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-09,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-10,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-11,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,857.8646
+2026-10-12,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-13,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-14,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-15,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-16,ioda.asn200350.bgp,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-08-30,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.2
+2026-09-01,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.0833
+2026-09-02,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.1976
+2026-09-03,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,8.3969
+2026-09-04,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,4.9167
+2026-09-06,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.0
+2026-09-07,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.9936
+2026-09-08,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.8759
+2026-09-09,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.9506
+2026-09-10,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.0
+2026-09-11,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.0388
+2026-09-12,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.9674
+2026-09-13,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.4369
+2026-09-16,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.1418
+2026-09-17,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.1104
+2026-09-18,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.1579
+2026-09-19,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.0771
+2026-09-22,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.3
+2026-09-23,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.6781
+2026-09-24,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.5369
+2026-09-25,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.7108
+2026-09-26,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.0083
+2026-09-27,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.7571
+2026-09-28,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.0387
+2026-09-29,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.5451
+2026-09-30,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.2103
+2026-10-01,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.2565
+2026-10-02,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.1987
+2026-10-03,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.972
+2026-10-04,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,1.0576
+2026-10-05,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.9937
+2026-10-06,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.8431
+2026-10-07,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.2432
+2026-10-08,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.1875
+2026-10-09,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.2896
+2026-10-10,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.3725
+2026-10-11,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.3105
+2026-10-12,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.4058
+2026-10-13,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.2577
+2026-10-14,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.425
+2026-10-15,ioda.asn200350.merit-nt,ioda,TELESCOPE SOURCES,infrastructure,0.3474
+2026-08-28,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,521.1778
+2026-08-29,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,520.375
+2026-08-30,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,520.7222
+2026-08-31,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,520.1806
+2026-09-01,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,520.0417
+2026-09-02,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.2917
+2026-09-03,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.0764
+2026-09-04,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,516.8403
+2026-09-05,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.5278
+2026-09-06,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.6736
+2026-09-07,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.1597
+2026-09-08,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.1806
+2026-09-09,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7708
+2026-09-10,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,516.0208
+2026-09-11,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,515.4583
+2026-09-12,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,515.4722
+2026-09-13,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,509.9514
+2026-09-14,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,517.7292
+2026-09-15,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7639
+2026-09-16,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.9792
+2026-09-17,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.4097
+2026-09-18,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.2083
+2026-09-19,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7222
+2026-09-20,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,516.4167
+2026-09-21,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.2361
+2026-09-22,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,517.1528
+2026-09-23,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.7222
+2026-09-24,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.6528
+2026-09-25,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.25
+2026-09-26,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.3472
+2026-09-27,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,403.8889
+2026-09-28,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,408.5972
+2026-09-29,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.6667
+2026-09-30,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.0764
+2026-10-01,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,519.1042
+2026-10-02,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.2917
+2026-10-03,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.0833
+2026-10-04,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,517.7986
+2026-10-05,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.2431
+2026-10-06,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7639
+2026-10-07,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,516.2431
+2026-10-08,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,341.0208
+2026-10-09,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,341.2292
+2026-10-10,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,341.7708
+2026-10-11,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,130.4097
+2026-10-12,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,112.0486
+2026-10-13,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,112.9538
+2026-10-14,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,114.6129
+2026-10-15,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,112.0787
+2026-10-16,ioda.asn200350.ping-slash24,ioda,/24 BLOCKS ANSWERING,infrastructure,116.781
+2026-10-12,bluesky.afd.de.posts,bluesky,POSTS / H,political-right,79.0
+2026-10-13,bluesky.afd.de.posts,bluesky,POSTS / H,political-right,42.9791
+2026-10-14,bluesky.afd.de.posts,bluesky,POSTS / H,political-right,66.6811
+2026-10-15,bluesky.afd.de.posts,bluesky,POSTS / H,political-right,42.4762
+2026-10-16,bluesky.afd.de.posts,bluesky,POSTS / H,political-right,50.3226
+2026-10-12,bluesky.bundestag.de.posts,bluesky,POSTS / H,political,5.0
+2026-10-13,bluesky.bundestag.de.posts,bluesky,POSTS / H,political,2.7826
+2026-10-14,bluesky.bundestag.de.posts,bluesky,POSTS / H,political,6.3158
+2026-10-15,bluesky.bundestag.de.posts,bluesky,POSTS / H,political,7.7619
+2026-10-16,bluesky.bundestag.de.posts,bluesky,POSTS / H,political,7.1739
+2026-10-12,bluesky.konfederacja.pl.posts,bluesky,POSTS / H,political-right,0.0
+2026-10-13,bluesky.konfederacja.pl.posts,bluesky,POSTS / H,political-right,0.0
+2026-10-14,bluesky.konfederacja.pl.posts,bluesky,POSTS / H,political-right,0.1579
+2026-10-15,bluesky.konfederacja.pl.posts,bluesky,POSTS / H,political-right,0.0952
+2026-10-16,bluesky.konfederacja.pl.posts,bluesky,POSTS / H,political-right,0.087
+2026-10-12,bluesky.maga.en.posts,bluesky,POSTS / H,political-right,445.565
+2026-10-13,bluesky.maga.en.posts,bluesky,POSTS / H,political-right,379.9159
+2026-10-14,bluesky.maga.en.posts,bluesky,POSTS / H,political-right,457.4987
+2026-10-15,bluesky.maga.en.posts,bluesky,POSTS / H,political-right,461.6705
+2026-10-16,bluesky.maga.en.posts,bluesky,POSTS / H,political-right,395.08
+2026-10-12,bluesky.reform-uk.en.posts,bluesky,POSTS / H,political-right,15.5
+2026-10-13,bluesky.reform-uk.en.posts,bluesky,POSTS / H,political-right,8.7826
+2026-10-14,bluesky.reform-uk.en.posts,bluesky,POSTS / H,political-right,27.5789
+2026-10-15,bluesky.reform-uk.en.posts,bluesky,POSTS / H,political-right,18.381
+2026-10-16,bluesky.reform-uk.en.posts,bluesky,POSTS / H,political-right,13.6087
+2026-10-12,bluesky.weather.en.posts,bluesky,POSTS / H,control,215.915
+2026-10-13,bluesky.weather.en.posts,bluesky,POSTS / H,control,161.7804
+2026-10-14,bluesky.weather.en.posts,bluesky,POSTS / H,control,219.8626
+2026-10-15,bluesky.weather.en.posts,bluesky,POSTS / H,control,221.9905
+2026-10-16,bluesky.weather.en.posts,bluesky,POSTS / H,control,242.0943
+2026-08-24,reddit.alabama.comments,reddit,COMMENTS / H,regional,2.3913
+2026-08-25,reddit.alabama.comments,reddit,COMMENTS / H,regional,2.1667
+2026-08-26,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.4583
+2026-08-27,reddit.alabama.comments,reddit,COMMENTS / H,regional,7.375
+2026-08-28,reddit.alabama.comments,reddit,COMMENTS / H,regional,12.8333
+2026-08-29,reddit.alabama.comments,reddit,COMMENTS / H,regional,5.625
+2026-08-30,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.9167
+2026-08-31,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.9583
+2026-09-01,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.9167
+2026-09-02,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.3333
+2026-09-03,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.5833
+2026-09-04,reddit.alabama.comments,reddit,COMMENTS / H,regional,2.9167
+2026-09-05,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.5833
+2026-09-06,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.0417
+2026-09-07,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.0833
+2026-09-08,reddit.alabama.comments,reddit,COMMENTS / H,regional,2.1667
+2026-09-09,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.9583
+2026-09-10,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.0
+2026-09-11,reddit.alabama.comments,reddit,COMMENTS / H,regional,5.8333
+2026-09-12,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.0
+2026-09-13,reddit.alabama.comments,reddit,COMMENTS / H,regional,2.5833
+2026-09-14,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.7083
+2026-09-15,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.5
+2026-09-16,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.0417
+2026-09-17,reddit.alabama.comments,reddit,COMMENTS / H,regional,7.2917
+2026-09-18,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.9583
+2026-09-19,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.5833
+2026-09-20,reddit.alabama.comments,reddit,COMMENTS / H,regional,0.9583
+2026-09-21,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.3333
+2026-09-22,reddit.alabama.comments,reddit,COMMENTS / H,regional,5.5
+2026-09-23,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.3333
+2026-09-24,reddit.alabama.comments,reddit,COMMENTS / H,regional,15.625
+2026-09-25,reddit.alabama.comments,reddit,COMMENTS / H,regional,6.0
+2026-09-26,reddit.alabama.comments,reddit,COMMENTS / H,regional,6.0833
+2026-09-27,reddit.alabama.comments,reddit,COMMENTS / H,regional,3.5833
+2026-09-28,reddit.alabama.comments,reddit,COMMENTS / H,regional,6.0417
+2026-09-29,reddit.alabama.comments,reddit,COMMENTS / H,regional,5.7917
+2026-09-30,reddit.alabama.comments,reddit,COMMENTS / H,regional,8.875
+2026-10-01,reddit.alabama.comments,reddit,COMMENTS / H,regional,5.8333
+2026-10-02,reddit.alabama.comments,reddit,COMMENTS / H,regional,11.5417
+2026-10-03,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.5833
+2026-10-04,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.375
+2026-10-05,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.875
+2026-10-06,reddit.alabama.comments,reddit,COMMENTS / H,regional,1.5
+2026-10-07,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.2083
+2026-10-08,reddit.alabama.comments,reddit,COMMENTS / H,regional,4.9167
+2026-10-09,reddit.alabama.comments,reddit,COMMENTS / H,regional,9.4167
+2026-10-10,reddit.alabama.comments,reddit,COMMENTS / H,regional,19.9583
+2026-10-11,reddit.alabama.comments,reddit,COMMENTS / H,regional,5.5
+2026-10-13,reddit.alabama.comments,reddit,COMMENTS / H,regional,7.7
+2026-10-14,reddit.alabama.comments,reddit,COMMENTS / H,regional,6.2857
+2026-10-15,reddit.alabama.comments,reddit,COMMENTS / H,regional,6.5556
+2026-10-16,reddit.alabama.comments,reddit,COMMENTS / H,regional,9.0
+2026-08-24,reddit.askarussian.comments,reddit,COMMENTS / H,russia,10.0
+2026-08-25,reddit.askarussian.comments,reddit,COMMENTS / H,russia,12.0833
+2026-08-26,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.8333
+2026-08-27,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.625
+2026-08-28,reddit.askarussian.comments,reddit,COMMENTS / H,russia,7.75
+2026-08-29,reddit.askarussian.comments,reddit,COMMENTS / H,russia,13.4583
+2026-08-30,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.375
+2026-08-31,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.4583
+2026-09-01,reddit.askarussian.comments,reddit,COMMENTS / H,russia,14.0833
+2026-09-02,reddit.askarussian.comments,reddit,COMMENTS / H,russia,13.4167
+2026-09-03,reddit.askarussian.comments,reddit,COMMENTS / H,russia,18.5
+2026-09-04,reddit.askarussian.comments,reddit,COMMENTS / H,russia,14.8333
+2026-09-05,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.5417
+2026-09-06,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.5417
+2026-09-07,reddit.askarussian.comments,reddit,COMMENTS / H,russia,4.4167
+2026-09-08,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.0833
+2026-09-09,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.0833
+2026-09-10,reddit.askarussian.comments,reddit,COMMENTS / H,russia,6.0
+2026-09-11,reddit.askarussian.comments,reddit,COMMENTS / H,russia,4.625
+2026-09-12,reddit.askarussian.comments,reddit,COMMENTS / H,russia,3.9583
+2026-09-13,reddit.askarussian.comments,reddit,COMMENTS / H,russia,6.2083
+2026-09-14,reddit.askarussian.comments,reddit,COMMENTS / H,russia,6.3333
+2026-09-15,reddit.askarussian.comments,reddit,COMMENTS / H,russia,10.4583
+2026-09-16,reddit.askarussian.comments,reddit,COMMENTS / H,russia,14.125
+2026-09-17,reddit.askarussian.comments,reddit,COMMENTS / H,russia,10.9583
+2026-09-18,reddit.askarussian.comments,reddit,COMMENTS / H,russia,12.625
+2026-09-19,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.625
+2026-09-20,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.5
+2026-09-21,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.0417
+2026-09-22,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.3333
+2026-09-23,reddit.askarussian.comments,reddit,COMMENTS / H,russia,12.5833
+2026-09-24,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.4583
+2026-09-25,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.625
+2026-09-26,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.25
+2026-09-27,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.375
+2026-09-28,reddit.askarussian.comments,reddit,COMMENTS / H,russia,6.25
+2026-09-29,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.25
+2026-09-30,reddit.askarussian.comments,reddit,COMMENTS / H,russia,35.4583
+2026-10-01,reddit.askarussian.comments,reddit,COMMENTS / H,russia,31.0
+2026-10-02,reddit.askarussian.comments,reddit,COMMENTS / H,russia,18.875
+2026-10-03,reddit.askarussian.comments,reddit,COMMENTS / H,russia,13.7917
+2026-10-04,reddit.askarussian.comments,reddit,COMMENTS / H,russia,12.0
+2026-10-05,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.0
+2026-10-06,reddit.askarussian.comments,reddit,COMMENTS / H,russia,10.0833
+2026-10-07,reddit.askarussian.comments,reddit,COMMENTS / H,russia,15.9583
+2026-10-08,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.8333
+2026-10-09,reddit.askarussian.comments,reddit,COMMENTS / H,russia,8.5417
+2026-10-10,reddit.askarussian.comments,reddit,COMMENTS / H,russia,6.9167
+2026-10-11,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.5
+2026-10-13,reddit.askarussian.comments,reddit,COMMENTS / H,russia,5.2222
+2026-10-14,reddit.askarussian.comments,reddit,COMMENTS / H,russia,11.875
+2026-10-15,reddit.askarussian.comments,reddit,COMMENTS / H,russia,14.75
+2026-10-16,reddit.askarussian.comments,reddit,COMMENTS / H,russia,7.8889
+2026-08-23,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,1.6957
+2026-08-24,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,15.9167
+2026-08-25,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,38.6667
+2026-08-26,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,19.2083
+2026-08-27,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,34.4583
+2026-08-28,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,23.25
+2026-08-29,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,18.2917
+2026-08-30,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,11.125
+2026-08-31,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,10.2917
+2026-09-01,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,18.9167
+2026-09-02,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,16.0417
+2026-09-03,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,21.75
+2026-09-04,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,19.375
+2026-09-05,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,9.5
+2026-09-06,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,3.1667
+2026-09-07,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,10.4583
+2026-09-08,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,16.5
+2026-09-09,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,25.4583
+2026-09-10,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,37.8333
+2026-09-11,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,30.3333
+2026-09-12,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,21.1667
+2026-09-13,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,17.5833
+2026-09-14,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,20.4167
+2026-09-15,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,20.2083
+2026-09-16,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,23.4583
+2026-09-17,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,22.625
+2026-09-18,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,19.875
+2026-09-19,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,21.7917
+2026-09-20,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,18.5833
+2026-09-21,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,21.1667
+2026-09-22,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,44.3333
+2026-09-23,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,17.0417
+2026-09-24,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,15.9167
+2026-09-25,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,28.75
+2026-09-26,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,17.9167
+2026-09-27,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,11.4583
+2026-09-28,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,11.3333
+2026-09-29,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,18.0417
+2026-09-30,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,31.2083
+2026-10-01,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,19.125
+2026-10-02,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,21.5
+2026-10-03,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,8.7917
+2026-10-04,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,14.3333
+2026-10-05,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,23.0
+2026-10-06,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,40.75
+2026-10-07,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,24.9167
+2026-10-08,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,31.0417
+2026-10-09,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,41.9583
+2026-10-10,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,34.3182
+2026-10-12,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,29.0
+2026-10-13,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,33.9833
+2026-10-14,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,44.5714
+2026-10-15,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,33.3333
+2026-10-16,reddit.asktrumpsupporters.comments,reddit,COMMENTS / H,political-right,23.3333
+2026-10-12,reddit.asktrumpsupporters.posts,reddit,POSTS / H,political-right,0.0
+2026-08-24,reddit.aww.comments,reddit,COMMENTS / H,control,44.1304
+2026-08-25,reddit.aww.comments,reddit,COMMENTS / H,control,74.5417
+2026-08-26,reddit.aww.comments,reddit,COMMENTS / H,control,70.3333
+2026-08-27,reddit.aww.comments,reddit,COMMENTS / H,control,56.9167
+2026-08-28,reddit.aww.comments,reddit,COMMENTS / H,control,65.2917
+2026-08-29,reddit.aww.comments,reddit,COMMENTS / H,control,48.0833
+2026-08-30,reddit.aww.comments,reddit,COMMENTS / H,control,61.3333
+2026-08-31,reddit.aww.comments,reddit,COMMENTS / H,control,51.7083
+2026-09-01,reddit.aww.comments,reddit,COMMENTS / H,control,93.2917
+2026-09-02,reddit.aww.comments,reddit,COMMENTS / H,control,62.25
+2026-09-03,reddit.aww.comments,reddit,COMMENTS / H,control,72.4583
+2026-09-04,reddit.aww.comments,reddit,COMMENTS / H,control,61.4583
+2026-09-05,reddit.aww.comments,reddit,COMMENTS / H,control,52.0833
+2026-09-06,reddit.aww.comments,reddit,COMMENTS / H,control,56.125
+2026-09-07,reddit.aww.comments,reddit,COMMENTS / H,control,51.7917
+2026-09-08,reddit.aww.comments,reddit,COMMENTS / H,control,43.5417
+2026-09-09,reddit.aww.comments,reddit,COMMENTS / H,control,63.9167
+2026-09-10,reddit.aww.comments,reddit,COMMENTS / H,control,68.7917
+2026-09-11,reddit.aww.comments,reddit,COMMENTS / H,control,52.3333
+2026-09-12,reddit.aww.comments,reddit,COMMENTS / H,control,36.0417
+2026-09-13,reddit.aww.comments,reddit,COMMENTS / H,control,44.2917
+2026-09-14,reddit.aww.comments,reddit,COMMENTS / H,control,64.4167
+2026-09-15,reddit.aww.comments,reddit,COMMENTS / H,control,60.2917
+2026-09-16,reddit.aww.comments,reddit,COMMENTS / H,control,48.6667
+2026-09-17,reddit.aww.comments,reddit,COMMENTS / H,control,47.875
+2026-09-18,reddit.aww.comments,reddit,COMMENTS / H,control,55.875
+2026-09-19,reddit.aww.comments,reddit,COMMENTS / H,control,88.4583
+2026-09-20,reddit.aww.comments,reddit,COMMENTS / H,control,42.9583
+2026-09-21,reddit.aww.comments,reddit,COMMENTS / H,control,52.875
+2026-09-22,reddit.aww.comments,reddit,COMMENTS / H,control,63.7083
+2026-09-23,reddit.aww.comments,reddit,COMMENTS / H,control,54.5417
+2026-09-24,reddit.aww.comments,reddit,COMMENTS / H,control,44.0833
+2026-09-25,reddit.aww.comments,reddit,COMMENTS / H,control,65.1667
+2026-09-26,reddit.aww.comments,reddit,COMMENTS / H,control,55.2083
+2026-09-27,reddit.aww.comments,reddit,COMMENTS / H,control,48.5833
+2026-09-28,reddit.aww.comments,reddit,COMMENTS / H,control,63.0
+2026-09-29,reddit.aww.comments,reddit,COMMENTS / H,control,69.7083
+2026-09-30,reddit.aww.comments,reddit,COMMENTS / H,control,56.375
+2026-10-01,reddit.aww.comments,reddit,COMMENTS / H,control,45.2917
+2026-10-02,reddit.aww.comments,reddit,COMMENTS / H,control,59.0833
+2026-10-03,reddit.aww.comments,reddit,COMMENTS / H,control,73.75
+2026-10-04,reddit.aww.comments,reddit,COMMENTS / H,control,62.0
+2026-10-05,reddit.aww.comments,reddit,COMMENTS / H,control,39.6667
+2026-10-06,reddit.aww.comments,reddit,COMMENTS / H,control,50.3333
+2026-10-07,reddit.aww.comments,reddit,COMMENTS / H,control,65.1667
+2026-10-08,reddit.aww.comments,reddit,COMMENTS / H,control,57.6667
+2026-10-09,reddit.aww.comments,reddit,COMMENTS / H,control,63.3333
+2026-10-10,reddit.aww.comments,reddit,COMMENTS / H,control,58.75
+2026-10-11,reddit.aww.comments,reddit,COMMENTS / H,control,114.75
+2026-10-13,reddit.aww.comments,reddit,COMMENTS / H,control,77.22
+2026-10-14,reddit.aww.comments,reddit,COMMENTS / H,control,95.4125
+2026-10-15,reddit.aww.comments,reddit,COMMENTS / H,control,58.375
+2026-10-16,reddit.aww.comments,reddit,COMMENTS / H,control,64.0
+2026-08-23,reddit.conservative.comments,reddit,COMMENTS / H,political-right,8.9565
+2026-08-24,reddit.conservative.comments,reddit,COMMENTS / H,political-right,68.625
+2026-08-25,reddit.conservative.comments,reddit,COMMENTS / H,political-right,88.0417
+2026-08-26,reddit.conservative.comments,reddit,COMMENTS / H,political-right,86.6667
+2026-08-27,reddit.conservative.comments,reddit,COMMENTS / H,political-right,142.3333
+2026-08-28,reddit.conservative.comments,reddit,COMMENTS / H,political-right,134.1667
+2026-08-29,reddit.conservative.comments,reddit,COMMENTS / H,political-right,63.5417
+2026-08-30,reddit.conservative.comments,reddit,COMMENTS / H,political-right,61.2917
+2026-08-31,reddit.conservative.comments,reddit,COMMENTS / H,political-right,73.5
+2026-09-01,reddit.conservative.comments,reddit,COMMENTS / H,political-right,94.8333
+2026-09-02,reddit.conservative.comments,reddit,COMMENTS / H,political-right,84.5
+2026-09-03,reddit.conservative.comments,reddit,COMMENTS / H,political-right,73.9167
+2026-09-04,reddit.conservative.comments,reddit,COMMENTS / H,political-right,104.5833
+2026-09-05,reddit.conservative.comments,reddit,COMMENTS / H,political-right,77.2917
+2026-09-06,reddit.conservative.comments,reddit,COMMENTS / H,political-right,63.5
+2026-09-07,reddit.conservative.comments,reddit,COMMENTS / H,political-right,102.0
+2026-09-08,reddit.conservative.comments,reddit,COMMENTS / H,political-right,87.375
+2026-09-09,reddit.conservative.comments,reddit,COMMENTS / H,political-right,101.9167
+2026-09-10,reddit.conservative.comments,reddit,COMMENTS / H,political-right,198.5833
+2026-09-11,reddit.conservative.comments,reddit,COMMENTS / H,political-right,156.5833
+2026-09-12,reddit.conservative.comments,reddit,COMMENTS / H,political-right,89.8333
+2026-09-13,reddit.conservative.comments,reddit,COMMENTS / H,political-right,62.5833
+2026-09-14,reddit.conservative.comments,reddit,COMMENTS / H,political-right,76.8333
+2026-09-15,reddit.conservative.comments,reddit,COMMENTS / H,political-right,81.875
+2026-09-16,reddit.conservative.comments,reddit,COMMENTS / H,political-right,73.0417
+2026-09-17,reddit.conservative.comments,reddit,COMMENTS / H,political-right,87.0
+2026-09-18,reddit.conservative.comments,reddit,COMMENTS / H,political-right,93.9167
+2026-09-19,reddit.conservative.comments,reddit,COMMENTS / H,political-right,84.7083
+2026-09-20,reddit.conservative.comments,reddit,COMMENTS / H,political-right,43.2917
+2026-09-21,reddit.conservative.comments,reddit,COMMENTS / H,political-right,83.125
+2026-09-22,reddit.conservative.comments,reddit,COMMENTS / H,political-right,105.5
+2026-09-23,reddit.conservative.comments,reddit,COMMENTS / H,political-right,73.5
+2026-09-24,reddit.conservative.comments,reddit,COMMENTS / H,political-right,80.2083
+2026-09-25,reddit.conservative.comments,reddit,COMMENTS / H,political-right,50.75
+2026-09-26,reddit.conservative.comments,reddit,COMMENTS / H,political-right,48.0417
+2026-09-27,reddit.conservative.comments,reddit,COMMENTS / H,political-right,42.375
+2026-09-28,reddit.conservative.comments,reddit,COMMENTS / H,political-right,58.7917
+2026-09-29,reddit.conservative.comments,reddit,COMMENTS / H,political-right,89.8333
+2026-09-30,reddit.conservative.comments,reddit,COMMENTS / H,political-right,96.5
+2026-10-01,reddit.conservative.comments,reddit,COMMENTS / H,political-right,80.125
+2026-10-02,reddit.conservative.comments,reddit,COMMENTS / H,political-right,62.5
+2026-10-03,reddit.conservative.comments,reddit,COMMENTS / H,political-right,40.8333
+2026-10-04,reddit.conservative.comments,reddit,COMMENTS / H,political-right,41.2917
+2026-10-05,reddit.conservative.comments,reddit,COMMENTS / H,political-right,34.875
+2026-10-06,reddit.conservative.comments,reddit,COMMENTS / H,political-right,90.2083
+2026-10-07,reddit.conservative.comments,reddit,COMMENTS / H,political-right,87.25
+2026-10-08,reddit.conservative.comments,reddit,COMMENTS / H,political-right,73.75
+2026-10-09,reddit.conservative.comments,reddit,COMMENTS / H,political-right,105.875
+2026-10-10,reddit.conservative.comments,reddit,COMMENTS / H,political-right,97.8095
+2026-10-12,reddit.conservative.comments,reddit,COMMENTS / H,political-right,64.0
+2026-10-13,reddit.conservative.comments,reddit,COMMENTS / H,political-right,29.8889
+2026-10-14,reddit.conservative.comments,reddit,COMMENTS / H,political-right,42.375
+2026-10-15,reddit.conservative.comments,reddit,COMMENTS / H,political-right,43.25
+2026-10-16,reddit.conservative.comments,reddit,COMMENTS / H,political-right,48.7778
+2026-10-12,reddit.conservative.posts,reddit,POSTS / H,political-right,2.0
+2026-08-23,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,0.3043
+2026-08-24,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.4167
+2026-08-25,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,8.6667
+2026-08-26,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,6.125
+2026-08-27,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.625
+2026-08-28,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.0
+2026-08-29,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.0417
+2026-08-30,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.625
+2026-08-31,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,1.8333
+2026-09-01,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,3.625
+2026-09-02,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,9.0417
+2026-09-03,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.0833
+2026-09-04,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.875
+2026-09-05,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.6667
+2026-09-06,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,2.4167
+2026-09-07,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,6.0417
+2026-09-08,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.4583
+2026-09-09,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.2083
+2026-09-10,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.0833
+2026-09-11,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,8.3333
+2026-09-12,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.7917
+2026-09-13,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.125
+2026-09-14,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.2083
+2026-09-15,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,6.625
+2026-09-16,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.5417
+2026-09-17,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.5
+2026-09-18,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.3333
+2026-09-19,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.7917
+2026-09-20,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,9.75
+2026-09-21,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.0833
+2026-09-22,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.4167
+2026-09-23,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,8.0417
+2026-09-24,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.2917
+2026-09-25,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,11.625
+2026-09-26,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.1667
+2026-09-27,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.6667
+2026-09-28,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.9167
+2026-09-29,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,9.8333
+2026-09-30,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,23.5
+2026-10-01,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.25
+2026-10-02,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.5833
+2026-10-03,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.8333
+2026-10-04,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.1667
+2026-10-05,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.5
+2026-10-06,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.625
+2026-10-07,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,6.5
+2026-10-08,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.9167
+2026-10-09,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,5.25
+2026-10-10,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,10.5909
+2026-10-12,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,9.0
+2026-10-13,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,12.1111
+2026-10-14,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.5
+2026-10-15,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,4.75
+2026-10-16,reddit.conservatives.comments,reddit,COMMENTS / H,political-right,7.5556
+2026-10-12,reddit.conservatives.posts,reddit,POSTS / H,political-right,1.0
+2026-08-24,reddit.cooking.comments,reddit,COMMENTS / H,control,132.6522
+2026-08-25,reddit.cooking.comments,reddit,COMMENTS / H,control,176.2917
+2026-08-26,reddit.cooking.comments,reddit,COMMENTS / H,control,129.8333
+2026-08-27,reddit.cooking.comments,reddit,COMMENTS / H,control,130.0833
+2026-08-28,reddit.cooking.comments,reddit,COMMENTS / H,control,129.3333
+2026-08-29,reddit.cooking.comments,reddit,COMMENTS / H,control,112.1667
+2026-08-30,reddit.cooking.comments,reddit,COMMENTS / H,control,170.2083
+2026-08-31,reddit.cooking.comments,reddit,COMMENTS / H,control,174.9167
+2026-09-01,reddit.cooking.comments,reddit,COMMENTS / H,control,231.3333
+2026-09-02,reddit.cooking.comments,reddit,COMMENTS / H,control,166.25
+2026-09-03,reddit.cooking.comments,reddit,COMMENTS / H,control,124.3333
+2026-09-04,reddit.cooking.comments,reddit,COMMENTS / H,control,131.125
+2026-09-05,reddit.cooking.comments,reddit,COMMENTS / H,control,104.4167
+2026-09-06,reddit.cooking.comments,reddit,COMMENTS / H,control,105.625
+2026-09-07,reddit.cooking.comments,reddit,COMMENTS / H,control,126.1667
+2026-09-08,reddit.cooking.comments,reddit,COMMENTS / H,control,144.9583
+2026-09-09,reddit.cooking.comments,reddit,COMMENTS / H,control,154.9167
+2026-09-10,reddit.cooking.comments,reddit,COMMENTS / H,control,135.6667
+2026-09-11,reddit.cooking.comments,reddit,COMMENTS / H,control,107.625
+2026-09-12,reddit.cooking.comments,reddit,COMMENTS / H,control,147.125
+2026-09-13,reddit.cooking.comments,reddit,COMMENTS / H,control,137.75
+2026-09-14,reddit.cooking.comments,reddit,COMMENTS / H,control,132.2917
+2026-09-15,reddit.cooking.comments,reddit,COMMENTS / H,control,207.0
+2026-09-16,reddit.cooking.comments,reddit,COMMENTS / H,control,130.375
+2026-09-17,reddit.cooking.comments,reddit,COMMENTS / H,control,139.5417
+2026-09-18,reddit.cooking.comments,reddit,COMMENTS / H,control,151.9167
+2026-09-19,reddit.cooking.comments,reddit,COMMENTS / H,control,220.5
+2026-09-20,reddit.cooking.comments,reddit,COMMENTS / H,control,245.9167
+2026-09-21,reddit.cooking.comments,reddit,COMMENTS / H,control,247.3333
+2026-09-22,reddit.cooking.comments,reddit,COMMENTS / H,control,122.7083
+2026-09-23,reddit.cooking.comments,reddit,COMMENTS / H,control,137.9167
+2026-09-24,reddit.cooking.comments,reddit,COMMENTS / H,control,176.4167
+2026-09-25,reddit.cooking.comments,reddit,COMMENTS / H,control,116.5
+2026-09-26,reddit.cooking.comments,reddit,COMMENTS / H,control,152.4167
+2026-09-27,reddit.cooking.comments,reddit,COMMENTS / H,control,209.5
+2026-09-28,reddit.cooking.comments,reddit,COMMENTS / H,control,225.0
+2026-09-29,reddit.cooking.comments,reddit,COMMENTS / H,control,152.6667
+2026-09-30,reddit.cooking.comments,reddit,COMMENTS / H,control,157.9583
+2026-10-01,reddit.cooking.comments,reddit,COMMENTS / H,control,195.125
+2026-10-02,reddit.cooking.comments,reddit,COMMENTS / H,control,133.0556
+2026-10-03,reddit.cooking.comments,reddit,COMMENTS / H,control,127.9167
+2026-10-04,reddit.cooking.comments,reddit,COMMENTS / H,control,160.7083
+2026-10-05,reddit.cooking.comments,reddit,COMMENTS / H,control,151.2083
+2026-10-06,reddit.cooking.comments,reddit,COMMENTS / H,control,205.7917
+2026-10-07,reddit.cooking.comments,reddit,COMMENTS / H,control,138.4167
+2026-10-08,reddit.cooking.comments,reddit,COMMENTS / H,control,137.2917
+2026-10-09,reddit.cooking.comments,reddit,COMMENTS / H,control,100.3333
+2026-10-10,reddit.cooking.comments,reddit,COMMENTS / H,control,126.0
+2026-10-11,reddit.cooking.comments,reddit,COMMENTS / H,control,196.0
+2026-10-13,reddit.cooking.comments,reddit,COMMENTS / H,control,253.2878
+2026-10-14,reddit.cooking.comments,reddit,COMMENTS / H,control,153.5375
+2026-10-15,reddit.cooking.comments,reddit,COMMENTS / H,control,286.5238
+2026-10-16,reddit.cooking.comments,reddit,COMMENTS / H,control,219.0489
+2026-10-13,reddit.czech.comments,reddit,COMMENTS / H,regional,156.248
+2026-10-14,reddit.czech.comments,reddit,COMMENTS / H,regional,251.1414
+2026-10-15,reddit.czech.comments,reddit,COMMENTS / H,regional,154.4678
+2026-10-16,reddit.czech.comments,reddit,COMMENTS / H,regional,162.6944
+2026-10-13,reddit.de.comments,reddit,COMMENTS / H,regional,182.374
+2026-10-14,reddit.de.comments,reddit,COMMENTS / H,regional,177.8529
+2026-10-15,reddit.de.comments,reddit,COMMENTS / H,regional,166.4733
+2026-10-16,reddit.de.comments,reddit,COMMENTS / H,regional,186.4722
+2026-08-24,reddit.gardening.comments,reddit,COMMENTS / H,control,76.2174
+2026-08-25,reddit.gardening.comments,reddit,COMMENTS / H,control,108.8333
+2026-08-26,reddit.gardening.comments,reddit,COMMENTS / H,control,111.7083
+2026-08-27,reddit.gardening.comments,reddit,COMMENTS / H,control,124.4167
+2026-08-28,reddit.gardening.comments,reddit,COMMENTS / H,control,94.2917
+2026-08-29,reddit.gardening.comments,reddit,COMMENTS / H,control,110.0
+2026-08-30,reddit.gardening.comments,reddit,COMMENTS / H,control,97.4583
+2026-08-31,reddit.gardening.comments,reddit,COMMENTS / H,control,85.7917
+2026-09-01,reddit.gardening.comments,reddit,COMMENTS / H,control,109.125
+2026-09-02,reddit.gardening.comments,reddit,COMMENTS / H,control,113.0
+2026-09-03,reddit.gardening.comments,reddit,COMMENTS / H,control,111.1667
+2026-09-04,reddit.gardening.comments,reddit,COMMENTS / H,control,82.9167
+2026-09-05,reddit.gardening.comments,reddit,COMMENTS / H,control,79.9167
+2026-09-06,reddit.gardening.comments,reddit,COMMENTS / H,control,128.5833
+2026-09-07,reddit.gardening.comments,reddit,COMMENTS / H,control,93.0417
+2026-09-08,reddit.gardening.comments,reddit,COMMENTS / H,control,106.7917
+2026-09-09,reddit.gardening.comments,reddit,COMMENTS / H,control,118.8333
+2026-09-10,reddit.gardening.comments,reddit,COMMENTS / H,control,78.0417
+2026-09-11,reddit.gardening.comments,reddit,COMMENTS / H,control,84.875
+2026-09-12,reddit.gardening.comments,reddit,COMMENTS / H,control,87.375
+2026-09-13,reddit.gardening.comments,reddit,COMMENTS / H,control,79.6667
+2026-09-14,reddit.gardening.comments,reddit,COMMENTS / H,control,102.0833
+2026-09-15,reddit.gardening.comments,reddit,COMMENTS / H,control,91.7083
+2026-09-16,reddit.gardening.comments,reddit,COMMENTS / H,control,86.3333
+2026-09-17,reddit.gardening.comments,reddit,COMMENTS / H,control,94.5833
+2026-09-18,reddit.gardening.comments,reddit,COMMENTS / H,control,84.7083
+2026-09-19,reddit.gardening.comments,reddit,COMMENTS / H,control,83.1667
+2026-09-20,reddit.gardening.comments,reddit,COMMENTS / H,control,87.9583
+2026-09-21,reddit.gardening.comments,reddit,COMMENTS / H,control,97.125
+2026-09-22,reddit.gardening.comments,reddit,COMMENTS / H,control,80.5
+2026-09-23,reddit.gardening.comments,reddit,COMMENTS / H,control,100.4583
+2026-09-24,reddit.gardening.comments,reddit,COMMENTS / H,control,85.75
+2026-09-25,reddit.gardening.comments,reddit,COMMENTS / H,control,131.375
+2026-09-26,reddit.gardening.comments,reddit,COMMENTS / H,control,87.0
+2026-09-27,reddit.gardening.comments,reddit,COMMENTS / H,control,84.5
+2026-09-28,reddit.gardening.comments,reddit,COMMENTS / H,control,77.75
+2026-09-29,reddit.gardening.comments,reddit,COMMENTS / H,control,73.625
+2026-09-30,reddit.gardening.comments,reddit,COMMENTS / H,control,59.8333
+2026-10-01,reddit.gardening.comments,reddit,COMMENTS / H,control,60.5
+2026-10-02,reddit.gardening.comments,reddit,COMMENTS / H,control,97.25
+2026-10-03,reddit.gardening.comments,reddit,COMMENTS / H,control,71.75
+2026-10-04,reddit.gardening.comments,reddit,COMMENTS / H,control,70.7917
+2026-10-05,reddit.gardening.comments,reddit,COMMENTS / H,control,60.5833
+2026-10-06,reddit.gardening.comments,reddit,COMMENTS / H,control,85.5417
+2026-10-07,reddit.gardening.comments,reddit,COMMENTS / H,control,97.7917
+2026-10-08,reddit.gardening.comments,reddit,COMMENTS / H,control,90.2917
+2026-10-09,reddit.gardening.comments,reddit,COMMENTS / H,control,69.0833
+2026-10-10,reddit.gardening.comments,reddit,COMMENTS / H,control,58.5833
+2026-10-11,reddit.gardening.comments,reddit,COMMENTS / H,control,67.25
+2026-10-13,reddit.gardening.comments,reddit,COMMENTS / H,control,57.6667
+2026-10-14,reddit.gardening.comments,reddit,COMMENTS / H,control,63.875
+2026-10-15,reddit.gardening.comments,reddit,COMMENTS / H,control,67.25
+2026-10-16,reddit.gardening.comments,reddit,COMMENTS / H,control,74.6667
+2026-08-24,reddit.illinois.comments,reddit,COMMENTS / H,regional,37.0
+2026-08-25,reddit.illinois.comments,reddit,COMMENTS / H,regional,28.0417
+2026-08-26,reddit.illinois.comments,reddit,COMMENTS / H,regional,25.7083
+2026-08-27,reddit.illinois.comments,reddit,COMMENTS / H,regional,19.8333
+2026-08-28,reddit.illinois.comments,reddit,COMMENTS / H,regional,17.9583
+2026-08-29,reddit.illinois.comments,reddit,COMMENTS / H,regional,10.0833
+2026-08-30,reddit.illinois.comments,reddit,COMMENTS / H,regional,28.0417
+2026-08-31,reddit.illinois.comments,reddit,COMMENTS / H,regional,29.4583
+2026-09-01,reddit.illinois.comments,reddit,COMMENTS / H,regional,50.75
+2026-09-02,reddit.illinois.comments,reddit,COMMENTS / H,regional,33.4167
+2026-09-03,reddit.illinois.comments,reddit,COMMENTS / H,regional,50.9583
+2026-09-04,reddit.illinois.comments,reddit,COMMENTS / H,regional,53.4167
+2026-09-05,reddit.illinois.comments,reddit,COMMENTS / H,regional,23.625
+2026-09-06,reddit.illinois.comments,reddit,COMMENTS / H,regional,15.0417
+2026-09-07,reddit.illinois.comments,reddit,COMMENTS / H,regional,31.9167
+2026-09-08,reddit.illinois.comments,reddit,COMMENTS / H,regional,17.9167
+2026-09-09,reddit.illinois.comments,reddit,COMMENTS / H,regional,41.7083
+2026-09-10,reddit.illinois.comments,reddit,COMMENTS / H,regional,43.8333
+2026-09-11,reddit.illinois.comments,reddit,COMMENTS / H,regional,17.75
+2026-09-12,reddit.illinois.comments,reddit,COMMENTS / H,regional,9.625
+2026-09-13,reddit.illinois.comments,reddit,COMMENTS / H,regional,54.9583
+2026-09-14,reddit.illinois.comments,reddit,COMMENTS / H,regional,84.9167
+2026-09-15,reddit.illinois.comments,reddit,COMMENTS / H,regional,82.4583
+2026-09-16,reddit.illinois.comments,reddit,COMMENTS / H,regional,46.625
+2026-09-17,reddit.illinois.comments,reddit,COMMENTS / H,regional,49.25
+2026-09-18,reddit.illinois.comments,reddit,COMMENTS / H,regional,22.125
+2026-09-19,reddit.illinois.comments,reddit,COMMENTS / H,regional,20.2917
+2026-09-20,reddit.illinois.comments,reddit,COMMENTS / H,regional,27.0417
+2026-09-21,reddit.illinois.comments,reddit,COMMENTS / H,regional,53.0
+2026-09-22,reddit.illinois.comments,reddit,COMMENTS / H,regional,38.625
+2026-09-23,reddit.illinois.comments,reddit,COMMENTS / H,regional,22.0417
+2026-09-24,reddit.illinois.comments,reddit,COMMENTS / H,regional,35.9583
+2026-09-25,reddit.illinois.comments,reddit,COMMENTS / H,regional,29.0
+2026-09-26,reddit.illinois.comments,reddit,COMMENTS / H,regional,14.75
+2026-09-27,reddit.illinois.comments,reddit,COMMENTS / H,regional,29.875
+2026-09-28,reddit.illinois.comments,reddit,COMMENTS / H,regional,61.875
+2026-09-29,reddit.illinois.comments,reddit,COMMENTS / H,regional,46.2917
+2026-09-30,reddit.illinois.comments,reddit,COMMENTS / H,regional,39.625
+2026-10-01,reddit.illinois.comments,reddit,COMMENTS / H,regional,29.125
+2026-10-02,reddit.illinois.comments,reddit,COMMENTS / H,regional,19.0833
+2026-10-03,reddit.illinois.comments,reddit,COMMENTS / H,regional,13.625
+2026-10-04,reddit.illinois.comments,reddit,COMMENTS / H,regional,13.2083
+2026-10-05,reddit.illinois.comments,reddit,COMMENTS / H,regional,71.125
+2026-10-06,reddit.illinois.comments,reddit,COMMENTS / H,regional,33.8333
+2026-10-07,reddit.illinois.comments,reddit,COMMENTS / H,regional,25.7083
+2026-10-08,reddit.illinois.comments,reddit,COMMENTS / H,regional,55.8333
+2026-10-09,reddit.illinois.comments,reddit,COMMENTS / H,regional,29.5
+2026-10-10,reddit.illinois.comments,reddit,COMMENTS / H,regional,13.5833
+2026-10-11,reddit.illinois.comments,reddit,COMMENTS / H,regional,10.75
+2026-10-13,reddit.illinois.comments,reddit,COMMENTS / H,regional,17.0
+2026-10-14,reddit.illinois.comments,reddit,COMMENTS / H,regional,53.2857
+2026-10-15,reddit.illinois.comments,reddit,COMMENTS / H,regional,42.4478
+2026-10-16,reddit.illinois.comments,reddit,COMMENTS / H,regional,46.8889
+2026-08-24,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.6522
+2026-08-25,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,7.7083
+2026-08-26,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,6.5
+2026-08-27,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,9.7917
+2026-08-28,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,7.75
+2026-08-29,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,8.4583
+2026-08-30,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,5.625
+2026-08-31,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,8.5417
+2026-09-01,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,8.375
+2026-09-02,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,13.8333
+2026-09-03,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.375
+2026-09-04,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,11.875
+2026-09-05,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,22.25
+2026-09-06,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,5.5417
+2026-09-07,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,16.9583
+2026-09-08,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,11.2083
+2026-09-09,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,21.2917
+2026-09-10,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,15.2083
+2026-09-11,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,6.5833
+2026-09-12,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,6.25
+2026-09-13,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,6.0417
+2026-09-14,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,7.5833
+2026-09-15,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,6.9167
+2026-09-16,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,14.6667
+2026-09-17,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,14.0417
+2026-09-18,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,18.1667
+2026-09-19,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,6.9583
+2026-09-20,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,5.7083
+2026-09-21,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,11.0
+2026-09-22,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,18.9583
+2026-09-23,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,18.9583
+2026-09-24,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,12.625
+2026-09-25,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,15.875
+2026-09-26,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,13.4167
+2026-09-27,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,8.0833
+2026-09-28,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,17.9167
+2026-09-29,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.5
+2026-09-30,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,14.9167
+2026-10-01,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,9.25
+2026-10-02,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,22.5
+2026-10-03,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,7.5833
+2026-10-04,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,14.625
+2026-10-05,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,8.625
+2026-10-06,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.625
+2026-10-07,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,13.625
+2026-10-08,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,15.125
+2026-10-09,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.9583
+2026-10-10,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,9.0833
+2026-10-11,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,2.0
+2026-10-13,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.2
+2026-10-14,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,10.2857
+2026-10-15,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,7.7778
+2026-10-16,reddit.irishpolitics.comments,reddit,COMMENTS / H,political,12.3333
+2026-08-26,reddit.kansas.comments,reddit,COMMENTS / H,regional,3.6087
+2026-08-27,reddit.kansas.comments,reddit,COMMENTS / H,regional,8.75
+2026-08-28,reddit.kansas.comments,reddit,COMMENTS / H,regional,13.7083
+2026-08-29,reddit.kansas.comments,reddit,COMMENTS / H,regional,5.875
+2026-08-30,reddit.kansas.comments,reddit,COMMENTS / H,regional,6.7917
+2026-08-31,reddit.kansas.comments,reddit,COMMENTS / H,regional,6.6667
+2026-09-01,reddit.kansas.comments,reddit,COMMENTS / H,regional,19.5
+2026-09-02,reddit.kansas.comments,reddit,COMMENTS / H,regional,10.75
+2026-09-03,reddit.kansas.comments,reddit,COMMENTS / H,regional,12.3333
+2026-09-04,reddit.kansas.comments,reddit,COMMENTS / H,regional,15.8333
+2026-09-05,reddit.kansas.comments,reddit,COMMENTS / H,regional,12.7083
+2026-09-06,reddit.kansas.comments,reddit,COMMENTS / H,regional,15.0417
+2026-09-07,reddit.kansas.comments,reddit,COMMENTS / H,regional,22.5417
+2026-09-08,reddit.kansas.comments,reddit,COMMENTS / H,regional,20.75
+2026-09-09,reddit.kansas.comments,reddit,COMMENTS / H,regional,13.2083
+2026-09-10,reddit.kansas.comments,reddit,COMMENTS / H,regional,9.375
+2026-09-11,reddit.kansas.comments,reddit,COMMENTS / H,regional,28.5
+2026-09-12,reddit.kansas.comments,reddit,COMMENTS / H,regional,25.2917
+2026-09-13,reddit.kansas.comments,reddit,COMMENTS / H,regional,33.8333
+2026-09-14,reddit.kansas.comments,reddit,COMMENTS / H,regional,27.2917
+2026-09-15,reddit.kansas.comments,reddit,COMMENTS / H,regional,14.625
+2026-09-16,reddit.kansas.comments,reddit,COMMENTS / H,regional,11.7917
+2026-09-17,reddit.kansas.comments,reddit,COMMENTS / H,regional,12.6667
+2026-09-18,reddit.kansas.comments,reddit,COMMENTS / H,regional,38.5
+2026-09-19,reddit.kansas.comments,reddit,COMMENTS / H,regional,18.4167
+2026-09-20,reddit.kansas.comments,reddit,COMMENTS / H,regional,11.875
+2026-09-21,reddit.kansas.comments,reddit,COMMENTS / H,regional,16.5417
+2026-09-22,reddit.kansas.comments,reddit,COMMENTS / H,regional,22.0
+2026-09-23,reddit.kansas.comments,reddit,COMMENTS / H,regional,20.4583
+2026-09-24,reddit.kansas.comments,reddit,COMMENTS / H,regional,32.4167
+2026-09-25,reddit.kansas.comments,reddit,COMMENTS / H,regional,31.8333
+2026-09-26,reddit.kansas.comments,reddit,COMMENTS / H,regional,16.375
+2026-09-27,reddit.kansas.comments,reddit,COMMENTS / H,regional,10.75
+2026-09-28,reddit.kansas.comments,reddit,COMMENTS / H,regional,12.8333
+2026-09-29,reddit.kansas.comments,reddit,COMMENTS / H,regional,25.0417
+2026-09-30,reddit.kansas.comments,reddit,COMMENTS / H,regional,22.5
+2026-10-01,reddit.kansas.comments,reddit,COMMENTS / H,regional,17.875
+2026-10-02,reddit.kansas.comments,reddit,COMMENTS / H,regional,24.125
+2026-10-03,reddit.kansas.comments,reddit,COMMENTS / H,regional,19.5417
+2026-10-04,reddit.kansas.comments,reddit,COMMENTS / H,regional,17.2083
+2026-10-05,reddit.kansas.comments,reddit,COMMENTS / H,regional,18.0417
+2026-10-06,reddit.kansas.comments,reddit,COMMENTS / H,regional,20.7917
+2026-10-07,reddit.kansas.comments,reddit,COMMENTS / H,regional,20.0417
+2026-10-08,reddit.kansas.comments,reddit,COMMENTS / H,regional,14.5833
+2026-10-09,reddit.kansas.comments,reddit,COMMENTS / H,regional,12.5417
+2026-10-10,reddit.kansas.comments,reddit,COMMENTS / H,regional,11.9583
+2026-10-11,reddit.kansas.comments,reddit,COMMENTS / H,regional,10.2917
+2026-10-12,reddit.kansas.comments,reddit,COMMENTS / H,regional,15.125
+2026-10-13,reddit.kansas.comments,reddit,COMMENTS / H,regional,43.0667
+2026-10-14,reddit.kansas.comments,reddit,COMMENTS / H,regional,43.4286
+2026-10-15,reddit.kansas.comments,reddit,COMMENTS / H,regional,24.3333
+2026-10-16,reddit.kansas.comments,reddit,COMMENTS / H,regional,14.5556
+2026-10-13,reddit.maryland.comments,reddit,COMMENTS / H,regional,67.416
+2026-10-14,reddit.maryland.comments,reddit,COMMENTS / H,regional,102.1857
+2026-10-15,reddit.maryland.comments,reddit,COMMENTS / H,regional,75.8089
+2026-10-16,reddit.maryland.comments,reddit,COMMENTS / H,regional,57.1111
+2026-08-23,reddit.neoliberal.comments,reddit,COMMENTS / H,political,39.3913
+2026-08-24,reddit.neoliberal.comments,reddit,COMMENTS / H,political,400.1667
+2026-08-25,reddit.neoliberal.comments,reddit,COMMENTS / H,political,473.0833
+2026-08-26,reddit.neoliberal.comments,reddit,COMMENTS / H,political,481.5417
+2026-08-27,reddit.neoliberal.comments,reddit,COMMENTS / H,political,488.6667
+2026-08-28,reddit.neoliberal.comments,reddit,COMMENTS / H,political,460.375
+2026-08-29,reddit.neoliberal.comments,reddit,COMMENTS / H,political,352.7083
+2026-08-30,reddit.neoliberal.comments,reddit,COMMENTS / H,political,336.4583
+2026-08-31,reddit.neoliberal.comments,reddit,COMMENTS / H,political,388.1667
+2026-09-01,reddit.neoliberal.comments,reddit,COMMENTS / H,political,470.125
+2026-09-02,reddit.neoliberal.comments,reddit,COMMENTS / H,political,493.1667
+2026-09-03,reddit.neoliberal.comments,reddit,COMMENTS / H,political,463.875
+2026-09-04,reddit.neoliberal.comments,reddit,COMMENTS / H,political,433.2917
+2026-09-05,reddit.neoliberal.comments,reddit,COMMENTS / H,political,315.75
+2026-09-06,reddit.neoliberal.comments,reddit,COMMENTS / H,political,319.625
+2026-09-07,reddit.neoliberal.comments,reddit,COMMENTS / H,political,323.2917
+2026-09-08,reddit.neoliberal.comments,reddit,COMMENTS / H,political,423.7917
+2026-09-09,reddit.neoliberal.comments,reddit,COMMENTS / H,political,545.6667
+2026-09-10,reddit.neoliberal.comments,reddit,COMMENTS / H,political,579.6667
+2026-09-11,reddit.neoliberal.comments,reddit,COMMENTS / H,political,485.2917
+2026-09-12,reddit.neoliberal.comments,reddit,COMMENTS / H,political,352.7917
+2026-09-13,reddit.neoliberal.comments,reddit,COMMENTS / H,political,376.25
+2026-09-14,reddit.neoliberal.comments,reddit,COMMENTS / H,political,460.0833
+2026-09-15,reddit.neoliberal.comments,reddit,COMMENTS / H,political,519.25
+2026-09-16,reddit.neoliberal.comments,reddit,COMMENTS / H,political,548.5
+2026-09-17,reddit.neoliberal.comments,reddit,COMMENTS / H,political,516.2083
+2026-09-18,reddit.neoliberal.comments,reddit,COMMENTS / H,political,451.6667
+2026-09-19,reddit.neoliberal.comments,reddit,COMMENTS / H,political,343.0833
+2026-09-20,reddit.neoliberal.comments,reddit,COMMENTS / H,political,380.9167
+2026-09-21,reddit.neoliberal.comments,reddit,COMMENTS / H,political,504.3333
+2026-09-22,reddit.neoliberal.comments,reddit,COMMENTS / H,political,508.625
+2026-09-23,reddit.neoliberal.comments,reddit,COMMENTS / H,political,476.5556
+2026-09-24,reddit.neoliberal.comments,reddit,COMMENTS / H,political,549.25
+2026-09-25,reddit.neoliberal.comments,reddit,COMMENTS / H,political,500.5417
+2026-09-26,reddit.neoliberal.comments,reddit,COMMENTS / H,political,353.2083
+2026-09-27,reddit.neoliberal.comments,reddit,COMMENTS / H,political,338.625
+2026-09-28,reddit.neoliberal.comments,reddit,COMMENTS / H,political,398.0
+2026-09-29,reddit.neoliberal.comments,reddit,COMMENTS / H,political,459.0417
+2026-09-30,reddit.neoliberal.comments,reddit,COMMENTS / H,political,469.4167
+2026-10-01,reddit.neoliberal.comments,reddit,COMMENTS / H,political,529.3333
+2026-10-02,reddit.neoliberal.comments,reddit,COMMENTS / H,political,517.5833
+2026-10-03,reddit.neoliberal.comments,reddit,COMMENTS / H,political,380.5833
+2026-10-04,reddit.neoliberal.comments,reddit,COMMENTS / H,political,373.5
+2026-10-05,reddit.neoliberal.comments,reddit,COMMENTS / H,political,440.75
+2026-10-06,reddit.neoliberal.comments,reddit,COMMENTS / H,political,442.5417
+2026-10-07,reddit.neoliberal.comments,reddit,COMMENTS / H,political,494.2917
+2026-10-08,reddit.neoliberal.comments,reddit,COMMENTS / H,political,486.9167
+2026-10-09,reddit.neoliberal.comments,reddit,COMMENTS / H,political,502.7083
+2026-10-10,reddit.neoliberal.comments,reddit,COMMENTS / H,political,385.0
+2026-10-13,reddit.neoliberal.comments,reddit,COMMENTS / H,political,565.892
+2026-10-14,reddit.neoliberal.comments,reddit,COMMENTS / H,political,603.6743
+2026-10-15,reddit.neoliberal.comments,reddit,COMMENTS / H,political,669.55
+2026-10-16,reddit.neoliberal.comments,reddit,COMMENTS / H,political,582.6456
+2026-10-13,reddit.newjersey.comments,reddit,COMMENTS / H,regional,88.941
+2026-10-14,reddit.newjersey.comments,reddit,COMMENTS / H,regional,62.0
+2026-10-15,reddit.newjersey.comments,reddit,COMMENTS / H,regional,77.4967
+2026-10-16,reddit.newjersey.comments,reddit,COMMENTS / H,regional,59.4444
+2026-08-23,reddit.news.comments,reddit,COMMENTS / H,political,12.6957
+2026-08-24,reddit.news.comments,reddit,COMMENTS / H,political,331.1667
+2026-08-25,reddit.news.comments,reddit,COMMENTS / H,political,617.375
+2026-08-26,reddit.news.comments,reddit,COMMENTS / H,political,827.9167
+2026-08-27,reddit.news.comments,reddit,COMMENTS / H,political,450.2083
+2026-08-28,reddit.news.comments,reddit,COMMENTS / H,political,448.2917
+2026-08-29,reddit.news.comments,reddit,COMMENTS / H,political,299.4583
+2026-08-30,reddit.news.comments,reddit,COMMENTS / H,political,301.875
+2026-08-31,reddit.news.comments,reddit,COMMENTS / H,political,395.9583
+2026-09-01,reddit.news.comments,reddit,COMMENTS / H,political,543.875
+2026-09-02,reddit.news.comments,reddit,COMMENTS / H,political,742.5417
+2026-09-03,reddit.news.comments,reddit,COMMENTS / H,political,493.9583
+2026-09-04,reddit.news.comments,reddit,COMMENTS / H,political,671.5833
+2026-09-05,reddit.news.comments,reddit,COMMENTS / H,political,333.0833
+2026-09-06,reddit.news.comments,reddit,COMMENTS / H,political,332.4583
+2026-09-07,reddit.news.comments,reddit,COMMENTS / H,political,387.5833
+2026-09-08,reddit.news.comments,reddit,COMMENTS / H,political,642.8333
+2026-09-09,reddit.news.comments,reddit,COMMENTS / H,political,328.5417
+2026-09-10,reddit.news.comments,reddit,COMMENTS / H,political,316.625
+2026-09-11,reddit.news.comments,reddit,COMMENTS / H,political,367.75
+2026-09-12,reddit.news.comments,reddit,COMMENTS / H,political,207.6667
+2026-09-13,reddit.news.comments,reddit,COMMENTS / H,political,168.5833
+2026-09-14,reddit.news.comments,reddit,COMMENTS / H,political,293.0
+2026-09-15,reddit.news.comments,reddit,COMMENTS / H,political,467.8333
+2026-09-16,reddit.news.comments,reddit,COMMENTS / H,political,436.7083
+2026-09-17,reddit.news.comments,reddit,COMMENTS / H,political,354.3333
+2026-09-18,reddit.news.comments,reddit,COMMENTS / H,political,482.5833
+2026-09-19,reddit.news.comments,reddit,COMMENTS / H,political,548.875
+2026-09-20,reddit.news.comments,reddit,COMMENTS / H,political,297.2917
+2026-09-21,reddit.news.comments,reddit,COMMENTS / H,political,312.2083
+2026-09-22,reddit.news.comments,reddit,COMMENTS / H,political,313.375
+2026-09-23,reddit.news.comments,reddit,COMMENTS / H,political,319.5
+2026-09-24,reddit.news.comments,reddit,COMMENTS / H,political,408.8333
+2026-09-25,reddit.news.comments,reddit,COMMENTS / H,political,416.625
+2026-09-26,reddit.news.comments,reddit,COMMENTS / H,political,207.25
+2026-09-27,reddit.news.comments,reddit,COMMENTS / H,political,180.3333
+2026-09-28,reddit.news.comments,reddit,COMMENTS / H,political,264.8333
+2026-09-29,reddit.news.comments,reddit,COMMENTS / H,political,444.4583
+2026-09-30,reddit.news.comments,reddit,COMMENTS / H,political,433.125
+2026-10-01,reddit.news.comments,reddit,COMMENTS / H,political,979.7917
+2026-10-02,reddit.news.comments,reddit,COMMENTS / H,political,500.4583
+2026-10-03,reddit.news.comments,reddit,COMMENTS / H,political,259.9167
+2026-10-04,reddit.news.comments,reddit,COMMENTS / H,political,420.375
+2026-10-05,reddit.news.comments,reddit,COMMENTS / H,political,515.3333
+2026-10-06,reddit.news.comments,reddit,COMMENTS / H,political,382.5
+2026-10-07,reddit.news.comments,reddit,COMMENTS / H,political,375.8333
+2026-10-08,reddit.news.comments,reddit,COMMENTS / H,political,411.4167
+2026-10-09,reddit.news.comments,reddit,COMMENTS / H,political,457.1667
+2026-10-10,reddit.news.comments,reddit,COMMENTS / H,political,398.8636
+2026-10-12,reddit.news.comments,reddit,COMMENTS / H,political,167.36
+2026-10-13,reddit.news.comments,reddit,COMMENTS / H,political,412.9122
+2026-10-14,reddit.news.comments,reddit,COMMENTS / H,political,334.6986
+2026-10-15,reddit.news.comments,reddit,COMMENTS / H,political,755.0667
+2026-10-16,reddit.news.comments,reddit,COMMENTS / H,political,693.4144
+2026-08-24,reddit.personalfinance.comments,reddit,COMMENTS / H,control,139.1739
+2026-08-25,reddit.personalfinance.comments,reddit,COMMENTS / H,control,145.0
+2026-08-26,reddit.personalfinance.comments,reddit,COMMENTS / H,control,145.9167
+2026-08-27,reddit.personalfinance.comments,reddit,COMMENTS / H,control,171.5833
+2026-08-28,reddit.personalfinance.comments,reddit,COMMENTS / H,control,133.4167
+2026-08-29,reddit.personalfinance.comments,reddit,COMMENTS / H,control,133.75
+2026-08-30,reddit.personalfinance.comments,reddit,COMMENTS / H,control,118.9583
+2026-08-31,reddit.personalfinance.comments,reddit,COMMENTS / H,control,170.0417
+2026-09-01,reddit.personalfinance.comments,reddit,COMMENTS / H,control,137.7083
+2026-09-02,reddit.personalfinance.comments,reddit,COMMENTS / H,control,133.25
+2026-09-03,reddit.personalfinance.comments,reddit,COMMENTS / H,control,124.1667
+2026-09-04,reddit.personalfinance.comments,reddit,COMMENTS / H,control,159.6667
+2026-09-05,reddit.personalfinance.comments,reddit,COMMENTS / H,control,132.2917
+2026-09-06,reddit.personalfinance.comments,reddit,COMMENTS / H,control,121.6667
+2026-09-07,reddit.personalfinance.comments,reddit,COMMENTS / H,control,155.8333
+2026-09-08,reddit.personalfinance.comments,reddit,COMMENTS / H,control,123.7083
+2026-09-09,reddit.personalfinance.comments,reddit,COMMENTS / H,control,153.625
+2026-09-10,reddit.personalfinance.comments,reddit,COMMENTS / H,control,123.9167
+2026-09-11,reddit.personalfinance.comments,reddit,COMMENTS / H,control,164.5
+2026-09-12,reddit.personalfinance.comments,reddit,COMMENTS / H,control,172.0833
+2026-09-13,reddit.personalfinance.comments,reddit,COMMENTS / H,control,155.0417
+2026-09-14,reddit.personalfinance.comments,reddit,COMMENTS / H,control,174.1667
+2026-09-15,reddit.personalfinance.comments,reddit,COMMENTS / H,control,161.0833
+2026-09-16,reddit.personalfinance.comments,reddit,COMMENTS / H,control,180.1667
+2026-09-17,reddit.personalfinance.comments,reddit,COMMENTS / H,control,165.2917
+2026-09-18,reddit.personalfinance.comments,reddit,COMMENTS / H,control,153.9583
+2026-09-19,reddit.personalfinance.comments,reddit,COMMENTS / H,control,138.0833
+2026-09-20,reddit.personalfinance.comments,reddit,COMMENTS / H,control,120.7917
+2026-09-21,reddit.personalfinance.comments,reddit,COMMENTS / H,control,145.2917
+2026-09-22,reddit.personalfinance.comments,reddit,COMMENTS / H,control,166.125
+2026-09-23,reddit.personalfinance.comments,reddit,COMMENTS / H,control,184.9583
+2026-09-24,reddit.personalfinance.comments,reddit,COMMENTS / H,control,176.4583
+2026-09-25,reddit.personalfinance.comments,reddit,COMMENTS / H,control,145.1667
+2026-09-26,reddit.personalfinance.comments,reddit,COMMENTS / H,control,123.9583
+2026-09-27,reddit.personalfinance.comments,reddit,COMMENTS / H,control,130.625
+2026-09-28,reddit.personalfinance.comments,reddit,COMMENTS / H,control,176.625
+2026-09-29,reddit.personalfinance.comments,reddit,COMMENTS / H,control,170.619
+2026-09-30,reddit.personalfinance.comments,reddit,COMMENTS / H,control,184.0952
+2026-10-01,reddit.personalfinance.comments,reddit,COMMENTS / H,control,127.7083
+2026-10-02,reddit.personalfinance.comments,reddit,COMMENTS / H,control,142.2083
+2026-10-03,reddit.personalfinance.comments,reddit,COMMENTS / H,control,119.3333
+2026-10-04,reddit.personalfinance.comments,reddit,COMMENTS / H,control,102.4583
+2026-10-05,reddit.personalfinance.comments,reddit,COMMENTS / H,control,120.5
+2026-10-06,reddit.personalfinance.comments,reddit,COMMENTS / H,control,161.75
+2026-10-07,reddit.personalfinance.comments,reddit,COMMENTS / H,control,123.2917
+2026-10-08,reddit.personalfinance.comments,reddit,COMMENTS / H,control,142.2083
+2026-10-09,reddit.personalfinance.comments,reddit,COMMENTS / H,control,134.25
+2026-10-10,reddit.personalfinance.comments,reddit,COMMENTS / H,control,140.0417
+2026-10-11,reddit.personalfinance.comments,reddit,COMMENTS / H,control,143.5
+2026-10-13,reddit.personalfinance.comments,reddit,COMMENTS / H,control,124.8311
+2026-10-14,reddit.personalfinance.comments,reddit,COMMENTS / H,control,176.4925
+2026-10-15,reddit.personalfinance.comments,reddit,COMMENTS / H,control,147.4013
+2026-10-16,reddit.personalfinance.comments,reddit,COMMENTS / H,control,146.2978
+2026-10-13,reddit.pikabu.comments,reddit,COMMENTS / H,russia,27.4
+2026-10-14,reddit.pikabu.comments,reddit,COMMENTS / H,russia,21.875
+2026-10-15,reddit.pikabu.comments,reddit,COMMENTS / H,russia,16.5
+2026-10-16,reddit.pikabu.comments,reddit,COMMENTS / H,russia,27.2222
+2026-08-23,reddit.politics.comments,reddit,COMMENTS / H,political,124.3478
+2026-08-24,reddit.politics.comments,reddit,COMMENTS / H,political,1171.4583
+2026-08-25,reddit.politics.comments,reddit,COMMENTS / H,political,1344.375
+2026-08-26,reddit.politics.comments,reddit,COMMENTS / H,political,1153.25
+2026-08-27,reddit.politics.comments,reddit,COMMENTS / H,political,1322.4167
+2026-08-28,reddit.politics.comments,reddit,COMMENTS / H,political,1270.6667
+2026-08-29,reddit.politics.comments,reddit,COMMENTS / H,political,925.7083
+2026-08-30,reddit.politics.comments,reddit,COMMENTS / H,political,797.0417
+2026-08-31,reddit.politics.comments,reddit,COMMENTS / H,political,937.625
+2026-09-01,reddit.politics.comments,reddit,COMMENTS / H,political,1031.375
+2026-09-02,reddit.politics.comments,reddit,COMMENTS / H,political,1213.5833
+2026-09-03,reddit.politics.comments,reddit,COMMENTS / H,political,1071.125
+2026-09-04,reddit.politics.comments,reddit,COMMENTS / H,political,1210.6111
+2026-09-05,reddit.politics.comments,reddit,COMMENTS / H,political,715.3333
+2026-09-06,reddit.politics.comments,reddit,COMMENTS / H,political,669.0909
+2026-09-07,reddit.politics.comments,reddit,COMMENTS / H,political,801.75
+2026-09-08,reddit.politics.comments,reddit,COMMENTS / H,political,831.0
+2026-09-09,reddit.politics.comments,reddit,COMMENTS / H,political,943.0
+2026-09-10,reddit.politics.comments,reddit,COMMENTS / H,political,1417.75
+2026-09-11,reddit.politics.comments,reddit,COMMENTS / H,political,1147.7083
+2026-09-12,reddit.politics.comments,reddit,COMMENTS / H,political,738.0417
+2026-09-13,reddit.politics.comments,reddit,COMMENTS / H,political,601.0
+2026-09-14,reddit.politics.comments,reddit,COMMENTS / H,political,1117.3333
+2026-09-15,reddit.politics.comments,reddit,COMMENTS / H,political,1156.125
+2026-09-16,reddit.politics.comments,reddit,COMMENTS / H,political,1080.75
+2026-09-17,reddit.politics.comments,reddit,COMMENTS / H,political,1421.0833
+2026-09-18,reddit.politics.comments,reddit,COMMENTS / H,political,1354.375
+2026-09-19,reddit.politics.comments,reddit,COMMENTS / H,political,776.6667
+2026-09-20,reddit.politics.comments,reddit,COMMENTS / H,political,893.6667
+2026-09-21,reddit.politics.comments,reddit,COMMENTS / H,political,1003.875
+2026-09-22,reddit.politics.comments,reddit,COMMENTS / H,political,1317.6667
+2026-09-23,reddit.politics.comments,reddit,COMMENTS / H,political,1300.5417
+2026-09-24,reddit.politics.comments,reddit,COMMENTS / H,political,1065.1667
+2026-09-25,reddit.politics.comments,reddit,COMMENTS / H,political,939.4545
+2026-09-26,reddit.politics.comments,reddit,COMMENTS / H,political,757.65
+2026-09-27,reddit.politics.comments,reddit,COMMENTS / H,political,688.6667
+2026-09-28,reddit.politics.comments,reddit,COMMENTS / H,political,1198.8889
+2026-09-29,reddit.politics.comments,reddit,COMMENTS / H,political,1075.0833
+2026-09-30,reddit.politics.comments,reddit,COMMENTS / H,political,1138.0
+2026-10-01,reddit.politics.comments,reddit,COMMENTS / H,political,1361.375
+2026-10-02,reddit.politics.comments,reddit,COMMENTS / H,political,979.5417
+2026-10-03,reddit.politics.comments,reddit,COMMENTS / H,political,779.2083
+2026-10-04,reddit.politics.comments,reddit,COMMENTS / H,political,692.25
+2026-10-05,reddit.politics.comments,reddit,COMMENTS / H,political,756.625
+2026-10-06,reddit.politics.comments,reddit,COMMENTS / H,political,989.125
+2026-10-07,reddit.politics.comments,reddit,COMMENTS / H,political,1063.3333
+2026-10-08,reddit.politics.comments,reddit,COMMENTS / H,political,1116.125
+2026-10-09,reddit.politics.comments,reddit,COMMENTS / H,political,1093.0
+2026-10-10,reddit.politics.comments,reddit,COMMENTS / H,political,870.3182
+2026-10-12,reddit.politics.comments,reddit,COMMENTS / H,political,1146.5
+2026-10-13,reddit.politics.comments,reddit,COMMENTS / H,political,1161.7689
+2026-10-14,reddit.politics.comments,reddit,COMMENTS / H,political,1672.9771
+2026-10-15,reddit.politics.comments,reddit,COMMENTS / H,political,1470.0567
+2026-10-16,reddit.politics.comments,reddit,COMMENTS / H,political,1543.7456
+2026-10-12,reddit.politics.posts,reddit,POSTS / H,political,13.0
+2026-08-24,reddit.polska.comments,reddit,COMMENTS / H,regional,164.087
+2026-08-25,reddit.polska.comments,reddit,COMMENTS / H,regional,170.125
+2026-08-26,reddit.polska.comments,reddit,COMMENTS / H,regional,142.5833
+2026-08-27,reddit.polska.comments,reddit,COMMENTS / H,regional,149.8333
+2026-08-28,reddit.polska.comments,reddit,COMMENTS / H,regional,146.0833
+2026-08-29,reddit.polska.comments,reddit,COMMENTS / H,regional,112.6667
+2026-08-30,reddit.polska.comments,reddit,COMMENTS / H,regional,142.5
+2026-08-31,reddit.polska.comments,reddit,COMMENTS / H,regional,124.1667
+2026-09-01,reddit.polska.comments,reddit,COMMENTS / H,regional,112.5
+2026-09-02,reddit.polska.comments,reddit,COMMENTS / H,regional,121.0417
+2026-09-03,reddit.polska.comments,reddit,COMMENTS / H,regional,148.625
+2026-09-04,reddit.polska.comments,reddit,COMMENTS / H,regional,134.375
+2026-09-05,reddit.polska.comments,reddit,COMMENTS / H,regional,97.2917
+2026-09-06,reddit.polska.comments,reddit,COMMENTS / H,regional,115.0833
+2026-09-07,reddit.polska.comments,reddit,COMMENTS / H,regional,206.0
+2026-09-08,reddit.polska.comments,reddit,COMMENTS / H,regional,142.7917
+2026-09-09,reddit.polska.comments,reddit,COMMENTS / H,regional,154.75
+2026-09-10,reddit.polska.comments,reddit,COMMENTS / H,regional,151.0833
+2026-09-11,reddit.polska.comments,reddit,COMMENTS / H,regional,135.1667
+2026-09-12,reddit.polska.comments,reddit,COMMENTS / H,regional,141.875
+2026-09-13,reddit.polska.comments,reddit,COMMENTS / H,regional,128.25
+2026-09-14,reddit.polska.comments,reddit,COMMENTS / H,regional,171.2083
+2026-09-15,reddit.polska.comments,reddit,COMMENTS / H,regional,135.5417
+2026-09-16,reddit.polska.comments,reddit,COMMENTS / H,regional,118.2083
+2026-09-17,reddit.polska.comments,reddit,COMMENTS / H,regional,165.5417
+2026-09-18,reddit.polska.comments,reddit,COMMENTS / H,regional,134.0833
+2026-09-19,reddit.polska.comments,reddit,COMMENTS / H,regional,104.0
+2026-09-20,reddit.polska.comments,reddit,COMMENTS / H,regional,132.25
+2026-09-21,reddit.polska.comments,reddit,COMMENTS / H,regional,146.4167
+2026-09-22,reddit.polska.comments,reddit,COMMENTS / H,regional,151.5833
+2026-09-23,reddit.polska.comments,reddit,COMMENTS / H,regional,136.4167
+2026-09-24,reddit.polska.comments,reddit,COMMENTS / H,regional,136.5833
+2026-09-25,reddit.polska.comments,reddit,COMMENTS / H,regional,145.875
+2026-09-26,reddit.polska.comments,reddit,COMMENTS / H,regional,115.7917
+2026-09-27,reddit.polska.comments,reddit,COMMENTS / H,regional,115.7083
+2026-09-28,reddit.polska.comments,reddit,COMMENTS / H,regional,164.0833
+2026-09-29,reddit.polska.comments,reddit,COMMENTS / H,regional,130.5
+2026-09-30,reddit.polska.comments,reddit,COMMENTS / H,regional,138.2083
+2026-10-01,reddit.polska.comments,reddit,COMMENTS / H,regional,136.1667
+2026-10-02,reddit.polska.comments,reddit,COMMENTS / H,regional,131.7917
+2026-10-03,reddit.polska.comments,reddit,COMMENTS / H,regional,152.4167
+2026-10-04,reddit.polska.comments,reddit,COMMENTS / H,regional,161.0417
+2026-10-05,reddit.polska.comments,reddit,COMMENTS / H,regional,153.0
+2026-10-06,reddit.polska.comments,reddit,COMMENTS / H,regional,125.1667
+2026-10-07,reddit.polska.comments,reddit,COMMENTS / H,regional,132.1667
+2026-10-08,reddit.polska.comments,reddit,COMMENTS / H,regional,166.25
+2026-10-09,reddit.polska.comments,reddit,COMMENTS / H,regional,237.5833
+2026-10-10,reddit.polska.comments,reddit,COMMENTS / H,regional,141.4167
+2026-10-11,reddit.polska.comments,reddit,COMMENTS / H,regional,26.0
+2026-10-13,reddit.polska.comments,reddit,COMMENTS / H,regional,136.587
+2026-10-14,reddit.polska.comments,reddit,COMMENTS / H,regional,97.41
+2026-10-15,reddit.polska.comments,reddit,COMMENTS / H,regional,159.7937
+2026-10-16,reddit.polska.comments,reddit,COMMENTS / H,regional,99.9633
+2026-08-23,reddit.republican.comments,reddit,COMMENTS / H,political-right,0.0
+2026-08-24,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.75
+2026-08-25,reddit.republican.comments,reddit,COMMENTS / H,political-right,7.8333
+2026-08-26,reddit.republican.comments,reddit,COMMENTS / H,political-right,5.0833
+2026-08-27,reddit.republican.comments,reddit,COMMENTS / H,political-right,6.4583
+2026-08-28,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.6667
+2026-08-29,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.0
+2026-08-30,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.9583
+2026-08-31,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.125
+2026-09-01,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.5
+2026-09-02,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.3333
+2026-09-03,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.25
+2026-09-04,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.7917
+2026-09-05,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.75
+2026-09-06,reddit.republican.comments,reddit,COMMENTS / H,political-right,0.5833
+2026-09-07,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.0417
+2026-09-08,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.9167
+2026-09-09,reddit.republican.comments,reddit,COMMENTS / H,political-right,5.125
+2026-09-10,reddit.republican.comments,reddit,COMMENTS / H,political-right,14.0833
+2026-09-11,reddit.republican.comments,reddit,COMMENTS / H,political-right,10.3333
+2026-09-12,reddit.republican.comments,reddit,COMMENTS / H,political-right,5.5
+2026-09-13,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.2083
+2026-09-14,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.7917
+2026-09-15,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.5
+2026-09-16,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.4583
+2026-09-17,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.875
+2026-09-18,reddit.republican.comments,reddit,COMMENTS / H,political-right,6.0
+2026-09-19,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.5
+2026-09-20,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.5
+2026-09-21,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.5833
+2026-09-22,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.375
+2026-09-23,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.125
+2026-09-24,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.125
+2026-09-25,reddit.republican.comments,reddit,COMMENTS / H,political-right,0.75
+2026-09-26,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.5833
+2026-09-27,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.125
+2026-09-28,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.75
+2026-09-29,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.875
+2026-09-30,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.0833
+2026-10-01,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.125
+2026-10-02,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.5417
+2026-10-03,reddit.republican.comments,reddit,COMMENTS / H,political-right,0.875
+2026-10-04,reddit.republican.comments,reddit,COMMENTS / H,political-right,0.375
+2026-10-05,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.0
+2026-10-06,reddit.republican.comments,reddit,COMMENTS / H,political-right,3.7917
+2026-10-07,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.2917
+2026-10-08,reddit.republican.comments,reddit,COMMENTS / H,political-right,2.25
+2026-10-09,reddit.republican.comments,reddit,COMMENTS / H,political-right,7.0
+2026-10-10,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.7727
+2026-10-12,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.0
+2026-10-13,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.7778
+2026-10-14,reddit.republican.comments,reddit,COMMENTS / H,political-right,4.25
+2026-10-15,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.875
+2026-10-16,reddit.republican.comments,reddit,COMMENTS / H,political-right,1.3333
+2026-10-12,reddit.republican.posts,reddit,POSTS / H,political-right,0.0
+2026-08-24,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,3.3913
+2026-08-25,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,2.3333
+2026-08-26,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,4.5833
+2026-08-27,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,5.5833
+2026-08-28,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,7.5
+2026-08-29,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,4.2917
+2026-08-30,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,3.1667
+2026-08-31,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,7.625
+2026-09-01,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,9.9583
+2026-09-02,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,11.2917
+2026-09-03,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,8.2083
+2026-09-04,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,5.75
+2026-09-05,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,2.5833
+2026-09-06,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,3.8333
+2026-09-07,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,5.5417
+2026-09-08,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.125
+2026-09-09,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,9.6667
+2026-09-10,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,8.5417
+2026-09-11,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.625
+2026-09-12,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,7.25
+2026-09-13,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,3.0
+2026-09-14,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,4.5417
+2026-09-15,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.1667
+2026-09-16,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,8.75
+2026-09-17,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,10.3333
+2026-09-18,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.1667
+2026-09-19,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,4.9167
+2026-09-20,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,9.2917
+2026-09-21,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,10.9167
+2026-09-22,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,10.9167
+2026-09-23,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,20.8333
+2026-09-24,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,10.9583
+2026-09-25,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,9.1667
+2026-09-26,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,4.5
+2026-09-27,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,7.3333
+2026-09-28,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,10.75
+2026-09-29,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,14.6667
+2026-09-30,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.5
+2026-10-01,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.625
+2026-10-02,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,22.2083
+2026-10-03,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,5.2917
+2026-10-04,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,11.4583
+2026-10-05,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,20.6667
+2026-10-06,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,7.0417
+2026-10-07,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,14.1667
+2026-10-08,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,9.6667
+2026-10-09,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,11.0
+2026-10-10,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,6.75
+2026-10-11,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,1.25
+2026-10-13,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,4.9
+2026-10-14,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,9.5714
+2026-10-15,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,5.7778
+2026-10-16,reddit.spainpolitics.comments,reddit,COMMENTS / H,political,7.1111
+2026-10-13,reddit.sweden.comments,reddit,COMMENTS / H,regional,187.67
+2026-10-14,reddit.sweden.comments,reddit,COMMENTS / H,regional,266.9671
+2026-10-15,reddit.sweden.comments,reddit,COMMENTS / H,regional,212.445
+2026-10-16,reddit.sweden.comments,reddit,COMMENTS / H,regional,223.0544
+2026-10-13,reddit.tjournal_refugees.comments,reddit,COMMENTS / H,russia,59.2
+2026-10-14,reddit.tjournal_refugees.comments,reddit,COMMENTS / H,russia,47.25
+2026-10-15,reddit.tjournal_refugees.comments,reddit,COMMENTS / H,russia,40.8312
+2026-10-16,reddit.tjournal_refugees.comments,reddit,COMMENTS / H,russia,45.8889
+2026-08-24,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,223.0
+2026-08-25,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,223.0
+2026-08-26,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,242.7083
+2026-08-27,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,226.75
+2026-08-28,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,290.7083
+2026-08-29,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,192.0417
+2026-08-30,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,161.2917
+2026-08-31,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,164.7083
+2026-09-01,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,240.75
+2026-09-02,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,249.3333
+2026-09-03,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,238.2917
+2026-09-04,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,249.375
+2026-09-05,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,217.75
+2026-09-06,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,165.1667
+2026-09-07,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,329.5
+2026-09-08,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,348.5
+2026-09-09,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,285.875
+2026-09-10,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,269.5
+2026-09-11,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,249.8333
+2026-09-12,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,260.375
+2026-09-13,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,205.2917
+2026-09-14,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,270.5417
+2026-09-15,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,296.625
+2026-09-16,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,299.0417
+2026-09-17,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,272.9167
+2026-09-18,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,237.9167
+2026-09-19,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,248.8333
+2026-09-20,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,277.9167
+2026-09-21,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,219.0
+2026-09-22,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,338.125
+2026-09-23,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,352.8333
+2026-09-24,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,300.9583
+2026-09-25,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,293.7917
+2026-09-26,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,213.8333
+2026-09-27,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,266.4167
+2026-09-28,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,431.9583
+2026-09-29,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,440.0417
+2026-09-30,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,429.9583
+2026-10-01,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,282.7917
+2026-10-02,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,276.875
+2026-10-03,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,213.875
+2026-10-04,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,308.1667
+2026-10-05,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,355.7917
+2026-10-06,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,266.7083
+2026-10-07,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,240.4167
+2026-10-08,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,259.7917
+2026-10-09,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,277.7083
+2026-10-10,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,166.375
+2026-10-11,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,95.5
+2026-10-13,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,174.543
+2026-10-14,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,202.4086
+2026-10-15,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,206.1656
+2026-10-16,reddit.ukpolitics.comments,reddit,COMMENTS / H,political,187.8278
+2026-08-24,reddit.worldnews.comments,reddit,COMMENTS / H,political,595.5652
+2026-08-25,reddit.worldnews.comments,reddit,COMMENTS / H,political,806.375
+2026-08-26,reddit.worldnews.comments,reddit,COMMENTS / H,political,674.5833
+2026-08-27,reddit.worldnews.comments,reddit,COMMENTS / H,political,803.1111
+2026-08-28,reddit.worldnews.comments,reddit,COMMENTS / H,political,639.2083
+2026-08-29,reddit.worldnews.comments,reddit,COMMENTS / H,political,582.6667
+2026-08-30,reddit.worldnews.comments,reddit,COMMENTS / H,political,400.875
+2026-08-31,reddit.worldnews.comments,reddit,COMMENTS / H,political,775.5
+2026-09-01,reddit.worldnews.comments,reddit,COMMENTS / H,political,573.125
+2026-09-02,reddit.worldnews.comments,reddit,COMMENTS / H,political,577.5417
+2026-09-03,reddit.worldnews.comments,reddit,COMMENTS / H,political,661.7917
+2026-09-04,reddit.worldnews.comments,reddit,COMMENTS / H,political,753.5417
+2026-09-05,reddit.worldnews.comments,reddit,COMMENTS / H,political,451.5417
+2026-09-06,reddit.worldnews.comments,reddit,COMMENTS / H,political,462.9583
+2026-09-07,reddit.worldnews.comments,reddit,COMMENTS / H,political,462.75
+2026-09-08,reddit.worldnews.comments,reddit,COMMENTS / H,political,557.7917
+2026-09-09,reddit.worldnews.comments,reddit,COMMENTS / H,political,597.75
+2026-09-10,reddit.worldnews.comments,reddit,COMMENTS / H,political,400.25
+2026-09-11,reddit.worldnews.comments,reddit,COMMENTS / H,political,520.875
+2026-09-12,reddit.worldnews.comments,reddit,COMMENTS / H,political,519.3333
+2026-09-13,reddit.worldnews.comments,reddit,COMMENTS / H,political,647.625
+2026-09-14,reddit.worldnews.comments,reddit,COMMENTS / H,political,490.0833
+2026-09-15,reddit.worldnews.comments,reddit,COMMENTS / H,political,486.5417
+2026-09-16,reddit.worldnews.comments,reddit,COMMENTS / H,political,719.4167
+2026-09-17,reddit.worldnews.comments,reddit,COMMENTS / H,political,780.6667
+2026-09-18,reddit.worldnews.comments,reddit,COMMENTS / H,political,703.1667
+2026-09-19,reddit.worldnews.comments,reddit,COMMENTS / H,political,495.75
+2026-09-20,reddit.worldnews.comments,reddit,COMMENTS / H,political,515.5
+2026-09-21,reddit.worldnews.comments,reddit,COMMENTS / H,political,601.4167
+2026-09-22,reddit.worldnews.comments,reddit,COMMENTS / H,political,643.5417
+2026-09-23,reddit.worldnews.comments,reddit,COMMENTS / H,political,633.7917
+2026-09-24,reddit.worldnews.comments,reddit,COMMENTS / H,political,762.75
+2026-09-25,reddit.worldnews.comments,reddit,COMMENTS / H,political,815.125
+2026-09-26,reddit.worldnews.comments,reddit,COMMENTS / H,political,760.125
+2026-09-27,reddit.worldnews.comments,reddit,COMMENTS / H,political,586.5
+2026-09-28,reddit.worldnews.comments,reddit,COMMENTS / H,political,722.7083
+2026-09-29,reddit.worldnews.comments,reddit,COMMENTS / H,political,551.7917
+2026-09-30,reddit.worldnews.comments,reddit,COMMENTS / H,political,800.625
+2026-10-01,reddit.worldnews.comments,reddit,COMMENTS / H,political,613.0833
+2026-10-02,reddit.worldnews.comments,reddit,COMMENTS / H,political,537.0833
+2026-10-03,reddit.worldnews.comments,reddit,COMMENTS / H,political,486.8333
+2026-10-04,reddit.worldnews.comments,reddit,COMMENTS / H,political,429.2083
+2026-10-05,reddit.worldnews.comments,reddit,COMMENTS / H,political,687.2857
+2026-10-06,reddit.worldnews.comments,reddit,COMMENTS / H,political,631.087
+2026-10-07,reddit.worldnews.comments,reddit,COMMENTS / H,political,743.9167
+2026-10-08,reddit.worldnews.comments,reddit,COMMENTS / H,political,508.625
+2026-10-09,reddit.worldnews.comments,reddit,COMMENTS / H,political,592.625
+2026-10-10,reddit.worldnews.comments,reddit,COMMENTS / H,political,877.2083
+2026-10-11,reddit.worldnews.comments,reddit,COMMENTS / H,political,497.5
+2026-10-13,reddit.worldnews.comments,reddit,COMMENTS / H,political,407.587
+2026-10-14,reddit.worldnews.comments,reddit,COMMENTS / H,political,904.9829
+2026-10-15,reddit.worldnews.comments,reddit,COMMENTS / H,political,707.9789
+2026-10-16,reddit.worldnews.comments,reddit,COMMENTS / H,political,641.4822
