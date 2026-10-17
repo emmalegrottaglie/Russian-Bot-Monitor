@@ -197,3 +197,33 @@ def test_refetch_replaces_only_complete_windows_and_only_as_far_as_the_source_re
     with db.session(settings.db_path) as conn:
         assert db.points(conn, good, 0, 9999) == [(1300, 7.0), (1600, 8.0), (5000, 3.0)]  # 5000 is past the new data
         assert db.points(conn, bad, 0, 9999) == [(1000, 1.0), (1300, 2.0), (5000, 3.0)]
+
+
+def test_cloudflare_history_is_requested_a_week_at_a_time(monkeypatch):
+    import asyncio
+    from types import SimpleNamespace
+
+    import httpx
+
+    calls = []
+
+    def handler(request):
+        p = request.url.params
+        calls.append((p["dateStart"], p["dateEnd"]))
+        if len(calls) == 2:
+            return httpx.Response(400, json={"errors": [{"message": "too long"}]})
+        stamp = p["dateStart"].replace(":00Z", ":00.000Z")
+        return httpx.Response(200, json={"result": {"serie_0": {"timestamps": [stamp], "bot": ["50.0"]}}})
+
+    spec = SimpleNamespace(key="cloudflare.asn1.bot-pct", params={"asn": 1})
+    start, now = int(ts("2026-09-01T00:00:00Z")), int(ts("2026-09-20T00:00:00Z"))
+
+    async def go():
+        async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
+            return await cloudflare.collect(client, [spec], SimpleNamespace(cloudflare_token="t"), now, start=start)
+
+    r = asyncio.run(go())
+    assert calls == [("2026-09-01T00:00:00Z", "2026-09-08T00:00:00Z"), ("2026-09-08T00:00:00Z", "2026-09-15T00:00:00Z"),
+                     ("2026-09-15T00:00:00Z", "2026-09-20T00:00:00Z")]
+    assert [t for t, _ in r.points[spec.key]] == [start + 3600, int(ts("2026-09-15T01:00:00Z"))]  # refused week is a gap
+    assert len(r.errors) == 1

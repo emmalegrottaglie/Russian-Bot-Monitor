@@ -18,6 +18,10 @@ URL = "https://api.cloudflare.com/client/v4/radar/http/timeseries_groups/BOT_CLA
 BOT_KEYS = ("bot", "likely_automated")
 
 INTERVAL = 3600  # aggInterval=1h
+# Radar refuses hourly data for long ranges (a month works, 50 days does not), so
+# history is requested a week at a time.
+CHUNK = 7 * 86400
+
 
 def _iso(ts: int) -> str:
     return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -42,17 +46,22 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
         raise SourceSkipped("CLOUDFLARE_API_TOKEN not set")
     result = Result()
     headers = {"Authorization": f"Bearer {settings.cloudflare_token}"}
+    until = min(now, end) if end is not None else now
     for s in specs:
-        params = {"asn": s.params["asn"], "aggInterval": "1h", "format": "json"}  # matches INTERVAL
+        base = {"asn": s.params["asn"], "aggInterval": "1h", "format": "json"}  # matches INTERVAL
         if start is None:
-            params["dateRange"] = "2d"
+            windows = [{"dateRange": "2d"}]
         else:
-            params["dateStart"] = _iso(start)
-            params["dateEnd"] = _iso(min(now, end) if end is not None else now)
-        try:
-            r = await client.get(URL, params=params, headers=headers)
-            r.raise_for_status()
-            result.points[s.key] = parse(r.json())
-        except (httpx.HTTPError, ValueError) as e:
-            result.errors.append(f"{s.key}: {e}")
+            windows = [{"dateStart": _iso(t), "dateEnd": _iso(min(t + CHUNK, until))} for t in range(start, until, CHUNK)]
+        pts: dict[int, float] = {}
+        for w in windows:
+            try:
+                r = await client.get(URL, params=base | w, headers=headers)
+                r.raise_for_status()
+                pts.update(parse(r.json()))
+            except (httpx.HTTPError, ValueError) as e:
+                # One refused window is a gap in the history, not the end of it.
+                result.errors.append(f"{s.key} {w}: {e}")
+        if pts:
+            result.points[s.key] = sorted(pts.items())
     return result
