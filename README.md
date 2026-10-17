@@ -115,6 +115,8 @@ Correlation is not attribution. Activity can fall after an outage for reasons ot
 
 How raw source data becomes stored points, and every data bug found so far with how it was repaired, is in [docs/DATA.md](docs/DATA.md).
 
+The narratives group, which follows talking points documented in Russian influence operations rather than party names, is explained with its sources in [docs/NARRATIVES.md](docs/NARRATIVES.md).
+
 ## Licence
 
 The code is MIT licensed (see [LICENSE](LICENSE)). The data has its own terms: Cloudflare Radar data is CC BY-NC 4.0, so any published dataset that includes it is non-commercial only.

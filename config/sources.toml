@@ -307,3 +307,72 @@ query = "governo"
 lang = "it"
 region = "IT"
 tags = ["political"]
+
+# Narratives documented in Russian state-linked influence operations, 2024-25.
+# Unlike the groups above, these follow talking points rather than parties.
+# Each search is tied to a published source; where the source names a narrative
+# rather than a word, the search phrase is ours and says so. Kept only if the
+# keyword had at least 20 posts a day in October 2026. See docs/NARRATIVES.md.
+# These count every post using the words, including people arguing against
+# the narrative: they measure the topic, not the operation.
+[[bluesky]]
+# Recorded Future, CopyCop/Storm-1516 (Sept 2025): questions the legitimacy of
+# Zelensky's administration and claims misuse of US funds.
+query = "Zelensky"
+lang = "en"
+region = "EN-LANG"
+tags = ["narratives"]
+
+[[bluesky]]
+# DFRLab, Doppelganger (Sept 2024): highlights what the US spends on the war.
+# The phrase is ours; posts containing both words.
+query = "Ukraine aid"
+lang = "en"
+region = "EN-LANG"
+tags = ["narratives"]
+
+[[bluesky]]
+# DFRLab, Doppelganger (Sept 2024): a fake LGBTQ+ outlet filed stories under the
+# topic "Woke Wars". The single word is ours.
+query = "woke"
+lang = "en"
+region = "EN-LANG"
+tags = ["narratives"]
+
+[[bluesky]]
+# DFRLab, Doppelganger (Sept 2024): topic "Trans youth" on the same outlet.
+query = '"trans youth"'
+lang = "en"
+region = "EN-LANG"
+tags = ["narratives"]
+
+[[bluesky]]
+# Recorded Future, CopyCop (Sept 2025): Zelensky narrative; 94 sites targeting
+# Germany. German spelling of the name.
+query = "Selenskyj"
+lang = "de"
+region = "DE"
+tags = ["narratives"]
+
+[[bluesky]]
+# CORRECTIV, Storm-1516 (Jan 2025): fabricated abuse claims against Robert Habeck
+# ahead of the German election.
+query = "Habeck"
+lang = "de"
+region = "DE"
+tags = ["narratives"]
+
+[[bluesky]]
+# Recorded Future, CopyCop (Sept 2025): France among the targets; Zelensky narrative.
+query = "Zelensky"
+lang = "fr"
+region = "FR"
+tags = ["narratives"]
+
+[[bluesky]]
+# CheckFirst, Operation Overload (June 2024): Italy one of four main targets,
+# with content undermining Ukraine.
+query = "Zelensky"
+lang = "it"
+region = "IT"
+tags = ["narratives"]

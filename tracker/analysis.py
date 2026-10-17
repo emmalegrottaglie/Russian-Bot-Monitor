@@ -342,7 +342,7 @@ def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: i
 
 # ── Chart data (docs/CHARTS.md) ──────────────────────────────────────────────
 
-GROUP_ORDER = ("political-right", "political", "regional", "south-america", "russia", "control")
+GROUP_ORDER = ("political-right", "narratives", "political", "regional", "south-america", "russia", "control")
 ALIGNED_SPAN = 48  # hours either side of a strike; decide after backfill (48 or 72)
 ALIGNED_SMOOTH = 3  # centred rolling mean, hours; decide after backfill (1, 3 or 6)
 MIN_POOL = 50  # placebo start times needed before a chance band is drawn
