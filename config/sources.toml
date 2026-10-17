@@ -12,6 +12,7 @@
 #   political        general political discussion
 #   regional         country / state communities
 #   russia           Russia-focused communities
+#   south-america    South American country communities
 #   control          non-political baseline
 
 [analysis]
@@ -108,6 +109,73 @@ tags = ["russia"]
 subreddits = ["aww", "gardening", "Cooking", "personalfinance"]
 region = "GLOBAL"
 tags = ["control"]
+
+# South American country communities, to see whether activity there moved at the
+# strike times too. Nothing has been reported about this region; this group is the check.
+
+[[reddit]]
+# Brazil, general
+subreddits = ["brasil"]
+region = "BR"
+tags = ["south-america"]
+
+[[reddit]]
+# Brazil, right-leaning
+subreddits = ["brasilivre"]
+region = "BR"
+tags = ["south-america"]
+
+[[reddit]]
+# Argentina, general
+subreddits = ["argentina"]
+region = "AR"
+tags = ["south-america"]
+
+[[reddit]]
+# Argentina, libertarian / right-leaning
+subreddits = ["Republica_Argentina"]
+region = "AR"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["chile"]
+region = "CL"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["colombia"]
+region = "CO"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["PERU"]
+region = "PE"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["vzla"]
+region = "VE"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["uruguay"]
+region = "UY"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["Paraguay"]
+region = "PY"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["BOLIVIA"]
+region = "BO"
+tags = ["south-america"]
+
+[[reddit]]
+subreddits = ["ecuador"]
+region = "EC"
+tags = ["south-america"]
 
 # ── Bluesky keyword search ────────────────────────────────────────────────────
 

@@ -30,7 +30,7 @@ COMMUNITY_COLUMNS = [
     ("series", "Series key used by the API"),
     ("platform", "reddit or bluesky"),
     ("region", "Country or region the community is about"),
-    ("groups", "Research tags, | separated (political-right, political, regional, russia, control)"),
+    ("groups", "Research tags, | separated (political-right, political, regional, south-america, russia, control)"),
     ("unit", "What is counted"),
     ("main_metric", "yes for the series group statistics use (Reddit comments, Bluesky posts)"),
     ("pre_strike_mean", "Mean hourly rate over the pre-strike reference period"),
@@ -116,7 +116,7 @@ def build(conn: sqlite3.Connection, config: Config, settings: Settings, now: int
             "first_data_utc": _iso(first[0][0]) if first else "", "hours_of_data": len(hours),
         })
 
-    tag_order = {t: i for i, t in enumerate(("political-right", "political", "regional", "russia", "control"))}
+    tag_order = {t: i for i, t in enumerate(analysis.GROUP_ORDER)}
     communities.sort(key=lambda c: (c["main_metric"] != "yes", tag_order.get(c["groups"].split("|")[0], 9),
                                     c["strike_window_change"] if c["strike_window_change"] is not None else 9))
 

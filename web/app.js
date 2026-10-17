@@ -8,7 +8,7 @@ const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TAG_SHORT = {
   'political-right': 'RIGHT-WING', political: 'POLITICS', regional: 'REGIONAL',
-  russia: 'RUSSIA', control: 'NON-POLITICAL',
+  'south-america': 'SOUTH AMERICA', russia: 'RUSSIA', control: 'NON-POLITICAL',
 };
 // One line per group for the "who is in each group" panels. The tags themselves
 // are editorial labels set in config/sources.toml.
@@ -16,6 +16,7 @@ const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states and European countries.',
+  'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
   russia: 'Communities about Russia and Russian-language communities: everyday (r/Pikabu), questions to Russians (r/AskARussian) and émigré-leaning news (r/tjournal_refugees).',
   control: 'Hobby and lifestyle communities. They are the control group: a drop that shows up here too is not about politics.',
 };
@@ -41,7 +42,7 @@ let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
   corrTags: new Set(['political-right', 'control']), diffTag: 'political-right' };
 // Line style per group on the correlation chart; Yandex itself is always a1.
-const TAG_LINE = { 'political-right': 'l-a3', political: 'l-a2', regional: 'l-a2 l-dash', russia: 'l-ink', control: 'l-muted' };
+const TAG_LINE = { 'political-right': 'l-a3', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
 
 // ── Formatting: one time format per screen (MM-DD HH:MM UTC) ────────────────
 const pad = (n) => String(n).padStart(2, '0');
