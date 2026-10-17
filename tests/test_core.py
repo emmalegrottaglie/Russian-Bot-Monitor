@@ -200,3 +200,18 @@ def test_hourly_history_supersedes_live_samples_in_its_hours(tmp_path):
         # A re-collected stretch replaces everything inside it and nothing outside.
         db.replace_range(conn, "k", H, 3 * H, [(2 * H, 41.0), (3 * H, 61.0), (4 * H, 99.0)])
         assert db.points(conn, "k", 0, 5 * H) == [(600, 30.0), (2 * H, 41.0), (3 * H, 61.0), (3 * H + 600, 90.0)]
+
+
+def test_daily_points_in_sql_match_daily_means(tmp_path):
+    from tracker import db
+
+    pts = [(h * H, float(h % 7)) for h in range(1, 24 * 3 + 1)]  # three days of hourly points
+    pts += [(h * H - 600, 9.0) for h in range(3, 24 * 3, 5)]  # a second sample in some hours
+    pts = [p for p in pts if not 30 * H < p[0] <= 40 * H]  # day 1 left with 14 hours
+    with db.session(tmp_path / "d.db") as conn:
+        db.init(conn, [])
+        db.upsert_points(conn, "k", pts)
+        got = db.daily_points(conn, "k", 0, 10 * 86400, analysis.MIN_DAY_HOURS)
+    want = sorted(analysis.daily(pts).items())
+    assert [d for d, _ in got] == [d for d, _ in want] == [0, 2 * 86400]
+    assert [round(v, 9) for _, v in got] == [round(v, 9) for _, v in want]

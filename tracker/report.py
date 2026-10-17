@@ -167,7 +167,7 @@ def _write_daily(conn: sqlite3.Connection, path: Path, start: int, now: int) -> 
         w = csv.writer(f)
         w.writerow(["date_utc", "series", "kind", "platform", "unit", "groups", "daily_mean"])
         for s in db.list_series(conn, active_only=False):
-            for t, v in sorted(analysis.daily(db.points(conn, s["key"], start, now)).items()):
+            for t, v in db.daily_points(conn, s["key"], start, now, analysis.MIN_DAY_HOURS):
                 w.writerow([_iso(t)[:10], s["key"], s["kind"], s["platform"], s["unit"], "|".join(s["tags"]), round(v, 4)])
 
 

@@ -77,7 +77,7 @@ def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Pa
     for s in db.list_series(conn, active_only=False):
         key = s["key"]
         hourly = db.points(conn, key, now - HOURLY_DAYS * DAY, now, 3600)
-        daily = sorted(analysis.daily(db.points(conn, key, now - DAILY_DAYS * DAY, now)).items())
+        daily = db.daily_points(conn, key, now - DAILY_DAYS * DAY, now, analysis.MIN_DAY_HOURS)
         _json(api / "series" / key / "hour.json", {"series": s, "bucket": "hour", "points": hourly})
         _json(api / "series" / key / "day.json", {"series": s, "bucket": "day", "points": daily})
         if event_ts:

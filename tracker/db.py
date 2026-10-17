@@ -166,6 +166,19 @@ def points(conn: sqlite3.Connection, key: str, start: int, end: int, bucket: int
     return [(int(t), float(v)) for t, v in rows]
 
 
+def daily_points(conn: sqlite3.Connection, key: str, start: int, end: int, min_hours: int) -> list[tuple[int, float]]:
+    """Daily means of hourly means for points in [start, end], keyed by UTC day start.
+    Days with fewer than `min_hours` hours of data are left out (see analysis.days_of)."""
+    rows = conn.execute(
+        "SELECT (h / 86400) * 86400 AS d, AVG(v) FROM ("
+        "  SELECT ((ts - 1) / 3600) * 3600 AS h, AVG(value) AS v FROM points"
+        "  WHERE key = ? AND ts BETWEEN ? AND ? GROUP BY h"
+        ") GROUP BY d HAVING COUNT(*) >= ? ORDER BY d",
+        (key, start, end, min_hours),
+    ).fetchall()
+    return [(r[0], r[1]) for r in rows]
+
+
 def latest_point(conn: sqlite3.Connection, key: str) -> tuple[int, float] | None:
     row = conn.execute("SELECT ts, value FROM points WHERE key = ? ORDER BY ts DESC LIMIT 1", (key,)).fetchone()
     return (int(row[0]), float(row[1])) if row else None
