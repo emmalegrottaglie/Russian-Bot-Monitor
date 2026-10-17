@@ -5,5 +5,5 @@ UI must follow `terminal-design-guide/DESIGN_GUIDE.md` and use `terminal-design-
 - Backend: Python, `tracker/` package. FastAPI + SQLite + httpx. No other runtime dependencies without a good reason.
 - Sources and research tags live in `config/sources.toml`; chart annotations in `config/events.toml`. Every event needs a source and a status.
 - Collectors must never invent points: a failed or empty fetch records an error, not a zero.
-- Store timestamps only. No usernames or post content.
+- Store timestamps and aggregate counts only. Collectors may read post text and account metadata in memory to compute aggregate measures; only hourly totals are stored. Never store or log usernames, account IDs or post text.
 - Tests: `python -m pytest`.
