@@ -113,6 +113,8 @@ See [docs/HOSTING.md](docs/HOSTING.md) for a step-by-step guide in two phases:
 
 Correlation is not attribution. Activity can fall after an outage for reasons other than bots going offline: news cycles, weekends, moderation, platform changes, or real users in Russia losing service. Cloudflare's bot share for AS13238 is mostly Yandex's own search crawler. Read the About tab before citing a number.
 
+How raw source data becomes stored points, and every data bug found so far with how it was repaired, is in [docs/DATA.md](docs/DATA.md).
+
 ## Licence
 
 The code is MIT licensed (see [LICENSE](LICENSE)). The data has its own terms: Cloudflare Radar data is CC BY-NC 4.0, so any published dataset that includes it is non-commercial only.
