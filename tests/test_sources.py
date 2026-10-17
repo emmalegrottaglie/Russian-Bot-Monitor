@@ -79,7 +79,7 @@ def test_arctic_shift_corrects_early_labels():
 def test_arctic_shift_fills_quiet_hours_but_not_missing_days():
     day = 20000 * 86400
     pts = [(day + 3 * 3600, 5.0), (day + 2 * 86400 + 3600, 2.0)]  # day 0 and day 2; day 1 missing
-    out = dict(arctic_shift.fill_quiet_hours(pts, end=day + 3 * 86400))
+    out = dict(arctic_shift.fill_quiet_hours(pts, end=day + 3 * 86400, begin=day))
     assert out[day + 3 * 3600] == 5.0 and out[day + 4 * 3600] == 0.0
     assert not any(day + 86400 < t <= day + 2 * 86400 for t in out)  # gap kept
     assert len(out) == 48
@@ -116,7 +116,7 @@ def test_arctic_shift_skips_a_failing_window_and_keeps_the_rest(monkeypatch):
     assert len(have) == 48 - 6
     assert not any(day + 6 * 3600 < h <= day + 12 * 3600 for h in have)
     # the skipped hours stay missing after quiet-hour filling, never zero
-    filled = dict(arctic_shift.fill_quiet_hours(pts, day + 2 * 86400, gaps))
+    filled = dict(arctic_shift.fill_quiet_hours(pts, day + 2 * 86400, gaps, begin=day))
     assert not any(day + 6 * 3600 < h <= day + 12 * 3600 for h in filled)
     assert len(filled) == 42
 
@@ -137,3 +137,20 @@ def test_arctic_shift_stops_when_the_archive_keeps_refusing(monkeypatch):
     assert len(pts) == 24
     assert gaps[-1][1] == end and gaps[0][0] == day + 86400
     assert len(gaps) == arctic_shift.MAX_SKIPPED + 1  # skipped windows, then the untried rest
+
+
+def test_bluesky_history_counts_quiet_hours_and_extrapolates_busy_ones():
+    end = int(ts("2026-10-12T17:00:00Z"))
+    quiet = [end - 3000, end - 100]  # two posts in the hour: an exact count
+    assert bluesky.hour_rate(quiet, end) == 2.0
+    busy = [end - 1800 + i * 18 for i in range(100)]  # a full page covering 30 minutes
+    assert bluesky.hour_rate(busy, end) == pytest.approx(200, rel=0.01)
+
+
+def test_quiet_hours_are_not_filled_before_the_fetched_range():
+    day = 20000 * 86400
+    begin = day + 20 * 3600  # the backfill started at 20:00
+    pts = [(day + 22 * 3600, 5.0)]
+    out = dict(arctic_shift.fill_quiet_hours(pts, end=day + 86400, begin=begin))
+    assert min(out) == begin + 3600  # nothing before the first fetched hour
+    assert out[day + 21 * 3600] == 0.0 and out[day + 22 * 3600] == 5.0

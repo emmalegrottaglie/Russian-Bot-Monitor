@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 import re
 import tomllib
+import unicodedata
 from dataclasses import dataclass, field
 from datetime import date, datetime, timezone
 from pathlib import Path
@@ -121,7 +122,9 @@ def _event_ts(e: dict) -> int:
 
 
 def slug(text: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
+    # Accents are dropped first, so "fútbol" becomes "futbol" rather than "f-tbol".
+    plain = unicodedata.normalize("NFKD", text).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", plain.lower()).strip("-")
 
 
 def parse_config(sources: dict, events: dict) -> Config:

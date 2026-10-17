@@ -120,22 +120,24 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
             result.errors.append(f"{s.key}: no data {_iso(after)} to {_iso(before)}")
         if not pts:
             continue
-        result.points[s.key] = fill_quiet_hours(pts, end, gaps)
+        result.points[s.key] = fill_quiet_hours(pts, end, gaps, begin=begin)
         log.info("%s: %d hourly points, %d gaps", s.key, len(result.points[s.key]), len(gaps))
     return result
 
 
 def fill_quiet_hours(pts: list[tuple[int, float]], end: int,
-                     gaps: list[tuple[int, int]] = ()) -> list[tuple[int, float]]:
+                     gaps: list[tuple[int, int]] = (), *, begin: int) -> list[tuple[int, float]]:
     """Hours with no activity are absent from the aggregate. Fill them with zero, but
     only on UTC days that have some data: a whole missing day is more likely an
-    archive gap than a silent community, and must stay a gap rather than a fake zero."""
+    archive gap than a silent community, and must stay a gap rather than a fake zero.
+    Only hours inside the fetched range (begin, end] are filled: the hours of the first
+    day before `begin` were never asked for."""
     have = dict(pts)
     days = {(ts - 1) // 86400 for ts in have}
     out = []
     for day in sorted(days):
         for h in range(day * 86400 + 3600, day * 86400 + 86400 + 1, 3600):
             # Hours inside a window that was never fetched stay missing, not zero.
-            if h <= end and (h in have or not any(a < h <= b for a, b in gaps)):
+            if begin < h <= end and (h in have or not any(a < h <= b for a, b in gaps)):
                 out.append((h, have.get(h, 0.0)))
     return out

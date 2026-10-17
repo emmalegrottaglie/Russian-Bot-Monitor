@@ -38,7 +38,7 @@ def _modules() -> dict:
 
 LIVE = ("ioda", "cloudflare", "reddit", "bluesky")
 # Which collector backfills each platform's series.
-BACKFILL = {"ioda": "ioda", "cloudflare": "cloudflare", "reddit": "arctic_shift"}
+BACKFILL = {"ioda": "ioda", "cloudflare": "cloudflare", "reddit": "arctic_shift", "bluesky": "bluesky"}
 
 
 async def run(config: Config, settings: Settings, platforms=LIVE, start: int | None = None,

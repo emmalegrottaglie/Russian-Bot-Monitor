@@ -110,6 +110,22 @@ subreddits = ["aww", "gardening", "Cooking", "personalfinance"]
 region = "GLOBAL"
 tags = ["control"]
 
+[[reddit]]
+subreddits = ["france"]
+region = "FR"
+tags = ["regional"]
+
+[[reddit]]
+subreddits = ["italy"]
+region = "IT"
+tags = ["regional"]
+
+[[reddit]]
+# English-language, about Spain
+subreddits = ["spain"]
+region = "ES"
+tags = ["regional"]
+
 # South American country communities, to see whether activity there moved at the
 # strike times too. Nothing has been reported about this region; this group is the check.
 
@@ -214,3 +230,80 @@ query = "weather"
 lang = "en"
 region = "GLOBAL"
 tags = ["control"]
+
+# South America. Right-wing figures are in the right-wing group like AfD and MAGA;
+# the South America tag also puts them in that group's median.
+[[bluesky]]
+query = "Bolsonaro"
+lang = "pt"
+region = "BR"
+tags = ["political-right", "south-america"]
+
+[[bluesky]]
+query = "Milei"
+lang = "es"
+region = "AR"
+tags = ["political-right", "south-america"]
+
+[[bluesky]]
+query = "Lula"
+lang = "pt"
+region = "BR"
+tags = ["political", "south-america"]
+
+[[bluesky]]
+query = "futebol"
+lang = "pt"
+region = "PT-LANG"
+tags = ["control"]
+
+# Spain, France, Italy
+[[bluesky]]
+# Spain's Vox party; with lang "es" few posts use the Latin word
+query = "Vox"
+lang = "es"
+region = "ES"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "PSOE"
+lang = "es"
+region = "ES"
+tags = ["political"]
+
+[[bluesky]]
+query = "fútbol"
+lang = "es"
+region = "ES-LANG"
+tags = ["control"]
+
+[[bluesky]]
+query = "Le Pen"
+lang = "fr"
+region = "FR"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "Macron"
+lang = "fr"
+region = "FR"
+tags = ["political"]
+
+[[bluesky]]
+query = "météo"
+lang = "fr"
+region = "FR-LANG"
+tags = ["control"]
+
+[[bluesky]]
+# Prime minister and leader of Fratelli d'Italia
+query = "Meloni"
+lang = "it"
+region = "IT"
+tags = ["political-right"]
+
+[[bluesky]]
+query = "governo"
+lang = "it"
+region = "IT"
+tags = ["political"]
