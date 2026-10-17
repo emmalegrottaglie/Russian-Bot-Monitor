@@ -1,4 +1,4 @@
-"""Command line: python -m tracker {serve,collect,backfill,report,publish}"""
+"""Command line: python -m tracker {serve,collect,backfill,refetch,report,publish}"""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import asyncio
 import dataclasses
 import logging
 import time
+from datetime import datetime, timezone
 
 from . import alerts, analysis, collectors, db, report, static
 from .config import Settings, load_config
@@ -63,6 +64,12 @@ def main() -> None:
     p.add_argument("--missing-only", action="store_true",
                    help="skip series that already reach back to the start date (resume an interrupted run)")
 
+    p = sub.add_parser("refetch", help="collect stored history again from its source and replace it (for repairs)")
+    p.add_argument("--platform", action="append", required=True, choices=sorted(collectors.BACKFILL))
+    p.add_argument("--series", action="append", help="limit to these series keys (repeatable)")
+    p.add_argument("--from", dest="start", help="UTC date or time to start at (default: each series' first point)")
+    p.add_argument("--to", dest="end", help="UTC date or time to end at (default: now)")
+
     sub.add_parser("report", help="build (or rebuild) today's shareable report under <db dir>/reports/")
 
     p = sub.add_parser("publish", help="export a static copy of the site and push it to GitHub Pages")
@@ -108,6 +115,26 @@ def main() -> None:
             ordered = backfill_order(config.series, conn, int(time.time()))
         config = dataclasses.replace(config, series=tuple(ordered))
         asyncio.run(collectors.run(config, settings, platforms=platforms, start=start, backfill=True))
+    elif args.cmd == "refetch":
+        now = int(time.time())
+        windows = {}
+        with db.session(settings.db_path) as conn:
+            for s in config.series:
+                if s.platform not in args.platform or args.series and s.key not in args.series:
+                    continue
+                stored = db.point_range(conn, s.key)
+                if stored is None:
+                    continue
+                # Start a day before the first point so the bin or hour it closes is re-read too.
+                start = _utc(args.start) if args.start else stored[0] - 86400
+                windows[s.key] = (start, _utc(args.end) if args.end else now)
+        for key, outcome in asyncio.run(collectors.refetch(config, settings, windows)).items():
+            print(f"{key}: {outcome}")
+
+
+def _utc(text: str) -> int:
+    t = datetime.fromisoformat(text)
+    return int((t if t.tzinfo else t.replace(tzinfo=timezone.utc)).timestamp())
 
 
 if __name__ == "__main__":

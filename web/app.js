@@ -692,7 +692,8 @@ function renderCorrelation(c) {
     renderCorrelation(c);
   };
 
-  const latest = (vals) => { for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) return vals[i]; return null; };
+  // Index of the latest day with a value: only complete UTC days get one, so it is not today.
+  const latest = (vals) => { for (let i = vals.length - 1; i >= 0; i--) if (vals[i] != null) return i; return -1; };
   // Strength words follow the usual reading of a correlation coefficient.
   const strength = (r) => {
     if (r == null) return 'NOT ENOUGH DAYS YET';
@@ -704,7 +705,7 @@ function renderCorrelation(c) {
     <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${signed(g.r)}</div>
     <div class="tile-label">${esc(label(g.tag))}</div>
     <div class="tile-sub">${strength(g.r)}</div>
-    <div class="tile-sub">${latest(g.values) == null ? 'NO DATA TODAY' : `TODAY ${Math.round(latest(g.values))}% OF NORMAL`}</div></div>`).join('');
+    <div class="tile-sub">${((i) => (i < 0 ? 'NO COMPLETE DAY YET' : `${mmdd(c.days[i])} UTC: ${Math.round(g.values[i])}% OF NORMAL`))(latest(g.values))}</div></div>`).join('');
 }
 
 // Chart 3 in docs/CHARTS.md: one group's daily index minus the control group's.

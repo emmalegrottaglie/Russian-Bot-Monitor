@@ -31,18 +31,30 @@ CURRENT_HOURS = {"infrastructure": 3, "community": 24}
 FRESH = 3 * HOUR  # a series with no point this recent counts as stale
 
 
+MIN_DAY_HOURS = 20  # a day needs this many hourly values before it gets a daily mean
+
+
 def hourly(points: list[tuple[int, float]]) -> dict[int, float]:
+    """Hourly means, keyed by the hour's start. Every collector stamps a point at the
+    END of the period it measures, so a point stamped 13:00 belongs to 12:00-13:00."""
     buckets: dict[int, list[float]] = defaultdict(list)
     for ts, v in points:
-        buckets[ts - ts % HOUR].append(v)
+        buckets[(ts - 1) // HOUR * HOUR].append(v)
     return {h: sum(vs) / len(vs) for h, vs in buckets.items()}
 
 
-def daily(points: list[tuple[int, float]]) -> dict[int, float]:
+def days_of(hours: dict[int, float], min_hours: int = MIN_DAY_HOURS) -> dict[int, float]:
+    """Daily means of hourly values, keyed by the UTC day's start. A day with fewer than
+    `min_hours` hourly values has no mean: averaging whatever hours exist would reflect
+    the time of day they were collected, not the day's activity."""
     buckets: dict[int, list[float]] = defaultdict(list)
-    for h, v in hourly(points).items():
+    for h, v in hours.items():
         buckets[h - h % DAY].append(v)
-    return {d: sum(vs) / len(vs) for d, vs in buckets.items()}
+    return {d: sum(vs) / len(vs) for d, vs in buckets.items() if len(vs) >= min_hours}
+
+
+def daily(points: list[tuple[int, float]], min_hours: int = MIN_DAY_HOURS) -> dict[int, float]:
+    return days_of(hourly(points), min_hours)
 
 
 def change_vs_rolling(hours: dict[int, float], now: int, current_hours: int = 3, days: int = 7,
@@ -274,7 +286,7 @@ def daily_index(conn: sqlite3.Connection, config: Config, key: str, first_day: i
     base = _ref_mean(hours, config)
     if base is None:
         return {}
-    return {d: v / base * 100 for d, v in daily(list(hours.items())).items() if d >= first_day}
+    return {d: v / base * 100 for d, v in days_of(hours).items() if d >= first_day}
 
 
 def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: int = 45) -> dict:
@@ -481,8 +493,7 @@ def strike_hours(conn: sqlite3.Connection, config: Config, key: str, event: int,
     hours = hourly(db.points(conn, key, day0 - days_around * DAY - 4 * WEEK, day0 + (days_around + 1) * DAY))
     ratios = _ratios(hours)
     day_list = [day0 + d * DAY for d in range(-days_around, days_around + 1)]
-    # A cell for hour H holds the point stamped at the end of that hour (H + 1).
-    values = [[round(ratios[d + (h + 1) * HOUR] * 100, 1) if d + (h + 1) * HOUR in ratios else None
+    values = [[round(ratios[d + h * HOUR] * 100, 1) if d + h * HOUR in ratios else None
                for h in range(24)] for d in day_list]
     return {"key": key, "event": e.__dict__, "event_index": event, "days": day_list, "hours": list(range(24)),
             "values": values, "strike_hour": (e.ts % DAY) // HOUR if e.timed else None}

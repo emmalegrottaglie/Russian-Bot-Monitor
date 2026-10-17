@@ -67,9 +67,12 @@ def test_pearson_and_correlate():
 
 
 def test_hourly_and_daily_means():
-    pts = [(0, 1.0), (60, 3.0), (H, 10.0)]
+    # Points are stamped at the end of what they measure: 60 s and 1 h both close hour 0.
+    pts = [(60, 1.0), (H, 3.0), (H + 60, 10.0)]
     assert analysis.hourly(pts) == {0: 2.0, H: 10.0}
-    assert analysis.daily(pts) == {0: 6.0}
+    day = [(h * H, 4.0) for h in range(1, 25)]  # 24 hours ending 01:00 ... 24:00
+    assert analysis.daily(day) == {0: 4.0}  # the hour ending at midnight belongs to the day before it
+    assert analysis.daily(day[:19]) == {}  # 19 hours: incomplete, no daily mean
 
 
 # ── alerts ───────────────────────────────────────────────────────────────────
@@ -184,3 +187,16 @@ def test_robust_cells():
     cell = lambda e, p: {"effect": e, "p": p}
     assert analysis.robust_cells([cell(None, None)] * 9) is None
     assert analysis.robust_cells([cell(-0.3, 0.01), cell(-0.01, 0.001), cell(0.2, 0.01), cell(-0.3, 0.2)]) == 1
+
+
+def test_hourly_history_supersedes_live_samples_in_its_hours(tmp_path):
+    from tracker import db
+
+    with db.session(tmp_path / "t.db") as conn:
+        db.init(conn, [])
+        db.upsert_points(conn, "k", [(600, 30.0), (H + 600, 50.0), (2 * H + 600, 70.0), (3 * H + 600, 90.0)])  # live
+        db.replace_hours(conn, "k", [(2 * H, 40.0), (3 * H, 60.0)])  # archive counts for the hours ending 2H and 3H
+        assert db.points(conn, "k", 0, 5 * H) == [(600, 30.0), (2 * H, 40.0), (3 * H, 60.0), (3 * H + 600, 90.0)]
+        # A re-collected stretch replaces everything inside it and nothing outside.
+        db.replace_range(conn, "k", H, 3 * H, [(2 * H, 41.0), (3 * H, 61.0), (4 * H, 99.0)])
+        assert db.points(conn, "k", 0, 5 * H) == [(600, 30.0), (2 * H, 41.0), (3 * H, 61.0), (3 * H + 600, 90.0)]

@@ -17,6 +17,7 @@ from . import Result, SourceSkipped
 URL = "https://api.cloudflare.com/client/v4/radar/http/timeseries_groups/BOT_CLASS"
 BOT_KEYS = ("bot", "likely_automated")
 
+INTERVAL = 3600  # aggInterval=1h
 
 def _iso(ts: int) -> str:
     return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -31,23 +32,23 @@ def parse(payload: dict) -> list[tuple[int, float]]:
     out = []
     for stamp, v in zip(stamps, values):
         ts = int(datetime.fromisoformat(stamp.replace("Z", "+00:00")).timestamp())
-        out.append((ts, float(v)))
+        out.append((ts + INTERVAL, float(v)))  # Radar labels a bucket by its start; stamp its end
     return out
 
 
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
-                  start: int | None = None) -> Result:
+                  start: int | None = None, end: int | None = None) -> Result:
     if not settings.cloudflare_token:
         raise SourceSkipped("CLOUDFLARE_API_TOKEN not set")
     result = Result()
     headers = {"Authorization": f"Bearer {settings.cloudflare_token}"}
     for s in specs:
-        params = {"asn": s.params["asn"], "aggInterval": "1h", "format": "json"}
+        params = {"asn": s.params["asn"], "aggInterval": "1h", "format": "json"}  # matches INTERVAL
         if start is None:
             params["dateRange"] = "2d"
         else:
             params["dateStart"] = _iso(start)
-            params["dateEnd"] = _iso(now)
+            params["dateEnd"] = _iso(min(now, end) if end is not None else now)
         try:
             r = await client.get(URL, params=params, headers=headers)
             r.raise_for_status()

@@ -94,6 +94,33 @@ def upsert_points(conn: sqlite3.Connection, key: str, points: Iterable[tuple[int
     return len(rows)
 
 
+def replace_hours(conn: sqlite3.Connection, key: str, points: Iterable[tuple[int, float]]) -> int:
+    """Store hourly values (stamped at each hour's end) as the only value of their hour.
+
+    For history read from a source that counts every hour exactly (the Reddit archive,
+    Bluesky search by hour): any other sample inside a covered hour, such as a live
+    estimate taken during that hour, is superseded and removed. Hours not in `points`
+    keep whatever they had."""
+    points = [(int(ts), float(v)) for ts, v in points]
+    conn.executemany("DELETE FROM points WHERE key = ? AND ts > ? AND ts < ?", [(key, ts - 3600, ts) for ts, _ in points])
+    return upsert_points(conn, key, points)
+
+
+def replace_range(conn: sqlite3.Connection, key: str, start: int, end: int,
+                  points: Iterable[tuple[int, float]]) -> int:
+    """Replace every point of `key` in (start, end] with `points`. Callers pass a complete
+    re-collection of that stretch; run inside one transaction (db.session) so a failure
+    leaves the old points in place."""
+    points = [(int(ts), float(v)) for ts, v in points if start < ts <= end]
+    conn.execute("DELETE FROM points WHERE key = ? AND ts > ? AND ts <= ?", (key, start, end))
+    return upsert_points(conn, key, points)
+
+
+def point_range(conn: sqlite3.Connection, key: str) -> tuple[int, int] | None:
+    row = conn.execute("SELECT MIN(ts), MAX(ts) FROM points WHERE key = ?", (key,)).fetchone()
+    return (row[0], row[1]) if row[0] is not None else None
+
+
 def record_run(conn: sqlite3.Connection, platform: str, ok: bool, points: int, error: str | None = None) -> None:
     conn.execute(
         "INSERT INTO runs (ts, platform, ok, points, error) VALUES (?, ?, ?, ?, ?)",
@@ -123,10 +150,11 @@ def get_series(conn: sqlite3.Connection, key: str) -> dict | None:
 
 
 def points(conn: sqlite3.Connection, key: str, start: int, end: int, bucket: int = 0) -> list[tuple[int, float]]:
-    """Points in [start, end]. With bucket > 0, mean per bucket labelled by bucket start."""
+    """Points in [start, end]. With bucket > 0, mean per bucket labelled by the bucket's
+    start. Points are stamped at the end of what they measure, hence ts - 1."""
     if bucket:
         rows = conn.execute(
-            "SELECT (ts / ?) * ? AS b, AVG(value) FROM points WHERE key = ? AND ts BETWEEN ? AND ? "
+            "SELECT ((ts - 1) / ?) * ? AS b, AVG(value) FROM points WHERE key = ? AND ts BETWEEN ? AND ? "
             "GROUP BY b ORDER BY b",
             (bucket, bucket, key, start, end),
         )

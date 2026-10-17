@@ -37,7 +37,7 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
    2. Go to *My Profile → API Tokens → Create Token → Custom token* and give it the permission *Account · Radar · Read*.
    3. Copy `.env.example` to `.env` and paste the token into `CLOUDFLARE_API_TOKEN`.
 
-3. **Apply for Reddit API access now.** Approval takes about a week, so start early. You don't need it for phase 1, but phase 2 will.
+3. **Optional: apply for Reddit API access.** Phase 1 doesn't need it. Approval takes about a week and can be refused; this project's first request was refused in October 2026. See *Reddit without API access* below.
    1. Read the Responsible Builder Policy.
    2. Ask for research access through r/reddit4researchers. Describe the project as non-commercial research that stores aggregate counts only.
    3. When approved, put the client ID and secret in `.env`.
@@ -67,9 +67,18 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
    - In *Settings → System → Power*, set sleep to *Never* while the computer is plugged in.
    - To stop the schedule: `schtasks /Delete /TN "BotTrafficMonitor" /F`.
 
-8. **Optional, still free:** create an X developer account and an app for the alert account now, so the keys are ready. Posting stays off (`TRACKER_POST_ALERTS=0`) until phase 2.
+8. **Schedule the daily catch-up.** The 30-minute pass reads Reddit's public feeds, which give an estimate per community from a sample of recent posts. Once a day, `scripts\catch-up.cmd` reloads the last 7 days from the Arctic Shift archive (exact hourly counts, about 2 days behind) and from Bluesky's search (hour by hour). For every hour it loads, its count replaces the live estimates taken during that hour. Run this once in PowerShell:
+   ```powershell
+   $action = New-ScheduledTaskAction -Execute 'conhost.exe' -Argument '--headless cmd.exe /c "C:\Russian bot tracker\scripts\catch-up.cmd"' -WorkingDirectory 'C:\Russian bot tracker'
+   $trigger = New-ScheduledTaskTrigger -Daily -At '06:17'
+   Register-ScheduledTask -TaskName 'BotTrafficMonitorCatchUp' -Action $action -Trigger $trigger
+   ```
+   - It takes about 30 to 60 minutes. Output goes to `data\catch-up.log`.
+   - To stop it: `schtasks /Delete /TN "BotTrafficMonitorCatchUp" /F`.
 
-Checklist: the repository is public, Pages serves `gh-pages`, the scheduled task exists, `data\publish.log` shows a push every 30 minutes, and the site's REPORT tab lists today's report.
+9. **Optional, still free:** create an X developer account and an app for the alert account now, so the keys are ready. Posting stays off (`TRACKER_POST_ALERTS=0`) until phase 2.
+
+Checklist: the repository is public, Pages serves `gh-pages`, both scheduled tasks exist, `data\publish.log` shows a push every 30 minutes, and the site's REPORT tab lists today's report.
 
 ## Phase 2: paid, about $7 a month
 
@@ -100,7 +109,7 @@ Checklist: the repository is public, Pages serves `gh-pages`, the scheduled task
 
 3. **Code and settings.** On the server:
    1. `git clone` your repository.
-   2. Copy your `.env` across. It must now include the Reddit OAuth keys, because servers can't use the public feeds.
+   2. Copy your `.env` across. Reddit refuses its public feeds to servers, so without Reddit OAuth keys the server gets Reddit only from the archive, about 2 days late. See *Reddit without API access* below.
    3. Set `TRACKER_PUBLIC_URL` to your domain.
 
 4. **Move your data.** Stop the scheduled task on your computer first (`schtasks /Delete /TN "BotTrafficMonitor" /F`), so nothing writes to the database while you copy it. Then start the stack once so Docker creates its data volume, and copy the database into it:
@@ -131,13 +140,22 @@ Checklist: the repository is public, Pages serves `gh-pages`, the scheduled task
 
 9. **Retire or keep the free mirror.** Delete the scheduled task on your computer if you haven't already. Then either point GitHub Pages visitors at the new domain, or keep `gh-pages` as a mirror by running `docker compose exec app python -m tracker publish` from the server on a cron schedule.
 
+## Reddit without API access
+
+Reddit refused this project's API request in October 2026. What that means:
+
+- **Phase 1 is unaffected.** Live Reddit numbers come from the public feeds, which work from a home connection, and the daily catch-up replaces them with exact archive counts once the archive has them.
+- **Phase 2 loses live Reddit.** A server can still run the archive catch-up, so Reddit charts would run about 2 days behind; Bluesky, IODA and Cloudflare stay live. Two ways to keep live Reddit:
+  - keep a home computer running the 30-minute pass for Reddit alongside the server, or
+  - apply again later with a narrower description: read-only, aggregate hourly counts, a fixed list of public subreddits, no content stored.
+
 ## Research notes (October 2026)
 
 Prices change; check them before buying.
 
 ### Why a VPS for phase 2
 
-- **Reddit:** it refuses unauthenticated requests from most datacentre IP ranges. New OAuth keys need approval under its Responsible Builder Policy, which takes about a week and can be refused. A fixed VPS IP with an approved key is the most reliable setup.
+- **Reddit:** it refuses unauthenticated requests from most datacentre IP ranges. New OAuth keys need approval under its Responsible Builder Policy, which takes about a week and can be refused (ours was). Without a key, a server gets Reddit only from the Arctic Shift archive, about 2 days late.
 - **DigitalOcean:** the $6 droplet (1 GB RAM, 25 GB disk, 1 TB transfer) is the default choice.
 - **Hetzner:** cheaper, but its Cost-Optimized (CX/CAX) line was unavailable in October 2026. Its orderable CPX12 costs about €11.49.
 
@@ -164,6 +182,6 @@ Prices change; check them before buying.
 |---|---|---|
 | IODA | none | Only BGP visibility for AS13238. Active probing is available for Yandex Cloud, AS200350. |
 | Cloudflare Radar | free token | CC BY-NC 4.0, so non-commercial use only. |
-| Reddit | OAuth, approval required | Public feeds work from home connections only. |
+| Reddit | OAuth, approval required (refused for this project, October 2026) | Public feeds work from home connections only. |
 | Bluesky | none | Public AppView search. |
-| Arctic Shift | none | Backfill only. Slow for large subreddits. Its hourly bucket labels run 2 hours early; the collector corrects this. |
+| Arctic Shift | none | Backfill and the daily catch-up. Slow for large subreddits. About 2 days behind. Its hourly bucket labels run early by the Central European offset (2 hours in summer, 1 in winter); the collector corrects this, and leaves the two hours whose labels collide when clocks go forward as a gap. |

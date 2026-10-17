@@ -57,14 +57,16 @@ def test_correlation_view(tmp_path, monkeypatch):
     settings, config = Settings.from_env(), load_config()
     now = int(time.time())
     ref_hours = range(config.reference_start, config.reference_start + 3 * 86400, 3600)
-    recent_days = [now - d * 86400 for d in range(20, 0, -1)]
+    today = now // 86400 * 86400
+    recent_days = [today - d * 86400 for d in range(20, 0, -1)]  # 20 complete UTC days
     level = {t: 100.0 if i < 10 else 40.0 for i, t in enumerate(recent_days)}  # a step down halfway
     with db.session(settings.db_path) as conn:
         db.init(conn, config.series)
         for key, scale in (("ioda.asn200350.ping-slash24", 5.0), ("reddit.conservative.comments", 1.0),
                            ("reddit.republican.comments", 0.5)):
             db.upsert_points(conn, key, [(t, 100.0 * scale) for t in ref_hours])
-            db.upsert_points(conn, key, [(t, v * scale * (1 + 0.01 * (i % 3))) for i, (t, v) in enumerate(level.items())])
+            db.upsert_points(conn, key, [(t + h * 3600, v * scale * (1 + 0.01 * (i % 3)))
+                                         for i, (t, v) in enumerate(level.items()) for h in range(1, 25)])
     with TestClient(create_app(config, settings)) as c:
         body = c.get("/api/correlation").json()
     assert len(body["days"]) == len(body["infra"]["values"])

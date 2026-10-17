@@ -28,6 +28,7 @@ HISTORY_DELAY = 0.4  # seconds between hourly history requests
 LIMIT = 100
 RETRIES = (5, 30, 90)  # back-off, seconds, when a history request fails
 HOUR = 3600
+HOURLY_HISTORY = True  # one value per hour: supersedes live samples taken in that hour
 log = logging.getLogger(__name__)
 
 
@@ -41,9 +42,9 @@ def parse(payload: dict) -> list[float]:
 
 
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
-                  start: int | None = None) -> Result:
+                  start: int | None = None, end: int | None = None) -> Result:
     if start is not None:
-        return await history(client, specs, now, start)
+        return await history(client, specs, min(now, end) if end is not None else now, start)
     result = Result()
     for i, s in enumerate(specs):
         if i:

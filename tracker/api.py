@@ -148,7 +148,10 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
             series = db.get_series(conn, key)
             if series is None:
                 raise HTTPException(404, f"unknown series {key!r}")
-            pts = db.points(conn, key, now - days * 86400, now, BUCKETS[bucket])
+            if bucket == "day":  # complete days only, as everywhere else
+                pts = sorted(analysis.daily(db.points(conn, key, now - days * 86400, now)).items())
+            else:
+                pts = db.points(conn, key, now - days * 86400, now, BUCKETS[bucket])
         return {"series": series, "bucket": bucket, "points": pts}
 
     @app.get("/api/series/{key}/event-study")
@@ -187,7 +190,7 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
         rows = []
         with db.session(settings.db_path) as conn:
             for s in db.list_series(conn, active_only=False):
-                for t, v in db.points(conn, s["key"], now - days * 86400, now, 86400):
+                for t, v in sorted(analysis.daily(db.points(conn, s["key"], now - days * 86400, now)).items()):
                     rows.append([_iso(t)[:10], s["key"], s["platform"], s["unit"], "|".join(s["tags"]), round(v, 4)])
         return _csv(rows, ["date_utc", "series", "platform", "unit", "tags", "daily_mean"], "daily.csv")
 

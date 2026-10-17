@@ -1,8 +1,8 @@
 """IODA (Georgia Tech) raw outage signals per ASN. No key required.
 
 https://api.ioda.inetintel.cc.gatech.edu/v2/ — values are native-resolution
-samples (BGP and telescope every 5 min, active probing every 10 min) stored at
-the start of each bin.
+samples (BGP and telescope every 5 min, active probing every 10 min) stamped at
+the end of each bin, like every other series.
 """
 
 from __future__ import annotations
@@ -29,7 +29,7 @@ def parse(payload: dict, signals: set[str]) -> dict[str, list[tuple[int, float]]
             start, step = int(s["from"]), int(s["step"])
             for i, v in enumerate(s.get("values") or []):
                 if isinstance(v, (int, float)) and not isinstance(v, bool):
-                    out[ds].append((start + i * step, float(v)))
+                    out[ds].append((start + (i + 1) * step, float(v)))  # stamped at the bin's end
     return dict(out)
 
 
@@ -47,7 +47,8 @@ async def fetch(client: httpx.AsyncClient, asn: int, start: int, end: int, signa
 
 
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
-                  start: int | None = None) -> Result:
+                  start: int | None = None, end: int | None = None) -> Result:
+    until = min(now, end) if end is not None else now
     by_asn: dict[int, list[SeriesSpec]] = defaultdict(list)
     for s in specs:
         by_asn[s.params["asn"]].append(s)
@@ -55,7 +56,7 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
     for asn, group in by_asn.items():
         signals = {s.params["signal"] for s in group}
         try:
-            data = await fetch(client, asn, start if start is not None else now - LIVE_WINDOW, now, signals)
+            data = await fetch(client, asn, start if start is not None else now - LIVE_WINDOW, until, signals)
         except httpx.HTTPError as e:
             result.errors.append(f"AS{asn}: {e}")
             continue

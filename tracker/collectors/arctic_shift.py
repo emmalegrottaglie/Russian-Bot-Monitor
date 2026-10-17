@@ -21,6 +21,7 @@ BASE = "https://arctic-shift.photon-reddit.com/api/{kind}/search/aggregate"
 log = logging.getLogger(__name__)
 KINDS = {"comments": "comments", "posts": "posts"}
 LAG = 2 * 86400
+HOURLY_HISTORY = True  # exact hourly counts: they supersede live estimates
 MIN_CHUNK = 6 * 3600
 DELAY = 4.0  # seconds between requests; the archive is volunteer-run and throttles bursts
 COOLDOWNS = (30, 90, 180)  # seconds to back off when even the smallest chunk fails
@@ -31,29 +32,54 @@ def _iso(ts: int) -> str:
     return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
-def parse(payload: dict, after: int | None = None, before: int | None = None,
-          shift_hint: int = 0) -> tuple[list[tuple[int, float]], int]:
-    """Returns ([(hour_end_ts, count)], shift).
+def _eu_switch(year: int, month: int) -> int:
+    """01:00 UTC on the last Sunday of the month: when EU clocks change (rule since 1996)."""
+    d = datetime(year, month, 31, 1, tzinfo=timezone.utc)  # March and October have 31 days
+    return int(d.timestamp()) - (d.weekday() + 1) % 7 * 86400
 
-    The archive buckets hours in a local timezone and labels them early by that
-    offset (2 h in summer 2026): asking for after=00:00Z returns a first bucket
-    labelled 22:00Z. A label earlier than `after` reveals the shift; when the first
-    hours are empty it cannot be seen, so the last known shift is reused."""
+
+def _offset(t: int) -> int:
+    """Central European UTC offset in seconds at `t`: 2 h in summer time, else 1 h.
+    Coded from the EU rule because Windows Python ships no time zone database."""
+    year = datetime.fromtimestamp(t, timezone.utc).year
+    return 7200 if _eu_switch(year, 3) <= t < _eu_switch(year, 10) else 3600
+
+
+def label_to_utc(label: int) -> int:
+    """The UTC start of the hour an archive bucket labelled `label` counts.
+
+    The archive labels hours early by the Central European offset taken at the label:
+    2 h in summer, 1 h in winter. Checked against single comment timestamps on
+    ordinary days and around both 2025-26 clock changes."""
+    return label + _offset(label)
+
+
+def parse(payload: dict, after: int | None = None, before: int | None = None) -> list[tuple[int, float]]:
+    """[(hour_end_ts, count)] for the hours in [after, before).
+
+    When clocks go forward two buckets share one label and cannot be told apart:
+    both are left out, a two-hour gap rather than a guess."""
     if payload.get("error"):
         raise ValueError(payload["error"])
     rows = [(int(datetime.fromisoformat(r["created_utc"].replace("Z", "+00:00")).timestamp()), float(r["count"]))
             for r in payload.get("data") or []]
-    shift = shift_hint
-    if rows and after is not None and rows[0][0] < after:
-        shift = round((after - min(t for t, _ in rows)) / 3600) * 3600
+    if rows and after is not None and min(t for t, _ in rows) >= after:
+        # The archive has always answered "from 00:00Z" with a bucket labelled 22:00 or
+        # 23:00. If that stops, its labelling changed and the conversion would be wrong.
+        raise ValueError("archive hour labels are no longer offset; check label_to_utc")
+    seen: dict[int, int] = {}
+    for label, _ in rows:
+        seen[label] = seen.get(label, 0) + 1
     out = []
     for label, count in rows:
-        start = label + shift
+        if seen[label] > 1:
+            continue
+        start = label_to_utc(label)
         if after is not None and start < after or before is not None and start >= before:
             continue
         # A count for [h, h+1h) is the rate for the hour ending at h+1h, matching live points.
         out.append((start + 3600, count))
-    return out, shift
+    return out
 
 
 async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: int, end: int,
@@ -68,7 +94,6 @@ async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: 
     the rest of the range becomes a gap and what was fetched is kept."""
     out: list[tuple[int, float]] = []
     gaps: list[tuple[int, int]] = []
-    shift = 0
     strikes = 0
     skipped = 0
     t = start
@@ -79,7 +104,7 @@ async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: 
         try:
             r = await client.get(BASE.format(kind=KINDS[metric]), params=params, timeout=90)
             r.raise_for_status()  # 422 = archive query timed out: halve and retry
-            pts, shift = parse(r.json(), t, until, shift)
+            pts = parse(r.json(), t, until)
             out.extend(pts)
         except (httpx.HTTPError, ValueError) as e:
             if chunk <= MIN_CHUNK:
@@ -99,7 +124,7 @@ async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: 
                 await asyncio.sleep(COOLDOWNS[strikes])
                 strikes += 1
                 continue
-            chunk = max(MIN_CHUNK, chunk // 2 // 3600 * 3600)  # whole hours keep the label shift detectable
+            chunk = max(MIN_CHUNK, chunk // 2 // 3600 * 3600)  # whole hours
             log.debug("r/%s %s: %s, retrying with %d h chunks", subreddit, metric, e, chunk // 3600)
             await asyncio.sleep(DELAY)
             continue
@@ -110,9 +135,9 @@ async def _range(client: httpx.AsyncClient, subreddit: str, metric: str, start: 
 
 
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
-                  start: int | None = None) -> Result:
+                  start: int | None = None, end: int | None = None) -> Result:
     result = Result()
-    end = (now - LAG) // 3600 * 3600
+    end = min(now - LAG, end if end is not None else now) // 3600 * 3600
     begin = (start if start is not None else end - 7 * 86400) // 3600 * 3600
     for s in specs:
         pts, gaps = await _range(client, s.params["subreddit"], s.params["metric"], begin, end, 7 * 86400)

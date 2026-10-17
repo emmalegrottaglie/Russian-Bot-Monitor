@@ -167,7 +167,7 @@ def _write_daily(conn: sqlite3.Connection, path: Path, start: int, now: int) -> 
         w = csv.writer(f)
         w.writerow(["date_utc", "series", "kind", "platform", "unit", "groups", "daily_mean"])
         for s in db.list_series(conn, active_only=False):
-            for t, v in db.points(conn, s["key"], start, now, DAY):
+            for t, v in sorted(analysis.daily(db.points(conn, s["key"], start, now)).items()):
                 w.writerow([_iso(t)[:10], s["key"], s["kind"], s["platform"], s["unit"], "|".join(s["tags"]), round(v, 4)])
 
 
@@ -190,7 +190,7 @@ numbers as more history is collected, and this one will not change.
 - `groups.csv`: one row per research group, the headline table.
 - `communities.csv`: one row per community series.
 - `infrastructure.csv`: one row per network signal.
-- `daily.csv`: daily mean of every series, for your own analysis.
+- `daily.csv`: daily mean of every series, for your own analysis. Only days with at least 20 hourly values are listed.
 - `report.json`: all of the above plus the correlation chart data.
 
 ## Method

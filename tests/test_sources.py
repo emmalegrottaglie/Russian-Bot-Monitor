@@ -19,8 +19,8 @@ def test_ioda_parse_keeps_numeric_requested_signals():
         {"datasource": "ping-slash24", "subtype": "latency", "from": 1000, "step": 600, "values": [5]},
     ]]}
     out = ioda.parse(payload, {"bgp", "ping-slash24"})
-    assert out["bgp"] == [(1000, 753.0), (1600, 752.0)]
-    assert out["ping-slash24"] == [(1000, 520.0), (1600, 110.0)]
+    assert out["bgp"] == [(1300, 753.0), (1900, 752.0)]  # stamped at each bin's end
+    assert out["ping-slash24"] == [(1600, 520.0), (2200, 110.0)]
     assert "upstream-delay-penult-asns" not in out
 
 
@@ -28,7 +28,7 @@ def test_cloudflare_parse_bot_share():
     payload = {"success": True, "result": {"meta": {}, "serie_0": {
         "timestamps": ["2026-10-11T00:00:00Z", "2026-10-11T01:00:00Z"],
         "human": ["40.1", "41.0"], "bot": ["59.9", "59.0"]}}}
-    assert cloudflare.parse(payload) == [(ts("2026-10-11T00:00:00Z"), 59.9), (ts("2026-10-11T01:00:00Z"), 59.0)]
+    assert cloudflare.parse(payload) == [(ts("2026-10-11T01:00:00Z"), 59.9), (ts("2026-10-11T02:00:00Z"), 59.0)]
     with pytest.raises(ValueError):
         cloudflare.parse({"result": {"serie_0": {"timestamps": [], "human": []}}})
 
@@ -58,7 +58,7 @@ def test_bluesky_uses_indexed_at():
 
 def test_arctic_shift_parse_and_error():
     payload = {"data": [{"created_utc": "2026-10-12T10:00:00.000Z", "count": "12"}]}
-    assert arctic_shift.parse(payload) == ([(ts("2026-10-12T11:00:00Z"), 12.0)], 0)  # end of the hour
+    assert arctic_shift.parse(payload) == [(ts("2026-10-12T13:00:00Z"), 12.0)]  # 12:00-13:00, stamped at its end
     with pytest.raises(ValueError, match="Timeout"):
         arctic_shift.parse({"data": None, "error": "Timeout. Maybe slow down a bit"})
 
@@ -68,12 +68,26 @@ def test_arctic_shift_corrects_early_labels():
     payload = {"data": [{"created_utc": "2026-10-08T22:00:00.000Z", "count": "172"},
                         {"created_utc": "2026-10-09T21:00:00.000Z", "count": "5"},
                         {"created_utc": "2026-10-09T22:00:00.000Z", "count": "9"}]}  # really 00:00 next day
-    pts, shift = arctic_shift.parse(payload, after, before)
-    assert shift == 7200
-    assert pts == [(after + 3600, 172.0), (before, 5.0)]
-    # first hours empty: shift invisible, so the previous one is reused
-    late = {"data": [{"created_utc": "2026-10-09T03:00:00.000Z", "count": "4"}]}
-    assert arctic_shift.parse(late, after, before, shift_hint=7200)[0] == [(int(ts("2026-10-09T06:00:00Z")), 4.0)]
+    assert arctic_shift.parse(payload, after, before) == [(after + 3600, 172.0), (before, 5.0)]
+    # Labels that start at `after` mean the archive changed how it labels: refuse.
+    plain = {"data": [{"created_utc": "2026-10-09T00:00:00.000Z", "count": "4"}]}
+    with pytest.raises(ValueError, match="no longer offset"):
+        arctic_shift.parse(plain, after, before)
+
+
+def test_arctic_shift_clock_changes():
+    # Observed 2025-10-26 (clocks back at 01:00Z): label 23:00 held 01:00Z, 00:00 held 02:00Z,
+    # 02:00 held 03:00Z; no bucket was labelled 01:00.
+    for label, true in (("2025-10-25T23:00", "2025-10-26T01:00"), ("2025-10-26T00:00", "2025-10-26T02:00"),
+                        ("2025-10-26T02:00", "2025-10-26T03:00")):
+        assert arctic_shift.label_to_utc(int(ts(label + ":00Z"))) == ts(true + ":00Z")
+    # Observed 2026-03-29 (clocks forward at 01:00Z): two buckets labelled 01:00 (02:00Z and 03:00Z).
+    after, before = int(ts("2026-03-29T00:00:00Z")), int(ts("2026-03-29T05:00:00Z"))
+    payload = {"data": [{"created_utc": f"2026-03-{d}:00:00.000Z", "count": c} for d, c in
+                        (("28T23", "19"), ("29T00", "13"), ("29T01", "23"), ("29T01", "14"), ("29T02", "14"))]}
+    out = dict(arctic_shift.parse(payload, after, before))
+    assert out == {ts("2026-03-29T01:00:00Z"): 19.0, ts("2026-03-29T02:00:00Z"): 13.0,
+                   ts("2026-03-29T05:00:00Z"): 14.0}  # 02:00-04:00Z left out: their labels collide
 
 
 def test_arctic_shift_fills_quiet_hours_but_not_missing_days():
@@ -94,7 +108,8 @@ def _archive(bad):
         before = int(ts(request.url.params["before"]))
         if any(after < b and a < before for a, b in bad):
             return httpx.Response(422, json={"error": "Timeout. Maybe slow down a bit"})
-        data = [{"created_utc": arctic_shift._iso(h), "count": 1} for h in range(after, before, 3600)]
+        # labelled 2 h early, like the real archive in summer
+        data = [{"created_utc": arctic_shift._iso(h - 7200), "count": 1} for h in range(after, before, 3600)]
         return httpx.Response(200, json={"data": data})
     return httpx.AsyncClient(transport=httpx.MockTransport(handler))
 
@@ -154,3 +169,31 @@ def test_quiet_hours_are_not_filled_before_the_fetched_range():
     out = dict(arctic_shift.fill_quiet_hours(pts, end=day + 86400, begin=begin))
     assert min(out) == begin + 3600  # nothing before the first fetched hour
     assert out[day + 21 * 3600] == 0.0 and out[day + 22 * 3600] == 5.0
+
+
+def test_refetch_replaces_only_complete_windows_and_only_as_far_as_the_source_reached(tmp_path, monkeypatch):
+    import asyncio
+
+    from tracker import collectors, db
+    from tracker.config import Settings, load_config
+
+    monkeypatch.setenv("TRACKER_DB", str(tmp_path / "r.db"))
+    settings, config = Settings.from_env(), load_config()
+    good, bad = [s.key for s in config.series if s.platform == "ioda"][:2]
+    with db.session(settings.db_path) as conn:
+        db.init(conn, config.series)
+        for key in (good, bad):
+            db.upsert_points(conn, key, [(1000, 1.0), (1300, 2.0), (5000, 3.0)])
+
+    async def fake_collect(client, specs, settings, now, start=None, end=None):
+        key = specs[0].key
+        if key == bad:
+            return collectors.Result(errors=[f"{key}: timeout"])
+        return collectors.Result(points={key: [(1300, 7.0), (1600, 8.0)]})
+
+    monkeypatch.setattr(ioda, "collect", fake_collect)
+    out = asyncio.run(collectors.refetch(config, settings, {good: (900, 6000), bad: (900, 6000)}))
+    assert out[bad].startswith("kept old points")
+    with db.session(settings.db_path) as conn:
+        assert db.points(conn, good, 0, 9999) == [(1300, 7.0), (1600, 8.0), (5000, 3.0)]  # 5000 is past the new data
+        assert db.points(conn, bad, 0, 9999) == [(1000, 1.0), (1300, 2.0), (5000, 3.0)]

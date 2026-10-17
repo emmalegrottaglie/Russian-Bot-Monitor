@@ -1,8 +1,12 @@
 """Collector registry and the collection pass.
 
 Each collector module exposes
-    async collect(client, specs, settings, now, start=None) -> Result
-`start` is None for a live pass and a unix timestamp for a backfill.
+    async collect(client, specs, settings, now, start=None, end=None) -> Result
+`start` is None for a live pass and a unix timestamp for a backfill. A backfill
+loads history from `start` up to `end` (default: as recent as the source allows).
+
+A module that sets HOURLY_HISTORY = True returns history as exact hourly values,
+which supersede any live sample taken inside the same hour (db.replace_hours).
 """
 
 from __future__ import annotations
@@ -76,9 +80,10 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
                 except Exception as e:  # one broken source must not stop the others
                     log.exception("%s failed", platform)
                     part = Result(errors=[f"{type(e).__name__}: {e}"])
+                write = db.replace_hours if backfill and getattr(modules[name], "HOURLY_HISTORY", False) else db.upsert_points
                 with db.session(settings.db_path) as conn:
                     for key, pts in part.points.items():
-                        n += db.upsert_points(conn, key, pts)
+                        n += write(conn, key, pts)
                 result.points.update(part.points)
                 result.errors.extend(part.errors)
             else:
@@ -91,3 +96,35 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
                 log.info("%s: %d points, %d errors", platform, n, len(result.errors))
                 results[platform] = result
     return results
+
+
+async def refetch(config: Config, settings: Settings, windows: dict[str, tuple[int, int]]) -> dict[str, str]:
+    """Collect each series' window (start, end] again from its history source and replace
+    the stored points of that window with the result. A series is replaced only when its
+    window came back complete (no errors); otherwise it is left untouched and reported.
+    Returns {key: outcome}."""
+    modules = _modules()
+    specs = {s.key: s for s in config.series}
+    now = int(time.time())
+    outcome: dict[str, str] = {}
+    async with httpx.AsyncClient(timeout=45, headers={"User-Agent": USER_AGENT}, follow_redirects=True) as client:
+        for key, (start, end) in windows.items():
+            spec = specs[key]
+            module = modules[BACKFILL[spec.platform]]
+            try:
+                part = await module.collect(client, [spec], settings, now, start=start, end=end)
+            except Exception as e:
+                part = Result(errors=[f"{type(e).__name__}: {e}"])
+            if part.errors or not part.points.get(key):
+                outcome[key] = "kept old points: " + ("; ".join(part.errors)[:300] or "no data returned")
+            else:
+                # Replace only as far as the source reached: the Reddit archive, for one,
+                # stops two days short of now, and live points after that must stay.
+                pts = part.points[key]
+                end = min(end, max(t for t, _ in pts))
+                with db.session(settings.db_path) as conn:
+                    old = len(db.points(conn, key, start + 1, end))
+                    n = db.replace_range(conn, key, start, end, pts)
+                outcome[key] = f"replaced {old} points with {n}"
+            log.info("%s: %s", key, outcome[key])
+    return outcome
