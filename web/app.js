@@ -1177,7 +1177,7 @@ const views = {
         <li>Correlation is not attribution. A drop in a community after an outage is consistent with bot or troll accounts going offline, but also with news cycles, weekends, moderation changes, Reddit's own systems, or real users in Russia losing service.</li>
         <li>Compare against the <b>control</b> group. A drop that also appears in non-political communities is not evidence of anything political.</li>
         <li>Cloudflare's "bot" share for AS13238 is dominated by Yandex's own search crawlers. It measures automated traffic from that network, not influence operations.</li>
-        <li>Group tags (right, political, regional, russia, control) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
+        <li>Group tags (right-wing, narratives, politics, regional, South America, Russia, non-political) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
         <li>Reddit history before this site started collecting comes from the Arctic Shift archive and is backfilled hourly; days missing from the archive are left as gaps, never filled.</li>
       </ul></div>
       <h2 class="sect">Definitions</h2>
@@ -1194,6 +1194,17 @@ const views = {
         <a href="https://www.reddit.com/r/theydidthemath/comments/1x3q43a/" rel="noopener">"Comparing Reddit activity around three reported Yandex attacks"</a>.
         It used hourly Syften counts for 968 subreddits and found 90 that declined after all three strikes, none of which held across every timing check.
         Commenters asked for random-date comparisons and controls; the placebo test, the control group and the robustness grid here answer that.</p></div>
+      <h2 class="sect">Anti-trans and anti-LGBTQ rhetoric</h2>
+      <div class="prose">
+        <p>Influence operations have used anti-trans topics: a fake LGBTQ+ outlet run by the Russian operation Doppelganger filed stories under "Trans youth" and "Woke Wars" (<a href="https://dfrlab.org/2024/09/18/doppelganger-us-election/" rel="noopener">DFRLab, 2024</a>). Most anti-trans rhetoric online is domestic, and others have measured it where it mostly lives, on X:</p>
+        <ul>
+          <li><a href="https://counterhate.com/research/digital-hate-lgbtq/" rel="noopener">CCDH and the Human Rights Campaign (2022)</a>: 989,547 tweets in January to July 2022 used slurs such as "groomer" about LGBTQ+ people; "grooming" talk rose 406% in the month after Florida's "Don't Say Gay or Trans" law.</li>
+          <li><a href="https://counterhate.com/blog/the-musk-bump-quantifying-the-rise-in-hate-speech-under-elon-musk/" rel="noopener">CCDH (2022)</a>: tweets using one transphobic slur rose 62%, from 3,159 to 5,117 a day, after Twitter changed owner.</li>
+          <li><a href="https://www.isdglobal.org/digital-dispatch/offline-events-online-threats-analyzing-online-extremist-targeting-of-lgbtq-communities/" rel="noopener">ISD (2025)</a>: over 97,000 anti-LGBTQ+ posts from more than 1,000 violent extremist channels between August 2024 and January 2025; targeted hate doubled around the US election, and anti-trans content rose to 46% of it.</li>
+          <li><a href="https://bethylamine.github.io/" rel="noopener">Beth's Anti-Transphobia Library</a> catalogues the talking points, their code words and how they recycle older homophobic ones, and summarises 52,401 Twitter accounts reported as transphobic.</li>
+        </ul>
+        <p>This monitor does not chart this rhetoric. On Bluesky, the phrases are rare, and in a hand check in October 2026 almost none of the matching posts used them that way: of about 50 recent posts each, "groomer" was mostly pet grooming, "women's sports" and "protect women" were mostly fans and people criticising the framing, and "TRAs" matched the Spanish word "tras". Counting them would measure the pushback, not the rhetoric. See <code>docs/NARRATIVES.md</code>.</p>
+      </div>
       <h2 class="sect">Annotated events</h2>
       <div class="prose"><ul>${ev || '<li>None.</li>'}</ul></div>
       <h2 class="sect">Sources</h2>

@@ -54,3 +54,37 @@ Spanish, Italian and Portuguese narrative phrases had no source. They are not tr
 - **Zelensky has extra weight.** Four of the eight searches are the same name in different languages, so the group median leans towards that one topic.
 
 So this group gets the same tests as every other group: compared with the non-political control group, and with the same measure taken on random pre-strike dates. A drop after the strikes that also shows in the control group, or that random dates often produce, is not evidence. No change in this group would not show that bots are absent either.
+
+## Anti-trans rhetoric: tested, not tracked
+
+Doppelganger used anti-trans topics, and NGOs have measured a rise in anti-trans rhetoric on X: CCDH and the Human Rights Campaign (2022), CCDH's "Musk Bump" (2022) and ISD (2025). The About tab cites them. Beth's Anti-Transphobia Library (bethylamine.github.io) catalogues the talking points and code words. We tested whether Bluesky could measure this rhetoric, in October 2026.
+
+**Volume.** Exact daily counts, 1 September to 17 October 2026. Each day was read in one search, which returns every post when there are fewer than 100.
+
+| Search | Pre-strike mean (Sep 15 to Oct 7) | Oct 8 to 11 | Oct 12 to 17 |
+|---|---|---|---|
+| "women's sports" | 82 | 78 | 65 |
+| groomer | 41 | 33 | 41 |
+| "protect women" | 35 | 20 | 35 |
+| AGP | 24 | 22 | 22 |
+| groomers | 21 | 19 | 20 |
+| "gender critical" | 20 | 14 | 31 |
+| "gender ideology" | 15 | 9 | 13 |
+| "trans ideology" | 6 | 3 | 6 |
+| "what is a woman" | 6 | 6 | 7 |
+| "biological male" | 3 | 5 | 10 |
+| "adult human female", autogynephilia | 2 | under 6 | 2 |
+| German, French, Spanish, Italian, Portuguese "gender ideology" terms | 0 to 5 | 0 to 7 | 0 to 4 |
+
+On every strike day, each term stayed within the range it had on pre-strike days. "TRAs" and "TERF" are left out: "TRAs" matches the Spanish word "tras", and "TERF" is used mostly by trans people and allies.
+
+**What the posts say.** We hand-checked about 50 recent posts per term, sampled from two points in the week, and stored none of them:
+
+| Search | Posts that used the anti-trans framing |
+|---|---|
+| groomer | 0 of 47. Mostly pet grooming, abuse callouts and fandom; 2 pushed back against the slur |
+| "women's sports" | 1 to 3 of 50. About 25 were fans; about 15 criticised the framing |
+| "protect women" | 0 to 2 of 48. About half mocked the "protect women" crowd |
+| "TRAs" | 0 of 50. Spanish and Portuguese "tras" |
+
+On Bluesky these counts measure pushback and unrelated uses, not the rhetoric, so they are not tracked. The rhetoric is measured where it mostly is, on X, which this monitor does not read.
