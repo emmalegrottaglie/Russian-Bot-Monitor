@@ -116,6 +116,9 @@ def main() -> None:
         config = dataclasses.replace(config, series=tuple(ordered))
         asyncio.run(collectors.run(config, settings, platforms=platforms, start=start, backfill=True))
     elif args.cmd == "refetch":
+        unknown = set(args.series or ()) - {s.key for s in config.series}
+        if unknown:
+            parser.error(f"unknown series: {', '.join(sorted(unknown))}")
         now = int(time.time())
         windows = {}
         with db.session(settings.db_path) as conn:
