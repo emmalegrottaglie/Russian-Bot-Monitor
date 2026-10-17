@@ -29,6 +29,10 @@ a { color: var(--a1); }
 .chart svg { display: block; width: 100%; height: 170px; overflow: visible; }
 .chart .grid { stroke: var(--term-faint); stroke-width: 1; }
 .chart .axis { fill: var(--term-muted); font: 500 8px var(--font); letter-spacing: .06em; }
+.chart .axis-title { font-weight: 700; }
+/* Reference-line and band labels sit over the data: a background halo keeps them legible. */
+.chart .base-label { font-weight: 700; paint-order: stroke; stroke: var(--term-bg); stroke-width: 3px; }
+.chart-caption { padding: 4px 0 0; }
 .chart .line { fill: none; stroke: var(--a2); stroke-width: 1.5; }
 .chart .area { fill: color-mix(in srgb, var(--a2) 12%, transparent); stroke: none; }
 .chart .ref-band { fill: color-mix(in srgb, var(--a1) 7%, transparent); }

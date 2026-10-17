@@ -177,10 +177,23 @@ function niceMax(v) {
   return [1, 2, 2.5, 5, 10].map((m) => m * p).find((m) => m >= v);
 }
 
+// Round tick step for a value axis: about four intervals, on 1, 2, 2.5 or 5 times a power of ten.
+function niceStep(span) { return niceMax(span / 4); }
+
+// Value formats for index charts (100 = pre-strike average) and differences in percentage points.
+const indexTick = (v) => `${Math.round(v)}%`;
+const indexValue = (v) => `${Math.round(v)}% (${pct(v / 100 - 1)})`;
+const ppValue = (v) => { const r = Math.round(v); return `${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r)} PP`; };
+const refDates = (ref) => `${mmdd(ref.start)} TO ${mmdd(ref.end - 1)}`;
+const SOURCES = { ioda: 'IODA, GEORGIA TECH', cloudflare: 'CLOUDFLARE RADAR', reddit: 'REDDIT FEEDS · ARCTIC SHIFT ARCHIVE', bluesky: 'BLUESKY SEARCH' };
+
 // SVG line chart with labeled axes, event markers, reference band and a hover readout.
 // `lines`: [{label, cls, points: [[ts, value], ...], area?}] drawn in order (last on top).
 // `band`: {lo, hi, label} shades a horizontal normal range. `share`: {name, title,
-// caption, sources?} adds a PNG download that redraws the chart with that context.
+// caption, sources?} adds a PNG download that redraws the chart with that context, and
+// the caption and sources are shown under the chart.
+// The value axis is titled with `axisTitle` (default: the unit). `tick` formats tick
+// labels and `value` formats readout values (both default to num).
 //
 // The time axis zooms: an overview strip under the chart holds a window that can be
 // dragged (pan) or resized from its edges (zoom); the chart itself pans by dragging and
@@ -205,10 +218,10 @@ function timeTicks(start, end) {
 
 function chart(el, readout, lines, opts) {
   const { unit, events = [], ref = null, baseline = null, band = null, share = null } = opts;
+  const value = opts.value || num, axisTitle = opts.axisTitle || unit;
   const full = { start: opts.start, end: opts.end };
   const fullSpan = full.end - full.start;
-  const baselineLabel = opts.baselineLabel ?? `${num(baseline)} = PRE-STRIKE`;
-  const W = Math.max(el.clientWidth, 280), H = opts.height || 170, L = 40, R = 6, T = 6, B = 18;
+  const W = Math.max(el.clientWidth, 280), H = opts.height || 170, R = 6, T = 18, B = 18;  // T leaves room for the axis title
   lines = lines.filter((l) => l.points.length);
   if (!lines.length) {
     el.innerHTML = '';
@@ -222,8 +235,17 @@ function chart(el, readout, lines, opts) {
   const values = lines.flatMap((l) => l.points.map((p) => p[1]));
   if (baseline != null) values.push(baseline);
   if (band) values.push(band.lo, band.hi);
-  const min = Math.min(...values);
-  const lo = min < 0 ? -niceMax(-min) : 0, hi = niceMax(Math.max(...values));
+  const min = Math.min(...values), max = Math.max(...values);
+  const step = niceStep(Math.max(max, 0) - Math.min(min, 0) || 1);
+  const lo = min < 0 ? Math.floor(min / step) * step : 0, hi = Math.max(step, Math.ceil(max / step) * step);
+  const yTicks = [];
+  for (let v = lo; v <= hi + step / 2; v += step) yTicks.push(Math.round(v * 1e6) / 1e6);
+  // Default tick labels carry as many decimals as the step needs: 0, 25, 50, not 0.00, 25.0.
+  const decimals = step >= 1 ? 0 : (String(Number(step.toPrecision(3))).split('.')[1] || '').length;
+  const tick = opts.tick || ((v) => (Math.abs(v) >= 10000 ? num(v) : v.toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals })));
+  const baselineLabel = baseline == null ? '' : opts.baselineLabel ?? (ref ? `${tick(baseline)} = AVERAGE ${refDates(ref)}` : `${tick(baseline)} = PRE-STRIKE`);
+  // Left margin fits the widest tick label (about 6 px a character at the axis font size).
+  const L = Math.max(40, 10 + 6 * Math.max(...yTicks.map((v) => tick(v).length)));
   const y = (v) => T + (1 - (v - lo) / (hi - lo || 1)) * (H - T - B);
 
   const stepOf = (pts) => {
@@ -256,6 +278,7 @@ function chart(el, readout, lines, opts) {
         <button type="button" data-zoom="all" aria-label="Show the whole period">ALL</button></span></div>` : ''}
     <div class="chart-main"><svg class="chart-svg" viewBox="0 0 ${W} ${H}" role="img" tabindex="0"${H !== 170 ? ` style="height:${H}px"` : ''}></svg></div>
     ${zoomable ? `<svg class="chart-overview" viewBox="0 0 ${W} ${OV_H}" aria-hidden="true"></svg>` : ''}
+    ${share?.caption ? `<p class="note chart-caption">${esc(share.caption)} Source: ${esc(share.sources || 'IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY')}.</p>` : ''}
     <div class="chart-tools"><details class="data-table"><summary>Show data as a table${lines[0].points.length > 120 ? ' · daily means' : ''}</summary><div class="table-wrap"></div></details>
     ${share ? `<button type="button" class="chart-png" aria-label="Download this chart, as currently zoomed, as a PNG image">${glyph('▼')} PNG</button>` : ''}</div>`;
 
@@ -266,11 +289,11 @@ function chart(el, readout, lines, opts) {
   const describe = (t, prefix) => {
     if (lines.length === 1) {
       const p = near(lines[0].points, t);
-      return `${prefix}${num(p[1])} <span class="muted">${esc(unit)} · ${stamp(p[0])}</span>`;
+      return `${prefix}${value(p[1])} <span class="muted">${esc(unit)} · ${stamp(p[0])}</span>`;
     }
     const p0 = near(lines[0].points, t);
     return `${prefix}<span class="muted">${stamp(p0[0])} ·</span> ${lines.map((l) =>
-      `${esc(l.label)} ${num(near(l.points, p0[0])[1])}`).join(' · ')} <span class="muted">${esc(unit)}</span>`;
+      `${esc(l.label)} ${value(near(l.points, p0[0])[1])}`).join(' · ')} <span class="muted">${esc(unit)}</span>`;
   };
   let cursorT = null;  // time under the hover or keyboard cursor
   const idle = () => { readout.innerHTML = describe(view.end, view.end >= full.end ? 'LATEST ' : 'END OF VIEW '); };
@@ -299,14 +322,13 @@ function chart(el, readout, lines, opts) {
       return `${area ? `<path class="area" d="${area}"/>` : ''}<path class="line ${line.cls || ''}" d="${path}"/>${lone}`;
     }).join('');
 
-    const yTicks = [lo, (lo + hi) / 2, hi];
     const refBand = ref && ref.end > start && ref.start < end
       ? `<rect class="ref-band" x="${x(Math.max(ref.start, start))}" y="${T}" width="${x(Math.min(ref.end, end)) - x(Math.max(ref.start, start))}" height="${H - T - B}"/>`
       : '';
     const base = baseline == null ? '' : `<line class="baseline" x1="${L}" x2="${W - R}" y1="${y(baseline)}" y2="${y(baseline)}"/>
-      <text class="axis" x="${L + 4}" y="${y(baseline) - 3}">${esc(baselineLabel)}</text>`;  // left: line names sit at the right end
+      <text class="axis base-label" x="${L + 4}" y="${y(baseline) - 3}">${esc(baselineLabel)}</text>`;  // left: line names sit at the right end
     const normBand = !band ? '' : `<rect class="norm-band" x="${L}" y="${y(band.hi)}" width="${W - L - R}" height="${Math.max(1, y(band.lo) - y(band.hi))}"/>
-      <text class="axis" x="${L + 4}" y="${y(band.hi) - 3}">${esc(band.label || 'NORMAL RANGE')}</text>`;
+      <text class="axis base-label" x="${L + 4}" y="${y(band.hi) - 3}">${esc(band.label || 'NORMAL RANGE')}</text>`;
     // Event labels run vertically down their marker. Markers closer than one
     // label's width (narrow or zoomed-out charts) share a single label, joined with " · ".
     const shown = events.filter((e) => e.ts >= start && e.ts <= end);
@@ -327,14 +349,15 @@ function chart(el, readout, lines, opts) {
     }).join('');
     const summary = visible.filter((l) => l.pts.length).map((l) => {
       const vs = l.pts.map((p) => p[1]);
-      return `${l.label}: last ${num(vs[vs.length - 1])}, range ${num(Math.min(...vs))} to ${num(Math.max(...vs))}`;
+      return `${l.label}: last ${value(vs[vs.length - 1])}, range ${tick(Math.min(...vs))} to ${tick(Math.max(...vs))}`;
     }).join('; ') || 'no data in this window';
-    const bandText = band ? ` Shaded band: ${(band.label || 'normal range').toLowerCase()}, ${num(band.lo)} to ${num(band.hi)}.` : '';
-    svg.setAttribute('aria-label', `Chart, ${unit}, ${stamp(start)} to ${stamp(end)}. ${summary}.${bandText} Left and right arrow keys read values, plus and minus zoom; the data table below lists every value.`);
+    const bandText = band ? ` Shaded band: ${(band.label || 'normal range').toLowerCase()}, ${tick(band.lo)} to ${tick(band.hi)}.` : '';
+    svg.setAttribute('aria-label', `Chart, ${axisTitle}, ${stamp(start)} to ${stamp(end)}. ${summary}.${bandText} Left and right arrow keys read values, plus and minus zoom; the data table below lists every value.`);
 
     svg.innerHTML = `<clipPath id="clip-${id}"><rect x="${L}" y="0" width="${W - L - R}" height="${H}"/></clipPath>
       ${yTicks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
-        <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${num(v)}</text>`).join('')}
+        <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${esc(tick(v))}</text>`).join('')}
+      <text class="axis axis-title" x="4" y="9">${esc(axisTitle)}</text>
       ${timeTicks(start, end).map(([t, s]) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${s}</text>`).join('')}
       <g clip-path="url(#clip-${id})">${refBand}${normBand}${drawn}${ev}</g>
       ${base}${endLabels}
@@ -678,9 +701,10 @@ function renderCorrelation(c) {
     { label: 'YANDEX', cls: 'l-a1', points: pts(c.infra.values) },
   ];
   chart($('corr-chart'), $('corr-readout'), lines,
-    { start, end, unit: '% OF PRE-STRIKE', events: c.events, ref: c.reference, baseline: 100, maxGap: 1,
-      share: { name: 'correlation', title: 'Community activity vs Yandex Cloud',
-        caption: "Daily median of each group's communities and Yandex Cloud reachability, as % of their pre-strike mean (100). Shaded: pre-strike reference period. Dashed: reported strikes. Correlation, not proof of cause." } });
+    { start, end, unit: '% OF PRE-STRIKE AVERAGE', events: c.events, ref: c.reference, baseline: 100, maxGap: 1,
+      tick: indexTick, value: indexValue,
+      share: { name: 'correlation', title: 'Community activity vs Yandex Cloud', sources: 'IODA · REDDIT FEEDS · ARCTIC SHIFT · BLUESKY',
+        caption: `Daily median of each group's communities and Yandex Cloud reachability, as a % of their own average over ${refDates(c.reference).toLowerCase()} (100%). UTC days with at least 20 hours of data. Shaded: that reference period. Dashed: reported strikes. Correlation, not proof of cause.` } });
   renderDiff(c);
 
   const swatch = (cls) => `<svg class="swatch" viewBox="0 0 22 8" aria-hidden="true"><line class="line ${cls}" x1="1" x2="21" y1="4" y2="4"/></svg>`;
@@ -705,7 +729,7 @@ function renderCorrelation(c) {
     <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${signed(g.r)}</div>
     <div class="tile-label">${esc(label(g.tag))}</div>
     <div class="tile-sub">${strength(g.r)}</div>
-    <div class="tile-sub">${((i) => (i < 0 ? 'NO COMPLETE DAY YET' : `${mmdd(c.days[i])} UTC: ${Math.round(g.values[i])}% OF NORMAL`))(latest(g.values))}</div></div>`).join('');
+    <div class="tile-sub">${((i) => (i < 0 ? 'NO COMPLETE DAY YET' : `${mmdd(c.days[i])} UTC: ${Math.round(g.values[i])}% OF NORMAL (${pct(g.values[i] / 100 - 1)})`))(latest(g.values))}</div></div>`).join('');
 }
 
 // Chart 3 in docs/CHARTS.md: one group's daily index minus the control group's.
@@ -735,12 +759,13 @@ function renderDiff(c) {
   const ref = c.days.map((d, i) => [mid(d), diffs[i]])
     .filter(([t, v]) => v != null && t >= c.reference.start && t <= c.reference.end).map(([, v]) => v).sort((a, b) => a - b);
   const q = (p) => { const pos = p * (ref.length - 1), i = Math.floor(pos); return ref[i] + (ref[Math.min(i + 1, ref.length - 1)] - ref[i]) * (pos - i); };
-  const band = ref.length >= 10 ? { lo: q(0.05), hi: q(0.95), label: 'NORMAL RANGE' } : null;
+  const band = ref.length >= 10 ? { lo: q(0.05), hi: q(0.95), label: '90% OF PRE-STRIKE DAYS FELL HERE' } : null;
   const caption = DIFF_CAPTION(label(g.tag));
   chart($('diff-chart'), $('diff-readout'),
     [{ label: `${label(g.tag)} − CONTROL`, cls: 'l-a3', points: c.days.map((d, i) => [mid(d), diffs[i]]).filter((p) => p[1] != null) }],
-    { start: c.days[0], end: snap.now, unit: 'PTS VS CONTROL', events: c.events, baseline: 0, baselineLabel: '0 = NO DIFFERENCE', band, maxGap: 1,
-      share: { name: `${g.tag}-minus-control`, title: `${label(g.tag)} minus control`, caption } });
+    { start: c.days[0], end: snap.now, unit: 'VS CONTROL', axisTitle: 'PERCENTAGE POINTS · GROUP MINUS CONTROL',
+      events: c.events, baseline: 0, baselineLabel: '0 = NO DIFFERENCE', band, maxGap: 1, tick: ppValue, value: ppValue,
+      share: { name: `${g.tag}-minus-control`, title: `${label(g.tag)} minus control`, caption, sources: 'REDDIT FEEDS · ARCTIC SHIFT · BLUESKY' } });
   $('diff-note').innerHTML = notes([
     `The line is ${esc(label(g.tag).toLowerCase())} activity minus non-political activity, both as a % of their usual pre-strike level.`,
     'Above 0: the group is busier than usual compared with non-political communities. Below 0: quieter.',
@@ -867,8 +892,8 @@ const views = {
       const end = snap.now, start = end - 14 * 86400;
       api(`/api/series/${encodeURIComponent(ref.key)}/points?days=14&bucket=hour`).then((d) =>
         lineChart($('live-chart'), $('live-readout'), d.points, { start, end, unit: ref.unit, events: snap.events, ref: snap.reference,
-          share: { name: ref.key, title: `${ref.label} · ${ref.unit}`, sources: ref.platform === 'ioda' ? 'IODA, GEORGIA TECH' : 'CLOUDFLARE RADAR',
-            caption: 'Hourly, last 14 days. Shaded: pre-strike reference period. Dashed: reported strikes.' } }))
+          share: { name: ref.key, title: `${ref.label} · ${ref.unit}`, sources: SOURCES[ref.platform],
+            caption: 'Hourly means, UTC, last 14 days. Shaded: pre-strike reference period. Dashed: reported strikes.' } }))
         .catch(() => toast('CHART DATA UNAVAILABLE'));
     }
     api('/api/alerts?limit=3').then((list) => {
@@ -946,7 +971,6 @@ const views = {
       <div class="readout" id="ro-a"></div><div class="chart" id="chart-a"></div>
       <label class="field" style="margin-top:14px"><span>Community series</span><select id="sel-b">${opt(comm, state.b)}</select></label>
       <div class="readout" id="ro-b"></div><div class="chart" id="chart-b"></div>
-      <p class="note">HOURLY MEANS, UTC · SHADED = PRE-STRIKE REFERENCE · DASHED = REPORTED STRIKES</p>
       <h2 class="sect" id="daily-title">Daily mean · last 14 days</h2>
       <div id="daily-bars"></div>
       <h2 class="sect" id="es-title">Event study · robustness</h2>
@@ -970,7 +994,8 @@ const views = {
       const s = byKey(key);
       const d = await api(`/api/series/${encodeURIComponent(key)}/points?days=${state.days}&bucket=hour`);
       lineChart($(chart), $(ro), d.points, { start, end, unit: s.unit, events: snap.events, ref: snap.reference,
-        share: { name: key, title: `${s.label} · ${s.unit}`, caption: `Hourly means, UTC, last ${state.days} days. Shaded: pre-strike reference period. Dashed: reported strikes.` } });
+        share: { name: key, title: `${s.label} · ${s.unit}`, sources: SOURCES[s.platform],
+          caption: `Hourly means, UTC, last ${state.days} days. Shaded: pre-strike reference period. Dashed: reported strikes.` } });
     };
     draw(state.a, 'chart-a', 'ro-a').catch(() => toast('SERIES A UNAVAILABLE'));
     draw(state.b, 'chart-b', 'ro-b').catch(() => toast('SERIES B UNAVAILABLE'));

@@ -75,3 +75,5 @@ A research agent ran 14 web searches and read 13 pages. Only pages that were act
 7. **Write changes as percent in readouts and tiles**, e.g. "+47% VS PRE-STRIKE" next to the index value 147, so nobody has to do the arithmetic.
 
 Items 1 to 4 are a contained change to the shared `chart()` function in `web/app.js`, so every chart gets them at once. Items 5 to 7 are copy changes.
+
+**Status:** all seven were built on 2026-10-18. Tick labels on plain-unit charts also take their decimals from the tick step (0, 25, 50 rather than 0.00, 25.0, 50.0), and the reference-line and band labels have a background halo, because they sit over the data.
