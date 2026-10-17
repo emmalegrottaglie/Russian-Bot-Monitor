@@ -45,6 +45,7 @@ class Settings:
     x_api_secret: str
     x_access_token: str
     x_access_secret: str
+    x_bearer_token: str
     post_alerts: bool
     max_posts_per_day: int
 
@@ -69,6 +70,7 @@ class Settings:
             x_api_secret=env("X_API_SECRET", ""),
             x_access_token=env("X_ACCESS_TOKEN", ""),
             x_access_secret=env("X_ACCESS_TOKEN_SECRET", ""),
+            x_bearer_token=env("X_BEARER_TOKEN", ""),
             post_alerts=env("TRACKER_POST_ALERTS", "0") == "1",
             max_posts_per_day=int(env("TRACKER_MAX_POSTS_PER_DAY", "4")),
         )
