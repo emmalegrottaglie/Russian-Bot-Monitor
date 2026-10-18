@@ -1435,8 +1435,11 @@ const views = {
         <li>All data: <a href="api/export/daily.csv?days=365">daily CSV</a>${STATIC ? '' : ' · <a href="docs">API</a>'} · <a href="#report">dated reports</a>.</li>
       </ul></div>
       <h2 class="sect">Display</h2>
-      <div class="switch" data-palette role="group" aria-label="Colour palette">${[['term-phosphor', 'PHOSPHOR'], ['term-amber', 'AMBER'], ['term-navy', 'BROADCAST 8S'], ['term-light', 'LIGHT']]
+      <div class="switch" data-palette role="group" aria-label="Colour palette">${[['term-phosphor', 'PHOSPHOR'], ['term-amber', 'AMBER'], ['term-navy', 'BROADCAST 8S']]
         .map(([v, l]) => `<button class="chip" data-v="${v}" aria-pressed="${pal === v}">${l}</button>`).join('')}</div>
+      <div class="switch" data-mode role="group" aria-label="Light or dark">${[['dark', 'DARK'], ['light', 'LIGHT']]
+        .map(([v, l]) => `<button class="chip" data-v="${v}" aria-pressed="${document.documentElement.dataset.mode === v}">${l}</button>`).join('')}</div>
+      <p class="note">EVERY PALETTE HAS A DARK AND A LIGHT VERSION. WITHOUT A CHOICE HERE, THE SITE FOLLOWS YOUR SYSTEM SETTING.</p>
       <p class="note" id="crt-note">CRT SCANLINES · OFF BY DEFAULT: THE EFFECT LOWERS TEXT CONTRAST</p>
       <div class="switch" data-crt role="group" aria-label="CRT scanlines" aria-describedby="crt-note">
         <button class="chip" data-v="on" aria-pressed="${crt === 'on'}">ON</button>
@@ -1446,6 +1449,11 @@ const views = {
       const b = e.target.closest('button'); if (!b) return;
       document.documentElement.dataset.palette = b.dataset.v;
       try { localStorage.setItem('palette', b.dataset.v); } catch { /* storage unavailable: setting lasts this visit */ }
+      views.about();
+    });
+    view.querySelector('[data-mode]').addEventListener('click', (e) => {
+      const b = e.target.closest('button'); if (!b) return;
+      setMode(b.dataset.v, true);
       views.about();
     });
     view.querySelector('[data-crt]').addEventListener('click', (e) => {
@@ -1497,10 +1505,27 @@ function tickClock() {
   $('clock').textContent = hhmm(n);
 }
 
+// Light or dark. The page head sets it before the first paint; `save` is false when it
+// only follows the system setting, so a later system change is still followed.
+function setMode(mode, save) {
+  document.documentElement.dataset.mode = mode;
+  const btn = $('mode');
+  btn.setAttribute('aria-pressed', String(mode === 'light'));
+  if (save) {
+    try { localStorage.setItem('mode', mode); } catch { /* storage unavailable: setting lasts this visit */ }
+  }
+}
+
 async function start() {
+  setMode(document.documentElement.dataset.mode || 'dark', false);
+  $('mode').addEventListener('click', () => setMode(document.documentElement.dataset.mode === 'light' ? 'dark' : 'light', true));
+  const system = window.matchMedia?.('(prefers-color-scheme: light)');
+  system?.addEventListener('change', (e) => {
+    let saved = null;
+    try { saved = localStorage.getItem('mode'); } catch { /* storage unavailable */ }
+    if (!saved) setMode(e.matches ? 'light' : 'dark', false);
+  });
   try {
-    const saved = localStorage.getItem('palette');
-    if (saved) document.documentElement.dataset.palette = saved;
     const crt = localStorage.getItem('crt');  // CRT overlay is opt-in: it lowers contrast
     if (crt) document.documentElement.dataset.crt = crt;
   } catch { /* storage unavailable */ }

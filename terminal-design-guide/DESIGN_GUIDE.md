@@ -7,6 +7,8 @@ The visual language of the WeatherTerminal app, packaged for reuse on the web: a
 | `terminal.css` | Drop-in tokens plus component classes. Values match the app one-for-one. |
 | `specimen.html` | A complete speed-test screen built only from the kit, with live palette / accent / font switchers. Open it in a browser to see every component. |
 | `DESIGN_GUIDE.md` | This document — the rules behind the values. |
+| `palettes.html` | Reference sheets for every palette in dark and light mode, drawn live from `terminal.css`: hex, RGB, role and contrast for each token. |
+| `palettes/*.png` | The same sheets as 1200 × 675 images (`phosphor-dark.png` … `navy-light.png`, and `all-palettes.png`), for icons, slides and other designs made outside the browser. |
 
 ---
 
@@ -23,7 +25,7 @@ The visual language of the WeatherTerminal app, packaged for reuse on the web: a
 
 ## 2. Theme axes
 
-Three independent attributes on `<html>`. All combinations are valid.
+Four independent attributes on `<html>`. All combinations are valid.
 
 ### Palette — `data-palette`
 
@@ -35,6 +37,21 @@ Three independent attributes on `<html>`. All combinations are valid.
 | Terminal Light | `term-light` | `#f1eee2` | `#e7e3d4` | `#14170f` | `#5a6050` | `#1a7030` | `#0a5f7d` | `#8f4e00` |
 
 Each palette also defines `--term-line` (hairlines, ~18–24% of the accent) and `--term-faint` (row dividers and bar tracks, ~8–10%). Terminal Light is the accessibility escape hatch for bright rooms; it pulls the CRT texture back to 34%.
+
+### Mode — `data-mode`
+
+Every palette has a dark version (the default, no attribute) and a light version (`data-mode="light"`), so a site can offer one dark/light switch and keep the reader's palette. Phosphor's light version is Terminal Light; `term-light` remains as its older name.
+
+| Palette, light | bg | card | ink | muted | a1 | a2 | a3 |
+|---|---|---|---|---|---|---|---|
+| Phosphor | `#f1eee2` | `#e7e3d4` | `#14170f` | `#5a6050` | `#1a7030` | `#0a5f7d` | `#8f4e00` |
+| Amber Console | `#f6f0e3` | `#ece4d2` | `#1c140a` | `#6b5434` | `#8a4f00` | `#b0261c` | `#5e4a00` |
+| Broadcast 8s | `#eef1fb` | `#e0e5f5` | `#0b1030` | `#4a5788` | `#a8115f` | `#006b85` | `#7d5a00` |
+
+- Every text colour (ink, muted, a1 to a3) is at least 4.5:1 on both bg and card in light mode. The light accents keep their dark versions' hues, darkened until they pass.
+- Light mode switches the glows off (they blur on a pale ground), pulls the CRT texture back to 34% and sets `color-scheme: light`.
+- With no saved choice, follow the system: set `data-mode` from `prefers-color-scheme` in a small script in `<head>`, before the stylesheet paints, so the page never flashes the wrong mode.
+- `palettes.html` and the PNGs in `palettes/` show every palette in both modes, with hex, RGB and contrast for each token.
 
 ### Accent set — `data-accents`
 
@@ -190,7 +207,7 @@ A grade or speed-quality scale is meaning-bearing, so give it a fixed colour sca
 
 ## 10. Accessibility
 
-- Verify text contrast for each palette in your own components, especially muted text on the dark grounds and every accent on Terminal Light. Terminal Light exists for bright environments; offer it.
+- Verify text contrast for each palette in your own components, especially muted text on the dark grounds and every accent in light mode. Light mode exists for bright environments; offer it, and follow the system setting until the reader chooses.
 - Never rely on colour alone. The labeling rule (§1.2) and the `●`/`○` glyphs carry meaning without hue.
 - Keyboard focus is a 1px `a1` outline (`:focus-visible`), never removed.
 - Announce live results with `aria-live="polite"` (the specimen's boot section does).

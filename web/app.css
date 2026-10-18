@@ -88,7 +88,7 @@ a { color: var(--a1); }
 /* Print / Save as PDF (REPORT tab): paper colours from the Terminal Light palette,
    no chrome, tables allowed to wrap. */
 @media print {
-  :root, [data-palette] {
+  :root, [data-palette], html:root[data-mode][data-palette] {
     --term-bg: #fff; --term-card: #f4f2ea; --term-ink: #14170f; --term-muted: #5a6050;
     --term-line: rgba(20,23,15,.3); --term-faint: rgba(20,23,15,.12);
     --a1: #1a7030; --a2: #0a5f7d; --a3: #8f4e00;
@@ -204,7 +204,7 @@ button.legend-item[aria-pressed="false"] .swatch { opacity: .35; }
 
 /* Phosphor: the kit's muted green (#5c8c68) reads dim at small sizes; brighter
    labels lift contrast on the near-black background from about 5:1 to about 9:1. */
-[data-palette="term-phosphor"] { --term-muted: #8cc49a; }
+html:not([data-mode="light"])[data-palette="term-phosphor"] { --term-muted: #8cc49a; }
 
 /* Phones keep the kit's 1:1 scale, so the smallest running text is raised a
    step instead; nav labels drop most of their tracking so six fit side by side. */

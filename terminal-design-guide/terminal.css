@@ -5,6 +5,9 @@
 
    Three independent axes, set as attributes on <html>:
      data-palette = "term-phosphor" | "term-amber" | "term-navy" | "term-light"
+     data-mode    = "dark" (default, no attribute) | "light"
+                    (light versions of phosphor, amber and navy; term-light is
+                    phosphor's light version under its older name)
      data-accents = "uniform" | "duotone" | "broadcast" (default, no attribute)
      data-font    = "jetbrains" (default) | "plex" | "space"
 
@@ -39,6 +42,33 @@
   --a1: #1a7030; --a2: #0a5f7d; --a3: #8f4e00;
   --crt-chrome-opacity: .34; /* paper ground: texture pulled right back */
 }
+
+/* ── Light mode ─────────────────────────────────────────────────────────────
+   Every palette has a light version, chosen with data-mode="light" on <html>.
+   Text colours (ink, muted, a1-a3) are at least 4.5:1 on both bg and card.
+   Phosphor light is the same as term-light, kept above for older pages.
+   Glows blur on a pale ground, so they are switched off. */
+html[data-mode="light"], html[data-mode="light"][data-palette="term-phosphor"] {
+  --term-bg: #f1eee2; --term-card: #e7e3d4; --term-ink: #14170f; --term-muted: #5a6050;
+  --term-line: rgba(20,23,15,.24); --term-faint: rgba(20,23,15,.1);
+  --a1: #1a7030; --a2: #0a5f7d; --a3: #8f4e00;
+}
+html[data-mode="light"][data-palette="term-amber"] {
+  --term-bg: #f6f0e3; --term-card: #ece4d2; --term-ink: #1c140a; --term-muted: #6b5434;
+  --term-line: rgba(28,20,10,.24); --term-faint: rgba(28,20,10,.1);
+  --a1: #8a4f00; --a2: #b0261c; --a3: #5e4a00;
+}
+html[data-mode="light"][data-palette="term-navy"] {
+  --term-bg: #eef1fb; --term-card: #e0e5f5; --term-ink: #0b1030; --term-muted: #4a5788;
+  --term-line: rgba(11,16,48,.24); --term-faint: rgba(11,16,48,.1);
+  --a1: #a8115f; --a2: #006b85; --a3: #7d5a00;
+}
+html[data-mode="light"] {
+  --crt-chrome-opacity: .34; --glow-hero: none; --glow-label: none; --glow-led: none;
+  color-scheme: light;
+}
+html:not([data-mode="light"]):not([data-palette="term-light"]) { color-scheme: dark; }
+[data-palette="term-light"] { color-scheme: light; }
 
 /* ── Accent sets (applied after palettes so they win) ─────────────────────── */
 [data-accents="uniform"] { --a2: var(--a1); --a3: var(--a1); }

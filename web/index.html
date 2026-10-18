@@ -1,7 +1,18 @@
 <!doctype html>
-<html lang="en" data-palette="term-phosphor">
+<html lang="en" data-palette="term-phosphor" data-mode="dark">
 <head>
 <meta charset="utf-8">
+<script>
+  // Theme before the first paint: the saved palette and mode, else the system's light or
+  // dark setting. "term-light" was the old light palette: it is phosphor in light mode.
+  (function () {
+    var d = document.documentElement, p = null, m = null;
+    try { p = localStorage.getItem('palette'); m = localStorage.getItem('mode'); } catch (e) { /* storage unavailable */ }
+    if (p === 'term-light') { p = 'term-phosphor'; m = m || 'light'; }
+    if (p) d.dataset.palette = p;
+    d.dataset.mode = m || (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  })();
+</script>
 <link rel="icon" href="data:,">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Bot Traffic Monitor</title>
@@ -15,6 +26,7 @@
 <header>
   <div class="band"><h1 id="title" tabindex="-1"><span aria-hidden="true">// </span>BOT MONITOR</h1><span id="state" role="status"><span aria-hidden="true">●</span> CONNECTING</span></div>
   <div class="sub"><button class="asn" id="asn" aria-expanded="false" aria-controls="asn-info">YANDEX AS13238 · AS200350 <span class="asn-i" aria-hidden="true">?</span><span class="sr-only">: what are these?</span></button><span class="sub-right"><span id="updated">—</span>
+    <button class="pause" id="mode" aria-pressed="false" aria-label="Light mode">LIGHT</button>
     <button class="pause" id="pause" aria-pressed="false">PAUSE UPDATES</button></span></div>
   <div class="asn-info" id="asn-info" hidden>
     <ul class="notes">
