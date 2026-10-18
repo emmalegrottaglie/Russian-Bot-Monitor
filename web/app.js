@@ -986,7 +986,8 @@ const views = {
     let hero = '<div class="hero"><div class="hero-value">—</div><div class="hero-status">NO INFRASTRUCTURE DATA</div></div>';
     if (ref) {
       const share = ref.change_ref == null ? null : (1 + ref.change_ref) * 100;
-      const status = share == null ? 'NO PRE-STRIKE BASELINE' : share >= 90 ? 'NOMINAL' : share >= 50 ? 'DEGRADED' : 'SEVERE OUTAGE';
+      // Without a recent point there is nothing to compare, which is not a missing baseline.
+      const status = share == null ? (ref.fresh ? 'NO PRE-STRIKE BASELINE' : 'NO RECENT DATA') : share >= 90 ? 'NOMINAL' : share >= 50 ? 'DEGRADED' : 'SEVERE OUTAGE';
       hero = `<div class="hero">
         <div class="hero-value">${share == null ? num(ref.latest) : Math.round(share)}<span class="hero-unit">${share == null ? '' : '%'}</span></div>
         <div class="hero-status">${esc(status)}</div>
