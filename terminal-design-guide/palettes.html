@@ -82,8 +82,11 @@
       </div></section>`;
   }
 
+  // Only known palettes and modes are drawn: the values go into markup, so anything else
+  // in the address is ignored rather than rendered.
   const q = new URLSearchParams(location.search);
-  const want = q.get('palette') ? [[q.get('palette'), q.get('mode') || 'dark']]
+  const pick = q.get('palette'), mode = q.get('mode') === 'light' ? 'light' : 'dark';
+  const want = Object.hasOwn(PALETTES, pick) ? [[pick, mode]]
     : Object.keys(PALETTES).flatMap((p) => [[p, 'dark'], [p, 'light']]);
   document.getElementById('sheets').innerHTML = want.map(([p, m]) => sheet(p, m)).join('');
   // The page itself goes back to neutral; each sheet carries its own tokens inline.
