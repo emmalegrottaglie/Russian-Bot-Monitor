@@ -36,6 +36,7 @@ SIMILARITY = 0.7  # Jaccard similarity of character 5-grams for "near-identical"
 MIN_ACCOUNTS = 3  # distinct accounts for a cluster to count
 MIN_CHARS = 20  # shorter normalised texts (a bare hashtag, "MAGA") match too easily to mean anything
 NEW_ACCOUNT_DAYS = 30
+MEASURES = ("coord10", "coord30", "coord60", "new_accounts", "no_avatar")
 OUT = Path(__file__).resolve().parent.parent / "data" / "research"
 DELAY = 0.35
 
@@ -118,7 +119,8 @@ def hourly(posts: list[dict], incomplete: set[int]) -> list[list]:
 def _ts(stamp: str | None) -> int | None:
     if not stamp:
         return None
-    return int(datetime.fromisoformat(stamp.replace("Z", "+00:00")).timestamp())
+    t = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+    return int((t if t.tzinfo else t.replace(tzinfo=timezone.utc)).timestamp())
 
 
 def _search(client: httpx.Client, q: str, lang: str, a: int, b: int) -> list[dict]:
@@ -201,12 +203,25 @@ def cmd_fetch(args) -> None:
           f"{len(incomplete)} incomplete hours, {len(failed)} failed hours")
 
 
-def shares(rows: list[list], a: int, b: int) -> dict[str, float | None]:
-    """Share of posts in [a, b) per measure, over complete hours."""
+def shares(rows: list[list], a: int, b: int) -> dict[str, float | int | None]:
+    """Share of posts in (a, b] per measure over complete hours, plus the raw counts."""
     sel = [r for r in rows if a < r[0] <= b and r[7]]
     total = sum(r[1] for r in sel)
-    names = ["coord10", "coord30", "coord60", "new_accounts", "no_avatar"]
-    return {n: (sum(r[2 + k] for r in sel) / total if total else None) for k, n in enumerate(names)} | {"posts": total}
+    out: dict[str, float | int | None] = {"posts": total}
+    for k, n in enumerate(MEASURES):
+        count = sum(r[2 + k] for r in sel)
+        out[n] = count / total if total else None
+        out[n + "_n"] = count
+    return out
+
+
+def percentile(value: float, others: list[float]) -> float | None:
+    """Mid-rank percentile of `value` among `others` (ties count half): 50 = typical, low = unusually low."""
+    if value is None or not others:
+        return None
+    below = sum(v < value for v in others)
+    ties = sum(v == value for v in others)
+    return 100 * (below + ties / 2) / len(others)
 
 
 def cmd_analyze(args) -> None:
@@ -216,18 +231,36 @@ def cmd_analyze(args) -> None:
     strikes = sorted(e.ts for e in config.events)
     s0, s1 = strikes[0] // DAY * DAY, strikes[-1] // DAY * DAY + DAY
     span = s1 - s0
+    fmt = lambda x: "-" if x is None else f"{100 * x:5.2f}%"
     for f in sorted(OUT.glob("coordination-*.json")):
         d = json.loads(f.read_text(encoding="utf-8"))
         rows = d["hours"]
         pre, during, post = shares(rows, d["start"], s0), shares(rows, s0, s1), shares(rows, s1, d["end"])
         placebo = [shares(rows, t, t + span) for t in range(d["start"], s0 - span + 1, DAY)]
-        print(f"\n{d['query']} ({d['lang']}): {pre['posts']} posts before, {during['posts']} during, {post['posts']} after")
-        for m in ("coord10", "coord30", "coord60", "new_accounts", "no_avatar"):
-            vals = sorted(p[m] for p in placebo if p[m] is not None)
-            rank = sum(v <= during[m] for v in vals) if during[m] is not None else None
-            fmt = lambda x: "—" if x is None else f"{100 * x:5.1f}%"
-            print(f"  {m:13} before {fmt(pre[m])}  strikes {fmt(during[m])}  after {fmt(post[m])}"
-                  f"  · strike window ranks {rank}/{len(vals)} among pre-strike windows (low = unusually low)")
+        print(f"\n{d['query']} ({d['lang']}): {pre['posts']} posts before, {during['posts']} during, {post['posts']} after;"
+              f" {len(placebo)} pre-strike windows of {span // DAY} days to compare")
+        for m in MEASURES:
+            pct = percentile(during[m], [p[m] for p in placebo if p[m] is not None])
+            print(f"  {m:13} before {fmt(pre[m])} ({pre[m + '_n']})  strikes {fmt(during[m])} ({during[m + '_n']})"
+                  f"  after {fmt(post[m])} ({post[m + '_n']})  | strike window at percentile {'-' if pct is None else round(pct)}")
+
+
+def cmd_show(args) -> None:
+    """Print the near-identical clusters in a window to the terminal, for a manual check
+    of what they are. Shows text only (no handles or IDs) and writes nothing; do not
+    redirect this output to a file."""
+    start, end = _ts(args.start), _ts(args.end)
+    with httpx.Client(timeout=45, headers={"User-Agent": "bot-traffic-monitor/0.1 (research; read-only)"}) as client:
+        posts, _, _ = fetch(client, args.query, args.lang, start, end)
+    flagged = coordinated(posts, args.window)
+    groups: dict[str, list[dict]] = {}
+    for i in sorted(flagged, key=lambda i: posts[i]["ts"]):
+        groups.setdefault(posts[i]["norm"][:60], []).append(posts[i])
+    for k, (key, ps) in enumerate(groups.items(), 1):
+        accounts = len({p["author"] for p in ps})
+        new = sum(p["author_created"] is not None and p["ts"] - p["author_created"] < NEW_ACCOUNT_DAYS * DAY for p in ps)
+        print(f"{k}. {len(ps)} posts, {accounts} accounts, {new} from new accounts, "
+              f"{bluesky._iso(ps[0]['ts'])}: {ps[0]['norm'][:180]}")
 
 
 def main() -> None:
@@ -239,8 +272,14 @@ def main() -> None:
     f.add_argument("--from", dest="start", required=True, help="UTC date, inclusive")
     f.add_argument("--to", dest="end", required=True, help="UTC date, exclusive")
     sub.add_parser("analyze")
+    sh = sub.add_parser("show", help="print clustered texts in a window to the terminal (not saved)")
+    sh.add_argument("--query", required=True)
+    sh.add_argument("--lang", default="")
+    sh.add_argument("--from", dest="start", required=True, help="UTC time, e.g. 2026-10-01T12:00")
+    sh.add_argument("--to", dest="end", required=True)
+    sh.add_argument("--window", type=int, default=60)
     args = p.parse_args()
-    {"fetch": cmd_fetch, "analyze": cmd_analyze}[args.cmd](args)
+    {"fetch": cmd_fetch, "analyze": cmd_analyze, "show": cmd_show}[args.cmd](args)
 
 
 if __name__ == "__main__":
