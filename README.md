@@ -18,10 +18,11 @@ It collects data on its own every 15 minutes and logs an alert when a signal mov
 | Comments and posts per hour in selected subreddits | Reddit API (or public feeds) | OAuth recommended |
 | Historical subreddit activity (backfill) | [Arctic Shift](https://arctic-shift.photon-reddit.com) | no |
 | Posts per hour matching keywords | Bluesky public search | no |
+| Original posts, reposts and replies per hour for the same keywords (counts only) | X API post counts | Bearer Token, pay-per-use |
 
-Communities are tagged `political-right`, `political`, `regional`, `russia` or `control` in [config/sources.toml](config/sources.toml). The **control** group of non-political communities is the point of the exercise: a drop that also shows up there is not evidence of bot removal. The tags are editorial judgements and are documented on the site.
+Communities are tagged `political-right`, `narratives`, `political`, `regional`, `south-america`, `russia` or `control` in [config/sources.toml](config/sources.toml). The **control** group of non-political communities is the point of the exercise: a drop that also shows up there is not evidence of bot removal. The tags are editorial judgements and are documented on the site.
 
-Only timestamps are counted. No usernames or content are stored.
+Only timestamps and aggregate counts are stored. No usernames, account IDs or post content are stored.
 
 ## Run it locally
 

@@ -26,7 +26,8 @@ def test_run_writes_points_and_isolates_failures(tmp_path, monkeypatch):
         raise SourceSkipped("no token")
 
     monkeypatch.setattr(collectors, "_modules", lambda: {
-        "ioda": _module(ok), "reddit": _module(boom), "cloudflare": _module(skipped), "bluesky": _module(ok)})
+        "ioda": _module(ok), "reddit": _module(boom), "cloudflare": _module(skipped), "bluesky": _module(ok),
+        "x": _module(skipped)})
     asyncio.run(collectors.run(config, settings))
 
     with db.session(settings.db_path) as conn:

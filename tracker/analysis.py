@@ -29,6 +29,7 @@ HOUR, DAY = 3600, 86400
 # has a strong daily cycle, so it is averaged over a full day for change_ref.
 CURRENT_HOURS = {"infrastructure": 3, "community": 24}
 FRESH = 3 * HOUR  # a series with no point this recent counts as stale
+FRESH_BY_PLATFORM = {"x": 26 * HOUR}  # X counts are fetched once a day
 
 
 MIN_DAY_HOURS = 20  # a day needs this many hourly values before it gets a daily mean
@@ -191,8 +192,9 @@ def robust_cells(grid: list[dict], alpha: float = 0.05) -> int | None:
 
 
 def is_primary(series: dict) -> bool:
-    """The one series per community that group statistics use (Reddit has two)."""
-    return series["platform"] != "reddit" or series["key"].endswith(".comments")
+    """The one series per community that group statistics use: comments on Reddit,
+    posts elsewhere (X has five metrics per keyword)."""
+    return series["key"].endswith(".comments" if series["platform"] == "reddit" else ".posts")
 
 
 def _r(x: float | None, digits: int = 4) -> float | None:
@@ -225,7 +227,7 @@ def snapshot(conn: sqlite3.Connection, config: Config, now: int, corr_days: int 
             "primary": is_primary(s),
             "latest": latest[1] if latest else None,
             "latest_ts": latest[0] if latest else None,
-            "fresh": bool(latest and now - latest[0] <= FRESH),
+            "fresh": bool(latest and now - latest[0] <= FRESH_BY_PLATFORM.get(s["platform"], FRESH)),
             "change_7d": _r(change_vs_rolling(hours, now, current_hours=3)),
             "change_ref": _r(change_vs_reference(hours, now, config.reference_start, config.reference_end, cur_h)),
             "r": _r(r, 3),

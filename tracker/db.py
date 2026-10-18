@@ -184,6 +184,11 @@ def latest_point(conn: sqlite3.Connection, key: str) -> tuple[int, float] | None
     return (int(row[0]), float(row[1])) if row else None
 
 
+def last_ok_run(conn: sqlite3.Connection, platform: str) -> int | None:
+    row = conn.execute("SELECT MAX(ts) FROM runs WHERE platform = ? AND ok = 1", (platform,)).fetchone()
+    return row[0]
+
+
 def last_runs(conn: sqlite3.Connection) -> list[dict]:
     """Most recent run per platform, plus the most recent successful one."""
     rows = conn.execute(

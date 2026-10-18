@@ -35,14 +35,14 @@ class Result:
 
 
 def _modules() -> dict:
-    from . import arctic_shift, bluesky, cloudflare, ioda, reddit
+    from . import arctic_shift, bluesky, cloudflare, ioda, reddit, x
     return {"ioda": ioda, "cloudflare": cloudflare, "reddit": reddit, "bluesky": bluesky,
-            "arctic_shift": arctic_shift}
+            "arctic_shift": arctic_shift, "x": x}
 
 
-LIVE = ("ioda", "cloudflare", "reddit", "bluesky")
+LIVE = ("ioda", "cloudflare", "reddit", "bluesky", "x")
 # Which collector backfills each platform's series.
-BACKFILL = {"ioda": "ioda", "cloudflare": "cloudflare", "reddit": "arctic_shift", "bluesky": "bluesky"}
+BACKFILL = {"ioda": "ioda", "cloudflare": "cloudflare", "reddit": "arctic_shift", "bluesky": "bluesky", "x": "x"}
 
 
 async def run(config: Config, settings: Settings, platforms=LIVE, start: int | None = None,
@@ -59,6 +59,13 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
             name = BACKFILL.get(platform, platform) if backfill else platform
             if backfill and platform not in BACKFILL:
                 continue
+            interval = getattr(modules[name], "MIN_INTERVAL", 0)
+            if not backfill and interval:
+                # Sources billed per request run less often than the pass (see the module).
+                with db.session(settings.db_path) as conn:
+                    last_ok = db.last_ok_run(conn, platform)
+                if last_ok and now - last_ok < interval:
+                    continue
             if not backfill:
                 # Stalest series first: when a throttled source only gets partway through
                 # a pass, the next pass picks up where it stopped.
@@ -67,6 +74,12 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
                 specs = sorted(specs, key=lambda s: last[s.key])
             # Backfills are long: write each series as it finishes so an interruption keeps progress.
             batches = [[s] for s in specs] if backfill else [specs]
+            key = getattr(modules[name], "batch_key", None)
+            if backfill and key:  # series that share requests are fetched together
+                grouped: dict = {}
+                for s in specs:
+                    grouped.setdefault(key(s), []).append(s)
+                batches = list(grouped.values())
             result, n = Result(), 0
             for batch in batches:
                 try:

@@ -14,7 +14,7 @@ const TAG_SHORT = {
 // are editorial labels set in config/sources.toml.
 const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
-  narratives: 'Bluesky searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
+  narratives: 'Bluesky and X searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states and European countries.',
   'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
@@ -37,7 +37,7 @@ function groupsPanel() {
       <dd>${esc(TAG_ABOUT[t] || '')} <span class="members">${byTag.get(t).map(esc).join(' · ')}</span></dd>`).join('')}</dl>
     <p class="notes-tail">Groups are editorial labels, open to challenge in <code>config/sources.toml</code>.</p></details>`;
 }
-const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT', bluesky: 'BLUESKY' };
+const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT', bluesky: 'BLUESKY', x: 'X' };
 
 let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
@@ -186,7 +186,7 @@ const indexTick = (v) => `${Math.round(v)}%`;
 const indexValue = (v) => `${Math.round(v)}% (${pct(v / 100 - 1)})`;
 const ppValue = (v) => { const r = Math.round(v); return `${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r)} PP`; };
 const refDates = (ref) => `${mmdd(ref.start)} TO ${mmdd(ref.end - 1)}`;
-const SOURCES = { ioda: 'IODA, GEORGIA TECH', cloudflare: 'CLOUDFLARE RADAR', reddit: 'REDDIT FEEDS · ARCTIC SHIFT ARCHIVE', bluesky: 'BLUESKY SEARCH' };
+const SOURCES = { ioda: 'IODA, GEORGIA TECH', cloudflare: 'CLOUDFLARE RADAR', reddit: 'REDDIT FEEDS · ARCTIC SHIFT ARCHIVE', bluesky: 'BLUESKY SEARCH', x: 'X API POST COUNTS' };
 
 // SVG line chart with labeled axes, event markers, reference band and a hover readout.
 // `lines`: [{label, cls, points: [[ts, value], ...], area?}] drawn in order (last on top).
@@ -1170,7 +1170,7 @@ const views = {
     view.innerHTML = `<h2 class="sect">What this is</h2>
       <div class="prose">
         <p>An open monitor for one question: when Yandex data centres go dark, does activity in online political communities change, and does it change more than in non-political ones?</p>
-        <p>It records two kinds of signal side by side. <b>Infrastructure</b>: how much of Yandex's network is reachable (IODA active probing and BGP routing) and, when configured, the share of HTTP requests from Yandex's network that Cloudflare classifies as bots. <b>Communities</b>: comments and posts per hour in selected subreddits, and posts per hour matching keywords on Bluesky. Only timestamps are counted; no usernames or content are stored.</p>
+        <p>It records two kinds of signal side by side. <b>Infrastructure</b>: how much of Yandex's network is reachable (IODA active probing and BGP routing) and, when configured, the share of HTTP requests from Yandex's network that Cloudflare classifies as bots. <b>Communities</b>: comments and posts per hour in selected subreddits, and posts per hour matching keywords on Bluesky and on X (original posts, reposts and replies, from X's post counts, updated once a day). Only timestamps are counted; no usernames or content are stored.</p>
       </div>
       <h2 class="sect">Read this before citing a number</h2>
       <div class="prose"><ul>
@@ -1213,6 +1213,7 @@ const views = {
         <li>Cloudflare Radar — CC BY-NC 4.0.</li>
         <li>Reddit Data API / public feeds; Arctic Shift archive for history.</li>
         <li>Bluesky public AppView search.</li>
+        <li>X API post counts (pay-per-use; counts only, no posts read).</li>
         <li>All data: <a href="api/export/daily.csv?days=365">daily CSV</a>${STATIC ? '' : ' · <a href="docs">API</a>'} · <a href="#report">dated reports</a>.</li>
       </ul></div>
       <h2 class="sect">Display</h2>

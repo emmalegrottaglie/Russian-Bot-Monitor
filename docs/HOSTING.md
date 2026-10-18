@@ -184,4 +184,5 @@ Prices change; check them before buying.
 | Cloudflare Radar | free token | CC BY-NC 4.0, so non-commercial use only. |
 | Reddit | OAuth, approval required (refused for this project, October 2026) | Public feeds work from home connections only. |
 | Bluesky | none | Public AppView search. |
+| X | Bearer Token, pay-per-use | Post counts only, once a day: about $0.53 a day (about $16 a month) for 26 searches, with a daily request cap (`X_MAX_REQUESTS_PER_DAY`). |
 | Arctic Shift | none | Backfill and the daily catch-up. Slow for large subreddits. About 2 days behind. Its hourly bucket labels run early by the Central European offset (2 hours in summer, 1 in winter); the collector corrects this, and leaves the two hours whose labels collide when clocks go forward as a gap. |

@@ -227,3 +227,45 @@ def test_cloudflare_history_is_requested_a_week_at_a_time(monkeypatch):
                      ("2026-09-15T00:00:00Z", "2026-09-20T00:00:00Z")]
     assert [t for t, _ in r.points[spec.key]] == [start + 3600, int(ts("2026-09-15T01:00:00Z"))]  # refused week is a gap
     assert len(r.errors) == 1
+
+
+def test_x_counts_become_hourly_metrics():
+    from tracker.collectors import x
+
+    h0, h1 = int(ts("2026-10-08T10:00:00Z")), int(ts("2026-10-08T11:00:00Z"))
+    payload = {"data": [{"start": "2026-10-08T10:00:00.000Z", "end": "2026-10-08T11:00:00.000Z", "tweet_count": 30},
+                        {"start": "2026-10-08T11:00:00.000Z", "end": "2026-10-08T12:00:00.000Z", "tweet_count": 0}]}
+    orig = x.buckets(payload)
+    assert orig == {h0: 30, h1: 0}
+    minutes = {h0 + 60 * i: (20 if i < 5 else 1) for i in range(60)}  # a 5-minute burst: 100 of 155 posts
+    out = x.metrics(orig, {h0: 90, h1: 0}, {h0: 6}, minutes)
+    assert out["posts"] == [(h0 + 3600, 30.0), (h1 + 3600, 0.0)]  # stamped at each hour's end; zeros are X's own
+    assert out["reposts"] == [(h0 + 3600, 90.0), (h1 + 3600, 0.0)]
+    assert out["repost-share"] == [(h0 + 3600, 75.0)]  # no share for an hour with no posts at all
+    assert out["replies"] == [(h0 + 3600, 6.0)]
+    assert out["burst"] == [(h0 + 3600, round(100 * 100 / 155, 2))]
+    assert "burst" not in x.metrics(orig, {}, {}, {h0 + 60 * i: 0 for i in range(60)})  # too quiet to judge
+    gap = x.metrics(orig, {h0: 90, h1: 0}, {}, minutes, gaps={h1})  # X had no data at all in h1
+    assert gap["posts"] == [(h0 + 3600, 30.0)] and gap["reposts"] == [(h0 + 3600, 90.0)]
+
+
+def test_x_daily_request_cap(tmp_path):
+    from tracker.collectors import SourceSkipped, x
+
+    budget = x._Budget(tmp_path / "usage.json", cap=2)
+    budget.take()
+    x._Budget(tmp_path / "usage.json", cap=2).take()  # the count survives a restart
+    with pytest.raises(SourceSkipped, match="cap"):
+        x._Budget(tmp_path / "usage.json", cap=2).take()
+
+
+def test_x_mirrors_bluesky_searches_and_uses_original_posts_for_groups():
+    from tracker import analysis
+    from tracker.config import load_config
+
+    config = load_config()
+    bsky = [s for s in config.series if s.platform == "bluesky"]
+    xs = [s for s in config.series if s.platform == "x"]
+    assert len(xs) == 5 * len(bsky)
+    primary = [s for s in xs if analysis.is_primary({"platform": s.platform, "key": s.key})]
+    assert {s.params["query"] for s in primary} == {s.params["query"] for s in bsky} and all(s.key.endswith(".posts") for s in primary)

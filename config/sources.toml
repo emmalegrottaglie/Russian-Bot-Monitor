@@ -195,6 +195,10 @@ tags = ["south-america"]
 
 # ── Bluesky keyword search ────────────────────────────────────────────────────
 
+[x]
+# Count every Bluesky search below on X as well (X API post counts; see docs/X-SAMPLING.md).
+mirror_bluesky = true
+
 [[bluesky]]
 query = "AfD"
 lang = "de"

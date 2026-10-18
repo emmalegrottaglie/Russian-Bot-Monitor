@@ -46,6 +46,7 @@ class Settings:
     x_access_token: str
     x_access_secret: str
     x_bearer_token: str
+    x_max_requests_per_day: int
     post_alerts: bool
     max_posts_per_day: int
 
@@ -71,16 +72,21 @@ class Settings:
             x_access_token=env("X_ACCESS_TOKEN", ""),
             x_access_secret=env("X_ACCESS_TOKEN_SECRET", ""),
             x_bearer_token=env("X_BEARER_TOKEN", ""),
+            x_max_requests_per_day=int(env("X_MAX_REQUESTS_PER_DAY", "150")),
             post_alerts=env("TRACKER_POST_ALERTS", "0") == "1",
             max_posts_per_day=int(env("TRACKER_MAX_POSTS_PER_DAY", "4")),
         )
 
 
+# X series per keyword. "posts" (original posts) is the one group statistics use.
+X_METRICS = (("posts", "POSTS / H"), ("reposts", "REPOSTS / H"), ("repost-share", "% REPOSTS"),
+             ("replies", "REPLIES / H"), ("burst", "% IN BUSIEST 5 MIN"))
+
 @dataclass(frozen=True)
 class SeriesSpec:
     key: str
     kind: str  # "infrastructure" | "community"
-    platform: str  # "ioda" | "cloudflare" | "reddit" | "bluesky"
+    platform: str  # "ioda" | "cloudflare" | "reddit" | "bluesky" | "x"
     label: str
     unit: str
     region: str
@@ -167,6 +173,18 @@ def parse_config(sources: dict, events: dict) -> Config:
             region=item["region"], tags=tuple(item["tags"]),
             params={"query": item["query"], "lang": lang},
         ))
+
+    # X: the same searches as Bluesky, counted with the X API (tracker/collectors/x.py).
+    if sources.get("x", {}).get("mirror_bluesky"):
+        for item in sources.get("bluesky", []):
+            lang = item.get("lang", "")
+            for metric, unit in X_METRICS:
+                specs.append(SeriesSpec(
+                    key=f"x.{slug(item['query'])}{'.' + lang if lang else ''}.{metric}", kind="community",
+                    platform="x", label=f'X "{item["query"]}"', unit=unit,
+                    region=item["region"], tags=tuple(item["tags"]),
+                    params={"query": item["query"], "lang": lang, "metric": metric},
+                ))
 
     keys = [s.key for s in specs]
     dupes = {k for k in keys if keys.count(k) > 1}
