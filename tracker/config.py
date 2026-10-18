@@ -172,6 +172,8 @@ def parse_config(sources: dict, events: dict) -> Config:
         return f"{prefix} {q} {item['lang']}" if item.get("lang") else f"{prefix} {q}"
 
     for item in sources.get("bluesky", []):
+        if item.get("x_only"):  # too quiet on Bluesky to show a change; still counted on X
+            continue
         lang = item.get("lang", "")
         specs.append(SeriesSpec(
             key=f"bluesky.{slug(item['query'])}{'.' + lang if lang else ''}.posts", kind="community",

@@ -197,6 +197,7 @@ tags = ["south-america"]
 
 [x]
 # Count every Bluesky search below on X as well (X API post counts; see docs/X-SAMPLING.md).
+# A search with `x_only = true` is counted on X only: too quiet on Bluesky to show a change.
 mirror_bluesky = true
 
 [[bluesky]]
@@ -375,8 +376,10 @@ tags = ["narratives"]
 
 [[bluesky]]
 # CheckFirst, Operation Overload (June 2024): Italy one of four main targets,
-# with content undermining Ukraine.
+# with content undermining Ukraine. X only: 11 posts a day on Bluesky over 49 days,
+# below the 20-a-day rule (docs/NARRATIVES.md); about 460 a day on X.
 query = "Zelensky"
 lang = "it"
 region = "IT"
 tags = ["narratives"]
+x_only = true

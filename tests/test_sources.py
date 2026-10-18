@@ -266,9 +266,11 @@ def test_x_mirrors_bluesky_searches_and_uses_original_posts_for_groups():
     config = load_config()
     bsky = [s for s in config.series if s.platform == "bluesky"]
     xs = [s for s in config.series if s.platform == "x"]
-    assert len(xs) == 5 * len(bsky)
     primary = [s for s in xs if analysis.is_primary({"platform": s.platform, "key": s.key})]
-    assert {s.params["query"] for s in primary} == {s.params["query"] for s in bsky} and all(s.key.endswith(".posts") for s in primary)
+    assert len(xs) == 5 * len(primary)
+    # Every Bluesky search is on X too; X also has the x_only searches.
+    searched = lambda specs: {(s.params["query"], s.params["lang"]) for s in specs}
+    assert searched(bsky) < searched(primary) and all(s.key.endswith(".posts") for s in primary)
 
 
 def test_search_labels_name_the_language_and_are_unique():
@@ -279,3 +281,11 @@ def test_search_labels_name_the_language_and_are_unique():
     assert len(set(labels)) == len(labels)  # Zelensky is searched in three languages
     assert 'BSKY "Zelensky" fr' in labels
     assert not any('""' in label for label in labels)  # exact phrases are not quoted twice
+
+
+def test_x_only_search_is_counted_on_x_but_not_bluesky():
+    from tracker.config import load_config
+
+    keys = {s.key for s in load_config().series}
+    assert "x.zelensky.it.posts" in keys and "bluesky.zelensky.it.posts" not in keys
+    assert "bluesky.zelensky.fr.posts" in keys

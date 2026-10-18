@@ -34,7 +34,7 @@ We tested each candidate's volume on Bluesky over the week to 18 October 2026, s
 | Selenskyj | German | about 93 | Recorded Future (Germany targeted) | yes |
 | Habeck | German | about 41 | CORRECTIV | yes |
 | Zelensky | French | about 118 | Recorded Future (France targeted) | yes |
-| Zelensky | Italian | about 41 | CheckFirst (Italy targeted) | yes |
+| Zelensky | Italian | about 41 | CheckFirst (Italy targeted) | X only (see below) |
 | Zelensky | Spanish | about 7 | none for Spain | no |
 | Scholz | German | about 12 | research summaries only, not checked | no |
 | "traditional values" | English | about 9 | EUvsDisinfo | no |
@@ -43,6 +43,8 @@ We tested each candidate's volume on Bluesky over the week to 18 October 2026, s
 | "LGBTQ agenda" | English | about 2 | EUvsDisinfo wording | no |
 | Sandu | English | about 2 | ISD, Recorded Future (Moldova) | no |
 | Baerbock | German | 0 | CORRECTIV | no |
+
+The week sampled fell in the news spike after the strikes. Over the full 49 days loaded later, Italian Zelensky averaged 11 posts a day on Bluesky, below the rule, so it is counted on X only (about 460 a day there). Every other kept search stayed above 20 a day.
 
 Spanish, Italian and Portuguese narrative phrases had no source. They are not tracked, because guessing words would defeat the point.
 
