@@ -41,11 +41,9 @@ October 2026. What was claimed to have gone quiet after the Yandex data-centre s
 
 The monitor's X counts agree with Graphika. Original posts a day on 8 to 11 October were higher than before the strikes for MAGA (170,372 against 152,844) and AfD (57,884 against 50,224), and the repost share stayed inside its pre-strike range on every strike day (docs/X-SAMPLING.md).
 
-## Searches worth adding
-
-Only keywords tied to a sourced claim:
-- **Reform UK** (English): one of the three communities Graphika checked.
-- A Polish anti-EU search: named in the viral claims (IBTimes), but no specific phrase was given, so it needs a sourced term first.
+The monitor already tracks the other two communities named in the claims, on X and Bluesky:
+- **Reform UK** (one of the three communities Graphika checked): 1,701 and 1,721 original X posts on Saturday 10 and Sunday 11 October, against 1,461 to 2,107 on the three weekends before; 148 and 159 Bluesky posts, against 149 to 254. The X repost share was 84.9% and 83.1%, inside its pre-strike range of 73.7 to 90.1%.
+- **Konfederacja** (the Polish right; "Polish anti-EU accounts" were named in the viral claims without a specific phrase): X posts rose on 8 and 9 October (833 and 696, against a pre-strike median of 480), then returned to normal.
 
 Account bios ("Veteran, Christian, Father") cannot be measured with counts and would need post reads.
 
