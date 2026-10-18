@@ -1,6 +1,6 @@
 # Chart specs
 
-Status: draft, 2026-10-12. Built so far: the data endpoints for charts 1, 2 and 5, chart 3, and PNG export (chart 4) on every line chart. Several values below are placeholders marked **decide after backfill**. They depend on how noisy the real Reddit history turns out to be, and the Arctic Shift backfill is still loading as of this writing.
+Status, 2026-10-18: charts 1, 2 and 3 and PNG export (chart 4) are built; chart 5 has its endpoint only. The values that waited on the backfill are settled under [Decisions from the backfill](#decisions-from-the-backfill), using the data loaded by then: 50 days for Bluesky and X, and for Reddit comments; the Reddit post counts and the 8 narratives Bluesky searches were still loading.
 
 Charts in build order:
 
@@ -40,7 +40,7 @@ A group's curve is the median, at each offset, of its communities' curves, using
 
 **Chance band.** This is what makes the chart honest. Draw placebo start times from the hours before the first strike, using the same pool rule as `placebo_pool`: the whole ±48 h span must end before the first strike. For each of 500 draws, pick as many placebo starts as there are strikes and build the group curve exactly as above. At each offset, the band runs from the 5th to the 95th percentile of the 500 placebo curves. Seed it per group, as `event_study` does, so the band is reproducible.
 
-**Smoothing:** a centred rolling mean over **3 hours**, applied to both the curves and the band. **Decide after backfill:** 1, 3 or 6 hours, judged by how noisy small subreddits are.
+**Smoothing:** a centred rolling mean over **3 hours**, applied to both the curves and the band (decided; see below).
 
 **Endpoint:** `GET /api/strike-aligned` (built; the span and smoothing are `ALIGNED_SPAN` and `ALIGNED_SMOOTH` in `tracker/analysis.py`, not query parameters, so the response can be cached) returns:
 
@@ -80,11 +80,9 @@ Arrow keys step by hour. The readout gives "+6 H: right 84, control 98, normal r
 - A unit test with flat noise: the curve stays inside the band for at least 90% of offsets.
 - With the band switched off, the chart must not render. The band is not optional styling.
 
-### Decide after backfill
+### Decided after backfill
 
-- Span: ±48 h or ±72 h.
-- Smoothing window.
-- Whether the band is too wide to ever show anything. If it is, that is the finding, and the caption says so plainly. The chart is not rescaled or re-smoothed until something shows.
+See [Decisions from the backfill](#decisions-from-the-backfill): ±48 h, 3-hour smoothing, and the band is narrow enough to read for every group except the 3-community Russia group.
 
 ## 2. Community heatmap
 
@@ -110,21 +108,21 @@ Each community's daily index, 100 = pre-strike mean: the per-series `index()` al
 
 ### Visual
 
-- **Rows:** one per community (primary metric only), grouped in the order right, political, regional, russia, control. A group heading row separates the groups. A community with several tags appears once, under its first tag in `config/sources.toml`. Sort by name within a group. **Decide after backfill:** whether sorting by change after the strike is a useful option, or just invites cherry-picking.
+- **Rows:** one per community (primary metric only), grouped in the order right, political, regional, russia, control. A group heading row separates the groups. A community with several tags appears once, under its first tag in `config/sources.toml`. Sort by name within a group. Sorting by change after the strike is not offered: it invites cherry-picking, and the group order already answers "is it broad?".
 - **Columns:** one per UTC day. Strike days get a marker above the column and a thin vertical rule through it.
 - **Colour:** binned, not continuous, so the legend can be read off exactly.
 
   | Index | Colour |
   |---|---|
-  | below 70 | a2, strong |
-  | 70–85 | a2, mid |
-  | 85–95 | a2, faint |
-  | 95–105 | `--term-faint` (neutral) |
-  | 105–115 | a3, faint |
-  | 115–130 | a3, mid |
-  | above 130 | a3, strong |
+  | below 50 | a2, strong |
+  | 50–67 | a2, mid |
+  | 67–80 | a2, faint |
+  | 80–125 | `--term-faint` (neutral) |
+  | 125–150 | a3, faint |
+  | 150–200 | a3, mid |
+  | above 200 | a3, strong |
 
-  The cap at ±30% stops one tiny subreddit swinging +400% from washing out the rest. **Decide after backfill:** the bin edges, from the spread of real daily indices.
+  The edges are symmetric as ratios (80 and 125, 67 and 150, 50 and 200), so halving reads as far from normal as doubling, and they come from the spread of real daily indices (see below). The end bins are open, so one tiny community swinging +400% does not stretch the scale for the rest.
 - **Missing days:** a hatched cell with no fill. The legend shows it as "NO DATA".
 - **Columns by screen width:** 21 days on screens narrower than 480 px, 50 days otherwise.
 - **Hover and focus:** "r/Conservative · 10-09 · index 78 (−22% vs pre-strike)".
@@ -227,7 +225,30 @@ The same gap and accessibility rules as chart 2.
 | Chart 3 | yes, it reuses existing data | review the band |
 | Chart 5 | after chart 2 | yes |
 
-Once the backfill is done, look at the real data for one right-wing group and the control group, and settle every **decide after backfill** item in this file before any of these charts ships on Live.
+Once the backfill is done, look at the real data for one right-wing group and the control group, and settle every **decide after backfill** item in this file before any of these charts ships on Live. Done on 2026-10-18; see below.
+
+## Decisions from the backfill
+
+Settled on 2026-10-18 from the data loaded by then (see Status at the top).
+
+**Chart 1, span and smoothing.** The chart was computed for spans of ±48 h and ±72 h and smoothing of 1, 3 and 6 hours (300 placebo draws each). Median width of the 90% band, in index points:
+
+| Group | Communities | 1 h | 3 h | 6 h |
+|---|---|---|---|---|
+| Right-wing | 22 | 28 | 22 | 20 |
+| Political | 17 | 40 | 32 | 27 |
+| Regional | 10 | 47 | 36 | 30 |
+| South America | 11 | 70 | 54 | 48 |
+| Russia | 3 | 86 | 65 | 55 |
+| Control | 12 | 31 | 25 | 21 |
+
+- **3 hours.** One hour leaves the band so wide that only large moves could show; 6 hours narrows it a little more but blurs a short drop of a few hours, which is the size of effect the claims describe. The band is smoothed with the curve, so smoothing does not make a result easier to get.
+- **±48 h.** ±72 h gave the same picture for every group and has a smaller placebo pool (624 windows instead of 672 for the right-wing group). The first two strikes are 24 h apart, so either span mixes the hours after one strike with the next; the chart says so.
+- **The band is usable** for every group except Russia (3 communities, 65 points wide at 3 h), which can only show very large changes. That is stated, not fixed by rescaling.
+
+**Chart 2, bins.** Daily indices on pre-strike days (2,965 community-days): 5th percentile 47, 25th 74, median 93, 75th 112, 95th 167. Half of ordinary days fall outside 85 to 115, so the draft bins would have coloured most of the map. The neutral bin is now 80 to 125, and the strongest bins hold about 1 in 20 ordinary days on the low side and fewer on the high side.
+
+**What the first look showed** (not a finding until the remaining backfill is in and it has been checked by hand): in the 48 hours after the strikes the right-wing curve sat above its normal range in 37 of 49 hours (median index 116), the control curve below its range in 38 (median 89), and the narratives group, which then held only the X searches, about 80% above normal, driven by Zelensky news. Neither is a drop in right-wing activity.
 
 ## Not planned
 

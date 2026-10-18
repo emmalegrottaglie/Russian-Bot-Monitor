@@ -26,7 +26,7 @@ log = logging.getLogger(__name__)
 DAY = 86400
 
 COMMUNITY_COLUMNS = [
-    ("community", "Community name (r/… for Reddit, BSKY \"…\" for a Bluesky keyword)"),
+    ("community", "Community name (r/… for Reddit, BSKY \"…\" and X \"…\" for a keyword search, with its language)"),
     ("series", "Series key used by the API"),
     ("platform", "reddit or bluesky"),
     ("region", "Country or region the community is about"),

@@ -221,6 +221,31 @@ button.legend-item[aria-pressed="false"] .swatch { opacity: .35; }
 }
 .chart-png:disabled { color: var(--term-muted); cursor: progress; }
 .chart .norm-band { fill: color-mix(in srgb, var(--a3) 12%, transparent); }
+
+/* Community heatmap: a2 below normal, a3 above, three strengths each */
+.hm-lo3 { fill: var(--a2); }
+.hm-lo2 { fill: color-mix(in srgb, var(--a2) 60%, transparent); }
+.hm-lo1 { fill: color-mix(in srgb, var(--a2) 28%, transparent); }
+.hm-mid { fill: color-mix(in srgb, var(--term-faint) 60%, transparent); }
+.hm-hi1 { fill: color-mix(in srgb, var(--a3) 28%, transparent); }
+.hm-hi2 { fill: color-mix(in srgb, var(--a3) 60%, transparent); }
+.hm-hi3 { fill: var(--a3); }
+.hm-none { fill: url(#hm-hatch); }
+.hm-hatch { stroke: var(--term-line); stroke-width: 1.5; }
+.chart .hm-group { fill: var(--a1); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+.chart .hm-label { font-size: 8px; }
+.hm-cursor { fill: none; stroke: var(--term-ink); stroke-width: 1.5; }
+.hm-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 8px var(--gutter) 0; color: var(--term-muted); font-size: 10px; letter-spacing: .08em; }
+.hm-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.hm-legend i { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--term-line); }
+.hm-legend i.hm-lo3 { background: var(--a2); }
+.hm-legend i.hm-lo2 { background: color-mix(in srgb, var(--a2) 60%, transparent); }
+.hm-legend i.hm-lo1 { background: color-mix(in srgb, var(--a2) 28%, transparent); }
+.hm-legend i.hm-mid { background: color-mix(in srgb, var(--term-faint) 60%, transparent); }
+.hm-legend i.hm-hi1 { background: color-mix(in srgb, var(--a3) 28%, transparent); }
+.hm-legend i.hm-hi2 { background: color-mix(in srgb, var(--a3) 60%, transparent); }
+.hm-legend i.hm-hi3 { background: var(--a3); }
+.hm-legend i.hm-none { background: repeating-linear-gradient(45deg, var(--term-line) 0 1.5px, transparent 1.5px 4px); }
 @media print { .chart-png { display: none; } }
 
 /* Explanatory notes: one point per line, sentence case, room between points */

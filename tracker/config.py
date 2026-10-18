@@ -165,11 +165,17 @@ def parse_config(sources: dict, events: dict) -> Config:
                     params={"subreddit": sub, "metric": metric},
                 ))
 
+    def search_label(prefix: str, item: dict) -> str:
+        # The same keyword is searched in several languages, so the language is part of
+        # the name; a query already in quotes (an exact phrase) is not quoted twice.
+        q = item["query"] if item["query"].startswith('"') else f'"{item["query"]}"'
+        return f"{prefix} {q} {item['lang']}" if item.get("lang") else f"{prefix} {q}"
+
     for item in sources.get("bluesky", []):
         lang = item.get("lang", "")
         specs.append(SeriesSpec(
             key=f"bluesky.{slug(item['query'])}{'.' + lang if lang else ''}.posts", kind="community",
-            platform="bluesky", label=f'BSKY "{item["query"]}"', unit="POSTS / H",
+            platform="bluesky", label=search_label("BSKY", item), unit="POSTS / H",
             region=item["region"], tags=tuple(item["tags"]),
             params={"query": item["query"], "lang": lang},
         ))
@@ -181,7 +187,7 @@ def parse_config(sources: dict, events: dict) -> Config:
             for metric, unit in X_METRICS:
                 specs.append(SeriesSpec(
                     key=f"x.{slug(item['query'])}{'.' + lang if lang else ''}.{metric}", kind="community",
-                    platform="x", label=f'X "{item["query"]}"', unit=unit,
+                    platform="x", label=search_label("X", item), unit=unit,
                     region=item["region"], tags=tuple(item["tags"]),
                     params={"query": item["query"], "lang": lang, "metric": metric},
                 ))

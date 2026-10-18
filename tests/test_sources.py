@@ -269,3 +269,13 @@ def test_x_mirrors_bluesky_searches_and_uses_original_posts_for_groups():
     assert len(xs) == 5 * len(bsky)
     primary = [s for s in xs if analysis.is_primary({"platform": s.platform, "key": s.key})]
     assert {s.params["query"] for s in primary} == {s.params["query"] for s in bsky} and all(s.key.endswith(".posts") for s in primary)
+
+
+def test_search_labels_name_the_language_and_are_unique():
+    from tracker.config import load_config
+
+    searches = [s for s in load_config().series if s.platform in ("bluesky", "x") and s.key.endswith(".posts")]
+    labels = [s.label for s in searches]
+    assert len(set(labels)) == len(labels)  # Zelensky is searched in three languages
+    assert 'BSKY "Zelensky" fr' in labels
+    assert not any('""' in label for label in labels)  # exact phrases are not quoted twice

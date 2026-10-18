@@ -41,7 +41,7 @@ const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT
 
 let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
-  corrTags: new Set(['political-right', 'control']), diffTag: 'political-right' };
+  corrTags: new Set(['political-right', 'control']), diffTag: 'political-right', alignedTag: 'political-right' };
 // Line style per group on the correlation chart; Yandex itself is always a1.
 const TAG_LINE = { 'political-right': 'l-a3', narratives: 'l-a3 l-dash', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
 
@@ -195,6 +195,9 @@ const SOURCES = { ioda: 'IODA, GEORGIA TECH', cloudflare: 'CLOUDFLARE RADAR', re
 // the caption and sources are shown under the chart.
 // The value axis is titled with `axisTitle` (default: the unit). `tick` formats tick
 // labels and `value` formats readout values (both default to num).
+// `envelope`: {lo, hi, label} with [[x, value], ...] each shades a range that varies
+// along the x axis. The x axis is time unless `xTicks(start, end)` and `xStamp(x)` say
+// otherwise (and `xTitle` names it in the data table).
 //
 // The time axis zooms: an overview strip under the chart holds a window that can be
 // dragged (pan) or resized from its edges (zoom); the chart itself pans by dragging and
@@ -218,8 +221,9 @@ function timeTicks(start, end) {
 }
 
 function chart(el, readout, lines, opts) {
-  const { unit, events = [], ref = null, baseline = null, band = null, share = null } = opts;
+  const { unit, events = [], ref = null, baseline = null, band = null, envelope = null, share = null } = opts;
   const value = opts.value || num, axisTitle = opts.axisTitle || unit;
+  const xTicks = opts.xTicks || timeTicks, xStamp = opts.xStamp || stamp;
   const full = { start: opts.start, end: opts.end };
   const fullSpan = full.end - full.start;
   const W = Math.max(el.clientWidth, 280), H = opts.height || 170, R = 6, T = 18, B = 18;  // T leaves room for the axis title
@@ -236,6 +240,7 @@ function chart(el, readout, lines, opts) {
   const values = lines.flatMap((l) => l.points.map((p) => p[1]));
   if (baseline != null) values.push(baseline);
   if (band) values.push(band.lo, band.hi);
+  if (envelope) values.push(...envelope.lo.map((p) => p[1]), ...envelope.hi.map((p) => p[1]));
   const min = Math.min(...values), max = Math.max(...values);
   const step = niceStep(Math.max(max, 0) - Math.min(min, 0) || 1);
   const lo = min < 0 ? Math.floor(min / step) * step : 0, hi = Math.max(step, Math.ceil(max / step) * step);
@@ -287,17 +292,21 @@ function chart(el, readout, lines, opts) {
   const ov = el.querySelector('.chart-overview');
   const rangeLabel = el.querySelector('.chart-range');
   const near = (pts, t) => pts.reduce((best, p) => (Math.abs(p[0] - t) < Math.abs(best[0] - t) ? p : best), pts[0]);
+  const envAt = (t) => {
+    const lo = envelope?.lo.find((p) => p[0] === t), hi = envelope?.hi.find((p) => p[0] === t);
+    return lo && hi ? ` <span class="muted">· ${esc((envelope.label || 'normal range').toLowerCase())} ${tick(lo[1])} to ${tick(hi[1])}</span>` : '';
+  };
   const describe = (t, prefix) => {
     if (lines.length === 1) {
       const p = near(lines[0].points, t);
-      return `${prefix}${value(p[1])} <span class="muted">${esc(unit)} · ${stamp(p[0])}</span>`;
+      return `${prefix}${value(p[1])} <span class="muted">${esc(unit)} · ${xStamp(p[0])}</span>${envAt(p[0])}`;
     }
     const p0 = near(lines[0].points, t);
-    return `${prefix}<span class="muted">${stamp(p0[0])} ·</span> ${lines.map((l) =>
-      `${esc(l.label)} ${value(near(l.points, p0[0])[1])}`).join(' · ')} <span class="muted">${esc(unit)}</span>`;
+    return `${prefix}<span class="muted">${xStamp(p0[0])} ·</span> ${lines.map((l) =>
+      `${esc(l.label)} ${value(near(l.points, p0[0])[1])}`).join(' · ')} <span class="muted">${esc(unit)}</span>${envAt(p0[0])}`;
   };
   let cursorT = null;  // time under the hover or keyboard cursor
-  const idle = () => { readout.innerHTML = describe(view.end, view.end >= full.end ? 'LATEST ' : 'END OF VIEW '); };
+  const idle = () => { readout.innerHTML = describe(view.end, view.end < full.end ? 'END OF VIEW ' : opts.xStamp ? '' : 'LATEST '); };
   let labelTimer = null;
   const describeRange = () => {
     const span = view.end - view.start;
@@ -330,6 +339,14 @@ function chart(el, readout, lines, opts) {
       <text class="axis base-label" x="${L + 4}" y="${y(baseline) - 3}">${esc(baselineLabel)}</text>`;  // left: line names sit at the right end
     const normBand = !band ? '' : `<rect class="norm-band" x="${L}" y="${y(band.hi)}" width="${W - L - R}" height="${Math.max(1, y(band.lo) - y(band.hi))}"/>
       <text class="axis base-label" x="${L + 4}" y="${y(band.hi) - 3}">${esc(band.label || 'NORMAL RANGE')}</text>`;
+    // A varying range is drawn as one polygon per run of x values where both edges exist.
+    let envShape = '';
+    if (envelope) {
+      const hiAt = new Map(envelope.hi.map((p) => [p[0], p[1]]));
+      const runs = segments(envelope.lo.filter((p) => hiAt.has(p[0])));
+      envShape = runs.filter((g) => g.length > 1).map((g) => `<path class="norm-band" d="M${g.map(xy).join('L')}L${
+        g.slice().reverse().map((p) => xy([p[0], hiAt.get(p[0])])).join('L')}Z"/>`).join('');
+    }
     // Event labels run vertically down their marker. Markers closer than one
     // label's width (narrow or zoomed-out charts) share a single label, joined with " · ".
     const shown = events.filter((e) => e.ts >= start && e.ts <= end);
@@ -353,14 +370,15 @@ function chart(el, readout, lines, opts) {
       return `${l.label}: last ${value(vs[vs.length - 1])}, range ${tick(Math.min(...vs))} to ${tick(Math.max(...vs))}`;
     }).join('; ') || 'no data in this window';
     const bandText = band ? ` Shaded band: ${(band.label || 'normal range').toLowerCase()}, ${tick(band.lo)} to ${tick(band.hi)}.` : '';
-    svg.setAttribute('aria-label', `Chart, ${axisTitle}, ${stamp(start)} to ${stamp(end)}. ${summary}.${bandText} Left and right arrow keys read values, plus and minus zoom; the data table below lists every value.`);
+    const envText = envelope ? ` Shaded area: ${(envelope.label || 'normal range').toLowerCase()}.` : '';
+    svg.setAttribute('aria-label', `Chart, ${axisTitle}, ${xStamp(start)} to ${xStamp(end)}. ${summary}.${bandText}${envText} Left and right arrow keys read values, plus and minus zoom; the data table below lists every value.`);
 
     svg.innerHTML = `<clipPath id="clip-${id}"><rect x="${L}" y="0" width="${W - L - R}" height="${H}"/></clipPath>
       ${yTicks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/>
         <text class="axis" x="${L - 5}" y="${y(v) + 3}" text-anchor="end">${esc(tick(v))}</text>`).join('')}
       <text class="axis axis-title" x="4" y="9">${esc(axisTitle)}</text>
-      ${timeTicks(start, end).map(([t, s]) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${s}</text>`).join('')}
-      <g clip-path="url(#clip-${id})">${refBand}${normBand}${drawn}${ev}</g>
+      ${xTicks(start, end, W).map(([t, s]) => `<text class="axis" x="${x(t)}" y="${H - 4}" text-anchor="middle">${s}</text>`).join('')}
+      <g clip-path="url(#clip-${id})">${refBand}${normBand}${envShape}${drawn}${ev}</g>
       ${base}${endLabels}
       <line class="cursor" y1="${T}" y2="${H - B}" visibility="hidden"/>`;
     svg.classList.toggle('zoomed', zoomed());
@@ -561,11 +579,17 @@ function chart(el, readout, lines, opts) {
         rowsBy.get(k)[li] = sum / n;
       }
     });
-    const keys = [...rowsBy.keys()].sort((a, b) => b - a);
-    const when = (t) => (daily ? mmdd(t) : stamp(t));
+    const keys = [...rowsBy.keys()].sort((a, b) => (opts.xStamp ? a - b : b - a));
+    const when = (t) => (daily ? mmdd(t) : xStamp(t));
+    // The shaded range is data too: its edges get their own columns.
+    const edge = (side) => new Map((envelope?.[side] || []).map((p) => [p[0], p[1]]));
+    const envLo = edge('lo'), envHi = edge('hi');
+    const envCols = envelope && !daily;
     details.querySelector('.table-wrap').innerHTML = `<table class="table" aria-label="${esc(unit)} data">
-      <thead><tr><th scope="col">${daily ? 'DATE UTC' : 'TIME'}</th>${lines.map((l) => `<th scope="col" class="t-num">${esc(l.label)}</th>`).join('')}</tr></thead>
-      <tbody>${keys.map((k) => `<tr><td class="t-key">${when(k)}</td>${rowsBy.get(k).map((v) => `<td class="t-num">${num(v)}</td>`).join('')}</tr>`).join('')}</tbody>
+      <thead><tr><th scope="col">${daily ? 'DATE UTC' : esc(opts.xTitle || 'TIME')}</th>${lines.map((l) => `<th scope="col" class="t-num">${esc(l.label)}</th>`).join('')}${
+        envCols ? '<th scope="col" class="t-num">RANGE LOW</th><th scope="col" class="t-num">RANGE HIGH</th>' : ''}</tr></thead>
+      <tbody>${keys.map((k) => `<tr><td class="t-key">${when(k)}</td>${rowsBy.get(k).map((v) => `<td class="t-num">${v == null ? '—' : num(v)}</td>`).join('')}${
+        envCols ? `<td class="t-num">${envLo.has(k) ? num(envLo.get(k)) : '—'}</td><td class="t-num">${envHi.has(k) ? num(envHi.get(k)) : '—'}</td>` : ''}</tr>`).join('')}</tbody>
     </table>`;
   });
 }
@@ -668,7 +692,7 @@ async function exportPng(lines, opts) {
     ctx.drawImage(img, pad - 16, chartTop, chartW, chartW * (vh / vw));
     ctx.strokeStyle = token('--term-line'); ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(pad, PNG_H - 52); ctx.lineTo(PNG_W - pad, PNG_H - 52); ctx.stroke();
-    const dataTo = Math.max(...lines.flatMap((l) => l.points.filter((p) => p[0] <= opts.end).map((p) => p[0])));
+    const dataTo = opts.dataTo ?? Math.max(...lines.flatMap((l) => l.points.filter((p) => p[0] <= opts.end).map((p) => p[0])));
     ctx.fillStyle = token('--term-muted'); ctx.font = `500 13px ${family}`;
     ctx.fillText(`DATA TO ${stamp(dataTo)} · ${share.sources || 'IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY'}`, pad, PNG_H - 26);
     ctx.textAlign = 'right'; ctx.fillStyle = token('--a1');
@@ -734,6 +758,183 @@ function renderCorrelation(c) {
 }
 
 // Chart 3 in docs/CHARTS.md: one group's daily index minus the control group's.
+// Chart 1: activity around the strikes, every strike lined up at hour 0.
+const offsetLabel = (h) => (h === 0 ? '0 H' : `${h > 0 ? '+' : '−'}${Math.abs(h)} H`);
+const ALIGNED_X = {
+  xTicks: (start, end, width) => {
+    // Every 12 h; on phones every 24 h, without the end labels that would run off the edge.
+    const step = width < 480 ? 24 : 12, out = [];
+    for (let h = Math.ceil(start / (step * 3600)) * step; h * 3600 <= end; h += step) {
+      if (width >= 480 || (h * 3600 > start && h * 3600 < end)) out.push([h * 3600, offsetLabel(h)]);
+    }
+    return out;
+  },
+  xStamp: (t) => offsetLabel(Math.round(t / 3600)),
+  xTitle: 'HOURS FROM STRIKE',
+};
+
+function renderAligned(d) {
+  const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
+  const usable = d.groups.filter((g) => g.members >= 2 && g.values.some((v) => v != null));
+  const control = usable.find((g) => g.tag === 'control');
+  const options = usable.filter((g) => g.tag !== 'control');
+  if (!options.length || !d.events.length) {
+    $('aligned-switch').innerHTML = '';
+    $('aligned-chart').innerHTML = '';
+    $('aligned-readout').innerHTML = `<span class="muted">${d.events.length ? 'NO DATA YET' : 'NO STRIKE IS A DAY OLD YET'}</span>`;
+    $('aligned-note').innerHTML = '';
+    return;
+  }
+  if (!options.some((g) => g.tag === state.alignedTag)) state.alignedTag = options[0].tag;
+  $('aligned-switch').innerHTML = options.map((g) =>
+    `<button class="chip" data-v="${esc(g.tag)}" aria-pressed="${g.tag === state.alignedTag}">${esc(label(g.tag))}</button>`).join('');
+  $('aligned-switch').onclick = (e) => {
+    const b = e.target.closest('button'); if (!b) return;
+    state.alignedTag = b.dataset.v; renderAligned(d);
+  };
+  const g = options.find((o) => o.tag === state.alignedTag);
+  const pts = (vs) => d.offsets.map((o, i) => [o * 3600, vs[i]]).filter((p) => p[1] != null);
+  const lines = [{ label: label(g.tag), cls: 'l-a3', points: pts(g.values) }];
+  if (control) lines.push({ label: 'CONTROL', cls: 'l-muted l-dash', points: pts(control.values) });
+  const envelope = g.band && { lo: pts(g.band.lo), hi: pts(g.band.hi), label: 'Normal range' };
+  const n = d.events.length, span = d.offsets[d.offsets.length - 1];
+  const unknown = d.events.filter((e) => !e.timed).map((e) => e.short.charAt(0) + e.short.slice(1).toLowerCase());
+  const caption = `${label(g.tag)} and non-political communities around ${n} reported strikes, all lined up at hour 0, as % of the same weekday and hour 1 to 3 weeks earlier (100 = normal). `
+    + (envelope ? `Shaded: range of 90% of ${g.band.draws} random pre-strike windows. ` : '')
+    + `${d.smoothing_h}-hour rolling mean.${unknown.length ? ` ${unknown.join(', ')} time unknown, starts at midnight UTC.` : ''}`;
+  chart($('aligned-chart'), $('aligned-readout'), lines, {
+    ...ALIGNED_X, start: -span * 3600, end: span * 3600, still: true, unit: 'INDEX', axisTitle: 'INDEX · 100 = NORMAL FOR THAT WEEKDAY AND HOUR',
+    events: [{ ts: 0, short: 'STRIKE' }], baseline: 100, baselineLabel: '100 = NORMAL', envelope, maxGap: 1,
+    tick: (v) => String(Math.round(v)), value: (v) => String(Math.round(v)), dataTo: snap.now,
+    share: { name: `${g.tag}-strike-aligned`, title: `${label(g.tag)} around the strikes`, caption, sources: 'REDDIT · ARCTIC SHIFT · BLUESKY · X' } });
+  const after = (vs) => vs.filter((v, i) => d.offsets[i] >= 0);
+  const outside = envelope ? after(g.values).filter((v, i) => {
+    const j = d.offsets.indexOf(0) + i, lo = g.band.lo[j], hi = g.band.hi[j];
+    return v != null && lo != null && (v < lo || v > hi);
+  }).length : null;
+  const hours = after(g.values).filter((v) => v != null).length;
+  $('aligned-note').innerHTML = notes([
+    `${g.members} ${esc(label(g.tag).toLowerCase())} communities${control ? `, ${control.members} non-political` : ''}. Each line is the median community.`,
+    envelope
+      ? `After hour 0 the ${esc(label(g.tag).toLowerCase())} line is outside its normal range in ${outside} of ${hours} hours. On ordinary days that happens in about 10% of hours by chance.`
+      : 'NOT ENOUGH PRE-STRIKE HISTORY FOR A CHANCE BAND.',
+    'The first two strikes are about 24 hours apart, so the hours after one strike include the next.',
+    'A line outside the range shows activity was unusual, not why. Compare with the control line: if both move, the cause is probably not political.',
+  ]);
+}
+
+// Chart 2: every community's daily index, one row each. Bins are symmetric in ratio
+// terms (halving reads as far from normal as doubling) and were set from the spread of
+// real pre-strike days: the darkest bin on each side holds about 1 in 20 ordinary days.
+const HEAT_BINS = [
+  { max: 50, cls: 'hm-lo3', label: 'BELOW 50' },
+  { max: 67, cls: 'hm-lo2', label: '50–67' },
+  { max: 80, cls: 'hm-lo1', label: '67–80' },
+  { max: 125, cls: 'hm-mid', label: '80–125 · NORMAL' },
+  { max: 150, cls: 'hm-hi1', label: '125–150' },
+  { max: 200, cls: 'hm-hi2', label: '150–200' },
+  { max: Infinity, cls: 'hm-hi3', label: 'ABOVE 200' },
+];
+const heatBin = (v) => HEAT_BINS.find((b) => v < b.max);
+
+function renderHeatmap(d) {
+  const el = $('heat-chart'), readout = $('heat-readout');
+  if (!d.rows.length) {
+    el.innerHTML = '';
+    readout.innerHTML = '<span class="muted">NO DATA YET</span>';
+    return;
+  }
+  const narrow = el.clientWidth < 480;
+  const nDays = Math.min(d.days.length, narrow ? 21 : 50);
+  const days = d.days.slice(-nDays), first = d.days.length - nDays;
+  // Rows in group order, with a heading row before each group.
+  const items = [];
+  let last;
+  for (const r of d.rows) {
+    if (r.group !== last) { items.push({ heading: r.group }); last = r.group; }
+    items.push({ row: r, values: r.values.slice(first) });
+  }
+  const rows = items.filter((i) => i.row);
+  const W = Math.max(el.clientWidth, 280), L = narrow ? 112 : 150, R = 4, T = 30, CH = 10, HH = 18;
+  const cw = (W - L - R) / nDays;
+  let yPos = T;
+  for (const it of items) { it.y = yPos; yPos += it.heading ? HH : CH; }
+  const H = yPos + 4;
+  const x = (i) => L + i * cw;
+  const label = (tag) => TAG_SHORT[tag] || (tag || 'OTHER').toUpperCase();
+  // Long names are cut in the middle so a trailing language code (" en") stays visible.
+  const fit = (t) => {
+    const max = narrow ? 17 : 23;
+    if (t.length <= max) return t;
+    const tail = / [a-z]{2}$/.test(t) ? t.slice(-3) : '';
+    return `${t.slice(0, max - 1 - tail.length)}…${tail}`;
+  };
+  const mid = (i) => (x(i) + cw / 2).toFixed(1);
+  const strikeCols = d.events.map((e) => ({ e, i: days.findIndex((dd) => e.ts >= dd && e.ts < dd + 86400) })).filter((s) => s.i >= 0);
+
+  const cells = items.map((it) => {
+    if (it.heading) return `<text class="hm-group" x="2" y="${it.y + HH - 5}">${esc(label(it.heading))}</text>`;
+    const allMissing = it.values.every((v) => v == null);
+    return `<text class="axis hm-label" x="${L - 6}" y="${it.y + CH - 2}" text-anchor="end">${esc(fit(it.row.label))}</text>`
+      + it.values.map((v, i) => `<rect class="${v == null ? 'hm-none' : heatBin(v).cls}" x="${x(i).toFixed(1)}" y="${it.y}" width="${Math.max(1, cw - 1).toFixed(1)}" height="${CH - 1}"/>`).join('')
+      + (allMissing ? `<text class="axis" x="${L + 4}" y="${it.y + CH - 2}">NO DATA YET</text>` : '');
+  }).join('');
+  const dayTicks = days.map((dd, i) => (i % 7 === 0 ? `<text class="axis" x="${mid(i)}" y="${T - 4}" text-anchor="middle">${mmdd(dd)}</text>` : '')).join('');
+  const strikes = strikeCols.map(({ i }) => `<line class="event" x1="${mid(i)}" x2="${mid(i)}" y1="${T - 2}" y2="${H - 4}"/>
+    <text class="event-label" x="${mid(i)}" y="9" text-anchor="middle">▼</text>`).join('');
+
+  el.innerHTML = `<div class="chart-main"><svg class="chart-svg hm" viewBox="0 0 ${W} ${H}" style="height:${H}px" role="grid" tabindex="0"
+      aria-label="Heatmap: ${rows.length} communities by day, ${mmdd(days[0])} to ${mmdd(days[days.length - 1])}. Arrow keys move between cells, Home and End jump to the row ends; the data table below lists every value.">
+      <defs><pattern id="hm-hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <line class="hm-hatch" x1="0" y1="0" x2="0" y2="4"/></pattern></defs>
+      ${dayTicks}${cells}${strikes}<rect class="hm-cursor" visibility="hidden" width="${Math.max(1, cw - 1).toFixed(1)}" height="${CH - 1}"/></svg></div>
+    <div class="hm-legend" role="list" aria-label="Colour key">${HEAT_BINS.map((b) =>
+      `<span role="listitem"><i class="${b.cls}"></i>${b.label}</span>`).join('')}<span role="listitem"><i class="hm-none"></i>NO DATA</span></div>
+    <p class="note chart-caption">Each cell is a community's activity that UTC day as % of its pre-strike average (${refDates(snap.reference)}). ▼ and dashed lines: reported strikes. Hatched: no data. Last ${nDays} days. Source: REDDIT · ARCTIC SHIFT · BLUESKY · X.</p>
+    <div class="chart-tools"><details class="data-table"><summary>Show data as a table</summary><div class="table-wrap"></div></details></div>`;
+
+  const svg = el.querySelector('svg'), cursor = svg.querySelector('.hm-cursor');
+  const describe = (ri, ci) => {
+    const r = rows[ri], v = r.values[ci];
+    return `${esc(r.row.label)} · ${mmdd(days[ci])} · ${v == null ? 'no data' : `index ${Math.round(v)} (${pct(v / 100 - 1)} vs pre-strike)`}`;
+  };
+  const idle = () => { readout.innerHTML = '<span class="muted">HOVER OR FOCUS A CELL TO READ IT</span>'; };
+  const show = (ri, ci) => {
+    cursor.setAttribute('x', x(ci).toFixed(1)); cursor.setAttribute('y', rows[ri].y);
+    cursor.setAttribute('visibility', 'visible');
+    readout.innerHTML = describe(ri, ci);
+  };
+  svg.addEventListener('pointermove', (e) => {
+    const b = svg.getBoundingClientRect(), px = (e.clientX - b.left) / b.width * W, py = (e.clientY - b.top) / b.height * H;
+    const ci = Math.floor((px - L) / cw), ri = rows.findIndex((r) => py >= r.y && py < r.y + CH);
+    if (ci >= 0 && ci < nDays && ri >= 0) show(ri, ci);
+  });
+  svg.addEventListener('pointerleave', () => { cursor.setAttribute('visibility', 'hidden'); idle(); });
+  let pos = [0, nDays - 1];
+  readout.setAttribute('aria-live', 'polite');
+  svg.addEventListener('focus', () => show(...pos));
+  svg.addEventListener('blur', () => { cursor.setAttribute('visibility', 'hidden'); idle(); });
+  svg.addEventListener('keydown', (e) => {
+    const [ri, ci] = pos;
+    const next = { ArrowUp: [ri - 1, ci], ArrowDown: [ri + 1, ci], ArrowLeft: [ri, ci - 1], ArrowRight: [ri, ci + 1], Home: [ri, 0], End: [ri, nDays - 1] }[e.key];
+    if (!next) return;
+    e.preventDefault();
+    pos = [Math.max(0, Math.min(rows.length - 1, next[0])), Math.max(0, Math.min(nDays - 1, next[1]))];
+    show(...pos);
+  });
+  idle();
+
+  const details = el.querySelector('details');
+  details.addEventListener('toggle', () => {
+    if (!details.open || details.dataset.built) return;
+    details.dataset.built = '1';
+    details.querySelector('.table-wrap').innerHTML = `<table class="table" aria-label="Daily index by community">
+      <thead><tr><th scope="col">COMMUNITY</th><th scope="col">GROUP</th>${days.map((dd) => `<th scope="col" class="t-num">${mmdd(dd)}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map((r) => `<tr><td class="t-value">${esc(r.row.label)}</td><td class="t-key">${esc(label(r.row.group))}</td>${
+        r.values.map((v) => `<td class="t-num">${v == null ? '—' : Math.round(v)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+  });
+}
+
 const DIFF_CAPTION = (g) => `${g} communities minus the non-political control group, in percentage points of their pre-strike level. Shaded: range of 90% of pre-strike days. Dashed: reported strikes.`;
 
 function renderDiff(c) {
@@ -832,6 +1033,11 @@ const views = {
     const stale = snap.series.filter((s) => !s.fresh && !snap.runs.find((r) => r.platform === s.platform && (r.error || '').startsWith('not configured')));
 
     view.innerHTML = `${hero}
+      <h2 class="sect">Around the strikes · index · 100 = normal</h2>
+      <div class="switch" id="aligned-switch" role="group" aria-label="Group shown around the strikes"></div>
+      <div class="readout" id="aligned-readout"></div>
+      <div class="chart" id="aligned-chart"><p class="note">LOADING…</p></div>
+      <div id="aligned-note"></div>
       <h2 class="sect">Correlation · activity vs Yandex Cloud · % of pre-strike</h2>
       <div class="legend" id="corr-legend" role="group" aria-label="Lines shown on the correlation chart"></div>
       ${groupsPanel()}
@@ -885,6 +1091,9 @@ const views = {
       if (e.key === 'Escape' && !$('why').hidden) { setWhy(false); why.focus(); }
     });
 
+    api('/api/strike-aligned').then(renderAligned).catch(() => {
+      $('aligned-chart').innerHTML = '<p class="note">STRIKE DATA UNAVAILABLE</p>';
+    });
     api('/api/correlation').then(renderCorrelation).catch(() => {
       $('corr-chart').innerHTML = '<p class="note">CORRELATION DATA UNAVAILABLE</p>';
     });
@@ -914,7 +1123,15 @@ const views = {
       .sort((a, b) => (a.change_ref ?? 9) - (b.change_ref ?? 9));
     const refLabel = byKey(snap.correlation_ref)?.label || snap.correlation_ref;
 
-    view.innerHTML = `<h2 class="sect">Filter</h2>
+    view.innerHTML = `<h2 class="sect">Every community · daily % of pre-strike average</h2>
+      <div class="readout" id="heat-readout"></div>
+      <div class="chart" id="heat-chart"><p class="note">LOADING…</p></div>
+      ${notes([
+        'One row per community, its main metric only. Columns are UTC days. Dim cells are within the normal day-to-day range (80 to 125).',
+        'A drop across many right-wing rows but not the non-political rows would point at something political.',
+        'Dark cells happen on ordinary days too: before the strikes, about 1 in 20 days was below 50.',
+      ])}
+      <h2 class="sect">Filter</h2>
       ${groupsPanel()}
       <div class="switch" data-tags role="group" aria-label="Filter by group">${tags.map((t) =>
         `<button class="chip" data-v="${esc(t)}" aria-pressed="${state.tag === t}">${esc(t === 'all' ? 'ALL' : TAG_SHORT[t] || t)}</button>`).join('')}</div>
@@ -953,6 +1170,7 @@ const views = {
       const b = e.target.closest('button'); if (b) { state.allMetrics = b.dataset.v === 'all'; views.communities(); }
     });
     view.querySelectorAll('a[data-key]').forEach((a) => a.addEventListener('click', () => { state.b = a.dataset.key; }));
+    api('/api/heatmap').then(renderHeatmap).catch(() => { $('heat-chart').innerHTML = '<p class="note">HEATMAP DATA UNAVAILABLE</p>'; });
   },
 
   history() {
