@@ -35,7 +35,10 @@ from . import Result, SourceSkipped
 RECENT = "https://api.x.com/2/tweets/counts/recent"
 ALL = "https://api.x.com/2/tweets/counts/all"
 HOUR = 3600
-MIN_INTERVAL = 20 * HOUR  # live counts cover 7 days, so once a day is enough
+# Live counts cover 7 days, so once a day is enough. 20 h allowed two passes in one UTC
+# day (00:24 and 20:54 on 19 October), which ran into the daily request cap; 23.5 h keeps
+# one pass a day at about the same time with the collector running every 30 minutes.
+MIN_INTERVAL = 23 * HOUR + 30 * 60
 BURST_MINUTES = 5
 BURST_MIN_POSTS = 60  # hours quieter than this get no burst value: too few posts to mean anything
 log = logging.getLogger(__name__)
