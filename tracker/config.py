@@ -167,8 +167,10 @@ def parse_config(sources: dict, events: dict) -> Config:
 
     def search_label(prefix: str, item: dict) -> str:
         # The same keyword is searched in several languages, so the language is part of
-        # the name; a query already in quotes (an exact phrase) is not quoted twice.
-        q = item["query"] if item["query"].startswith('"') else f'"{item["query"]}"'
+        # the name; a query already in quotes (an exact phrase) is not quoted twice. A
+        # query with operators gives a readable `label` instead.
+        q = item.get("label") or item["query"]
+        q = q if q.startswith('"') else f'"{q}"'
         return f"{prefix} {q} {item['lang']}" if item.get("lang") else f"{prefix} {q}"
 
     for item in sources.get("bluesky", []):

@@ -7,7 +7,7 @@ const REFRESH_MS = 60_000;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TAG_SHORT = {
-  'political-right': 'RIGHT-WING', narratives: 'NARRATIVES', political: 'POLITICS', regional: 'REGIONAL',
+  'political-right': 'RIGHT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', political: 'POLITICS', regional: 'REGIONAL',
   'south-america': 'SOUTH AMERICA', russia: 'RUSSIA', control: 'NON-POLITICAL',
 };
 // One line per group for the "who is in each group" panels. The tags themselves
@@ -15,6 +15,7 @@ const TAG_SHORT = {
 const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
   narratives: 'Bluesky and X searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
+  'anti-trans': 'X searches for anti-trans rhetoric: the slur "troon" and the claim that there is "no such thing as trans" (kids, people). X only; on Bluesky they are rare. They count everyone using the words, including people quoting them to object. Sources in docs/NARRATIVES.md.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states and European countries.',
   'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
@@ -43,7 +44,7 @@ let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
   corrTags: new Set(['political-right', 'control']), diffTag: 'political-right', alignedTag: 'political-right' };
 // Line style per group on the correlation chart; Yandex itself is always a1.
-const TAG_LINE = { 'political-right': 'l-a3', narratives: 'l-a3 l-dash', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
+const TAG_LINE = { 'political-right': 'l-a3', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a1', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
 
 // ── Formatting: one time format per screen (MM-DD HH:MM UTC) ────────────────
 const pad = (n) => String(n).padStart(2, '0');
@@ -1396,7 +1397,7 @@ const views = {
         <li>Correlation is not attribution. A drop in a community after an outage is consistent with bot or troll accounts going offline, but also with news cycles, weekends, moderation changes, Reddit's own systems, or real users in Russia losing service.</li>
         <li>Compare against the <b>control</b> group. A drop that also appears in non-political communities is not evidence of anything political.</li>
         <li>Cloudflare's "bot" share for AS13238 is dominated by Yandex's own search crawlers. It measures automated traffic from that network, not influence operations.</li>
-        <li>Group tags (right-wing, narratives, politics, regional, South America, Russia, non-political) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
+        <li>Group tags (right-wing, narratives, anti-trans, politics, regional, South America, Russia, non-political) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
         <li>Reddit history before this site started collecting comes from the Arctic Shift archive and is backfilled hourly; days missing from the archive are left as gaps, never filled.</li>
       </ul></div>
       <h2 class="sect">Definitions</h2>
@@ -1422,7 +1423,8 @@ const views = {
           <li><a href="https://www.isdglobal.org/digital-dispatch/offline-events-online-threats-analyzing-online-extremist-targeting-of-lgbtq-communities/" rel="noopener">ISD (2025)</a>: over 97,000 anti-LGBTQ+ posts from more than 1,000 violent extremist channels between August 2024 and January 2025; targeted hate doubled around the US election, and anti-trans content rose to 46% of it.</li>
           <li><a href="https://bethylamine.github.io/" rel="noopener">Beth's Anti-Transphobia Library</a> catalogues the talking points, their code words and how they recycle older homophobic ones, and summarises 52,401 Twitter accounts reported as transphobic.</li>
         </ul>
-        <p>This monitor does not chart this rhetoric. On Bluesky, the phrases are rare, and in a hand check in October 2026 almost none of the matching posts used them that way: of about 50 recent posts each, "groomer" was mostly pet grooming, "women's sports" and "protect women" were mostly fans and people criticising the framing, and "TRAs" matched the Spanish word "tras". Counting them would measure the pushback, not the rhetoric. See <code>docs/NARRATIVES.md</code>.</p>
+        <p>On Bluesky this rhetoric is rare, and in a hand check in October 2026 almost none of the matching posts used it: of about 50 recent posts each, "groomer" was mostly pet grooming, "women's sports" and "protect women" were mostly fans and people criticising the framing, and "TRAs" matched the Spanish word "tras". Counting them would measure the pushback, not the rhetoric, so Bluesky is not charted.</p>
+        <p>On X, from October 2026, the <b>anti-trans</b> group counts two searches: the slur "troon" (listed as a slur in Beth's glossary), about 3,300 original posts a day, and the phrase "no such thing as (a) trans", about 160 a day (<a href="https://www.the74million.org/article/in-private-texts-ny-ed-council-reps-congressional-candidate-demean-lgbtq-kids/" rel="noopener">The 74, 2023</a>, documents the claim). Counts include people quoting the words to object; how many has not been checked on X. See <code>docs/NARRATIVES.md</code>.</p>
       </div>
       <h2 class="sect">Annotated events</h2>
       <div class="prose"><ul>${ev || '<li>None.</li>'}</ul></div>

@@ -289,3 +289,12 @@ def test_x_only_search_is_counted_on_x_but_not_bluesky():
     keys = {s.key for s in load_config().series}
     assert "x.zelensky.it.posts" in keys and "bluesky.zelensky.it.posts" not in keys
     assert "bluesky.zelensky.fr.posts" in keys
+
+
+def test_search_with_operators_uses_its_label_and_keeps_its_brackets():
+    from tracker.config import load_config
+
+    troon = next(s for s in load_config().series if s.key == "x.troon-or-troons.en.posts")
+    assert troon.label == 'X "troon(s)" en' and troon.tags == ("anti-trans",)
+    # X applies AND before OR, so the brackets must survive for lang: to cover both words.
+    assert troon.params["query"] == "(troon OR troons)"

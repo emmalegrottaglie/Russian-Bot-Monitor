@@ -383,3 +383,27 @@ lang = "it"
 region = "IT"
 tags = ["narratives"]
 x_only = true
+
+# Anti-trans rhetoric, X only: on Bluesky each is about 10 posts a day or fewer
+# (checked 12 to 18 October 2026), mostly pushback (docs/NARRATIVES.md).
+[[bluesky]]
+# Beth's Anti-Transphobia Library, glossary entry "Tranny / Troon": a slur for
+# transgender people. About 3,300 original posts a day on X.
+query = "(troon OR troons)"
+label = "troon(s)"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+[[bluesky]]
+# The 74 (14 Dec 2023): a New York education council member's "There is no such
+# thing as trans kids", condemned by the city's education department. Both phrasings
+# ("no such thing as trans ...", "no such thing as a trans ..."): about 160 original
+# posts a day on X.
+query = '("no such thing as trans" OR "no such thing as a trans")'
+label = "no such thing as (a) trans"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true

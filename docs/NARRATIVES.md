@@ -57,7 +57,7 @@ Spanish, Italian and Portuguese narrative phrases had no source. They are not tr
 
 So this group gets the same tests as every other group: compared with the non-political control group, and with the same measure taken on random pre-strike dates. A drop after the strikes that also shows in the control group, or that random dates often produce, is not evidence. No change in this group would not show that bots are absent either.
 
-## Anti-trans rhetoric: tested, not tracked
+## Anti-trans rhetoric: tracked on X only
 
 Doppelganger used anti-trans topics, and NGOs have measured a rise in anti-trans rhetoric on X: CCDH and the Human Rights Campaign (2022), CCDH's "Musk Bump" (2022) and ISD (2025). The About tab cites them. Beth's Anti-Transphobia Library (bethylamine.github.io) catalogues the talking points and code words. We tested whether Bluesky could measure this rhetoric, in October 2026.
 
@@ -89,4 +89,14 @@ On every strike day, each term stayed within the range it had on pre-strike days
 | "protect women" | 0 to 2 of 48. About half mocked the "protect women" crowd |
 | "TRAs" | 0 of 50. Spanish and Portuguese "tras" |
 
-On Bluesky these counts measure pushback and unrelated uses, not the rhetoric, so they are not tracked. The rhetoric is measured where it mostly is, on X, which this monitor does not read.
+On Bluesky these counts measure pushback and unrelated uses, not the rhetoric, so they are not tracked.
+
+**On X.** Once X post counts were added, two searches suggested by the project owner were checked over 12 to 18 October 2026 (English, original posts a day):
+
+| Search | X original | X reposts | Bluesky | Source |
+|---|---|---|---|---|
+| troon OR troons | about 3,300 (2,886 to 4,654) | about 2,600 | about 10 | Beth's Anti-Transphobia Library, glossary: "Tranny / Troon", a slur for transgender people |
+| "no such thing as trans" | about 100 (43 to 189) | about 10 | about 1 | The 74, 14 December 2023: an NYC education council member's "There is no such thing as trans kids" |
+| "no such thing as a trans" | about 60 (32 to 109) | not counted | under 1 | as above |
+
+Both are tracked on X as the **anti-trans** group (the two phrasings as one search), with `x_only = true`, so Bluesky does not count them. On X, as on Bluesky, a count includes people quoting the words to object. How large that share is on X has not been checked: it needs reading a sample of posts (about $0.50 for 50 each), which the counts-only plan does not cover.
