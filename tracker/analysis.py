@@ -291,12 +291,18 @@ def daily_index(conn: sqlite3.Connection, config: Config, key: str, first_day: i
     return {d: v / base * 100 for d, v in days_of(hours).items() if d >= first_day}
 
 
+MIN_GROUP_SHARE = 0.5  # share of a group's communities a day needs before it gets a group value
+
+
 def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: int = 45) -> dict:
     """Daily activity indices (100 = pre-strike mean) for the reference infrastructure
     series and each community group, plus each group's correlation with it.
 
     A group's index on a day is the median index of its communities that have data
-    that day (at least two), so one large community cannot dominate the line."""
+    that day, so one large community cannot dominate the line. A day needs at least two
+    of them and at least MIN_GROUP_SHARE of the group: sources lag by different amounts
+    (the Reddit archive by about 2 days), and a median of whichever communities happen
+    to be in yet would describe a different group."""
     first_day = (now - days * DAY) // DAY * DAY
 
     def index(key: str) -> dict[int, float]:
@@ -319,9 +325,10 @@ def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: i
     groups = []
     for tag in sorted(members):
         values, counts = [], []
+        need = max(2, math.ceil(MIN_GROUP_SHARE * len(members[tag])))
         for d in day_list:
             vs = [m[d] for m in members[tag] if d in m]
-            values.append(round(statistics.median(vs), 2) if len(vs) >= 2 else None)
+            values.append(round(statistics.median(vs), 2) if len(vs) >= need else None)
             counts.append(len(vs))
         series = {d: v for d, v in zip(day_list, values) if v is not None}
         r, n = correlate(ref_index, series)

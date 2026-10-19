@@ -755,7 +755,8 @@ function renderCorrelation(c) {
     <div class="tile-value${g.tag === 'political-right' ? ' hl' : ''}">${signed(g.r)}</div>
     <div class="tile-label">${esc(label(g.tag))}</div>
     <div class="tile-sub">${strength(g.r)}</div>
-    <div class="tile-sub">${((i) => (i < 0 ? 'NO COMPLETE DAY YET' : `${mmdd(c.days[i])} UTC: ${Math.round(g.values[i])}% OF NORMAL (${pct(g.values[i] / 100 - 1)})`))(latest(g.values))}</div></div>`).join('');
+    <div class="tile-sub">${((i) => (i < 0 ? 'NO COMPLETE DAY YET' : `${mmdd(c.days[i])} UTC: ${Math.round(g.values[i])}% OF NORMAL (${pct(g.values[i] / 100 - 1)})
+      · MEDIAN OF ${g.n[i]} OF ${g.members} COMMUNITIES`))(latest(g.values))}</div></div>`).join('');
 }
 
 // Chart 3 in docs/CHARTS.md: one group's daily index minus the control group's.
@@ -1050,7 +1051,10 @@ const views = {
       ${notes([
         'Each line is a group\'s daily activity as a % of its usual level before the strikes: 100 means normal.',
         'The Yandex Cloud line is the share of its network still answering, against the same pre-strike level.',
-        'The number on each tile is a correlation from −1 to +1, over the days both lines have data (up to 45). Near +1: the group rises and falls with Yandex. Near 0: no link. Near −1: it moves the opposite way.',
+        'The big number on each tile is a correlation from −1 to +1, over the days both lines have data (up to 45). Near +1: the group rises and falls with Yandex. Near 0: no link. Near −1: it moves the opposite way.',
+        'Yandex Cloud fell at the strikes and stayed low. The claim that bots went quiet with it predicts a positive number. A negative number means the group tended to be busier on the days Yandex was down.',
+        `The last line is the group's latest complete UTC day: the median community's activity that day as a % of its own average over ${refDates(snap.reference).toLowerCase()}. "119% of normal" means the typical community in the group was 19% busier than usual. Half the group's communities were busier than that, half quieter.`,
+        'A group gets a value for a day only when at least half its communities have that day. Reddit history arrives about 2 days late, so groups made mostly of Reddit communities show an older date.',
         'A drop in the non-political group as well means the cause is probably not political.',
         'Correlation is not proof of cause. Methods are on the About tab.',
       ])}

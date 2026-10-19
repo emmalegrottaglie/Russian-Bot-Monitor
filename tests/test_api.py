@@ -3,7 +3,7 @@ import time
 import pytest
 from fastapi.testclient import TestClient
 
-from tracker import db
+from tracker import analysis, db
 from tracker.api import create_app
 from tracker.config import Settings, load_config
 
@@ -74,6 +74,29 @@ def test_correlation_view(tmp_path, monkeypatch):
     assert right["r"] > 0.95 and right["r_days"] >= 7
     vals = [v for v in right["values"] if v is not None]
     assert max(vals) > 95 and min(vals) < 45  # indexed to the pre-strike mean
+
+
+def test_group_day_needs_half_its_communities(tmp_path, monkeypatch):
+    # Sources lag by different amounts. A day where only the fast sources are in must not
+    # get a group value from them alone.
+    monkeypatch.setenv("TRACKER_DB", str(tmp_path / "g.db"))
+    settings, config = Settings.from_env(), load_config()
+    now = int(time.time())
+    today = now // 86400 * 86400
+    ref_hours = range(config.reference_start, config.reference_start + 3 * 86400, 3600)
+    keys = ["reddit.conservative.comments", "reddit.republican.comments", "reddit.conservatives.comments",
+            "reddit.asktrumpsupporters.comments", "bluesky.afd.de.posts"]
+    with db.session(settings.db_path) as conn:
+        db.init(conn, config.series)
+        for i, key in enumerate(keys):
+            db.upsert_points(conn, key, [(t, 10.0) for t in ref_hours])
+            days = [today - d * 86400 for d in range(5, 1 if i < 2 else 2, -1)]  # 2 of 5 have the last day
+            db.upsert_points(conn, key, [(d + h * 3600, 10.0) for d in days for h in range(1, 25)])
+        body = analysis.correlation_view(conn, config, now)
+    right = next(g for g in body["groups"] if g["tag"] == "political-right")
+    by_day = dict(zip(body["days"], right["values"]))
+    assert by_day[today - 3 * 86400] == 100.0  # all 5 in
+    assert by_day[today - 2 * 86400] is None   # only 2 of 5
 
 
 def test_report_bundle(client, tmp_path):
