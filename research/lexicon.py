@@ -77,7 +77,7 @@ EXTRA = [
     ("zippertits", "zippertits", "transphobic", "candidate",
      "Beth's Transphobia Glossary", "https://bethylamine.github.io/library/glossary/", "Slur for trans men"),
     ("single-sex spaces", "single-sex spaces; single sex spaces; single-sex space", "transphobic", "proposed",
-     "Emma, 20 Oct 2026", "", "Related to 'sex-based rights' (Mendelsohn); needs a documenting source"),
+     "Emma, 20 Oct 2026", "", "The campaign phrase 'protect single-sex spaces' is documented (Edinburgh SPN, Transvox) and listed separately; the bare legal term is not"),
     ("single-sex rights", "single-sex rights; single sex rights", "transphobic", "proposed",
      "Emma, 20 Oct 2026", "", "Related to 'sex-based rights' (Mendelsohn); needs a documenting source"),
     ("biology-based rights", "biology-based rights; biology based rights", "transphobic", "proposed",
@@ -110,18 +110,94 @@ GLAAD_TERMS = [
 ]
 
 
-def add_glaad(rows: list[dict]) -> None:
+EDINBURGH = "Robert Court, 'Decoding the Hidden Messages', University of Edinburgh Staff Pride Network blog, 5 Jul 2023 (cites no sources)"
+EDINBURGH_URL = "https://blogs.ed.ac.uk/staffpridenetwork/2023/07/05/decoding-the-hidden-messages-a-look-at-dog-whistles-in-the-gender-critical-movement/"
+EDINBURGH_TERMS = [
+    ("protect single-sex spaces", "protect single-sex spaces; protect single sex spaces; protecting single-sex spaces; protecting single sex spaces",
+     "transphobic", "Used to exclude trans people from single-sex spaces"),
+    ("sex-based rights", "defending sex-based rights; defend sex-based rights; defending sex based rights", "transphobic",
+     "Used to argue against rights for trans people"),
+    ("keep prisons single sex", "keep prisons single sex; keep prisons single-sex", "transphobic",
+     "Used to argue for placing trans women in men's prisons"),
+    ("sex matters", "sex matters; #SexMatters", "transphobic",
+     "Used to deny trans identities. Also the name of a UK campaign group, so counts include mentions of the group"),
+    ("homosexual means same-sex attracted", "homosexual means same-sex attracted; homosexual means same sex attracted", "transphobic",
+     "Used to deny trans women's identities"),
+    ("defend women's sports", "defend women's sports; defend women's sport", "transphobic",
+     "Used to exclude trans women and girls from sport at every level"),
+    ("adult human female", "", "transphobic", "Asserts trans women are men"),
+    ("watchful waiting", "watchful waiting", "transphobic",
+     "Used to delay medical transition. Also an ordinary clinical term, so precision will be low"),
+    ("exploratory therapy", "exploratory therapy; gender exploratory therapy; exploration therapy", "anti-LGBTQ",
+     "Euphemism for conversion therapy; GLAAD lists 'gender exploratory/exploration therapy' among conversion-therapy phrases"),
+]
+
+TRANSVOX = "Transvox podcast, 'Understanding Dog Whistles in Anti-Trans Discourse', Gillian Russell and Jenny Harvey, 22 Mar 2025"
+TRANSVOX_URL = "https://transvox.co.uk/episode/transvox-understanding-dog-whistles-in-anti-trans-discourse"
+TRANSVOX_TERMS = [
+    ("protect single-sex spaces", "", "transphobic", "Questions about protecting single-sex spaces are often not asked in good faith"),
+    ("sex matters", "", "transphobic", "Implies gender does not matter"),
+    ("sex is real", "", "transphobic", "Implies gender does not matter"),
+    ("biological sex", "biological sex", "transphobic",
+     "Hosts argue it effectively means 'cisgender'. Also ordinary scientific usage; TransActual says it would not use the term"),
+    ("protecting women and girls", "", "transphobic",
+     "Hosts say 'women and girls' implies trans women are a threat; context matters, and the bare phrase is very common"),
+    ("gender ideology", "", "transphobic", "Frames gender as an ideology"),
+    ("adult human female", "", "transphobic", "Slogan implying trans women are not women"),
+    ("transgenderism", "", "transphobic", "Casts gender identity as a political belief"),
+    ("Trans Identified Male", "trans identifying; trans-identifying", "transphobic", "Used dismissively"),
+    ("dark side of trans activism", "dark side of trans activism", "transphobic", "Signals to an already receptive audience"),
+    ("family values", "", "homophobic", "An attack on the whole LGBTQ+ community"),
+]
+
+TRANSACTUAL = "TransActual, 'Transphobia' (undated page, © 2026)"
+TRANSACTUAL_URL = "https://transactual.org.uk/transphobia/"
+TRANSACTUAL_TERMS = [
+    ("adult human female", "", "transphobic", "Given as an example of dogwhistle transphobia"),
+    ("protect women's rights", "protect women's rights; protecting women's rights", "transphobic",
+     "Label used by campaigns against trans women's access to toilets. Also very common in unrelated contexts"),
+    ("Trans Identified Male", "trans identified males", "transphobic", "Misgenders trans women"),
+    ("social contagion", "social contagion; gender contagion", "transphobic",
+     "'Contagion' applied to trans young people; GLAAD's 'transtrender' entry also names the 'social contagion' theory"),
+]
+
+BARNARD = "Barnard College Library, 'TERFs in the Stacks' guide FAQ, updated 13 May 2026 (keyword list; no sources or definitions)"
+BARNARD_URL = "https://guides.library.barnard.edu/terf/faq"
+BARNARD_TERMS = [
+    ("gender critical", "", "transphobic", "Listed as a keyword for identifying TERF materials"),
+    ("transgenderism", "", "transphobic", "Listed as a keyword for identifying TERF materials"),
+    ("sex-based feminism", "sex-based feminism; sex based feminism", "transphobic", "Listed as a keyword; not defined"),
+    ("sex realist feminism", "sex realist feminism; sex-realist feminism", "transphobic", "Listed as a keyword; not defined"),
+    ("gender eugenics", "gender eugenics", "transphobic", "Listed as a keyword; not defined"),
+]
+
+SOURCED = [
+    ("GLAAD", GLAAD, GLAAD_URL, GLAAD_TERMS),
+    ("Edinburgh SPN", EDINBURGH, EDINBURGH_URL, EDINBURGH_TERMS),
+    ("Transvox", TRANSVOX, TRANSVOX_URL, TRANSVOX_TERMS),
+    ("TransActual", TRANSACTUAL, TRANSACTUAL_URL, TRANSACTUAL_TERMS),
+    ("Barnard", BARNARD, BARNARD_URL, BARNARD_TERMS),
+]
+
+
+def add_sourced(rows: list[dict]) -> None:
+    """Add terms from further checked lists; a term already listed gains the list as a second source."""
     by_term = {r["term"].lower(): r for r in rows}
-    for term, variants, category, note in GLAAD_TERMS:
-        row = by_term.get(term.lower())
-        if row:
-            row["source"] += f"; {GLAAD}"
-            row["note"] = "; ".join(x for x in (row["note"], f"GLAAD: {note}") if x)
-            if variants:
-                row["variants"] = "; ".join(x for x in (row["variants"], variants) if x)
-            continue
-        rows.append({"term": term, "variants": variants or term, "category": category, "type": "", "register": "",
-                     "status": "candidate", "source": GLAAD, "source_url": GLAAD_URL, "note": note, "precision": ""})
+    for label, source, url, terms in SOURCED:
+        for term, variants, category, note in terms:
+            row = by_term.get(term.lower())
+            if row:
+                row["source"] += f"; {source}"
+                row["note"] = "; ".join(x for x in (row["note"], f"{label}: {note}") if x)
+                if variants:
+                    have = {v.strip().lower() for v in row["variants"].split(";")}
+                    extra = [v for v in variants.split("; ") if v.lower() not in have]
+                    row["variants"] = "; ".join(x for x in (row["variants"], "; ".join(extra)) if x)
+                continue
+            row = {"term": term, "variants": variants or term, "category": category, "type": "", "register": "",
+                   "status": "candidate", "source": source, "source_url": url, "note": note, "precision": ""}
+            rows.append(row)
+            by_term[term.lower()] = row
 
 
 def main() -> None:
@@ -151,7 +227,7 @@ def main() -> None:
     for term, variants, category, status, source, url, note in EXTRA:
         rows.append({"term": term, "variants": variants, "category": category, "type": "", "register": "",
                      "status": status, "source": source, "source_url": url, "note": note, "precision": ""})
-    add_glaad(rows)
+    add_sourced(rows)
     rows.sort(key=lambda r: (r["category"], r["term"].lower()))
     with OUT.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS, lineterminator="\n")
