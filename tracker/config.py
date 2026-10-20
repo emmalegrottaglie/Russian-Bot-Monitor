@@ -156,13 +156,17 @@ def parse_config(sources: dict, events: dict) -> Config:
         else:
             raise ValueError(f"unknown infrastructure source {item['source']!r}")
 
+    units = {"comments": "COMMENTS / H", "posts": "POSTS / H"}
     for group in sources.get("reddit", []):
+        # `metrics` narrows a group to some counts; `archive_only` groups are filled from
+        # the archive by the daily catch-up and skipped by the live pass (see sources.toml).
+        extra = {"archive_only": True} if group.get("archive_only") else {}
         for sub in group["subreddits"]:
-            for metric, unit in (("comments", "COMMENTS / H"), ("posts", "POSTS / H")):
+            for metric in group.get("metrics", ("comments", "posts")):
                 specs.append(SeriesSpec(
                     key=f"reddit.{sub.lower()}.{metric}", kind="community", platform="reddit",
-                    label=f"r/{sub}", unit=unit, region=group["region"], tags=tuple(group["tags"]),
-                    params={"subreddit": sub, "metric": metric},
+                    label=f"r/{sub}", unit=units[metric], region=group["region"], tags=tuple(group["tags"]),
+                    params={"subreddit": sub, "metric": metric, **extra},
                 ))
 
     def search_label(prefix: str, item: dict) -> str:

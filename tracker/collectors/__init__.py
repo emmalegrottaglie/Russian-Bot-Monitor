@@ -54,6 +54,8 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
     async with httpx.AsyncClient(timeout=45, headers={"User-Agent": USER_AGENT}, follow_redirects=True) as client:
         for platform in platforms:
             specs = config.by_platform(platform)
+            if not backfill:  # archive-only series are filled by the daily catch-up
+                specs = [s for s in specs if not s.params.get("archive_only")]
             if not specs:
                 continue
             name = BACKFILL.get(platform, platform) if backfill else platform

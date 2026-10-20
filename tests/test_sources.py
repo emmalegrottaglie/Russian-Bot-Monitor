@@ -298,3 +298,36 @@ def test_search_with_operators_uses_its_label_and_keeps_its_brackets():
     assert troon.label == 'X "troon(s)" en' and troon.tags == ("anti-trans",)
     # X applies AND before OR, so the brackets must survive for lang: to cover both words.
     assert troon.params["query"] == "(troon OR troons)"
+
+
+def test_archive_only_groups_have_comments_only_and_are_skipped_by_the_live_pass(tmp_path, monkeypatch):
+    import asyncio
+
+    from tracker import collectors
+    from tracker.config import Settings, load_config
+
+    config = load_config()
+    keys = {s.key for s in config.series}
+    assert "reddit.askconservatives.comments" in keys and "reddit.askconservatives.posts" not in keys
+    assert "reddit.conservative.posts" in keys  # the original groups keep both counts
+    live = next(s for s in config.series if s.key == "reddit.conservative.comments")
+    assert not live.params.get("archive_only")
+
+    seen = []
+
+    async def fake_collect(client, specs, settings, now, start=None, end=None):
+        seen.extend(s.key for s in specs)
+        return collectors.Result()
+
+    monkeypatch.setenv("TRACKER_DB", str(tmp_path / "a.db"))
+    monkeypatch.setattr(reddit, "collect", fake_collect)
+    monkeypatch.setattr(arctic_shift, "collect", fake_collect)
+    from tracker import db
+    settings = Settings.from_env()
+    with db.session(settings.db_path) as conn:
+        db.init(conn, config.series)
+    asyncio.run(collectors.run(config, settings, platforms=("reddit",)))
+    assert "reddit.conservative.comments" in seen and "reddit.askconservatives.comments" not in seen
+    seen.clear()
+    asyncio.run(collectors.run(config, settings, platforms=("reddit",), start=0, backfill=True))
+    assert "reddit.askconservatives.comments" in seen

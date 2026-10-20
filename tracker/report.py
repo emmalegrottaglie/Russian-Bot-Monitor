@@ -30,7 +30,7 @@ COMMUNITY_COLUMNS = [
     ("series", "Series key used by the API"),
     ("platform", "reddit or bluesky"),
     ("region", "Country or region the community is about"),
-    ("groups", "Research tags, | separated (political-right, narratives, anti-trans, political, regional, south-america, russia, control)"),
+    ("groups", "Research tags, | separated (political-right, political-left, narratives, anti-trans, political, regional, south-america, russia, control)"),
     ("unit", "What is counted"),
     ("main_metric", "yes for the series group statistics use (Reddit comments, Bluesky posts)"),
     ("pre_strike_mean", "Mean hourly rate over the pre-strike reference period"),

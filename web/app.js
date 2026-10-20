@@ -7,17 +7,18 @@ const REFRESH_MS = 60_000;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TAG_SHORT = {
-  'political-right': 'RIGHT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', political: 'POLITICS', regional: 'REGIONAL',
+  'political-right': 'RIGHT-WING', 'political-left': 'LEFT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', political: 'POLITICS', regional: 'REGIONAL',
   'south-america': 'SOUTH AMERICA', russia: 'RUSSIA', control: 'NON-POLITICAL',
 };
 // One line per group for the "who is in each group" panels. The tags themselves
 // are editorial labels set in config/sources.toml.
 const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
+  'political-left': 'Communities organised around left-wing, liberal or socialist politics: party and campaign communities, socialist and anarchist ones.',
   narratives: 'Bluesky and X searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
   'anti-trans': 'X searches for anti-trans rhetoric: the slur "troon" and the claim that there is "no such thing as trans" (kids, people). X only; on Bluesky they are rare. They count everyone using the words, including people quoting them to object. Sources in docs/NARRATIVES.md.',
   political: 'General news and politics communities, across the spectrum.',
-  regional: 'Local communities for US states and European countries.',
+  regional: 'Local communities for US states, and for European and neighbouring countries.',
   'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
   russia: 'Communities about Russia and Russian-language communities: everyday (r/Pikabu), questions to Russians (r/AskARussian) and émigré-leaning news (r/tjournal_refugees).',
   control: 'Hobby and lifestyle communities. They are the control group: a drop that shows up here too is not about politics.',
@@ -44,7 +45,7 @@ let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
   corrTags: new Set(['political-right', 'control']), diffTag: 'political-right', alignedTag: 'political-right' };
 // Line style per group on the correlation chart; Yandex itself is always a1.
-const TAG_LINE = { 'political-right': 'l-a3', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a1', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
+const TAG_LINE = { 'political-right': 'l-a3', 'political-left': 'l-ink l-dash', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a1', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
 
 // ── Formatting: one time format per screen (MM-DD HH:MM UTC) ────────────────
 const pad = (n) => String(n).padStart(2, '0');
@@ -1405,8 +1406,9 @@ const views = {
         <li>Correlation is not attribution. A drop in a community after an outage is consistent with bot or troll accounts going offline, but also with news cycles, weekends, moderation changes, Reddit's own systems, or real users in Russia losing service.</li>
         <li>Compare against the <b>control</b> group. A drop that also appears in non-political communities is not evidence of anything political.</li>
         <li>Cloudflare's "bot" share for AS13238 is dominated by Yandex's own search crawlers. It measures automated traffic from that network, not influence operations.</li>
-        <li>Group tags (right-wing, narratives, anti-trans, politics, regional, South America, Russia, non-political) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
+        <li>Group tags (right-wing, left-wing, narratives, anti-trans, politics, regional, South America, Russia, non-political) are editorial labels set in <code>config/sources.toml</code>. They are open to challenge; propose changes there.</li>
         <li>Reddit history before this site started collecting comes from the Arctic Shift archive and is backfilled hourly; days missing from the archive are left as gaps, never filled.</li>
+        <li>About 135 of the Reddit communities come from the r/theydidthemath study's list (see Prior work). They are tracked by comments only and filled once a day from the archive, which runs a day or two behind, so their latest day often shows as not yet in.</li>
       </ul></div>
       <h2 class="sect">Definitions</h2>
       <div class="prose"><ul>

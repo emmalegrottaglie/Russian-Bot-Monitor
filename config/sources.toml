@@ -9,6 +9,7 @@
 # of bot removal.
 #
 #   political-right  communities organised around right-wing politics
+#   political-left   communities organised around left-wing politics
 #   political        general political discussion
 #   regional         country / state communities
 #   russia           Russia-focused communities
@@ -193,6 +194,410 @@ tags = ["south-america"]
 subreddits = ["ecuador"]
 region = "EC"
 tags = ["south-america"]
+
+# ── Reddit: communities from the r/theydidthemath study's list ─────────────────
+# Taken from the subreddit list in the study's published package (see
+# docs/SYFTEN-CHECK.md and docs/SUBREDDIT-CANDIDATES.md): its US, European and
+# political communities with at least 100 posts plus comments a day, and the
+# clearly political ones from its general list. Chosen by topic before looking
+# at how they moved. Tags were reviewed by hand; communities whose leaning was
+# not clear are left out until reviewed (docs/subreddit-candidates*.csv).
+#
+# Comments only, from the archive: these groups are filled by the daily catch-up
+# (`backfill --days 7`) and skipped by the live pass, so their newest data is about
+# two days old.
+
+[[reddit]]
+subreddits = ["askconservatives", "trump", "walkaway"]
+region = "US"
+tags = ["political-right"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["50501", "askaliberal", "democraticparty", "democrats", "political_revolution", "trumpvirus", "votedem"]
+region = "US"
+tags = ["political-left"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["latestagecapitalism", "shitliberalssay", "socialism", "tankiejerk", "democraticsocialism", "socialdemocracy", "anarchism"]
+region = "EN-LANG"
+tags = ["political-left"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["labouruk"]
+region = "UK"
+tags = ["political-left"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["askpolitics", "blackpeopletwitter", "centrist", "enough_sanders_spam", "inthenews", "leopardsatemyface", "moderatepolitics", "politicaldiscussion", "politicalhumor", "wayofthebern", "whitepeopletwitter", "california_politics", "texaspolitics"]
+region = "US"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["belgium2"]
+region = "BE"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["germany", "politik", "politikbrd"]
+region = "DE"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["geopolitics", "politicaldebate", "enoughcommiespam"]
+region = "EN-LANG"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["askeurope", "europe", "europeanunion", "yurop"]
+region = "EU"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["finland"]
+region = "FI"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["actualite", "francedigeste"]
+region = "FR"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["italia"]
+region = "IT"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["nederlands", "politiek"]
+region = "NL"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["norway"]
+region = "NO"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["poland"]
+region = "PL"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["portugueses"]
+region = "PT"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["svenskpolitik"]
+region = "SE"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["greenandpleasant", "northernireland", "scotland", "uknews", "wales"]
+region = "UK"
+tags = ["political"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["alaska", "arizona", "arkansas", "california", "colorado", "connecticut", "delaware", "florida", "georgia", "hawaii", "idaho", "indiana", "iowa", "louisiana", "maine", "massachusetts", "michigan", "minnesota", "mississippi", "missouri", "montana", "nebraska", "newhampshire", "newmexico", "newyork", "northcarolina", "ohio", "oklahoma", "oregon", "pennsylvania", "rhodeisland", "southcarolina", "tennessee", "texas", "utah", "vermont", "virginia", "washington", "westvirginia", "wisconsin", "wyoming"]
+region = "US"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["albania"]
+region = "AL"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["armenia"]
+region = "AM"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["austria"]
+region = "AT"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["azerbaijan"]
+region = "AZ"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["bih"]
+region = "BA"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["belgium"]
+region = "BE"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["bulgaria"]
+region = "BG"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["switzerland"]
+region = "CH"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["cyprus"]
+region = "CY"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["denmark"]
+region = "DK"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["eesti"]
+region = "EE"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["suomi"]
+region = "FI"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["sakartvelo"]
+region = "GE"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["greece"]
+region = "GR"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["croatia"]
+region = "HR"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["hungary"]
+region = "HU"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["ireland"]
+region = "IE"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["iceland"]
+region = "IS"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["kazakhstan"]
+region = "KZ"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["lithuania"]
+region = "LT"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["luxembourg"]
+region = "LU"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["latvia"]
+region = "LV"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["moldova"]
+region = "MD"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["montenegro"]
+region = "ME"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["mkd"]
+region = "MK"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["malta"]
+region = "MT"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["thenetherlands"]
+region = "NL"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["norge"]
+region = "NO"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["portugal"]
+region = "PT"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["romania"]
+region = "RO"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["serbia"]
+region = "RS"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["slovenia"]
+region = "SI"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["slovakia"]
+region = "SK"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["turkey"]
+region = "TR"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["ukraine"]
+region = "UA"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["unitedkingdom"]
+region = "UK"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
+
+[[reddit]]
+subreddits = ["kosovo"]
+region = "XK"
+tags = ["regional"]
+metrics = ["comments"]
+archive_only = true
 
 # ── Bluesky keyword search ────────────────────────────────────────────────────
 

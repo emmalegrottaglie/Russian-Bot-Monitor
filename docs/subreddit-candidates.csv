@@ -1,222 +1,222 @@
 subreddit,study_type,study_region,posts_plus_comments_per_day,suggested_group,note,your_decision
-askconservatives,US national politics,United States,1946,political-right,conservatives answering questions,
-trump,US national politics,United States,532,political-right,Trump fan community,
-walkaway,US national politics,United States,421,political-right,"#WalkAway, people leaving the Democratic Party for the right",
-actualite,European politics or alternate country candidate,France,141,political,,
-askeurope,European politics or alternate country candidate,EU / Europe,849,political,,
-belgium2,European politics or alternate country candidate,Belgium,1269,political,,
-europe,European politics or alternate country candidate,EU / Europe,6145,political,,
-europeanunion,European politics or alternate country candidate,EU / Europe,304,political,,
-finland,European politics or alternate country candidate,Finland,668,political,,
-francedigeste,European politics or alternate country candidate,France,355,political,,
-germany,European politics or alternate country candidate,Germany,1118,political,,
-greenandpleasant,European politics or alternate country candidate,United Kingdom,374,political,UK left-leaning humour; not right-wing,
-italia,European politics or alternate country candidate,Italy,3282,political,,
-labouruk,European politics or alternate country candidate,United Kingdom,909,political,,
-nederlands,European politics or alternate country candidate,Netherlands,7704,political,,
-northernireland,European politics or alternate country candidate,United Kingdom / Northern Ireland,2851,political,,
-norway,European politics or alternate country candidate,Norway,434,political,,
-poland,European politics or alternate country candidate,Poland,1175,political,,
-politiek,European politics or alternate country candidate,Netherlands,319,political,,
-politik,European politics or alternate country candidate,Germany,168,political,,
-politikbrd,European politics or alternate country candidate,Germany,131,political,,
-portugueses,European politics or alternate country candidate,Portugal,2691,political,,
-scotland,European politics or alternate country candidate,United Kingdom / Scotland,2021,political,,
-svenskpolitik,European politics or alternate country candidate,Sweden,563,political,,
-uknews,European politics or alternate country candidate,United Kingdom,3039,political,,
-wales,European politics or alternate country candidate,United Kingdom / Wales,201,political,,
-yurop,European politics or alternate country candidate,EU / Europe,196,political,,
-50501,US national politics,United States,292,political,,
-askaliberal,US national politics,United States,1588,political,,
-askpolitics,US national politics,United States,535,political,,
-blackpeopletwitter,US national politics,United States,1829,political,,
-centrist,US national politics,United States,590,political,,
-democraticparty,US national politics,United States,345,political,,
-democrats,US national politics,United States,635,political,,
-enough_sanders_spam,US national politics,United States,846,political,,
-inthenews,US national politics,United States,654,political,,
-leopardsatemyface,US national politics,United States,1809,political,,
-moderatepolitics,US national politics,United States,282,political,,
-political_revolution,US national politics,United States,186,political,,
-politicaldiscussion,US national politics,United States,340,political,,
-politicalhumor,US national politics,United States,1789,political,"general, leans left",
-trumpvirus,US national politics,United States,1490,political,,
-votedem,US national politics,United States,382,political,,
-wayofthebern,US national politics,United States,465,political,"Sanders-supporting left, anti-Democratic-establishment",
-whitepeopletwitter,US national politics,United States,6242,political,,
-california_politics,US state politics candidate,California,145,political,,
-texaspolitics,US state politics candidate,Texas,292,political,,
-albania,European country,Albania,623,regional,,
-armenia,European country,Armenia,215,regional,,
-austria,European country,Austria,3180,regional,,
-azerbaijan,European country,Azerbaijan,247,regional,,
-belgium,European country,Belgium,1727,regional,,
-bih,European country,Bosnia and Herzegovina,1047,regional,,
-bulgaria,European country,Bulgaria,2402,regional,,
-croatia,European country,Croatia,1408,regional,,
-cyprus,European country,Cyprus,411,regional,,
-denmark,European country,Denmark,2869,regional,,
-eesti,European country,Estonia,1316,regional,,
-greece,European country,Greece,2146,regional,,
-hungary,European country,Hungary,7040,regional,,
-iceland,European country,Iceland,234,regional,,
-ireland,European country,Ireland,4349,regional,,
-kazakhstan,European country,Kazakhstan,351,regional,,
-kosovo,European country,Kosovo,435,regional,,
-latvia,European country,Latvia,503,regional,,
-lithuania,European country,Lithuania,632,regional,,
-luxembourg,European country,Luxembourg,351,regional,,
-malta,European country,Malta,379,regional,,
-mkd,European country,North Macedonia,1168,regional,,
-moldova,European country,Moldova,154,regional,,
-montenegro,European country,Montenegro,281,regional,,
-norge,European country,Norway,4018,regional,,
-portugal,European country,Portugal,1874,regional,,
-romania,European country,Romania,1708,regional,,
-sakartvelo,European country,Georgia,230,regional,,
-serbia,European country,Serbia,3751,regional,,
-slovakia,European country,Slovakia,2575,regional,,
-slovenia,European country,Slovenia,2459,regional,,
-suomi,European country,Finland,2464,regional,,
-switzerland,European country,Switzerland,849,regional,,
-thenetherlands,European country,Netherlands,1226,regional,,
-turkey,European country,Turkey,1147,regional,,
-ukraine,European country,Ukraine,1078,regional,,
-unitedkingdom,European country,United Kingdom,8451,regional,,
-alaska,US state,Alaska,306,regional,,
-arizona,US state,Arizona,221,regional,,
-arkansas,US state,Arkansas,470,regional,,
-california,US state,California,897,regional,,
-colorado,US state,Colorado,242,regional,,
-connecticut,US state,Connecticut,1638,regional,,
-delaware,US state,Delaware,269,regional,,
-florida,US state,Florida,1278,regional,,
-georgia,US state,Georgia,526,regional,,
-hawaii,US state,Hawaii,231,regional,,
-idaho,US state,Idaho,333,regional,,
-indiana,US state,Indiana,919,regional,,
-iowa,US state,Iowa,871,regional,,
-louisiana,US state,Louisiana,234,regional,,
-maine,US state,Maine,849,regional,,
-massachusetts,US state,Massachusetts,2239,regional,,
-michigan,US state,Michigan,811,regional,,
-minnesota,US state,Minnesota,818,regional,,
-mississippi,US state,Mississippi,425,regional,,
-missouri,US state,Missouri,504,regional,,
-montana,US state,Montana,152,regional,,
-nebraska,US state,Nebraska,263,regional,,
-newhampshire,US state,New Hampshire,793,regional,,
-newmexico,US state,New Mexico,199,regional,,
-newyork,US state,New York,357,regional,,
-northcarolina,US state,North Carolina,1351,regional,,
-ohio,US state,Ohio,3126,regional,,
-oklahoma,US state,Oklahoma,208,regional,,
-oregon,US state,Oregon,1192,regional,,
-pennsylvania,US state,Pennsylvania,840,regional,,
-rhodeisland,US state,Rhode Island,544,regional,,
-southcarolina,US state,South Carolina,369,regional,,
-tennessee,US state,Tennessee,241,regional,,
-texas,US state,Texas,1195,regional,,
-utah,US state,Utah,527,regional,,
-vermont,US state,Vermont,761,regional,,
-virginia,US state,Virginia,717,regional,,
-washington,US state,Washington,383,regional,,
-westvirginia,US state,West Virginia,152,regional,,
-wisconsin,US state,Wisconsin,1258,regional,,
-wyoming,US state,Wyoming,148,regional,,
-andorra,European country,Andorra,13,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-belarus,European country,Belarus,71,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-liechtenstein,European country,Liechtenstein,5,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-monaco,European country,Monaco,19,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-russia,European country,Russia,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-sanmarino,European country,San Marino,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-vatican,European country,Vatican City,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-austriapolitics,European politics or alternate country candidate,Austria,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-brexit,European politics or alternate country candidate,United Kingdom,31,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-dkpolitik,European politics or alternate country candidate,Denmark,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-england,European politics or alternate country candidate,United Kingdom / England,15,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-eupolitics,European politics or alternate country candidate,EU / Europe,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-europeanfederalists,European politics or alternate country candidate,EU / Europe,88,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-europeanpolitics,European politics or alternate country candidate,EU / Europe,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-europeansocialists,European politics or alternate country candidate,EU / Europe,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-greekpolitics,European politics or alternate country candidate,Greece,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-libdem,European politics or alternate country candidate,United Kingdom,57,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-norskpolitikk,European politics or alternate country candidate,Norway,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-podemos,European politics or alternate country candidate,Spain,4,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-politicaita,European politics or alternate country candidate,Italy,16,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-politique,European politics or alternate country candidate,France,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-polityka,European politics or alternate country candidate,Poland,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-portugalpolitica,European politics or alternate country candidate,Portugal,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-swisspolitics,European politics or alternate country candidate,Switzerland,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-tories,European politics or alternate country candidate,United Kingdom,33,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-ukraina,European politics or alternate country candidate,Ukraine,34,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-americanpolitics,US national politics,United States,56,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-enoughtrumpspam,US national politics,United States,80,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-esist,US national politics,United States,22,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-liberal,US national politics,United States,4,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-libertarian,US national politics,United States,91,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-ourpresident,US national politics,United States,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-progressive,US national politics,United States,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-sandersforpresident,US national politics,United States,31,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-the_mueller,US national politics,United States,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-uspolitics,US national politics,United States,81,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-kentucky,US state,Kentucky,49,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-nevada,US state,Nevada,82,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-northdakota,US state,North Dakota,87,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-southdakota,US state,South Dakota,49,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-arizonapolitics,US state politics candidate,Arizona,2,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-coloradopolitics,US state politics candidate,Colorado,39,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-connecticutpolitics,US state politics candidate,Connecticut,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-floridapolitics,US state politics candidate,Florida,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-georgiapolitics,US state politics candidate,Georgia,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-illinoispolitics,US state politics candidate,Illinois,8,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-indianapolitics,US state politics candidate,Indiana,2,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-iowapolitics,US state politics candidate,Iowa,6,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-kansaspolitics,US state politics candidate,Kansas,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-kentuckypolitics,US state politics candidate,Kentucky,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-louisianapolitics,US state politics candidate,Louisiana,7,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-mainepolitics,US state politics candidate,Maine,12,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-marylandpolitics,US state politics candidate,Maryland,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-masspolitics,US state politics candidate,Massachusetts,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-michiganpolitics,US state politics candidate,Michigan,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-minnesotapolitics,US state politics candidate,Minnesota,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-missouripolitics,US state politics candidate,Missouri,14,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-ncpolitics,US state politics candidate,North Carolina,58,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-nevadapolitics,US state politics candidate,Nevada,11,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-newjerseypolitics,US state politics candidate,New Jersey,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-newmexicopolitics,US state politics candidate,New Mexico,2,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-newyorkpolitics,US state politics candidate,New York,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-ohiopolitics,US state politics candidate,Ohio,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-oregonpolitics,US state politics candidate,Oregon,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-pennsylvania_politics,US state politics candidate,Pennsylvania,6,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-southcarolinapolitics,US state politics candidate,South Carolina,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-tennesseepolitics,US state politics candidate,Tennessee,87,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-utahpolitics,US state politics candidate,Utah,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-vermontpolitics,US state politics candidate,Vermont,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-virginiapolitics,US state politics candidate,Virginia,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-washington_politics,US state politics candidate,Washington,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-westvirginiapolitics,US state politics candidate,West Virginia,11,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-wisconsinpolitics,US state politics candidate,Wisconsin,54,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),
-czech,European country,Czechia,4899,already tracked,already in group regional,
-de,European country,Germany,4473,already tracked,already in group regional,
-france,European country,France,4504,already tracked,already in group regional,
-italy,European country,Italy,1530,already tracked,already in group regional,
-polska,European country,Poland,3411,already tracked,already in group regional,
-spain,European country,Spain,280,already tracked,already in group regional,
-sweden,European country,Sweden,6711,already tracked,already in group regional,
-askarussian,European politics or alternate country candidate,Russia,313,already tracked,already in group russia,
-irishpolitics,European politics or alternate country candidate,Ireland,304,already tracked,already in group political,
-spainpolitics,European politics or alternate country candidate,Spain,246,already tracked,already in group political,
-tjournal_refugees,European politics or alternate country candidate,Russia / Russian language,1117,already tracked,already in group russia,
-ukpolitics,European politics or alternate country candidate,United Kingdom,7169,already tracked,already in group political,
-asktrumpsupporters,US national politics,United States,526,already tracked,already in group political-right,
-conservative,US national politics,United States,1763,already tracked,already in group political-right,
-neoliberal,US national politics,United States,10905,already tracked,already in group political,
-news,US national politics,United States,9317,already tracked,already in group political,
-politics,US national politics,United States,24340,already tracked,already in group political,
-republican,US national politics,United States,66,already tracked,already in group political-right,
-alabama,US state,Alabama,121,already tracked,already in group regional,
-illinois,US state,Illinois,926,already tracked,already in group regional,
-kansas,US state,Kansas,520,already tracked,already in group regional,
-maryland,US state,Maryland,884,already tracked,already in group regional,
-newjersey,US state,New Jersey,1502,already tracked,already in group regional,
+askconservatives,US national politics,United States,1946,political-right,conservatives answering questions,political-right
+trump,US national politics,United States,532,political-right,Trump fan community,political-right
+walkaway,US national politics,United States,421,political-right,"#WalkAway, people leaving the Democratic Party for the right",political-right
+actualite,European politics or alternate country candidate,France,141,political,,political
+askeurope,European politics or alternate country candidate,EU / Europe,849,political,,political
+belgium2,European politics or alternate country candidate,Belgium,1269,political,,political
+europe,European politics or alternate country candidate,EU / Europe,6145,political,,political
+europeanunion,European politics or alternate country candidate,EU / Europe,304,political,,political
+finland,European politics or alternate country candidate,Finland,668,political,,political
+francedigeste,European politics or alternate country candidate,France,355,political,,political
+germany,European politics or alternate country candidate,Germany,1118,political,,political
+greenandpleasant,European politics or alternate country candidate,United Kingdom,374,political,UK left-leaning humour; not right-wing,political
+italia,European politics or alternate country candidate,Italy,3282,political,,political
+labouruk,European politics or alternate country candidate,United Kingdom,909,political,,political-left
+nederlands,European politics or alternate country candidate,Netherlands,7704,political,,political
+northernireland,European politics or alternate country candidate,United Kingdom / Northern Ireland,2851,political,,political
+norway,European politics or alternate country candidate,Norway,434,political,,political
+poland,European politics or alternate country candidate,Poland,1175,political,,political
+politiek,European politics or alternate country candidate,Netherlands,319,political,,political
+politik,European politics or alternate country candidate,Germany,168,political,,political
+politikbrd,European politics or alternate country candidate,Germany,131,political,,political
+portugueses,European politics or alternate country candidate,Portugal,2691,political,,political
+scotland,European politics or alternate country candidate,United Kingdom / Scotland,2021,political,,political
+svenskpolitik,European politics or alternate country candidate,Sweden,563,political,,political
+uknews,European politics or alternate country candidate,United Kingdom,3039,political,,political
+wales,European politics or alternate country candidate,United Kingdom / Wales,201,political,,political
+yurop,European politics or alternate country candidate,EU / Europe,196,political,,political
+50501,US national politics,United States,292,political,,political-left
+askaliberal,US national politics,United States,1588,political,,political-left
+askpolitics,US national politics,United States,535,political,,political
+blackpeopletwitter,US national politics,United States,1829,political,,political
+centrist,US national politics,United States,590,political,,political
+democraticparty,US national politics,United States,345,political,,political-left
+democrats,US national politics,United States,635,political,,political-left
+enough_sanders_spam,US national politics,United States,846,political,,political
+inthenews,US national politics,United States,654,political,,political
+leopardsatemyface,US national politics,United States,1809,political,,political
+moderatepolitics,US national politics,United States,282,political,,political
+political_revolution,US national politics,United States,186,political,,political-left
+politicaldiscussion,US national politics,United States,340,political,,political
+politicalhumor,US national politics,United States,1789,political,"general, leans left",political
+trumpvirus,US national politics,United States,1490,political,,political-left
+votedem,US national politics,United States,382,political,,political-left
+wayofthebern,US national politics,United States,465,political,"Sanders-supporting left, anti-Democratic-establishment",political
+whitepeopletwitter,US national politics,United States,6242,political,,political
+california_politics,US state politics candidate,California,145,political,,political
+texaspolitics,US state politics candidate,Texas,292,political,,political
+albania,European country,Albania,623,regional,,regional
+armenia,European country,Armenia,215,regional,,regional
+austria,European country,Austria,3180,regional,,regional
+azerbaijan,European country,Azerbaijan,247,regional,,regional
+belgium,European country,Belgium,1727,regional,,regional
+bih,European country,Bosnia and Herzegovina,1047,regional,,regional
+bulgaria,European country,Bulgaria,2402,regional,,regional
+croatia,European country,Croatia,1408,regional,,regional
+cyprus,European country,Cyprus,411,regional,,regional
+denmark,European country,Denmark,2869,regional,,regional
+eesti,European country,Estonia,1316,regional,,regional
+greece,European country,Greece,2146,regional,,regional
+hungary,European country,Hungary,7040,regional,,regional
+iceland,European country,Iceland,234,regional,,regional
+ireland,European country,Ireland,4349,regional,,regional
+kazakhstan,European country,Kazakhstan,351,regional,,regional
+kosovo,European country,Kosovo,435,regional,,regional
+latvia,European country,Latvia,503,regional,,regional
+lithuania,European country,Lithuania,632,regional,,regional
+luxembourg,European country,Luxembourg,351,regional,,regional
+malta,European country,Malta,379,regional,,regional
+mkd,European country,North Macedonia,1168,regional,,regional
+moldova,European country,Moldova,154,regional,,regional
+montenegro,European country,Montenegro,281,regional,,regional
+norge,European country,Norway,4018,regional,,regional
+portugal,European country,Portugal,1874,regional,,regional
+romania,European country,Romania,1708,regional,,regional
+sakartvelo,European country,Georgia,230,regional,,regional
+serbia,European country,Serbia,3751,regional,,regional
+slovakia,European country,Slovakia,2575,regional,,regional
+slovenia,European country,Slovenia,2459,regional,,regional
+suomi,European country,Finland,2464,regional,,regional
+switzerland,European country,Switzerland,849,regional,,regional
+thenetherlands,European country,Netherlands,1226,regional,,regional
+turkey,European country,Turkey,1147,regional,,regional
+ukraine,European country,Ukraine,1078,regional,,regional
+unitedkingdom,European country,United Kingdom,8451,regional,,regional
+alaska,US state,Alaska,306,regional,,regional
+arizona,US state,Arizona,221,regional,,regional
+arkansas,US state,Arkansas,470,regional,,regional
+california,US state,California,897,regional,,regional
+colorado,US state,Colorado,242,regional,,regional
+connecticut,US state,Connecticut,1638,regional,,regional
+delaware,US state,Delaware,269,regional,,regional
+florida,US state,Florida,1278,regional,,regional
+georgia,US state,Georgia,526,regional,,regional
+hawaii,US state,Hawaii,231,regional,,regional
+idaho,US state,Idaho,333,regional,,regional
+indiana,US state,Indiana,919,regional,,regional
+iowa,US state,Iowa,871,regional,,regional
+louisiana,US state,Louisiana,234,regional,,regional
+maine,US state,Maine,849,regional,,regional
+massachusetts,US state,Massachusetts,2239,regional,,regional
+michigan,US state,Michigan,811,regional,,regional
+minnesota,US state,Minnesota,818,regional,,regional
+mississippi,US state,Mississippi,425,regional,,regional
+missouri,US state,Missouri,504,regional,,regional
+montana,US state,Montana,152,regional,,regional
+nebraska,US state,Nebraska,263,regional,,regional
+newhampshire,US state,New Hampshire,793,regional,,regional
+newmexico,US state,New Mexico,199,regional,,regional
+newyork,US state,New York,357,regional,,regional
+northcarolina,US state,North Carolina,1351,regional,,regional
+ohio,US state,Ohio,3126,regional,,regional
+oklahoma,US state,Oklahoma,208,regional,,regional
+oregon,US state,Oregon,1192,regional,,regional
+pennsylvania,US state,Pennsylvania,840,regional,,regional
+rhodeisland,US state,Rhode Island,544,regional,,regional
+southcarolina,US state,South Carolina,369,regional,,regional
+tennessee,US state,Tennessee,241,regional,,regional
+texas,US state,Texas,1195,regional,,regional
+utah,US state,Utah,527,regional,,regional
+vermont,US state,Vermont,761,regional,,regional
+virginia,US state,Virginia,717,regional,,regional
+washington,US state,Washington,383,regional,,regional
+westvirginia,US state,West Virginia,152,regional,,regional
+wisconsin,US state,Wisconsin,1258,regional,,regional
+wyoming,US state,Wyoming,148,regional,,regional
+andorra,European country,Andorra,13,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+belarus,European country,Belarus,71,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+liechtenstein,European country,Liechtenstein,5,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+monaco,European country,Monaco,19,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+russia,European country,Russia,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+sanmarino,European country,San Marino,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+vatican,European country,Vatican City,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+austriapolitics,European politics or alternate country candidate,Austria,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+brexit,European politics or alternate country candidate,United Kingdom,31,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+dkpolitik,European politics or alternate country candidate,Denmark,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+england,European politics or alternate country candidate,United Kingdom / England,15,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+eupolitics,European politics or alternate country candidate,EU / Europe,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+europeanfederalists,European politics or alternate country candidate,EU / Europe,88,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+europeanpolitics,European politics or alternate country candidate,EU / Europe,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+europeansocialists,European politics or alternate country candidate,EU / Europe,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+greekpolitics,European politics or alternate country candidate,Greece,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+libdem,European politics or alternate country candidate,United Kingdom,57,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+norskpolitikk,European politics or alternate country candidate,Norway,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+podemos,European politics or alternate country candidate,Spain,4,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+politicaita,European politics or alternate country candidate,Italy,16,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+politique,European politics or alternate country candidate,France,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+polityka,European politics or alternate country candidate,Poland,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+portugalpolitica,European politics or alternate country candidate,Portugal,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+swisspolitics,European politics or alternate country candidate,Switzerland,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+tories,European politics or alternate country candidate,United Kingdom,33,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+ukraina,European politics or alternate country candidate,Ukraine,34,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+americanpolitics,US national politics,United States,56,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+enoughtrumpspam,US national politics,United States,80,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+esist,US national politics,United States,22,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+liberal,US national politics,United States,4,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+libertarian,US national politics,United States,91,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+ourpresident,US national politics,United States,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+progressive,US national politics,United States,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+sandersforpresident,US national politics,United States,31,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+the_mueller,US national politics,United States,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+uspolitics,US national politics,United States,81,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+kentucky,US state,Kentucky,49,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+nevada,US state,Nevada,82,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+northdakota,US state,North Dakota,87,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+southdakota,US state,South Dakota,49,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+arizonapolitics,US state politics candidate,Arizona,2,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+coloradopolitics,US state politics candidate,Colorado,39,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+connecticutpolitics,US state politics candidate,Connecticut,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+floridapolitics,US state politics candidate,Florida,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+georgiapolitics,US state politics candidate,Georgia,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+illinoispolitics,US state politics candidate,Illinois,8,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+indianapolitics,US state politics candidate,Indiana,2,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+iowapolitics,US state politics candidate,Iowa,6,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+kansaspolitics,US state politics candidate,Kansas,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+kentuckypolitics,US state politics candidate,Kentucky,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+louisianapolitics,US state politics candidate,Louisiana,7,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+mainepolitics,US state politics candidate,Maine,12,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+marylandpolitics,US state politics candidate,Maryland,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+masspolitics,US state politics candidate,Massachusetts,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+michiganpolitics,US state politics candidate,Michigan,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+minnesotapolitics,US state politics candidate,Minnesota,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+missouripolitics,US state politics candidate,Missouri,14,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+ncpolitics,US state politics candidate,North Carolina,58,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+nevadapolitics,US state politics candidate,Nevada,11,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+newjerseypolitics,US state politics candidate,New Jersey,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+newmexicopolitics,US state politics candidate,New Mexico,2,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+newyorkpolitics,US state politics candidate,New York,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+ohiopolitics,US state politics candidate,Ohio,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+oregonpolitics,US state politics candidate,Oregon,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+pennsylvania_politics,US state politics candidate,Pennsylvania,6,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+southcarolinapolitics,US state politics candidate,South Carolina,3,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+tennesseepolitics,US state politics candidate,Tennessee,87,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+utahpolitics,US state politics candidate,Utah,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+vermontpolitics,US state politics candidate,Vermont,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+virginiapolitics,US state politics candidate,Virginia,1,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+washington_politics,US state politics candidate,Washington,0,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+westvirginiapolitics,US state politics candidate,West Virginia,11,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+wisconsinpolitics,US state politics candidate,Wisconsin,54,skip,under 100 posts+comments a day: too few to show a change (the study's own rule),skip
+czech,European country,Czechia,4899,already tracked,already in group regional,already tracked
+de,European country,Germany,4473,already tracked,already in group regional,already tracked
+france,European country,France,4504,already tracked,already in group regional,already tracked
+italy,European country,Italy,1530,already tracked,already in group regional,already tracked
+polska,European country,Poland,3411,already tracked,already in group regional,already tracked
+spain,European country,Spain,280,already tracked,already in group regional,already tracked
+sweden,European country,Sweden,6711,already tracked,already in group regional,already tracked
+askarussian,European politics or alternate country candidate,Russia,313,already tracked,already in group russia,already tracked
+irishpolitics,European politics or alternate country candidate,Ireland,304,already tracked,already in group political,already tracked
+spainpolitics,European politics or alternate country candidate,Spain,246,already tracked,already in group political,already tracked
+tjournal_refugees,European politics or alternate country candidate,Russia / Russian language,1117,already tracked,already in group russia,already tracked
+ukpolitics,European politics or alternate country candidate,United Kingdom,7169,already tracked,already in group political,already tracked
+asktrumpsupporters,US national politics,United States,526,already tracked,already in group political-right,already tracked
+conservative,US national politics,United States,1763,already tracked,already in group political-right,already tracked
+neoliberal,US national politics,United States,10905,already tracked,already in group political,already tracked
+news,US national politics,United States,9317,already tracked,already in group political,already tracked
+politics,US national politics,United States,24340,already tracked,already in group political,already tracked
+republican,US national politics,United States,66,already tracked,already in group political-right,already tracked
+alabama,US state,Alabama,121,already tracked,already in group regional,already tracked
+illinois,US state,Illinois,926,already tracked,already in group regional,already tracked
+kansas,US state,Kansas,520,already tracked,already in group regional,already tracked
+maryland,US state,Maryland,884,already tracked,already in group regional,already tracked
+newjersey,US state,New Jersey,1502,already tracked,already in group regional,already tracked

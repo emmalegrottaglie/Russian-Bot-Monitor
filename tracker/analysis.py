@@ -30,6 +30,7 @@ HOUR, DAY = 3600, 86400
 CURRENT_HOURS = {"infrastructure": 3, "community": 24}
 FRESH = 3 * HOUR  # a series with no point this recent counts as stale
 FRESH_BY_PLATFORM = {"x": 26 * HOUR}  # X counts are fetched once a day
+FRESH_ARCHIVE = 4 * DAY  # archive-only series: the archive lags a day or two, filled once a day
 
 
 MIN_DAY_HOURS = 20  # a day needs this many hourly values before it gets a daily mean
@@ -210,6 +211,7 @@ def snapshot(conn: sqlite3.Connection, config: Config, now: int, corr_days: int 
     ref_key = config.correlation_ref
     ref_daily = daily(db.points(conn, ref_key, now - corr_days * DAY, now)) if ref_key else {}
 
+    archive_only = {s.key for s in config.series if s.params.get("archive_only")}
     rows = []
     for s in db.list_series(conn):
         pts = db.points(conn, s["key"], start, now)
@@ -227,7 +229,8 @@ def snapshot(conn: sqlite3.Connection, config: Config, now: int, corr_days: int 
             "primary": is_primary(s),
             "latest": latest[1] if latest else None,
             "latest_ts": latest[0] if latest else None,
-            "fresh": bool(latest and now - latest[0] <= FRESH_BY_PLATFORM.get(s["platform"], FRESH)),
+            "fresh": bool(latest and now - latest[0] <= (FRESH_ARCHIVE if s["key"] in archive_only
+                                                          else FRESH_BY_PLATFORM.get(s["platform"], FRESH))),
             "change_7d": _r(change_vs_rolling(hours, now, current_hours=3)),
             "change_ref": _r(change_vs_reference(hours, now, config.reference_start, config.reference_end, cur_h)),
             "r": _r(r, 3),
@@ -351,7 +354,7 @@ def correlation_view(conn: sqlite3.Connection, config: Config, now: int, days: i
 
 # ── Chart data (docs/CHARTS.md) ──────────────────────────────────────────────
 
-GROUP_ORDER = ("political-right", "narratives", "anti-trans", "political", "regional", "south-america", "russia", "control")
+GROUP_ORDER = ("political-right", "political-left", "narratives", "anti-trans", "political", "regional", "south-america", "russia", "control")
 ALIGNED_SPAN = 48  # hours either side of a strike; 72 changed nothing and shrinks the placebo pool (docs/CHARTS.md)
 ALIGNED_SMOOTH = 3  # centred rolling mean, hours; 1 h left the band 28 to 86 points wide (docs/CHARTS.md)
 MIN_POOL = 50  # placebo start times needed before a chance band is drawn
@@ -476,6 +479,7 @@ def heatmap(conn: sqlite3.Connection, config: Config, now: int, days: int = 50) 
     grouped. A community with several tags appears once, under its first tag."""
     first_day = (now - days * DAY) // DAY * DAY
     day_list = list(range(first_day, now - now % DAY + 1, DAY))
+    archive_only = {s.key for s in config.series if s.params.get("archive_only")}
     rows = []
     for s in db.list_series(conn):
         if s["kind"] != "community" or not is_primary(s):
