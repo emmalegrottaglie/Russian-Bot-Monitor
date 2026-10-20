@@ -13,7 +13,7 @@ It collects data on its own every 15 minutes and logs an alert when a signal mov
 As of 21 October 2026. The Reddit history is still being backfilled, so these are first results, not conclusions.
 
 - **No drop in right-wing activity after the strikes.** In the 48 hours after the strikes, the right-wing Reddit communities ran above their normal range in 37 of 49 hours, while the non-political control group ran below its range in 38 ([docs/CHARTS.md](docs/CHARTS.md)). Bluesky and X searches show no drop either.
-- **The r/theydidthemath result matches chance.** Its package reports 90 of 968 subreddits declining after all three strikes. In its own data about 45% of subreddits declined at each strike, so about 95 would decline at all three by chance, and 77 rose at all three ([docs/SYFTEN-CHECK.md](docs/SYFTEN-CHECK.md)).
+- **The r/theydidthemath post did not find a drop either.** Its headline was 90 of 968 subreddits declining after all three strikes, but the author found none of them held across every timing check and called it an exploratory screen, not a test. In its own data about 45% of subreddits declined at each strike, so about 95 would decline at all three by chance, and 77 rose at all three ([docs/SYFTEN-CHECK.md](docs/SYFTEN-CHECK.md)).
 - **Independent checks agree.** Graphika (via Texty), Cloudflare and Lawfare each found no measured drop in political activity ([docs/DROP-CLAIMS.md](docs/DROP-CLAIMS.md)).
 - **The data itself checks out.** Its hourly Reddit counts agree with an independent provider (Syften) to within a few percent (median hourly correlation 0.958).
 
