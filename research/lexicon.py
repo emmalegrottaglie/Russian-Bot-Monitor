@@ -84,6 +84,45 @@ EXTRA = [
      "Emma, 20 Oct 2026", "", "Related to 'sex-based rights' (Mendelsohn); needs a documenting source"),
 ]
 
+GLAAD = "GLAAD Guide to Anti-LGBTQ Online Hate and Disinformation (read 21 Oct 2026)"
+GLAAD_URL = "https://glaad.org/smsi/anti-lgbtq-online-hate-speech-disinformation-guide/"
+# (term, variants, category, note). Terms already in the list get GLAAD added as a source.
+GLAAD_TERMS = [
+    ("41%", "", "transphobic", "A coded call for self-harm aimed at trans people"),
+    ("biological man", "biological pronouns", "transphobic", "Used to misgender trans women and men"),
+    ("biological woman", "", "transphobic", "Used to misgender trans women and men"),
+    ("gender ideology", "", "transphobic", "Frames trans people as an ideology"),
+    ("transgender ideology", "trans agenda", "transphobic", "Frames trans people as an ideology or a coordinated movement"),
+    ("transgenderism", "", "transphobic", "A dog whistle for contempt of trans people"),
+    ("groomers", "", "anti-LGBTQ", "Slur casting LGBTQ people as predators"),
+    ("troon", "", "transphobic", "Slur; spread from Kiwi Farms"),
+    ("womanface", "", "transphobic", "Equates trans women and drag with blackface"),
+    ("globohomo", "globohomo; globo homo", "anti-LGBTQ", "Combines homophobia and antisemitism"),
+    ("LGBTP", "LGBTP; LGBTQP", "anti-LGBTQ", "Fake acronym claiming a 'P' for paedophiles"),
+    ("CloverGender", "CloverGender; clover gender", "anti-LGBTQ", "4chan hoax tying trans people to paedophilia (in GLAAD's LGBTP entry)"),
+    ("LGBTS", "LGBTS; LGBTQIAS", "anti-LGBTQ", "False claim that 'S' for Satanist was added"),
+    ("rapid onset gender dysphoria", "rapid onset gender dysphoria; ROGD", "transphobic", "Pseudoscientific term; not a diagnosis"),
+    ("super straight", "super straight; superstraight; #SuperStraight", "transphobic", "Transphobic meme from February 2021; r/superstraight was banned"),
+    ("trans terrorism", "trans terrorism; trans terrorist; trans terrorists", "transphobic", "Fearmongering trope; no evidence of a threat, per experts cited"),
+    ("transtrender", "transtrender; transtrenders", "transphobic", "Claims trans people follow a trend"),
+    ("transvestigation", "transvestigation; transvestigator; transvestigators", "transphobic", "Conspiracy theory 'investigating' public figures as trans"),
+    ("unwanted same-sex attraction", "unwanted same-sex attraction; overcome same-sex attraction; ex-gay", "homophobic", "Conversion-therapy phrasing; GLAAD lists many more variants"),
+]
+
+
+def add_glaad(rows: list[dict]) -> None:
+    by_term = {r["term"].lower(): r for r in rows}
+    for term, variants, category, note in GLAAD_TERMS:
+        row = by_term.get(term.lower())
+        if row:
+            row["source"] += f"; {GLAAD}"
+            row["note"] = "; ".join(x for x in (row["note"], f"GLAAD: {note}") if x)
+            if variants:
+                row["variants"] = "; ".join(x for x in (row["variants"], variants) if x)
+            continue
+        rows.append({"term": term, "variants": variants or term, "category": category, "type": "", "register": "",
+                     "status": "candidate", "source": GLAAD, "source_url": GLAAD_URL, "note": note, "precision": ""})
+
 
 def main() -> None:
     csv.field_size_limit(10**7)
@@ -112,6 +151,7 @@ def main() -> None:
     for term, variants, category, status, source, url, note in EXTRA:
         rows.append({"term": term, "variants": variants, "category": category, "type": "", "register": "",
                      "status": status, "source": source, "source_url": url, "note": note, "precision": ""})
+    add_glaad(rows)
     rows.sort(key=lambda r: (r["category"], r["term"].lower()))
     with OUT.open("w", encoding="utf-8", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS, lineterminator="\n")
