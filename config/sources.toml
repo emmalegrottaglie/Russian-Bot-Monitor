@@ -43,7 +43,8 @@ asn = 13238
 name = "Yandex"
 
 # ── Reddit ────────────────────────────────────────────────────────────────────
-# Seeded with the communities from the r/theydidthemath analysis plus explicit
+# Seeded with the communities from the r/theydidthemath analysis (post 1x3q43a, since
+# deleted by its author; text in the Arctic Shift archive) plus explicit
 # right-wing communities and non-political controls.
 
 [[reddit]]

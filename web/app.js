@@ -1418,10 +1418,11 @@ const views = {
         <li><b>Rates</b>: each poll reads the newest 100 items; if they span more than an hour the last hour is counted exactly, otherwise the rate is extrapolated from the span covered.</li>
       </ul></div>
       <h2 class="sect">Prior work</h2>
-      <div class="prose"><p>The event-study design follows a community analysis posted to r/theydidthemath,
-        <a href="https://www.reddit.com/r/theydidthemath/comments/1x3q43a/" rel="noopener">"Comparing Reddit activity around three reported Yandex attacks"</a>.
-        It used hourly Syften counts for 968 subreddits and found 90 that declined after all three strikes, none of which held across every timing check.
-        Commenters asked for random-date comparisons and controls; the placebo test, the control group and the robustness grid here answer that.</p></div>
+      <div class="prose"><p>The event-study design follows an analysis posted to r/theydidthemath on 12 October 2026, "Comparing Reddit activity around three reported Yandex attacks".
+        Its author later deleted the post; the text is kept in the <a href="https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&amp;fields=title,created_utc,selftext" rel="noopener">Arctic Shift Reddit archive</a>, and the author's <a href="https://files.catbox.moe/eqj4gh.zip" rel="noopener">data, methods and code</a> (a 25 MB zip) were still online in October 2026.
+        It used hourly Syften counts for 968 subreddits and found 90 that declined after all three strikes, none of which held across every timing check. The author disclosed that the calculations were produced with ChatGPT and posted it for review.
+        Commenters asked for random-date comparisons and controls; the placebo test, the control group and the robustness grid here answer that.</p>
+        <p>Independent checks since then found no measured drop in political activity on social media: <a href="https://texty.org.ua/fragments/118487/chy-zmusyly-udary-po-data-centrax-yandeksu-zamovknuty-rosijskyx-botiv-analiz-graphika/" rel="noopener">Graphika</a> (via Texty, 14 October) on X, Telegram and Reddit, <a href="https://blog.cloudflare.com/yandex-outage/" rel="noopener">Cloudflare</a> (14 October) on its traffic data, and <a href="https://www.lawfaremedia.org/article/the-russian-bots-went-silent.-or-did-they" rel="noopener">Lawfare</a> (Renée DiResta, 14 October). What each found is in <code>docs/DROP-CLAIMS.md</code>.</p></div>
       <h2 class="sect">Anti-trans and anti-LGBTQ rhetoric</h2>
       <div class="prose">
         <p>Influence operations have used anti-trans topics: a fake LGBTQ+ outlet run by the Russian operation Doppelganger filed stories under "Trans youth" and "Woke Wars" (<a href="https://dfrlab.org/2024/09/18/doppelganger-us-election/" rel="noopener">DFRLab, 2024</a>). Most anti-trans rhetoric online is domestic, and others have measured it where it mostly lives, on X:</p>

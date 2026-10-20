@@ -61,7 +61,7 @@ The UI follows the terminal design system in [terminal-design-guide/](terminal-d
 
 ## Event study
 
-The headline question is tested the way the [r/theydidthemath analysis](https://www.reddit.com/r/theydidthemath/comments/1x3q43a/) tried to, with the checks its commenters asked for:
+The headline question is tested the way an r/theydidthemath analysis (12 October 2026) tried to, with the checks its commenters asked for. Its author later deleted the post; the text is in the [Arctic Shift archive](https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext) and the author's [data and code](https://files.catbox.moe/eqj4gh.zip) were still online in October 2026. The author disclosed the calculations were produced with ChatGPT. Independent checks are collected in [docs/DROP-CLAIMS.md](docs/DROP-CLAIMS.md).
 
 - **Effect**: total activity in the 12 hours after each strike, compared with the same weekday and hour one, two and three weeks earlier. The strikes are averaged with equal weight. Strike times are in [config/events.toml](config/events.toml). Where IODA shows the outage, its measured time is used: Sasovo at 23:30 UTC on Oct 7, Vladimir at 01:50 UTC on Oct 11.
 - **Placebo p-value**: the same statistic is computed for random start times before the first strike. p is the share of those that drop at least as much.
