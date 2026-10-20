@@ -38,6 +38,18 @@ EXCLUDED = {
     "attacks on or imagery of Jewish political leaders": "Named people, not a coded term",
     "George Soros": "Named person, not a coded term",
 }
+# Terms whose ordinary meaning dominates: not counted until a hand check shows most
+# uses are coded (Emma, 21 Oct 2026: "it's gonna create a lot of bad data").
+AMBIGUOUS = {
+    "bankers", "banksters", "central bankers", "international bankers", "Federal Reserve", "Rothschilds", "shekels",
+    "global elite", "globalism", "globalist", "cabal", "deep state", "New World Order", "Illuminati",
+    "Trilateral Commission", "puppet masters", "pulling strings", "string puller", "octopus", "controlled media",
+    "special interests", "cosmopolitan", "cosmopolitan elite", "cosmopolitanism", "rootless cosmopolitan",
+    "citizens of nowhere", "Hollywood elite", "New York elite", "New York intellectuals", "New York values",
+    "coastal elite", "cultural Marxism", "cultural Marxists", "coincidence", "poisoning the well", "Judas", "pilpul",
+    "Khazars", "America First", "blueish", "Skype", "YKW", "goy", "oy vey",
+}
+
 NOTES = {
     "dual loyalty": "Kept after review (Emma, 20 Oct 2026)",
     "open borders for Israel": "Kept after review (Emma, 20 Oct 2026)",
@@ -207,7 +219,8 @@ def main() -> None:
     rows = []
     for g in glossary:
         term, persona = g["Dogwhistle"].strip(), g["Persona/In-Group"].strip()
-        status = "excluded" if term in EXCLUDED else "out of scope" if persona in OUT_OF_SCOPE else "candidate"
+        status = ("excluded" if term in EXCLUDED else "out of scope" if persona in OUT_OF_SCOPE
+                  else "ambiguous" if term in AMBIGUOUS else "candidate")
         source = g["Source"].strip()
         link = g["Link"].strip()
         if link and not link.startswith(("http://", "https://")):  # a few glossary links omit the scheme
@@ -221,7 +234,7 @@ def main() -> None:
             "status": status,
             "source": f"{MENDELSOHN}; cites {source}" if source else MENDELSOHN,
             "source_url": link or MENDELSOHN_URL,
-            "note": EXCLUDED.get(term) or NOTES.get(term, ""),
+            "note": EXCLUDED.get(term) or NOTES.get(term, "") or ("Ordinary meaning dominates: not counted until a hand check" if term in AMBIGUOUS else ""),
             "precision": "",
         })
     for term, variants, category, status, source, url, note in EXTRA:

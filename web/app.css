@@ -8,6 +8,8 @@ main { flex: 1; }
 a { color: var(--a1); }
 
 /* Toggle chips (same pattern as the specimen's switchers) */
+.group-desc { margin: 0; padding: 0 var(--gutter) 10px; max-width: 90ch; color: var(--term-ink); font-size: 11px; line-height: 1.55; }
+.group-desc b { letter-spacing: .08em; }
 .switch { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 var(--gutter) 6px; }
 .switch button.chip:not([aria-pressed="true"]) { background: transparent; color: var(--a1); border-color: var(--term-line); }
 

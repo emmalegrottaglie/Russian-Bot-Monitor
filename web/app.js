@@ -45,6 +45,10 @@ let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
   corrTags: new Set(['political-right', 'control']), diffTag: 'political-right', alignedTag: 'political-right' };
 // Line style per group on the correlation chart; Yandex itself is always a1.
+// The selected group's one-line definition, shown under the chips so a label like
+// NARRATIVES makes sense without opening the group panels.
+const groupDesc = (tag, name) => TAG_ABOUT[tag] ? `<b>${esc(name)}:</b> ${esc(TAG_ABOUT[tag])}` : '';
+
 const TAG_LINE = { 'political-right': 'l-a3', 'political-left': 'l-ink l-dash', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a1', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
 
 // ── Formatting: one time format per screen (MM-DD HH:MM UTC) ────────────────
@@ -784,6 +788,7 @@ function renderAligned(d, chosen = null) {
   const options = usable.filter((g) => g.tag !== 'control');
   if (!options.length || !d.events.length) {
     $('aligned-switch').innerHTML = '';
+    $('aligned-desc').innerHTML = '';
     $('aligned-chart').innerHTML = '';
     $('aligned-readout').innerHTML = `<span class="muted">${d.events.length ? 'NO DATA YET' : 'NO STRIKE IS A DAY OLD YET'}</span>`;
     $('aligned-note').innerHTML = '';
@@ -796,6 +801,7 @@ function renderAligned(d, chosen = null) {
     state.alignedTag = b.dataset.v; renderAligned(d, b.dataset.v);
   };
   const g = options.find((o) => o.tag === state.alignedTag);
+  $('aligned-desc').innerHTML = groupDesc(g.tag, label(g.tag));
   const pts = (vs) => d.offsets.map((o, i) => [o * 3600, vs[i]]).filter((p) => p[1] != null);
   const lines = [{ label: label(g.tag), cls: 'l-a3', points: pts(g.values) }];
   if (control) lines.push({ label: 'CONTROL', cls: 'l-muted l-dash', points: pts(control.values) });
@@ -951,6 +957,7 @@ function renderDiff(c, chosen = null) {
     state.diffTag = b.dataset.v; renderDiff(c, b.dataset.v);
   };
   const g = options.find((o) => o.tag === state.diffTag);
+  $('diff-desc').innerHTML = g ? groupDesc(g.tag, label(g.tag)) : '';
   if (!g || !control) {
     $('diff-chart').innerHTML = '';
     $('diff-readout').innerHTML = '<span class="muted">NO DATA YET — NEEDS BOTH A GROUP AND THE CONTROL GROUP</span>';
@@ -1038,6 +1045,7 @@ const views = {
     view.innerHTML = `${hero}
       <h2 class="sect">Around the strikes · index · 100 = normal</h2>
       <div class="switch" id="aligned-switch" role="group" aria-label="Group shown around the strikes"></div>
+      <p class="group-desc" id="aligned-desc" aria-live="polite"></p>
       <div class="readout" id="aligned-readout"></div>
       <div class="chart" id="aligned-chart"><p class="note">LOADING…</p></div>
       <div id="aligned-note"></div>
@@ -1060,6 +1068,7 @@ const views = {
       ])}
       <h2 class="sect">Difference · group minus non-political · percentage points</h2>
       <div class="switch" id="diff-switch" role="group" aria-label="Group compared with the control group"></div>
+      <p class="group-desc" id="diff-desc" aria-live="polite"></p>
       <div class="readout" id="diff-readout"></div>
       <div class="chart" id="diff-chart"><p class="note">LOADING…</p></div>
       <div id="diff-note"></div>
