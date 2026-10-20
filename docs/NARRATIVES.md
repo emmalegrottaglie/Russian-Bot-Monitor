@@ -100,3 +100,14 @@ On Bluesky these counts measure pushback and unrelated uses, not the rhetoric, s
 | "no such thing as a trans" | about 60 (32 to 109) | not counted | under 1 | as above |
 
 Both are tracked on X as the **anti-trans** group (the two phrasings as one search), with `x_only = true`, so Bluesky does not count them. On X, as on Bluesky, a count includes people quoting the words to object. How large that share is on X has not been checked: it needs reading a sample of posts (about $0.50 for 50 each), which the counts-only plan does not cover.
+
+**Checked and not tracked: the "wound" framing of vaginoplasty.** The claim that bottom surgery leaves a wound the body keeps trying to close is documented as a myth by LGBTQ Nation (Gwendolyn Smith, 11 April 2019, reporting Christine Burns MBE). Counts for 13 to 20 October 2026, English, original posts:
+
+| Search | Posts a day |
+|---|---|
+| "gaping wound" on X, any context | about 36 (9 to 90) |
+| "gaping wound" on X with a trans term (trans, troon, tranny, vaginoplasty, neovagina, "bottom surgery") | about 2 (0 to 4) |
+| Any of "gaping wound", "open wound", "wound that never heals", "self-inflicted wound", "axe wound" on X, with a trans term or "dilate" | about 17 (3 to 45) |
+| "gaping wound", "axe wound" on Bluesky | 0 to 8 |
+
+The phrases are mostly used about injuries, games and fiction. Narrowed to posts that also mention trans terms, they fall below the 20-a-day rule, and the widest version still mixes in unrelated uses ("trans" and "dilate" match other topics). Not tracked.
