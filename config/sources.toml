@@ -215,7 +215,7 @@ metrics = ["comments"]
 archive_only = true
 
 [[reddit]]
-subreddits = ["50501", "askaliberal", "democraticparty", "democrats", "political_revolution", "trumpvirus", "votedem"]
+subreddits = ["50501", "askaliberal", "democraticparty", "democrats", "enough_sanders_spam", "political_revolution", "trumpvirus", "votedem"]
 region = "US"
 tags = ["political-left"]
 metrics = ["comments"]
@@ -236,7 +236,7 @@ metrics = ["comments"]
 archive_only = true
 
 [[reddit]]
-subreddits = ["askpolitics", "blackpeopletwitter", "centrist", "enough_sanders_spam", "inthenews", "leopardsatemyface", "moderatepolitics", "politicaldiscussion", "politicalhumor", "wayofthebern", "whitepeopletwitter", "california_politics", "texaspolitics"]
+subreddits = ["askpolitics", "blackpeopletwitter", "centrist", "inthenews", "leopardsatemyface", "moderatepolitics", "politicaldiscussion", "politicalhumor", "wayofthebern", "whitepeopletwitter", "california_politics", "texaspolitics"]
 region = "US"
 tags = ["political"]
 metrics = ["comments"]

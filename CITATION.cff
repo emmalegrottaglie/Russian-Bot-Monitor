@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this software, its data or its subreddit labels, please cite it as below."
+title: "Bot Traffic Monitor"
+type: software
+authors:
+  - family-names: Legrottaglie
+    given-names: Emma
+repository-code: "https://github.com/emmalegrottaglie/Russian-Bot-Monitor"
+url: "https://emmalegrottaglie.github.io/Russian-Bot-Monitor/"
+license: MIT
+date-released: "2026-10-20"
+keywords:
+  - Reddit
+  - Bluesky
+  - political communities
+  - subreddit classification
+  - influence operations
+references:
+  - type: report
+    title: "Labelling subreddits by political orientation: method, external checks and limits"
+    authors:
+      - family-names: Legrottaglie
+        given-names: Emma
+    version: "1"
+    date-published: "2026-10-20"
+    url: "https://github.com/emmalegrottaglie/Russian-Bot-Monitor/blob/main/docs/SUBREDDIT-LABELS.md"

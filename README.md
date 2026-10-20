@@ -92,6 +92,10 @@ An alert fires when either of these moves against its 7-day same-hour baseline:
 
 Each signal-direction pair has a 12-hour cooldown. Every alert also quotes the control group's change. Alerts are always logged on the site. To post them to X, set the four `X_*` credentials and `TRACKER_POST_ALERTS=1`. X charges per post, and much more for posts with links, so alerts leave the link out by default and are capped at `TRACKER_MAX_POSTS_PER_DAY`.
 
+## Community labels
+
+How Reddit communities are placed in groups, and how those labels compare with published classifications, is written up in [docs/SUBREDDIT-LABELS.md](docs/SUBREDDIT-LABELS.md), with the per-subreddit comparison in `docs/subreddit-label-check.csv`. To cite the project, see `CITATION.cff`.
+
 ## Reports
 
 A report is built every day and saved under `data/reports/YYYY-MM-DD/`. Reports are never changed after their day, so each one can be cited. Each contains:

@@ -20,8 +20,8 @@
 135 subreddits were added to config/sources.toml, comments only and from the archive only, through the daily catch-up, about 2 days late (Reddit's live feeds already run out of time with the original 42 subreddits).
 
 - **political-right (3):** askconservatives, trump, walkaway, as suggested.
-- **political-left (15), a new group:** from the 221, democrats, democraticparty, votedem, askaliberal, political_revolution, 50501, trumpvirus and labouruk; from the general list, latestagecapitalism, shitliberalssay, socialism, tankiejerk, democraticsocialism, socialdemocracy and anarchism. Each was checked against the community's own description in the Arctic Shift archive. r/shitliberalssay describes itself as communist, satirising liberals from the far left, despite a name that reads as right-wing.
-- **political (39):** the remaining suggested political subreddits, plus geopolitics, politicaldebate and enoughcommiespam from the general list.
+- **political-left (16), a new group:** from the 221, democrats, enough_sanders_spam, democraticparty, votedem, askaliberal, political_revolution, 50501, trumpvirus and labouruk; from the general list, latestagecapitalism, shitliberalssay, socialism, tankiejerk, democraticsocialism, socialdemocracy and anarchism. Each was checked against the community's own description in the Arctic Shift archive. r/shitliberalssay describes itself as communist, satirising liberals from the far left, despite a name that reads as right-wing.
+- **political (38):** the remaining suggested political subreddits, plus geopolitics, politicaldebate and enoughcommiespam from the general list.
 - **regional (78):** as suggested. US states have region `US`; countries have their ISO code (`UK` for the United Kingdom, as elsewhere in the file).
 
 A community moved to a left or right group only when its leaning was at least about 85% certain. Communities that lean one way but are not organised around it (r/wayofthebern describes itself as neither left nor right; r/greenandpleasant, r/politicalhumor, r/leopardsatemyface, r/whitepeopletwitter) stay in `political`.
@@ -29,3 +29,5 @@ A community moved to a left or right group only when its leaning was at least ab
 ### Left for review
 
 Not added; `your_decision` is blank. From the general list: antiwork, workreform, marchagainstnazis, conspiracy, joerogan, elonmusk, enoughmuskspam, 4chan, and every other general community. Right-leaning boards often use meme or code-word names, so the general list is worth reading for those; a name alone is not enough to tag one (see r/shitliberalssay above).
+
+The labels were then checked against two published classifications, and r/enough_sanders_spam was moved from `political` to `political-left` as a result: see docs/SUBREDDIT-LABELS.md and docs/subreddit-label-check.csv.
