@@ -75,3 +75,19 @@ The same measure could be applied to Bluesky (free search counts) and X (paid; e
 
 - **Erin in the Morning** (Erin Reed): reporting on anti-trans legislation, online spaces and coded language. Articles are cited individually once read.
 - **Transitics** (Aleksandra Vaca): news on policy and courts affecting trans people. Its recent archive (August to October 2026) covers policy rather than online communities; it is cited where it reports on the rhetoric measured here.
+
+## First look on X (21 October 2026)
+
+`research/coded_x.py`, approved by Emma: hourly counts on X (English, 1 September to 20 October 2026) for five categories of hand-picked high-specificity terms, original posts and reposts separately, plus X's general-volume probe. 22 full-archive count requests, about $0.22. No posts or accounts were read. Then the site's strike-aligned index (each hour against the same weekday-hour 1-3 weeks earlier, three strikes lined up, 3-hour smoothing, 5-95% band from 500 random pre-strike starts; pool of 456 hours).
+
+| Category | Median a day (originals / reposts) | Originals, mean index 0-48 h after | Reposts, mean index 0-48 h after |
+|---|---|---|---|
+| Anti-trans slurs and memes | 3,204 / 2,779 | 118, inside the band | 179, above the band in 31 of 49 hours |
+| Anti-trans framing | 1,692 / 2,210 | 95, inside | 188, above in 5 |
+| Anti-LGBTQ | 127 / 29 | 118, below in 4 | 120, below in 3 |
+| Antisemitic (coded) | 1,302 / 1,371 | 90, below in 15 by count, 5 as a rate | 94, inside |
+| Racist and white supremacist | 1,227 / 1,280 | 105 | 87, below in 15 by count, 12 as a rate |
+
+General English volume on X (the probe) averaged 99 after the strikes; its band is so narrow that it sat just below it in 45 of 49 hours, a dip of about 1%.
+
+**Reading.** No category of coded language fell after the strikes in a way that stands out, except reposts of the racist and white-supremacist terms (index 87, below the band in 12 to 15 of 49 hours, where about 2 to 3 would be expected by chance). Anti-trans reposts rose instead. Hours are not independent, so 12 hours may be one event. Before anything is read into it: which terms drive it, and whether their matches are coded uses, need checking (a per-term count for that category costs about $0.26). Precision has not been measured for any term.
