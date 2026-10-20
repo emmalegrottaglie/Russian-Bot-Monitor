@@ -1,6 +1,6 @@
 # Subreddit candidates from the r/theydidthemath study
 
-`subreddit-candidates.csv` lists the 221 political and regional subreddits that the r/theydidthemath study (12 October 2026; see docs/SYFTEN-CHECK.md) grouped by type, as candidates to add to this tracker. They were chosen by that study's author by topic, not by how they moved after the strikes, which keeps the selection honest. Its other 1,000 subreddits are general popular communities and are not proposed here.
+`subreddit-candidates.csv` lists the 221 political and regional subreddits that the r/theydidthemath study (12 October 2026; see docs/SYFTEN-CHECK.md) grouped by type, as candidates to add to this tracker. They were chosen by that study's author by topic, not by how they moved after the strikes, which keeps the selection honest. Its other 1,000 subreddits, general popular communities, are in `subreddit-candidates-general.csv`, busiest first, so right-wing or political ones among them can be picked out by hand.
 
 ## Columns
 
