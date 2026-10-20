@@ -1,11 +1,11 @@
 # The r/theydidthemath package: an independent check
 
-October 2026. The analysis this tracker's event study follows was posted to r/theydidthemath on 12 October 2026 and later deleted by its author. Its text is kept in the [Arctic Shift archive](https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext). The author's data, methods and code were published as [a zip on catbox](https://files.catbox.moe/eqj4gh.zip).
+October 2026. The analysis this tracker's event study follows was posted to r/theydidthemath on 12 October 2026 and removed later that day. Commenters on the post said moderators had removed it; no reason was posted that we could find, and the author did not say they had deleted it. Its text is kept in the [Arctic Shift archive](https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext). The author's data, methods and code were published as [a zip on catbox](https://files.catbox.moe/eqj4gh.zip).
 
 ## The copy
 
 - Downloaded on 20 October 2026: `eqj4gh.zip`, 24,602,672 bytes, SHA-256 `bf93862bd93b17bc5fdea74e1dae84024b96e0dfa33010e057e678afbf8a5ed2`.
-- Kept locally under `data/external/theydidthemath-1x3q43a/` (not in git, not republished). The author deleted the post; whether to rehost the package is left open.
+- Kept locally under `data/external/theydidthemath-1x3q43a/` (not in git, not republished). The post was removed; whether to rehost the package is left open.
 - Its code was read, not run. Only its data files were opened.
 
 ## What the package holds

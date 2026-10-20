@@ -8,6 +8,17 @@ It collects data on its own every 15 minutes and logs an alert when a signal mov
 
 **Live site: <https://emmalegrottaglie.github.io/Russian-Bot-Monitor/>**. This is a static snapshot, refreshed about every 30 minutes; see [Deploying](#deploying).
 
+## What we have found so far
+
+As of 21 October 2026. The Reddit history is still being backfilled, so these are first results, not conclusions.
+
+- **No drop in right-wing activity after the strikes.** In the 48 hours after the strikes, the right-wing Reddit communities ran above their normal range in 37 of 49 hours, while the non-political control group ran below its range in 38 ([docs/CHARTS.md](docs/CHARTS.md)). Bluesky and X searches show no drop either.
+- **The r/theydidthemath result matches chance.** Its package reports 90 of 968 subreddits declining after all three strikes. In its own data about 45% of subreddits declined at each strike, so about 95 would decline at all three by chance, and 77 rose at all three ([docs/SYFTEN-CHECK.md](docs/SYFTEN-CHECK.md)).
+- **Independent checks agree.** Graphika (via Texty), Cloudflare and Lawfare each found no measured drop in political activity ([docs/DROP-CLAIMS.md](docs/DROP-CLAIMS.md)).
+- **The data itself checks out.** Its hourly Reddit counts agree with an independent provider (Syften) to within a few percent (median hourly correlation 0.958).
+
+Correlation is not attribution: a drop after an outage could also come from news cycles, moderation or Russian users losing service, which is why every group is compared with a non-political control.
+
 ## What it measures
 
 | Signal | Source | Key needed |
@@ -61,7 +72,7 @@ The UI follows the terminal design system in [terminal-design-guide/](terminal-d
 
 ## Event study
 
-The headline question is tested the way an r/theydidthemath analysis (12 October 2026) tried to, with the checks its commenters asked for. Its author later deleted the post; the text is in the [Arctic Shift archive](https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext) and the author's [data and code](https://files.catbox.moe/eqj4gh.zip) were still online in October 2026. The author disclosed the calculations were produced with ChatGPT. Independent checks are collected in [docs/DROP-CLAIMS.md](docs/DROP-CLAIMS.md).
+The headline question is tested the way an r/theydidthemath analysis (12 October 2026) tried to, with the checks its commenters asked for. The post was removed later that day (commenters said by moderators; no reason was posted that we could find); the text is in the [Arctic Shift archive](https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext) and the author's [data and code](https://files.catbox.moe/eqj4gh.zip) were still online in October 2026. The author disclosed the calculations were produced with ChatGPT. Independent checks are collected in [docs/DROP-CLAIMS.md](docs/DROP-CLAIMS.md).
 
 - **Effect**: total activity in the 12 hours after each strike, compared with the same weekday and hour one, two and three weeks earlier. The strikes are averaged with equal weight. Strike times are in [config/events.toml](config/events.toml). Where IODA shows the outage, its measured time is used: Sasovo at 23:30 UTC on Oct 7, Vladimir at 01:50 UTC on Oct 11.
 - **Placebo p-value**: the same statistic is computed for random start times before the first strike. p is the share of those that drop at least as much.

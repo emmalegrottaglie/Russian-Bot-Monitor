@@ -16,7 +16,7 @@ Claims that bot networks "went quiet" after the strikes are claims about particu
 
 ## 2. Where the communities come from
 
-- **The original 42 subreddits** (October 2026): communities named in the r/theydidthemath analysis of 12 October 2026 (post 1x3q43a, since deleted by its author and kept in the Arctic Shift archive), plus explicitly right-wing communities and non-political controls. See `config/sources.toml`.
+- **The original 42 subreddits** (October 2026): communities named in the r/theydidthemath analysis of 12 October 2026 (post 1x3q43a, removed from Reddit the same day, apparently by moderators, and kept in the Arctic Shift archive), plus explicitly right-wing communities and non-political controls. See `config/sources.toml`.
 - **135 added subreddits** (20 October 2026): taken from the subreddit list in that study's published package (docs/SYFTEN-CHECK.md). From its 221 political and regional subreddits, those with at least 100 posts and comments a day, the study's own rule; and from its 1,000 general subreddits, those that are clearly political. Candidate lists and every decision: `docs/subreddit-candidates.csv` and `docs/subreddit-candidates-general.csv`.
 
 ## 3. Labelling rules
@@ -138,4 +138,4 @@ Legrottaglie, E. (2026). *Labelling subreddits by political orientation: method,
 - Kruk, J. et al. (2024). Silent signals, loud impact: LLMs for word-sense disambiguation of coded dog whistles. https://arxiv.org/abs/2406.06840
 - Mendelsohn, J., Le Bras, R., Choi, Y. and Sap, M. (2023). From dogwhistles to bullhorns: unveiling coded rhetoric with language models. *Proceedings of ACL 2023*, 15162–15180. https://aclanthology.org/2023.acl-long.845
 - Waller, I. and Anderson, A. (2021). Quantifying social organization and political polarization in online platforms. *Nature* 600, 264–268. https://doi.org/10.1038/s41586-021-04167-x. Preprint: https://arxiv.org/abs/2010.00590. Code and data: https://github.com/CSSLab/social-dimensions
-- r/theydidthemath analysis, 12 October 2026 (post 1x3q43a, deleted by its author): https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext. See docs/SYFTEN-CHECK.md.
+- r/theydidthemath analysis, 12 October 2026 (post 1x3q43a, removed from Reddit on 12 October 2026): https://arctic-shift.photon-reddit.com/api/posts/ids?ids=1x3q43a&fields=title,created_utc,selftext. See docs/SYFTEN-CHECK.md.
