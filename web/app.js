@@ -717,7 +717,7 @@ function lineChart(el, readout, points, opts) {
 function seriesLabel(s) { return `${s.label} · ${s.unit}`; }
 function byKey(key) { return snap?.series.find((s) => s.key === key); }
 
-function renderCorrelation(c) {
+function renderCorrelation(c, chosen = null) {
   const start = c.days[0], end = snap.now;
   const pts = (vals) => c.days.map((d, i) => [d + 43200, vals[i]]).filter((p) => p[1] != null);  // plot at midday
   const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
@@ -736,10 +736,11 @@ function renderCorrelation(c) {
   const swatch = (cls) => `<svg class="swatch" viewBox="0 0 22 8" aria-hidden="true"><line class="line ${cls}" x1="1" x2="21" y1="4" y2="4"/></svg>`;
   $('corr-legend').innerHTML = `<span class="legend-item">${swatch('l-a1')}YANDEX CLOUD</span>${c.groups.map((g) =>
     `<button class="legend-item" data-v="${esc(g.tag)}" aria-pressed="${state.corrTags.has(g.tag)}">${swatch(TAG_LINE[g.tag] || 'l-ink')}${esc(label(g.tag))}</button>`).join('')}`;
+  if (chosen != null) $('corr-legend').querySelector(`[data-v="${CSS.escape(chosen)}"]`)?.focus({ preventScroll: true });
   $('corr-legend').onclick = (e) => {
     const b = e.target.closest('button'); if (!b) return;
     if (state.corrTags.has(b.dataset.v)) state.corrTags.delete(b.dataset.v); else state.corrTags.add(b.dataset.v);
-    renderCorrelation(c);
+    renderCorrelation(c, b.dataset.v);
   };
 
   // Index of the latest day with a value: only complete UTC days get one, so it is not today.
@@ -775,7 +776,7 @@ const ALIGNED_X = {
   xTitle: 'HOURS FROM STRIKE',
 };
 
-function renderAligned(d) {
+function renderAligned(d, chosen = null) {
   const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
   const usable = d.groups.filter((g) => g.members >= 2 && g.values.some((v) => v != null));
   const control = usable.find((g) => g.tag === 'control');
@@ -788,11 +789,10 @@ function renderAligned(d) {
     return;
   }
   if (!options.some((g) => g.tag === state.alignedTag)) state.alignedTag = options[0].tag;
-  $('aligned-switch').innerHTML = options.map((g) =>
-    `<button class="chip" data-v="${esc(g.tag)}" aria-pressed="${g.tag === state.alignedTag}">${esc(label(g.tag))}</button>`).join('');
+  setChips($('aligned-switch'), options.map((g) => [g.tag, label(g.tag)]), state.alignedTag, chosen);
   $('aligned-switch').onclick = (e) => {
     const b = e.target.closest('button'); if (!b) return;
-    state.alignedTag = b.dataset.v; renderAligned(d);
+    state.alignedTag = b.dataset.v; renderAligned(d, b.dataset.v);
   };
   const g = options.find((o) => o.tag === state.alignedTag);
   const pts = (vs) => d.offsets.map((o, i) => [o * 3600, vs[i]]).filter((p) => p[1] != null);
@@ -939,16 +939,15 @@ function renderHeatmap(d) {
 
 const DIFF_CAPTION = (g) => `${g} communities minus the non-political control group, in percentage points of their pre-strike level. Shaded: range of 90% of pre-strike days. Dashed: reported strikes.`;
 
-function renderDiff(c) {
+function renderDiff(c, chosen = null) {
   const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
   const control = c.groups.find((g) => g.tag === 'control');
   const options = c.groups.filter((g) => g.tag !== 'control');
   if (!options.some((g) => g.tag === state.diffTag) && options.length) state.diffTag = options[0].tag;
-  $('diff-switch').innerHTML = options.map((g) =>
-    `<button class="chip" data-v="${esc(g.tag)}" aria-pressed="${g.tag === state.diffTag}">${esc(label(g.tag))}</button>`).join('');
+  setChips($('diff-switch'), options.map((g) => [g.tag, label(g.tag)]), state.diffTag, chosen);
   $('diff-switch').onclick = (e) => {
     const b = e.target.closest('button'); if (!b) return;
-    state.diffTag = b.dataset.v; renderDiff(c);
+    state.diffTag = b.dataset.v; renderDiff(c, b.dataset.v);
   };
   const g = options.find((o) => o.tag === state.diffTag);
   if (!g || !control) {
@@ -1088,7 +1087,7 @@ const views = {
 
     view.querySelector('[data-compare]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
-      state.compare = b.dataset.v; views.live();
+      state.compare = b.dataset.v; redraw(b);
     });
     const why = view.querySelector('[data-why]');
     const setWhy = (open) => { $('why').hidden = !open; why.setAttribute('aria-expanded', String(open)); };
@@ -1097,27 +1096,29 @@ const views = {
       if (e.key === 'Escape' && !$('why').hidden) { setWhy(false); why.focus(); }
     });
 
-    api('/api/strike-aligned').then(renderAligned).catch(() => {
+    const loads = [];
+    loads.push(api('/api/strike-aligned').then(renderAligned).catch(() => {
       $('aligned-chart').innerHTML = '<p class="note">STRIKE DATA UNAVAILABLE</p>';
-    });
-    api('/api/correlation').then(renderCorrelation).catch(() => {
+    }));
+    loads.push(api('/api/correlation').then(renderCorrelation).catch(() => {
       $('corr-chart').innerHTML = '<p class="note">CORRELATION DATA UNAVAILABLE</p>';
-    });
+    }));
 
     if (ref) {
       const end = snap.now, start = end - 14 * 86400;
-      api(`/api/series/${encodeURIComponent(ref.key)}/points?days=14&bucket=hour`).then((d) =>
+      loads.push(api(`/api/series/${encodeURIComponent(ref.key)}/points?days=14&bucket=hour`).then((d) =>
         lineChart($('live-chart'), $('live-readout'), d.points, { start, end, unit: ref.unit, events: snap.events, ref: snap.reference,
           share: { name: ref.key, title: `${ref.label} · ${ref.unit}`, sources: SOURCES[ref.platform],
             caption: 'Hourly means, UTC, last 14 days. Shaded: pre-strike reference period. Dashed: reported strikes.' } }))
-        .catch(() => toast('CHART DATA UNAVAILABLE'));
+        .catch(() => toast('CHART DATA UNAVAILABLE')));
     }
-    api('/api/alerts?limit=3').then((list) => {
+    loads.push(api('/api/alerts?limit=3').then((list) => {
       $('live-alerts').innerHTML = list.length
         ? `<div style="display:grid;gap:6px;padding:0 var(--gutter)">${list.map((a) =>
           `<div class="toast info"><span class="led"></span>${esc(stamp(a.ts))} · ${esc(a.details.map((d) => `${d.label} ${pct(d.change)}`).join(' · '))}</div>`).join('')}</div>`
         : '<p class="note">NO ALERTS YET</p>';
-    }).catch(() => { $('live-alerts').innerHTML = '<p class="note">ALERTS UNAVAILABLE</p>'; });
+    }).catch(() => { $('live-alerts').innerHTML = '<p class="note">ALERTS UNAVAILABLE</p>'; }));
+    return Promise.allSettled(loads);
   },
 
   communities() {
@@ -1170,13 +1171,13 @@ const views = {
       ])}`;
 
     view.querySelector('[data-tags]').addEventListener('click', (e) => {
-      const b = e.target.closest('button'); if (b) { state.tag = b.dataset.v; views.communities(); }
+      const b = e.target.closest('button'); if (b) { state.tag = b.dataset.v; redraw(b); }
     });
     view.querySelector('[data-metrics]').addEventListener('click', (e) => {
-      const b = e.target.closest('button'); if (b) { state.allMetrics = b.dataset.v === 'all'; views.communities(); }
+      const b = e.target.closest('button'); if (b) { state.allMetrics = b.dataset.v === 'all'; redraw(b); }
     });
     view.querySelectorAll('a[data-key]').forEach((a) => a.addEventListener('click', () => { state.b = a.dataset.key; }));
-    api('/api/heatmap').then(renderHeatmap).catch(() => { $('heat-chart').innerHTML = '<p class="note">HEATMAP DATA UNAVAILABLE</p>'; });
+    return api('/api/heatmap').then(renderHeatmap).catch(() => { $('heat-chart').innerHTML = '<p class="note">HEATMAP DATA UNAVAILABLE</p>'; });
   },
 
   history() {
@@ -1209,10 +1210,10 @@ const views = {
       </div>`;
 
     view.querySelector('[data-days]').addEventListener('click', (e) => {
-      const b = e.target.closest('button'); if (b) { state.days = Number(b.dataset.v); views.history(); }
+      const b = e.target.closest('button'); if (b) { state.days = Number(b.dataset.v); redraw(b); }
     });
-    $('sel-a').addEventListener('change', (e) => { state.a = e.target.value; views.history(); });
-    $('sel-b').addEventListener('change', (e) => { state.b = e.target.value; views.history(); });
+    $('sel-a').addEventListener('change', (e) => { state.a = e.target.value; redraw(e.target); });
+    $('sel-b').addEventListener('change', (e) => { state.b = e.target.value; redraw(e.target); });
 
     const end = snap.now, start = end - state.days * 86400;
     const draw = async (key, chart, ro) => {
@@ -1222,9 +1223,11 @@ const views = {
         share: { name: key, title: `${s.label} · ${s.unit}`, sources: SOURCES[s.platform],
           caption: `Hourly means, UTC, last ${state.days} days. Shaded: pre-strike reference period. Dashed: reported strikes.` } });
     };
-    draw(state.a, 'chart-a', 'ro-a').catch(() => toast('SERIES A UNAVAILABLE'));
-    draw(state.b, 'chart-b', 'ro-b').catch(() => toast('SERIES B UNAVAILABLE'));
-    api(`/api/series/${encodeURIComponent(state.b)}/event-study`).then((d) => {
+    const loads = [
+      draw(state.a, 'chart-a', 'ro-a').catch(() => toast('SERIES A UNAVAILABLE')),
+      draw(state.b, 'chart-b', 'ro-b').catch(() => toast('SERIES B UNAVAILABLE')),
+    ];
+    loads.push(api(`/api/series/${encodeURIComponent(state.b)}/event-study`).then((d) => {
       const s = byKey(state.b);
       $('es-title').textContent = `Event study · ${s.label} · robustness`;
       if (!d.grid.length) { $('es-grid').innerHTML = '<p class="note">NO EVENTS OLD ENOUGH YET</p>'; return; }
@@ -1249,12 +1252,13 @@ const views = {
           'Tiles: each strike on its own, 12-hour window.',
           'A real effect should hold across the grid, not in one cell.',
         ])}`;
-    }).catch(() => { $('es-grid').innerHTML = '<p class="note">UNAVAILABLE</p>'; });
-    api(`/api/series/${encodeURIComponent(state.b)}/points?days=14&bucket=day`).then((d) => {
+    }).catch(() => { $('es-grid').innerHTML = '<p class="note">UNAVAILABLE</p>'; }));
+    loads.push(api(`/api/series/${encodeURIComponent(state.b)}/points?days=14&bucket=day`).then((d) => {
       const s = byKey(state.b);
       $('daily-title').textContent = `${s.label} · ${s.unit} · daily mean, 14 days`;
       $('daily-bars').innerHTML = bars(d.points.map(([t, v]) => ({ value: v, label: mmdd(t).slice(3), text: num(v), sr: `${mmdd(t)}: ${num(v)}` })));
-    }).catch(() => { $('daily-bars').innerHTML = '<p class="note">UNAVAILABLE</p>'; });
+    }).catch(() => { $('daily-bars').innerHTML = '<p class="note">UNAVAILABLE</p>'; }));
+    return Promise.allSettled(loads);
   },
 
   async alerts() {
@@ -1381,7 +1385,7 @@ const views = {
       <p class="note">A NEW REPORT IS SAVED EVERY DAY AND NEVER CHANGED AFTERWARDS · CITE AS: BOT TRAFFIC MONITOR, REPORT OF ${esc(rep.report_date)}</p>`;
 
     view.querySelector('[data-metrics]').addEventListener('click', (e) => {
-      const b = e.target.closest('button'); if (b) { state.allMetrics = b.dataset.v === 'all'; views.report(); }
+      const b = e.target.closest('button'); if (b) { state.allMetrics = b.dataset.v === 'all'; redraw(b); }
     });
     $('print').addEventListener('click', () => window.print());
   },
@@ -1456,18 +1460,18 @@ const views = {
       const b = e.target.closest('button'); if (!b) return;
       document.documentElement.dataset.palette = b.dataset.v;
       try { localStorage.setItem('palette', b.dataset.v); } catch { /* storage unavailable: setting lasts this visit */ }
-      views.about();
+      redraw(b);
     });
     view.querySelector('[data-mode]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
       setMode(b.dataset.v, true);
-      views.about();
+      redraw(b);
     });
     view.querySelector('[data-crt]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
       document.documentElement.dataset.crt = b.dataset.v;
       try { localStorage.setItem('crt', b.dataset.v); } catch { /* storage unavailable: setting lasts this visit */ }
-      views.about();
+      redraw(b);
     });
   },
 };
@@ -1476,6 +1480,58 @@ const views = {
 const TITLES = { live: 'BOT MONITOR', communities: 'GROUPS', history: 'HISTORY', report: 'REPORT', alerts: 'ALERTS', about: 'ABOUT' };
 const PAGE_TITLES = { live: 'Live', communities: 'Groups', history: 'History', report: 'Report', alerts: 'Alerts', about: 'About' };
 let paused = false;
+
+// Redraw the current view in place, after a filter or option changed or new data
+// arrived. A redraw replaces charts with LOADING placeholders until their data comes
+// back, which used to shrink the page and jump it to another section. So every block
+// that comes back shorter is held at its old height until the view's data has loaded,
+// and `from`, the chip or select that was used, stays where it was on screen and keeps
+// focus: a rebuilt view creates a new copy of it.
+function redraw(from = null) {
+  const name = (location.hash.slice(1) || 'live').split('?')[0];
+  const key = views[name] ? name : 'live';
+  const heights = new Map([...view.querySelectorAll('[id]')].map((el) => [el.id, el.offsetHeight]));
+  const viewHeight = view.offsetHeight;
+  const anchor = from && anchorOf(from);
+  const top = from ? from.getBoundingClientRect().top : 0;
+  const done = Promise.resolve(views[key]());
+  const held = [view];
+  view.style.minHeight = `${viewHeight}px`;
+  for (const [id, h] of heights) {
+    const el = document.getElementById(id);
+    if (el && view.contains(el) && el.offsetHeight < h) { el.style.minHeight = `${h}px`; held.push(el); }
+  }
+  const settle = () => {
+    const el = anchor && view.querySelector(anchor);
+    if (!el) return;
+    window.scrollBy(0, el.getBoundingClientRect().top - top);
+    el.focus({ preventScroll: true });
+  };
+  settle();
+  done.catch((e) => toast(`VIEW FAILED: ${e.message}`)).finally(() => {
+    held.forEach((el) => { el.style.minHeight = ''; });
+    settle();  // views that render after loading (Report) only now have the control again
+  });
+}
+
+// A selector that finds the same control in a rebuilt view: its id, or its value
+// inside its switch group.
+function anchorOf(el) {
+  if (el.id) return `#${CSS.escape(el.id)}`;
+  const group = el.closest('.switch');
+  if (!group || el.dataset.v == null) return null;
+  const groupSel = group.id ? `#${CSS.escape(group.id)}`
+    : `[${[...group.attributes].find((a) => a.name.startsWith('data-'))?.name}]`;
+  return `${groupSel} [data-v="${CSS.escape(el.dataset.v)}"]`;
+}
+
+// Rebuild a switch group's chips. The chip that was just chosen gets focus back, so
+// the redraw neither drops keyboard focus nor lets the minute refresh redraw under it.
+function setChips(group, items, current, chosen = null) {
+  group.innerHTML = items.map(([v, label]) =>
+    `<button class="chip" data-v="${esc(v)}" aria-pressed="${v === current}">${esc(label)}</button>`).join('');
+  if (chosen != null) group.querySelector(`[data-v="${CSS.escape(chosen)}"]`)?.focus({ preventScroll: true });
+}
 
 // moveFocus: true when the visitor switched tabs, so focus lands on the new
 // view's heading instead of staying on the nav link while content swaps silently.
@@ -1493,15 +1549,20 @@ function route(moveFocus = false) {
     .catch((e) => toast(`VIEW FAILED: ${e.message}`));
 }
 
+// Changes only when a collection run finished: the newest run time across sources.
+const dataVersion = (sn) => (sn ? Math.max(0, ...sn.runs.map((r) => r.ts)) : null);
+
 async function refresh() {
   try {
+    const before = dataVersion(snap);
     snap = await api('/api/snapshot');
     setState(STATIC ? 'SNAPSHOT' : paused ? 'PAUSED' : 'LIVE');
     $('updated').textContent = `UPDATED ${hhmm(snap.now)} UTC`;
-    // Never redraw under someone: not while paused, and not while focus is inside the view.
-    if (paused || view.contains(document.activeElement)) return;
+    // Never redraw under someone: not while paused, not while focus is inside the view,
+    // and not when nothing new was collected (most minutes: collection runs every 30).
+    if (paused || view.contains(document.activeElement) || dataVersion(snap) === before) return;
     const name = (location.hash.slice(1) || 'live');
-    if (name === 'live' || name === 'communities') route();
+    if (name === 'live' || name === 'communities') redraw();
   } catch {
     setState('OFFLINE');
   }

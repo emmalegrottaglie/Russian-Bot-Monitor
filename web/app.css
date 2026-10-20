@@ -235,6 +235,9 @@ html:not([data-mode="light"])[data-palette="term-phosphor"] { --term-muted: #8cc
 .chart .hm-group { fill: var(--a1); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
 .chart .hm-label { font-size: 8px; }
 .hm-cursor { fill: none; stroke: var(--term-ink); stroke-width: 1.5; }
+/* Dragging across a chart must not start a text selection: on the tall heatmap the
+   browser then scrolled the page to follow the selection. The data tables keep their text. */
+.chart-svg, .chart-overview { user-select: none; -webkit-user-select: none; }
 .hm-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 8px var(--gutter) 0; color: var(--term-muted); font-size: 10px; letter-spacing: .08em; }
 .hm-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .hm-legend i { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--term-line); }
