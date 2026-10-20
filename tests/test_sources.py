@@ -331,3 +331,22 @@ def test_archive_only_groups_have_comments_only_and_are_skipped_by_the_live_pass
     seen.clear()
     asyncio.run(collectors.run(config, settings, platforms=("reddit",), start=0, backfill=True))
     assert "reddit.askconservatives.comments" in seen
+
+
+def test_lexicon_terms_are_sourced_and_israel_speech_is_not_counted():
+    import csv
+    from pathlib import Path
+
+    path = Path(__file__).resolve().parent.parent / "config" / "lexicon.csv"
+    with path.open(encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    assert len({r["term"] for r in rows}) == len(rows)
+    for r in rows:
+        assert r["status"] in ("candidate", "excluded", "out of scope", "proposed")
+        assert r["source"], r["term"]
+        if r["status"] != "proposed":
+            assert r["source_url"].startswith(("https://", "http://")), r["term"]
+    status = {r["term"]: r["status"] for r in rows}
+    for term in ("Zionist", "Israel Lobby", "deadly exchange", "dual citizen"):
+        assert status[term] == "excluded"
+    assert status["dual loyalty"] == status["open borders for Israel"] == "candidate"
