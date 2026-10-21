@@ -55,6 +55,15 @@ def batch_key(spec: SeriesSpec) -> tuple[str, str]:
     return spec.params["query"], spec.params["lang"]
 
 
+def recent_start(stop: int, wall: int) -> int:
+    """First hour of the 7-day recent window. X measures the 7 days from when the request
+    is made, not from the pass's `now`, and a pass can reach X long after it started (a
+    slow Reddit pass, or a laptop that slept: on 21 October 2026 X was reached two hours
+    late and the request was refused)."""
+    earliest = -(-(wall - 7 * 24 * HOUR + 60) // HOUR) * HOUR  # whole hours, a minute's margin
+    return max(stop - 7 * 24 * HOUR + HOUR, earliest)
+
+
 def _iso(ts: int) -> str:
     return datetime.fromtimestamp(ts, timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -145,7 +154,9 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
     # Whole hours only, and X wants end_time at least 10 s in the past.
     stop = min(now - 15, end if end is not None else now) // HOUR * HOUR
     if start is None:
-        url, begin = RECENT, stop - 7 * 24 * HOUR + HOUR  # the recent window is 7 days
+        url, begin = RECENT, recent_start(stop, int(time.time()))
+        if begin >= stop:
+            raise SourceSkipped("the pass is more than 7 days old by the time X is reached")
     else:
         url, begin = ALL, start // HOUR * HOUR
     groups: dict[tuple[str, str], list[SeriesSpec]] = defaultdict(list)

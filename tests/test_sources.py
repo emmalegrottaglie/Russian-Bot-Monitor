@@ -249,6 +249,16 @@ def test_x_counts_become_hourly_metrics():
     assert gap["posts"] == [(h0 + 3600, 30.0)] and gap["reposts"] == [(h0 + 3600, 90.0)]
 
 
+def test_x_recent_window_follows_the_clock_not_the_pass():
+    from tracker.collectors import x
+
+    stop = int(ts("2026-10-21T20:00:00Z"))
+    assert x.recent_start(stop, stop + 600) == stop - 7 * 86400 + 3600  # on time: the usual window
+    late = int(ts("2026-10-21T22:41:00Z"))  # the pass reached X two hours late
+    begin = x.recent_start(stop, late)
+    assert begin >= late - 7 * 86400 and begin % 3600 == 0
+
+
 def test_x_daily_request_cap(tmp_path):
     from tracker.collectors import SourceSkipped, x
 
