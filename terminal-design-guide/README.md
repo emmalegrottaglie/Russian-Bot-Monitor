@@ -9,7 +9,7 @@ A retro-futuristic terminal / broadcast-console look for web and mobile-web apps
 | `DESIGN_GUIDE.md` | The rules — principles, palettes, colour roles, type scale, spacing, components, motion, copy voice, a speed-test screen blueprint, accessibility, do/don't. Read this first. |
 | `terminal.css` | Drop-in stylesheet: theme tokens plus classes for every component. |
 | `specimen.html` | A complete speed-test screen built only from the kit, with palette / accent / font switchers. All numbers on it are simulated. |
-| `palettes.html` | Reference sheets for every palette in dark and light mode: hex, RGB, role and contrast per token, read live from `terminal.css`. |
+| `palettes.html` | Reference sheets for every palette in dark and light mode (hex, RGB, role and contrast per token, read live from `terminal.css`), plus a typeface sheet: JetBrains Mono (the default, used by the Bot Traffic Monitor), IBM Plex Mono and Space Mono, with their `data-font` values and weights. |
 | `palettes/` | The same sheets as PNG images, for app icons and designs made outside the browser. |
 
 ## Quick start
@@ -37,7 +37,7 @@ A retro-futuristic terminal / broadcast-console look for web and mobile-web apps
 
 ## Palette images
 
-`palettes/` holds one 1200 × 675 PNG per palette and mode, plus `all-palettes.png` with all six. They are screenshots of `palettes.html`. After changing a colour in `terminal.css`, open `palettes.html?palette=term-amber&mode=light` (any palette and mode) in a browser and capture the `.sheet` element at 1200 × 675 to regenerate them.
+`palettes/` holds one 1200 × 675 PNG per palette and mode, `type.png` for the typefaces, and `all-palettes.png` with all seven sheets. They are screenshots of `palettes.html`. After changing a colour in `terminal.css`, open `palettes.html?palette=term-amber&mode=light` (any palette and mode) in a browser and capture the `.sheet` element at 1200 × 675 to regenerate them; `palettes.html?sheet=type` gives the typeface sheet. All three fonts are on Google Fonts under the SIL Open Font License 1.1.
 
 ## Using it with Claude Code
 
