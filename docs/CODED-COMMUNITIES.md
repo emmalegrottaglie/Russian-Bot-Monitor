@@ -91,3 +91,20 @@ The same measure could be applied to Bluesky (free search counts) and X (paid; e
 General English volume on X (the probe) averaged 99 after the strikes; its band is so narrow that it sat just below it in 45 of 49 hours, a dip of about 1%.
 
 **Reading.** No category of coded language fell after the strikes in a way that stands out, except reposts of the racist and white-supremacist terms (index 87, below the band in 12 to 15 of 49 hours, where about 2 to 3 would be expected by chance). Anti-trans reposts rose instead. Hours are not independent, so 12 hours may be one event. Before anything is read into it: which terms drive it, and whether their matches are coded uses, need checking (a per-term count for that category costs about $0.26). Precision has not been measured for any term.
+
+### Per-term breakdown of racist and white-supremacist reposts (22 October 2026)
+
+26 more requests, about $0.26 (approved by Emma). The per-term counts add up to the category total (75,788 of 75,790 reposts), so the category is fully accounted for.
+
+| Term | Reposts, 1 Sep to 20 Oct | Share | Index 0-20 h after, by strike (Sasovo, Kaluga, Vladimir) |
+|---|---|---|---|
+| "clown world" | 38,676 | 51% | 89, 113, 75 |
+| dindu | 16,607 | 22% | 21, 31, 204 |
+| 1488 | 11,705 | 15% | 60, 51, 83 |
+| "it's okay to be white" | 3,681 | 5% | 72, 204, 88 |
+| Amerimutt | 1,962 | 3% | 37, 195, 17 |
+| "we wuz kangz" | 1,398 | 2% | 103, 69, 175 |
+
+Nine smaller terms make up the remaining 2%.
+
+**Reading.** The category's dip sits in the first 20 hours after the strikes and is not one term's doing: it remains with "clown world" or "1488" removed. Only "1488" fell after all three strikes, to 51-83% of normal, but it averages about 9 reposts an hour and is also an ordinary number (prices, years, scores), so its precision may be low. "Dindu" fell after the first two strikes and tripled after the third. This was one dip among 20 category-measure combinations tested, and hours are not independent, so a dip of this kind is not unusual by chance. Nothing here supports a drop in coded far-right activity unless a hand check shows "1488" reposts are mostly the coded use; that needs reading a sample of posts, which costs about $0.005 a post.

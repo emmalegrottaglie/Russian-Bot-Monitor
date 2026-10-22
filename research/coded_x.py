@@ -99,6 +99,49 @@ async def fetch() -> None:
     print(f"{after - used} requests, about ${0.01 * (after - used):.2f}. Saved to {OUT}")
 
 
+async def breakdown(category: str, variant: str = "rt") -> None:
+    """Per-term counts for one category, to see which terms drive its curve. Two
+    full-archive requests per term (approved by Emma on 22 October 2026, about $0.26)."""
+    settings = Settings.from_env()
+    data = json.loads(OUT.read_text(encoding="utf-8"))
+    path = settings.db_path.parent / "x_usage.json"
+    used = x._Budget(path, 0).state.get(time.strftime("%Y-%m-%d", time.gmtime()), 0)
+    budget = x._Budget(path, used + 2 * len(CATEGORIES[category]) + 2)
+    stop = data["end"]
+    terms = data.setdefault("terms", {})
+    async with httpx.AsyncClient(timeout=60) as client:
+        for term in CATEGORIES[category]:
+            got = await x._counts(client, budget, settings.x_bearer_token, x.ALL, query([term], VARIANTS[variant]),
+                                  START, stop, "hour")
+            terms[f"{category}|{variant}|{term}"] = {str(h): n for h, n in sorted(got.items())}
+            print(f"{term}: {sum(got.values()):,}")
+    OUT.write_text(json.dumps(data), encoding="utf-8")
+    after = x._Budget(path, 0).state.get(time.strftime("%Y-%m-%d", time.gmtime()), 0)
+    print(f"{after - used} requests, about ${0.01 * (after - used):.2f}")
+
+
+def analyze_terms() -> None:
+    data = json.loads(OUT.read_text(encoding="utf-8"))
+    config = load_config()
+    starts = [-(-e.ts // HOUR) * HOUR for e in config.events if e.ts <= data["end"] - 86400]
+    gaps = {int(h) for h, n in data["hours"]["probe"].items() if n == 0}
+    rows = []
+    for name, hrs in data.get("terms", {}).items():
+        counts = {int(h): float(n) for h, n in hrs.items() if int(h) not in gaps}
+        total = sum(counts.values())
+        pre = sum(n for h, n in counts.items() if h < min(starts)) / max(1, len({(h - 1) // 86400 for h in counts if h < min(starts)}))
+        offsets, main, band, _ = aligned(counts, starts)
+        after = [(v, lo) for o, v, (lo, hi) in zip(offsets, main, band) if o >= 0 and v is not None]
+        below = sum(1 for v, lo in after if lo is not None and v < lo)
+        mean_after = sum(v for v, _ in after) / len(after) if after else None
+        rows.append((total, name.split("|")[-1], pre, mean_after, below, len(after)))
+    grand = sum(r[0] for r in rows) or 1
+    for total, term, pre, mean_after, below, n in sorted(rows, reverse=True):
+        idx = f"{mean_after * 100:5.0f}" if mean_after else "    -"
+        print(f"{term:28} {total:>8,.0f} ({100 * total / grand:4.1f}%)  {pre:7.1f}/day before  "
+              f"index after {idx}  below band {below:2}/{n}")
+
+
 def aligned(hours: dict[int, float], starts: list[int], span: int = 48, smooth: int = 3, draws: int = 500):
     """One series' strike-aligned index and its 5-95% placebo band (as on the site)."""
     r = _ratios(hours)
@@ -154,5 +197,9 @@ if __name__ == "__main__":
         asyncio.run(fetch())
     elif cmd == "analyze":
         analyze()
+    elif cmd == "breakdown":
+        asyncio.run(breakdown(sys.argv[2] if len(sys.argv) > 2 else "racist and white supremacist"))
+    elif cmd == "terms":
+        analyze_terms()
     else:
         sys.exit(__doc__)
