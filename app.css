@@ -1,0 +1,331 @@
+/* Page layout and the few pieces the terminal kit does not have (line chart,
+   select, prose). Everything else comes from /design/terminal.css. */
+
+body { max-width: 720px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+[hidden] { display: none !important; }
+
+a { color: var(--a1); }
+
+/* Toggle chips (same pattern as the specimen's switchers) */
+.group-desc { margin: 0; padding: 0 var(--gutter) 10px; max-width: 90ch; color: var(--term-ink); font-size: 11px; line-height: 1.55; }
+.group-desc b { letter-spacing: .08em; }
+.switch { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 var(--gutter) 6px; }
+.switch button.chip:not([aria-pressed="true"]) { background: transparent; color: var(--a1); border-color: var(--term-line); }
+
+/* Small uppercase notes under charts and tables */
+.note { padding: 6px var(--gutter) 0; color: var(--term-muted); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; line-height: 1.7; }
+
+/* Wide tables scroll inside their own box instead of the page */
+.table-wrap { overflow-x: auto; }
+.table tbody tr[data-key] { cursor: pointer; }
+.table tbody tr[data-key]:hover td, .table tbody tr[data-key]:focus-visible td { background: var(--term-faint); }
+.table td.t-num { text-align: right; }
+.table th.t-num { text-align: right; }
+.table .t-up { color: var(--a2); }
+.table .t-down { color: var(--a3); }
+.table td.wrap { white-space: pre-line; min-width: 220px; }
+
+/* Line chart */
+.chart { position: relative; margin: 0 var(--gutter); }
+.chart svg { display: block; width: 100%; height: 170px; overflow: visible; }
+.chart .grid { stroke: var(--term-faint); stroke-width: 1; }
+.chart .axis { fill: var(--term-muted); font: 500 8px var(--font); letter-spacing: .06em; }
+.chart .axis-title { font-weight: 700; }
+/* Reference-line and band labels sit over the data: a background halo keeps them legible. */
+.chart .base-label { font-weight: 700; paint-order: stroke; stroke: var(--term-bg); stroke-width: 3px; }
+.chart-caption { padding: 4px 0 0; }
+.chart .line { fill: none; stroke: var(--a2); stroke-width: 1.5; }
+.chart .area { fill: color-mix(in srgb, var(--a2) 12%, transparent); stroke: none; }
+.chart .ref-band { fill: color-mix(in srgb, var(--a1) 7%, transparent); }
+.chart .event { stroke: var(--a3); stroke-width: 1; stroke-dasharray: 2 3; }
+.chart .event-label { fill: var(--a3); font: 800 8px var(--font); letter-spacing: .12em; }
+.chart .cursor { stroke: var(--a1); stroke-width: 1; }
+.chart .dot { fill: var(--a1); }
+.readout {
+  min-height: 16px; padding: 0 var(--gutter) 6px; color: var(--term-ink);
+  font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+}
+.readout .muted { color: var(--term-muted); font-weight: 500; }
+
+/* Native select dressed as a terminal field */
+.field { display: block; padding: 0 var(--gutter) 8px; }
+.field span { display: block; margin-bottom: 5px; color: var(--term-muted); font-size: 8px; letter-spacing: .2em; text-transform: uppercase; }
+.field select {
+  width: 100%; padding: 8px 9px; border: 1px solid var(--term-line); background: var(--term-card); color: var(--term-ink);
+  font: 700 11px var(--font); letter-spacing: .05em; appearance: none;
+}
+
+/* Download links styled as ghost chips */
+.links { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px var(--gutter) 0; }
+.links a { text-decoration: none; }
+
+/* Toasts stack under the prompt */
+#toast-slot:not(:empty) { display: grid; gap: 6px; padding: 12px var(--gutter) 0; }
+.toast.err { border-color: var(--a3); }
+.toast.info { border-color: var(--a2); }
+.toast .led.three { background: var(--a3); box-shadow: 0 0 8px var(--a3); }
+
+/* Explanation revealed by the quality band's WHY?> */
+.explain { margin: 0 var(--gutter); padding: 10px 12px; border: 1px solid var(--term-line); border-top: 0; }
+
+/* Prose (ABOUT tab): sentence case, readable measure */
+.prose { padding: 0 var(--gutter); color: var(--term-ink); font-size: 12px; line-height: 1.65; letter-spacing: .01em; }
+.prose p { margin: 0 0 12px; }
+.prose ul { margin: 0 0 12px; padding-left: 18px; }
+.prose li { margin-bottom: 6px; }
+.prose code { color: var(--a2); }
+.prose .muted { color: var(--term-muted); }
+
+/* Multi-line correlation chart: Yandex in a1, groups in their roles */
+.line.l-a1 { stroke: var(--a1); stroke-width: 2; }
+.line.l-a2 { stroke: var(--a2); }
+.line.l-a3 { stroke: var(--a3); stroke-width: 2; }
+.line.l-ink { stroke: var(--term-ink); }
+.line.l-muted { stroke: var(--term-muted); stroke-dasharray: 4 3; }
+.line.l-dash { stroke-dasharray: 2 2; }
+.chart .dot.l-a1 { fill: var(--a1); } .chart .dot.l-a3 { fill: var(--a3); } .chart .dot.l-muted { fill: var(--term-muted); }
+.chart .baseline { stroke: var(--term-line); stroke-width: 1; stroke-dasharray: 1 3; }
+
+/* Print / Save as PDF (REPORT tab): paper colours from the Terminal Light palette,
+   no chrome, tables allowed to wrap. */
+@media print {
+  :root, [data-palette], html:root[data-mode][data-palette] {
+    --term-bg: #fff; --term-card: #f4f2ea; --term-ink: #14170f; --term-muted: #5a6050;
+    --term-line: rgba(20,23,15,.3); --term-faint: rgba(20,23,15,.12);
+    --a1: #1a7030; --a2: #0a5f7d; --a3: #8f4e00;
+  }
+  body { max-width: none; }
+  .nav, .crt, .action, .switch, .links, .prompt, #toast-slot { display: none !important; }
+  .hero-value { text-shadow: none; }
+  .table-wrap { overflow: visible; }
+  .table th, .table td { white-space: normal; }
+  tr { break-inside: avoid; }
+}
+
+/* CRT overlay is opt-in (ABOUT tab): scanlines and vignette push grey text below
+   WCAG contrast on the dark palettes. Never shown when the OS asks for more contrast. */
+html:not([data-crt="on"]) .crt { display: none; }
+@media (prefers-contrast: more) { .crt { display: none !important; } }
+
+/* ── Accessibility layer ───────────────────────────────────────────────────
+   Overrides kept here so terminal.css stays the design system's own file. */
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+/* Keep absolutely positioned screen-reader text inside its scroll box; otherwise
+   hidden header labels in wide tables stretch the page sideways on phones. */
+.table-wrap { position: relative; }
+
+/* Headings keep the kit's look */
+.band h1 { margin: 0; font: inherit; letter-spacing: inherit; }
+h2.sect { margin: 0; font-family: inherit; }
+
+/* Decorative pseudo-content is not read aloud (alt text after the slash) */
+.sect::before { content: "// " / ""; }
+.hero-status::before { content: "// " / ""; }
+.table .t-data::before { content: "● " / ""; }
+.table .t-delta::before { content: "○ " / ""; }
+
+/* The prompt cursor blinks 4 times (under 5 s), then holds */
+.prompt::after { animation-iteration-count: 4; }
+
+/* Minimum text size: the kit's 8–9 px labels raised to 10 px */
+.tile-label, .tile-sub, .bar-label, .bar-value, .note, .field span, .sub, .chip, .end,
+.table th, .boot-pct, .readout, .legend-item, .nav a { font-size: 10px; }
+.chart .axis, .chart .event-label, .chart .line-label { font-size: 9px; }
+
+/* Targets: at least 44 px tall for nav, 24 px+ for other controls */
+.nav { padding: 0 0 env(safe-area-inset-bottom); }
+.nav a { display: flex; align-items: center; justify-content: center; min-height: 44px; }
+.qband-action { padding: 11px 12px; margin: -11px -12px -11px auto; }
+.table td a { display: inline-block; padding: 5px 0; }
+.pause {
+  margin-left: 8px; padding: 6px 8px; min-height: 24px; border: 1px solid var(--term-line);
+  color: var(--term-muted); font-size: 10px; font-weight: 800; letter-spacing: .14em;
+}
+.pause[aria-pressed="true"] { color: var(--a3); border-color: var(--a3); }
+.sub { align-items: center; }
+.sub-right { display: inline-flex; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+
+/* Keep focused elements clear of the sticky bottom nav */
+html { scroll-padding-bottom: 72px; }
+
+/* Community names are real links into the History tab */
+.row-link { color: inherit; text-decoration: underline dotted; text-underline-offset: 3px; }
+
+/* Charts: keyboard focus, end-of-line names, data tables */
+.chart svg:focus-visible { outline: 1px solid var(--a1); outline-offset: 3px; }
+.chart .line-label { font-weight: 800; letter-spacing: .1em; paint-order: stroke; stroke: var(--term-bg); stroke-width: 3px; }
+.chart .line-label.l-a1 { fill: var(--a1); } .chart .line-label.l-a2 { fill: var(--a2); }
+.chart .line-label.l-a3 { fill: var(--a3); } .chart .line-label.l-ink { fill: var(--term-ink); }
+.chart .line-label.l-muted { fill: var(--term-muted); }
+.data-table { margin-top: 6px; }
+.data-table summary {
+  display: inline-block; padding: 6px 0; min-height: 24px; cursor: pointer; color: var(--a1);
+  font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+}
+.data-table .table-wrap { max-height: 320px; overflow: auto; }
+.data-table .table th:first-child, .data-table .table td:first-child { padding-left: 0; }
+
+/* Correlation legend: swatch = the line's colour and dash; ■/□ = shown/hidden */
+.legend { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 var(--gutter) 6px; }
+.legend-item {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 28px; padding: 5px 9px;
+  border: 1px solid var(--term-line); color: var(--term-ink);
+  font-weight: 800; letter-spacing: .14em; text-transform: uppercase;
+}
+button.legend-item::before { content: "■" / ""; color: var(--a1); }
+button.legend-item[aria-pressed="false"] { color: var(--term-muted); border-style: dashed; }
+button.legend-item[aria-pressed="false"]::before { content: "□" / ""; color: var(--term-muted); }
+button.legend-item[aria-pressed="false"] .swatch { opacity: .35; }
+.swatch { width: 22px; height: 8px; flex: none; }
+.swatch line { fill: none; stroke-width: 2.5; }
+
+/* When switched on, the overlay runs at reduced strength */
+.crt { opacity: calc(var(--crt-chrome-opacity) * .6); }
+
+/* Scrollable tables are focusable regions (set in app.js) */
+.table-wrap[role="region"]:focus-visible { outline: 1px solid var(--a1); outline-offset: 2px; }
+
+/* ── Scale with the screen ─────────────────────────────────────────────────
+   The kit is drawn in px for a phone-width column. On wider screens the whole
+   interface is zoomed in steps, so text, spacing, charts and the column width
+   grow together and keep the kit's proportions. Media queries read the real
+   viewport width, so they are not affected by the zoom itself. */
+@media (min-width: 480px)  { body { zoom: 1.1; } }
+@media (min-width: 768px)  { body { zoom: 1.2; } }
+@media (min-width: 1024px) { body { zoom: 1.3; } }
+@media (min-width: 1280px) { body { zoom: 1.4; } }
+@media (min-width: 1600px) { body { zoom: 1.6; } }
+@media (min-width: 2000px) { body { zoom: 1.85; } }
+@media (min-width: 2600px) { body { zoom: 2.2; } }
+@media print { body { zoom: 1; } }
+
+/* Phosphor: the kit's muted green (#5c8c68) reads dim at small sizes; brighter
+   labels lift contrast on the near-black background from about 5:1 to about 9:1. */
+html:not([data-mode="light"])[data-palette="term-phosphor"] { --term-muted: #8cc49a; }
+
+/* Phones keep the kit's 1:1 scale, so the smallest running text is raised a
+   step instead; nav labels drop most of their tracking so six fit side by side. */
+@media (max-width: 479px) {
+  .note, .sub, .tile-label, .tile-sub, .table th, .readout, .end, .bar-label, .bar-value, .data-table summary { font-size: 11px; }
+  .nav a { font-size: 10px; letter-spacing: .04em; }
+}
+
+/* Chart tools: data table disclosure and PNG download share one row */
+.chart-tools { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 8px; }
+.chart-png {
+  padding: 6px 0; min-height: 24px; color: var(--a1);
+  font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+}
+.chart-png:disabled { color: var(--term-muted); cursor: progress; }
+.chart .norm-band { fill: color-mix(in srgb, var(--a3) 12%, transparent); }
+
+/* Community heatmap: a2 below normal, a3 above, three strengths each */
+.hm-lo3 { fill: var(--a2); }
+.hm-lo2 { fill: color-mix(in srgb, var(--a2) 60%, transparent); }
+.hm-lo1 { fill: color-mix(in srgb, var(--a2) 28%, transparent); }
+.hm-mid { fill: color-mix(in srgb, var(--term-faint) 60%, transparent); }
+.hm-hi1 { fill: color-mix(in srgb, var(--a3) 28%, transparent); }
+.hm-hi2 { fill: color-mix(in srgb, var(--a3) 60%, transparent); }
+.hm-hi3 { fill: var(--a3); }
+.hm-none { fill: url(#hm-hatch); }
+.hm-hatch { stroke: var(--term-line); stroke-width: 1.5; }
+.chart .hm-group { fill: var(--a1); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+.chart .hm-label { font-size: 8px; }
+.hm-cursor { fill: none; stroke: var(--term-ink); stroke-width: 1.5; }
+/* Dragging across a chart must not start a text selection: on the tall heatmap the
+   browser then scrolled the page to follow the selection. The data tables keep their text. */
+.chart-svg, .chart-overview { user-select: none; -webkit-user-select: none; }
+.hm-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 8px var(--gutter) 0; color: var(--term-muted); font-size: 10px; letter-spacing: .08em; }
+.hm-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.hm-legend i { display: inline-block; width: 12px; height: 12px; border: 1px solid var(--term-line); }
+.hm-legend i.hm-lo3 { background: var(--a2); }
+.hm-legend i.hm-lo2 { background: color-mix(in srgb, var(--a2) 60%, transparent); }
+.hm-legend i.hm-lo1 { background: color-mix(in srgb, var(--a2) 28%, transparent); }
+.hm-legend i.hm-mid { background: color-mix(in srgb, var(--term-faint) 60%, transparent); }
+.hm-legend i.hm-hi1 { background: color-mix(in srgb, var(--a3) 28%, transparent); }
+.hm-legend i.hm-hi2 { background: color-mix(in srgb, var(--a3) 60%, transparent); }
+.hm-legend i.hm-hi3 { background: var(--a3); }
+.hm-legend i.hm-none { background: repeating-linear-gradient(45deg, var(--term-line) 0 1.5px, transparent 1.5px 4px); }
+@media print { .chart-png { display: none; } }
+
+/* Explanatory notes: one point per line, sentence case, room between points */
+.notes {
+  display: grid; gap: 7px; margin: 0; padding: 10px var(--gutter) 4px; list-style: none;
+  color: var(--term-muted); font-size: 12px; line-height: 1.55; letter-spacing: .02em;
+}
+.notes li { position: relative; padding-left: 16px; }
+.notes li::before { content: "›" / ""; position: absolute; left: 0; color: var(--a1); font-weight: 800; }
+.notes b { color: var(--term-ink); font-weight: 700; }
+.notes code, .explain-groups code { font-size: .95em; color: var(--term-ink); }
+
+/* "Who is in each group?" */
+.explain-groups { margin: 4px var(--gutter) 6px; }
+.explain-groups summary {
+  display: inline-block; padding: 6px 0; min-height: 24px; cursor: pointer; color: var(--a1);
+  font-size: 10px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase;
+}
+.explain-groups dl { display: grid; gap: 9px; margin: 6px 0 4px; font-size: 12px; line-height: 1.5; }
+.explain-groups dt { color: var(--a2); font-weight: 800; letter-spacing: .14em; font-size: 10px; }
+.explain-groups dd { margin: 2px 0 0; color: var(--term-muted); }
+.explain-groups .members { display: block; color: var(--term-ink); margin-top: 2px; }
+.explain-groups .notes-tail { margin: 6px 0 0; color: var(--term-muted); font-size: 11px; }
+
+/* Correlation tiles get their own heading, so they don't read as part of the chart */
+.tiles-title {
+  margin: 14px var(--gutter) 6px; color: var(--term-muted); font-size: 10px; font-weight: 800;
+  letter-spacing: .16em; text-transform: uppercase;
+}
+
+/* Header: the network numbers open an explanation */
+.asn {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 24px; padding: 0;
+  color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer;
+}
+.asn-i {
+  display: inline-grid; place-items: center; width: 15px; height: 15px; border: 1px solid currentColor;
+  font-size: 9px; font-weight: 800; letter-spacing: 0;
+}
+.asn[aria-expanded="true"] { color: var(--a1); }
+.asn-info { border-bottom: 1px solid var(--term-line); padding-bottom: 8px; }
+
+/* Group names can be long; let bar labels wrap rather than spill */
+.bar-label { white-space: normal; line-height: 1.25; overflow-wrap: anywhere; }
+
+/* ── Chart zoom ─────────────────────────────────────────────────────────── */
+.chart-zoom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 0 0 4px; }
+.chart-range { color: var(--term-muted); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+.chart-zoom-btns { display: flex; gap: 4px; flex: none; }
+.chart-zoom-btns button {
+  min-width: 30px; min-height: 28px; padding: 0 8px; border: 1px solid var(--term-line);
+  color: var(--a1); font-size: 12px; font-weight: 800; letter-spacing: .1em;
+}
+.chart-zoom-btns button:disabled { color: var(--term-muted); opacity: .5; cursor: default; }
+.chart-main svg { touch-action: pan-y; }  /* vertical swipes still scroll the page */
+.chart-main svg.zoomed { cursor: grab; }
+.chart-main svg.dragging { cursor: grabbing; }
+.chart svg.chart-overview { height: 30px; margin-top: 6px; overflow: hidden; touch-action: none; cursor: ew-resize; }
+.chart-overview .ov-bg { fill: var(--term-faint); }
+.chart-overview .line { stroke-width: 1; opacity: .75; }
+.chart-overview .ov-shade { fill: color-mix(in srgb, var(--term-bg) 70%, transparent); }
+.chart-overview .ov-window { fill: none; stroke: var(--a1); stroke-width: 1; }
+.chart-overview .ov-handle { fill: var(--a1); }
+.chart-overview.dragging { cursor: grabbing; }
+@media print { .chart-zoom, .chart-overview { display: none; } }
+
+/* ── Scrollbars in the palette: square, thin, accent thumb ──────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: var(--term-bg); }
+::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--a1) 70%, var(--term-bg)); border-radius: 0; }
+::-webkit-scrollbar-thumb:hover { background: var(--a1); }
+.table-wrap::-webkit-scrollbar-track { background: var(--term-card); }
+/* Firefox has no ::-webkit-scrollbar; Chromium ignores those rules once scrollbar-color is set, so scope this to Firefox */
+@supports (-moz-appearance: none) {
+  html, .table-wrap { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--a1) 70%, var(--term-bg)) var(--term-bg); }
+}
+/* A click or drag focuses the chart (so its keys work); only keyboard focus draws the ring */
+.chart-svg:focus:not(:focus-visible) { outline: none; }

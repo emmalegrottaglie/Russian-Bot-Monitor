@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en" data-palette="term-phosphor" data-mode="dark">
+<head>
+<meta charset="utf-8">
+<meta name="data-mode" content="static">
+<script>
+  // Theme before the first paint: the saved palette and mode, else the system's light or
+  // dark setting. "term-light" was the old light palette: it is phosphor in light mode.
+  (function () {
+    var d = document.documentElement, p = null, m = null;
+    try { p = localStorage.getItem('palette'); m = localStorage.getItem('mode'); } catch (e) { /* storage unavailable */ }
+    if (p === 'term-light') { p = 'term-phosphor'; m = m || 'light'; }
+    if (p) d.dataset.palette = p;
+    d.dataset.mode = m || (window.matchMedia && matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+  })();
+</script>
+<link rel="icon" href="data:,">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bot Traffic Monitor</title>
+<meta name="description" content="Live and historical data on Yandex data-centre health and activity in online political communities.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap">
+<link rel="stylesheet" href="design/terminal.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header>
+  <div class="band"><h1 id="title" tabindex="-1"><span aria-hidden="true">// </span>BOT MONITOR</h1><span id="state" role="status"><span aria-hidden="true">●</span> CONNECTING</span></div>
+  <div class="sub"><button class="asn" id="asn" aria-expanded="false" aria-controls="asn-info">YANDEX AS13238 · AS200350 <span class="asn-i" aria-hidden="true">?</span><span class="sr-only">: what are these?</span></button><span class="sub-right"><span id="updated">—</span>
+    <button class="pause" id="mode" aria-pressed="false" aria-label="Light mode">LIGHT</button>
+    <button class="pause" id="pause" aria-pressed="false">PAUSE UPDATES</button></span></div>
+  <div class="asn-info" id="asn-info" hidden>
+    <ul class="notes">
+      <li>These are the two Yandex networks this site watches. An <b>AS</b> (autonomous system) is a block of internet addresses run by one organisation.</li>
+      <li><b>AS13238</b> is Yandex's main network: search, mail, maps and its other services.</li>
+      <li><b>AS200350</b> is Yandex Cloud: data centres that rent servers to other companies. Its reachability fell at the times of the reported strikes.</li>
+      <li>IODA (Georgia Tech) measures how much of each network still answers. Cloudflare Radar measures how much of its traffic is automated.</li>
+    </ul>
+  </div>
+</header>
+<main>
+  <div class="prompt" id="prompt" aria-hidden="true">monitor --live</div>
+
+  <section id="boot" class="boot" aria-live="polite">
+    <div class="boot-line cmd">❯ monitor --connect</div>
+    <div id="boot-lines"></div>
+    <div class="boot-bar"><div class="boot-fill" id="boot-fill"></div></div>
+    <div class="boot-pct" id="boot-pct">0% — CONNECTING</div>
+  </section>
+
+  <div id="toast-slot" role="status"></div>
+  <section id="view" hidden></section>
+
+</main>
+<footer class="end"><span>END TRANSMISSION — <span id="clock">--:--</span> UTC</span><span>DATA: IODA · CLOUDFLARE RADAR · REDDIT · BLUESKY</span></footer>
+
+<nav class="nav" aria-label="Sections">
+  <a href="#live">Live</a><a href="#communities">Groups</a><a href="#history">History</a><a href="#report">Report</a><a href="#alerts">Alerts</a><a href="#about">About</a>
+</nav>
+<div class="crt" aria-hidden="true"></div>
+<script src="app.js" type="module"></script>
+</body>
+</html>
