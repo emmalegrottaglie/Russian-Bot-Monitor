@@ -801,6 +801,60 @@ const ALIGNED_X = {
   xTitle: 'HOURS FROM STRIKE',
 };
 
+// "What our data shows": a live count of hours after the strikes, then the findings so
+// far. The findings are written by hand, so they carry the date they were last checked.
+const DOCS = 'https://github.com/emmalegrottaglie/Russian-Bot-Monitor/blob/main/docs/';
+const FINDINGS_CHECKED = '26 October 2026';
+
+function showsSection() {
+  const doc = (file, text) => `<a href="${DOCS}${file}" rel="noopener">${text}</a>`;
+  return `<h2 class="sect">What our data shows · so far</h2>
+    <p class="group-desc">Hours in the 48 after the strikes, by group, against the normal range for that weekday and hour (the strike-aligned chart at the top). Live: it updates as data arrives.</p>
+    <div id="shows-table"><p class="note">LOADING…</p></div>
+    <h3 class="tiles-title">Findings · checked ${FINDINGS_CHECKED}</h3>
+    ${notes([
+      '<b>No drop in political activity that non-political communities did not share.</b> A bot drop would show as many hours below the normal range in the political groups and not in the non-political one. Right-wing communities and the narratives searches ran above their range instead. General politics ran below its range in about half the hours, but the non-political communities ran below theirs in more, so whatever lowered both was not political. Searches on Bluesky and X show no drop either.',
+      '<b>What did fall and stay low is Yandex Cloud itself.</b> The outage is real and lasting, but the communities did not follow it down. The lower days in the correlation chart after the Vladimir strike fall on a weekend, and the weekends before the strikes were just as low.',
+      `<b>Coded far-right and anti-trans language on X did not drop.</b> Of 20 combinations of term category and measure, one dipped (reposts of racist and white-supremacist terms), no single term caused it, and one dip in 20 is about what chance gives. Anti-trans reposts rose. ${doc('CODED-COMMUNITIES.md', 'Method and results')}.`,
+      `<b>The r/theydidthemath post did not find a drop either.</b> Its 90 subreddits that declined after all three strikes did not hold up in the author's own timing checks, and about as many would decline by chance. ${doc('SYFTEN-CHECK.md', 'Our check')}.`,
+      `<b>Independent checks agree.</b> Graphika (via Texty), Cloudflare and Lawfare each found no measured drop in political activity. ${doc('DROP-CLAIMS.md', 'Sources')}.`,
+      '<b>The data checks out.</b> Hourly Reddit counts agree with an independent provider, Syften (median hourly correlation 0.958).',
+    ])}
+    <h3 class="tiles-title">What it cannot show</h3>
+    ${notes([
+      'Who is posting. Counts cannot tell a bot from a person, or where an account is run from: accounts can be made or bought in any country and run from data centres anywhere.',
+      'That there were no bots. No drop means that any accounts run from these data centres made too small a share of these communities to see, or moved elsewhere within hours.',
+      'The newest groups. The 135 communities added on 20 October, the political left among them, have about a week of data and are not in the chart yet. Reddit post counts are still loading.',
+    ])}`;
+}
+
+function renderShows(d) {
+  const el = $('shows-table'); if (!el) return;
+  const rows = d.groups.filter((g) => g.members >= 2 && g.band).map((g) => {
+    const after = d.offsets.map((o, i) => [o, g.values[i], g.band.lo[i], g.band.hi[i]])
+      .filter(([o, v, lo, hi]) => o >= 0 && v != null && lo != null && hi != null);
+    const vals = after.map((r) => r[1]).sort((a, b) => a - b);
+    return {
+      tag: g.tag, members: g.members, hours: after.length,
+      above: after.filter(([, v, , hi]) => v > hi).length,
+      below: after.filter(([, v, lo]) => v < lo).length,
+      median: vals.length ? vals[Math.floor(vals.length / 2)] : null,
+    };
+  }).filter((r) => r.hours).sort((a, b) => (a.tag === 'control') - (b.tag === 'control'));
+  if (!rows.length) { el.innerHTML = '<p class="note">NOT ENOUGH DATA YET</p>'; return; }
+  el.innerHTML = `<div class="table-wrap"><table class="table" aria-label="Hours after the strikes above, inside or below the normal range, by group">
+    <thead><tr><th scope="col">GROUP</th><th scope="col" class="t-num">ABOVE RANGE</th><th scope="col" class="t-num">INSIDE</th>
+      <th scope="col" class="t-num">BELOW RANGE</th><th scope="col" class="t-num">MEDIAN INDEX</th><th scope="col" class="t-num">COMMUNITIES</th></tr></thead>
+    <tbody>${rows.map((r) => `<tr><td class="t-value">${esc(TAG_SHORT[r.tag] || r.tag.toUpperCase())}</td>
+      <td class="t-num">${r.above} of ${r.hours} h</td><td class="t-num">${r.hours - r.above - r.below} of ${r.hours} h</td>
+      <td class="t-num">${r.below} of ${r.hours} h</td><td class="t-num">${r.median == null ? '—' : Math.round(r.median)}</td>
+      <td class="t-num">${r.members}</td></tr>`).join('')}</tbody></table></div>
+    ${notes([
+      'Index 100 is normal for that weekday and hour. The normal range is where 90% of ordinary pre-strike days fall, so about 5% of hours land above it and 5% below by chance.',
+      'Hours follow each other, so a run of hours outside the range can be a single event, not many.',
+    ])}`;
+}
+
 function renderAligned(d, chosen = null) {
   const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
   const usable = d.groups.filter((g) => g.members >= 2 && g.values.some((v) => v != null));
@@ -1115,7 +1169,8 @@ const views = {
       <div class="chart" id="live-chart"></div>
       ${notes(['Shaded: the pre-strike reference period.', 'Dashed lines: reported strikes (sources on the About tab).'])}
       <h2 class="sect">Latest alerts</h2>
-      <div id="live-alerts"><p class="note">LOADING…</p></div>`;
+      <div id="live-alerts"><p class="note">LOADING…</p></div>
+      ${showsSection()}`;
 
     view.querySelector('[data-compare]').addEventListener('click', (e) => {
       const b = e.target.closest('button'); if (!b) return;
@@ -1129,7 +1184,7 @@ const views = {
     });
 
     const loads = [];
-    loads.push(api('/api/strike-aligned').then(renderAligned).catch(() => {
+    loads.push(api('/api/strike-aligned').then((d) => { renderAligned(d); renderShows(d); }).catch(() => {
       $('aligned-chart').innerHTML = '<p class="note">STRIKE DATA UNAVAILABLE</p>';
     }));
     loads.push(api('/api/correlation').then(renderCorrelation).catch(() => {
