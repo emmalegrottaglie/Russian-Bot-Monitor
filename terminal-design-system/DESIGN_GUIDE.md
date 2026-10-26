@@ -278,6 +278,9 @@ Rules for every chart in every product: the bar charts and range lists in Weathe
 
 - `a2` for data, `a3` for the peak or the one highlighted series, a muted dashed line for controls and references (§3). A meaning-bearing scale uses fixed colours (§3).
 - Two series are told apart by a direct label and a dash pattern as well as colour. Below/above-normal scales use two hues of different lightness, never red against green.
+- A line chart with many series gives each one its own pair of accent and pattern: `a3`, `a2` and `a1`, each solid, dashed (`7 4`) or dotted (`1.5 3.5`, round caps), so nine series at most, and no two share a pair. Related series share an accent and differ by pattern. Controls stay muted (above).
+- Show at most four of those series at once. Past four the lines tangle and the patterns stop being readable; let people choose which four, and say so when switching one on turns another off.
+- The series the others are compared with (an outage, a price, a cause) is drawn as a different kind of mark: an ink line, thicker (2.5), over a lightly filled area. It never takes one of the series' accent and pattern pairs, so it cannot be mistaken for one of them.
 - Bins for a binned scale are chosen from the spread of ordinary periods, symmetric as ratios (halving reads as far from normal as doubling), with open end bins.
 
 ### Accessibility
@@ -364,6 +367,7 @@ Weather Terminal ships in English, Spanish, Brazilian Portuguese, French, German
 | Show data age (`UPD 06:22`) on cached data | Label cached or stale data `● LIVE` |
 | Drop whole optional rows when space runs out | Truncate a number or its label |
 | Give a meaning scale fixed colours | Recolour AQI or grade bands with the palette |
+| Give each line its own accent and pattern, four lines at most | Tell six lines apart by colour alone, or draw the cause in a series colour |
 | Start bars at zero, or name the baseline in a caption | Stretch a 2° change to fill the chart |
 | Show a missing value as `—` and an empty slot | Draw a missing value as zero, or close the gap |
 | Put actions in the band or the bottom nav | Add a hamburger menu or side drawer |

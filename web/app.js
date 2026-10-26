@@ -49,7 +49,13 @@ const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compa
 // NARRATIVES makes sense without opening the group panels.
 const groupDesc = (tag, name) => TAG_ABOUT[tag] ? `<b>${esc(name)}:</b> ${esc(TAG_ABOUT[tag])}` : '';
 
-const TAG_LINE = { 'political-right': 'l-a3', 'political-left': 'l-ink l-dash', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a1', political: 'l-a2', regional: 'l-a2 l-dash', 'south-america': 'l-a1 l-dash', russia: 'l-ink', control: 'l-muted' };
+// One colour and dash pair per group, never shared (design guide §11, Colour).
+const TAG_LINE = {
+  'political-right': 'l-a3', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a3 l-dot',
+  'political-left': 'l-a2', political: 'l-a2 l-dash', 'south-america': 'l-a2 l-dot',
+  russia: 'l-a1', regional: 'l-a1 l-dash', control: 'l-muted',
+};
+const MAX_LINES = 4;  // group lines on one chart at once; more turns into a tangle
 
 // ── Formatting: one time format per screen (MM-DD HH:MM UTC) ────────────────
 const pad = (n) => String(n).padStart(2, '0');
@@ -336,7 +342,7 @@ function chart(el, readout, lines, opts) {
       // Isolated samples (no neighbour within the gap limit) get a dot, or they'd be invisible.
       const lone = segs.filter((g) => g.length === 1).map(([p]) =>
         `<circle class="dot ${line.cls || ''}" r="2" cx="${x(p[0]).toFixed(1)}" cy="${y(p[1]).toFixed(1)}"/>`).join('');
-      return `${area ? `<path class="area" d="${area}"/>` : ''}<path class="line ${line.cls || ''}" d="${path}"/>${lone}`;
+      return `${area ? `<path class="area ${line.cls || ''}" d="${area}"/>` : ''}<path class="line ${line.cls || ''}" d="${path}"/>${lone}`;
     }).join('');
 
     const refBand = ref && ref.end > start && ref.start < end
@@ -730,7 +736,7 @@ function renderCorrelation(c, chosen = null) {
   const shown = c.groups.filter((g) => state.corrTags.has(g.tag));
   const lines = [
     ...shown.map((g) => ({ label: label(g.tag), cls: TAG_LINE[g.tag] || 'l-ink', points: pts(g.values) })),
-    { label: 'YANDEX', cls: 'l-a1', points: pts(c.infra.values) },
+    { label: 'YANDEX CLOUD', cls: 'l-cause', area: true, points: pts(c.infra.values) },
   ];
   chart($('corr-chart'), $('corr-readout'), lines,
     { start, end, unit: '% OF PRE-STRIKE AVERAGE', events: c.events, ref: c.reference, baseline: 100, maxGap: 1,
@@ -738,14 +744,27 @@ function renderCorrelation(c, chosen = null) {
       share: { name: 'correlation', title: 'Community activity vs Yandex Cloud', sources: 'IODA · REDDIT FEEDS · ARCTIC SHIFT · BLUESKY',
         caption: `Daily median of each group's communities and Yandex Cloud reachability, as a % of their own average over ${refDates(c.reference).toLowerCase()} (100%). UTC days with at least 20 hours of data. Shaded: that reference period. Dashed: reported strikes. Correlation, not proof of cause.` } });
   renderDiff(c);
+  if (state.corrDropped) {
+    $('corr-readout').insertAdjacentHTML('afterbegin', `<span class="muted">UP TO ${MAX_LINES} GROUPS AT ONCE · ${esc(label(state.corrDropped))} TURNED OFF · </span>`);
+    state.corrDropped = null;
+  }
 
   const swatch = (cls) => `<svg class="swatch" viewBox="0 0 22 8" aria-hidden="true"><line class="line ${cls}" x1="1" x2="21" y1="4" y2="4"/></svg>`;
-  $('corr-legend').innerHTML = `<span class="legend-item">${swatch('l-a1')}YANDEX CLOUD</span>${c.groups.map((g) =>
+  $('corr-legend').innerHTML = `<span class="legend-item">${swatch('l-cause')}YANDEX CLOUD</span>${c.groups.map((g) =>
     `<button class="legend-item" data-v="${esc(g.tag)}" aria-pressed="${state.corrTags.has(g.tag)}">${swatch(TAG_LINE[g.tag] || 'l-ink')}${esc(label(g.tag))}</button>`).join('')}`;
   if (chosen != null) $('corr-legend').querySelector(`[data-v="${CSS.escape(chosen)}"]`)?.focus({ preventScroll: true });
   $('corr-legend').onclick = (e) => {
     const b = e.target.closest('button'); if (!b) return;
-    if (state.corrTags.has(b.dataset.v)) state.corrTags.delete(b.dataset.v); else state.corrTags.add(b.dataset.v);
+    if (state.corrTags.has(b.dataset.v)) state.corrTags.delete(b.dataset.v);
+    else {
+      state.corrTags.add(b.dataset.v);
+      // Past MAX_LINES the first group switched on goes, and the readout says so.
+      if (state.corrTags.size > MAX_LINES) {
+        const first = state.corrTags.values().next().value;
+        state.corrTags.delete(first);
+        state.corrDropped = first;
+      }
+    }
     renderCorrelation(c, b.dataset.v);
   };
 
@@ -1065,6 +1084,8 @@ const views = {
         `The last line is the group's latest complete UTC day: the median community's activity that day as a % of its own average over ${refDates(snap.reference).toLowerCase()}. "119% of normal" means the typical community in the group was 19% busier than usual. Half the group's communities were busier than that, half quieter.`,
         'A group gets a value for a day only when at least half its communities have that day. Reddit history arrives about 2 days late, so groups made mostly of Reddit communities show an older date.',
         'A drop in the non-political group as well means the cause is probably not political.',
+        'These daily values are not adjusted for the day of the week, and most groups are quieter at weekends. A dip on a Saturday or Sunday is usually the weekend, not the strikes: compare it with the weekends before. The strike-aligned chart above compares each hour with the same weekday and hour, so it does not have this problem.',
+        `The chart shows up to ${MAX_LINES} groups at once so the lines stay readable. Switching on another turns off the first one switched on.`,
         'Correlation is not proof of cause. Methods are on the About tab.',
       ])}
       <h2 class="sect">Difference · group minus non-political · percentage points</h2>
