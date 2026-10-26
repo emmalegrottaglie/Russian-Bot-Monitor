@@ -61,7 +61,7 @@ The Reddit backfill is slow. Arctic Shift is a volunteer-run archive, and it tim
 
 ## The site
 
-The UI follows the terminal design system in [terminal-design-guide/](terminal-design-guide/DESIGN_GUIDE.md).
+The UI follows the terminal design system in [terminal-design-system/](terminal-design-system/DESIGN_GUIDE.md).
 
 - **Live** leads with the correlation. One chart puts Yandex Cloud reachability and the daily activity of each community group on the same scale, where 100 means the pre-strike average. It shows each group's correlation with Yandex (Pearson r), right-wing communities against the non-political control group by default. Below the chart are every infrastructure signal, the median change per group, data coverage and the latest alerts.
 - **Groups** lists every tracked community, filterable by group, with its current rate, its change against the last 7 days and against the pre-strike reference, and its correlation with Yandex Cloud reachability.

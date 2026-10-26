@@ -10,7 +10,7 @@ RUN pip install --no-cache-dir -e .
 
 COPY config ./config
 COPY web ./web
-COPY terminal-design-guide ./terminal-design-guide
+COPY terminal-design-system ./terminal-design-system
 
 RUN useradd --system --uid 10001 tracker && mkdir /data && chown tracker /data
 USER tracker

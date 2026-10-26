@@ -59,7 +59,7 @@ def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Pa
         _rmtree(out)
     shutil.copytree(ROOT / "web", out)
     (out / "design").mkdir()
-    shutil.copy2(ROOT / "terminal-design-guide" / "terminal.css", out / "design" / "terminal.css")
+    shutil.copy2(ROOT / "terminal-design-system" / "terminal.css", out / "design" / "terminal.css")
     index = out / "index.html"
     index.write_text(index.read_text(encoding="utf-8").replace(
         '<meta charset="utf-8">', '<meta charset="utf-8">\n<meta name="data-mode" content="static">', 1), encoding="utf-8")

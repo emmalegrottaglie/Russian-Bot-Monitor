@@ -214,6 +214,6 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
     reports_root = report.reports_dir(settings)
     reports_root.mkdir(parents=True, exist_ok=True)
     app.mount("/reports", StaticFiles(directory=reports_root), name="reports")
-    app.mount("/design", StaticFiles(directory=ROOT / "terminal-design-guide"), name="design")
+    app.mount("/design", StaticFiles(directory=ROOT / "terminal-design-system"), name="design")
     app.mount("/", StaticFiles(directory=ROOT / "web", html=True), name="web")
     return app

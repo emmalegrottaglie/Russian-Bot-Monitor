@@ -1,6 +1,6 @@
 # Terminal Design System
 
-A retro-futuristic terminal / broadcast-console look for web and mobile-web apps, extracted from the WeatherTerminal app. Self-contained: no build step, no dependencies beyond Google Fonts.
+A retro-futuristic terminal / broadcast-console look for web and mobile-web apps, extracted from the Weather Terminal app. Self-contained: no build step, no dependencies beyond Google Fonts.
 
 ## Contents
 
@@ -11,6 +11,13 @@ A retro-futuristic terminal / broadcast-console look for web and mobile-web apps
 | `specimen.html` | A complete speed-test screen built only from the kit, with palette / accent / font switchers. All numbers on it are simulated. |
 | `palettes.html` | Reference sheets for every palette in dark and light mode (hex, RGB, role and contrast per token, read live from `terminal.css`), plus a typeface sheet: JetBrains Mono (the default, used by the Bot Traffic Monitor), IBM Plex Mono and Space Mono, with their `data-font` values and weights. |
 | `palettes/` | The same sheets as PNG images, for app icons and designs made outside the browser. |
+| `research-dataviz/` | The research behind the chart rules (§11 of the guide), with a checklist for new charts. |
+| `AGENTS.md`, `CLAUDE.md` | Maintenance instructions: design decisions made in any app are written into this system and synced to every copy. |
+| `sync_copies.py` | Copies the canonical folder (in the bot tracker repo) over the other repos' copies. |
+
+## Keeping it current
+
+This folder is shared by the bot tracker (canonical copy), Weather Terminal and the retro speed test. Any design decision that adds or changes a rule goes into `DESIGN_GUIDE.md` in the canonical copy, then `python sync_copies.py` replaces the other copies. See `AGENTS.md`.
 
 ## Quick start
 

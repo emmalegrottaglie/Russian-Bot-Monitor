@@ -1,6 +1,8 @@
 # Bot Traffic Monitor
 
-UI must follow `terminal-design-guide/DESIGN_GUIDE.md` and use `terminal-design-guide/terminal.css` (served at `/design/terminal.css`). Label every number, never show fabricated data (unknown values render as `—`), keep border-radius 0. Page-specific styles go in `web/app.css`.
+UI must follow `terminal-design-system/DESIGN_GUIDE.md` and use `terminal-design-system/terminal.css` (served at `/design/terminal.css`). Label every number, never show fabricated data (unknown values render as `—`), keep border-radius 0. Page-specific styles go in `web/app.css`.
+
+This repo holds the canonical copy of the terminal design system shared with Weather Terminal and the retro speed test. Any design decision that adds or changes one of its rules must be written into `terminal-design-system/DESIGN_GUIDE.md` and synced to the other repos in the same piece of work; follow `terminal-design-system/AGENTS.md`.
 
 - Backend: Python, `tracker/` package. FastAPI + SQLite + httpx. No other runtime dependencies without a good reason.
 - Sources and research tags live in `config/sources.toml`; chart annotations in `config/events.toml`. Every event needs a source and a status.

@@ -162,17 +162,18 @@ function toast(message, kind = 'err') {
 
 // ── Components ──────────────────────────────────────────────────────────────
 function bars(items) {
-  // items: [{value, label, text}] — value scaled across the series' own range, 12% floor.
+  // items: [{value, label, text}]. Counts have a true zero, so bars start at
+  // zero (design guide §11); a missing value is a gap, never a zero bar.
   const vals = items.map((i) => i.value).filter((v) => v != null);
   if (!vals.length) return '<p class="note">NO DATA YET — NEEDS A BASELINE PERIOD</p>';
-  const lo = Math.min(...vals), hi = Math.max(...vals), span = hi - lo || 1;
+  const lo = Math.min(0, ...vals), hi = Math.max(...vals), span = hi - lo || 1;
   const peak = items.findIndex((i) => i.value === hi);
   // Screen readers get one "label: value" item per bar (items may pass `sr`).
   return `<div class="bars" role="list">${items.map((it, i) => {
-    const h = it.value == null ? 0 : 12 + ((it.value - lo) / span) * 88;
+    const h = it.value == null ? 0 : ((it.value - lo) / span) * 100;
     const sr = it.sr || `${it.label}: ${it.value == null ? 'no data' : it.text}`;
-    return `<div class="bar${i === peak ? ' peak' : ''}" role="listitem"><span class="sr-only">${esc(sr)}</span>
-      <div class="bar-value" aria-hidden="true">${esc(it.text)}</div>
+    return `<div class="bar${i === peak ? ' peak' : ''}${it.value == null ? ' gap' : ''}" role="listitem"><span class="sr-only">${esc(sr)}</span>
+      <div class="bar-value" aria-hidden="true">${it.value == null ? '—' : esc(it.text)}</div>
       <div class="bar-track" aria-hidden="true"><div class="bar-fill" style="--pct:${h}%"></div></div>
       <div class="bar-label" aria-hidden="true">${esc(it.label)}</div></div>`;
   }).join('')}</div>`;
