@@ -3,7 +3,7 @@
 There are two phases:
 
 - **Phase 1 is free.** Your own computer collects the data and publishes a static copy of the site to GitHub Pages every 30 minutes.
-- **Phase 2 costs about $7 a month.** A small server collects around the clock, the site updates live, and alerts post to X.
+- **Phase 2 costs about $7 a month.** A small server collects around the clock, the site updates live, and alerts post to Twitter.
 
 Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1 is thrown away: the database moves to the server as-is.
 
@@ -19,7 +19,7 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
 
 - **Freshness:** if the computer sleeps, the site freezes at its last publish. The header shows `● SNAPSHOT` and the time it was made.
 - **Bandwidth:** GitHub Pages has a soft limit of 100 GB a month, which is plenty unless a post goes very viral. Phase 2 adds Cloudflare caching for that.
-- **Alerts:** logged on the site's Alerts tab, but not posted to X, because X charges per post.
+- **Alerts:** logged on the site's Alerts tab, but not posted to Twitter, because Twitter charges per post.
 - **Public repository:** a free GitHub Pages site needs one. Keep the database and `.env` out of it; `.gitignore` already does this.
 
 ### Steps
@@ -76,7 +76,7 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
    - It takes about 30 to 60 minutes. Output goes to `data\catch-up.log`.
    - To stop it: `schtasks /Delete /TN "BotTrafficMonitorCatchUp" /F`.
 
-9. **Optional, still free:** create an X developer account and an app for the alert account now, so the keys are ready. Posting stays off (`TRACKER_POST_ALERTS=0`) until phase 2.
+9. **Optional, still free:** create an Twitter developer account and an app for the alert account now, so the keys are ready. Posting stays off (`TRACKER_POST_ALERTS=0`) until phase 2.
 
 Checklist: the repository is public, Pages serves `gh-pages`, both scheduled tasks exist, `data\publish.log` shows a push every 30 minutes, and the site's REPORT tab lists today's report.
 
@@ -87,7 +87,7 @@ Checklist: the repository is public, Pages serves `gh-pages`, both scheduled tas
 - Collection runs around the clock on a server.
 - The site is live, with a working API at `/api` and `/docs`.
 - Traffic spikes are absorbed by the Cloudflare cache.
-- Alerts post to X.
+- Alerts post to Twitter.
 
 ### Cost
 
@@ -95,7 +95,7 @@ Checklist: the repository is public, Pages serves `gh-pages`, both scheduled tas
 |---|---|
 | VPS, DigitalOcean 1 GB droplet | $6 a month |
 | Domain name, registered through Cloudflare | about $10 a year |
-| X posts, capped at 4 a day without links | under $2 a month |
+| Twitter posts, capped at 4 a day without links | under $2 a month |
 | Cloudflare proxy, Tunnel and cache; R2 backup under 10 GB | free |
 
 ### Steps
@@ -133,10 +133,10 @@ Checklist: the repository is public, Pages serves `gh-pages`, both scheduled tas
 7. **Backups.** Set up [Litestream](https://litestream.io) to stream `tracker.db` to a Cloudflare R2 bucket (free under 10 GB).
 
 8. **Alerts.**
-   1. Add credit and a spend cap in the X developer portal.
+   1. Add credit and a spend cap in the Twitter developer portal.
    2. Fill in the four `X_*` keys in `.env` and set `TRACKER_POST_ALERTS=1`.
    3. Run `docker compose up -d` to apply the change.
-   4. In the X profile settings, label the account as automated.
+   4. In the Twitter profile settings, label the account as automated.
 
 9. **Retire or keep the free mirror.** Delete the scheduled task on your computer if you haven't already. Then either point GitHub Pages visitors at the new domain, or keep `gh-pages` as a mirror by running `docker compose exec app python -m tracker publish` from the server on a cron schedule.
 
@@ -170,7 +170,7 @@ Prices change; check them before buying.
 | Cloudflare Workers + D1 | Needs a rewrite out of Python. D1 allows 500 MB free and 10 GB paid. |
 | GitHub Actions as the collector | Schedules run 5 to 30+ minutes late or get dropped, they stop after 60 days without repository activity, and Reddit blocks the runners. A home PC is the better free collector. |
 
-### X (Twitter)
+### Twitter
 
 - No free API tier for new developers since February 2026. It is pay-per-use: about $0.015 per post, and **$0.20 for a post that contains a URL**. Alerts leave the link out by default.
 - Posting needs OAuth 1.0a user context: an API key and secret plus an access token and secret.
@@ -184,5 +184,5 @@ Prices change; check them before buying.
 | Cloudflare Radar | free token | CC BY-NC 4.0, so non-commercial use only. |
 | Reddit | OAuth, approval required (refused for this project, October 2026) | Public feeds work from home connections only. |
 | Bluesky | none | Public AppView search. |
-| X | Bearer Token, pay-per-use | Post counts only, once a day: about $0.53 a day (about $16 a month) for 26 searches, with a daily request cap (`X_MAX_REQUESTS_PER_DAY`). |
+| Twitter | Bearer Token, pay-per-use | Post counts only, once a day: about $0.53 a day (about $16 a month) for 26 searches, with a daily request cap (`X_MAX_REQUESTS_PER_DAY`). |
 | Arctic Shift | none | Backfill and the daily catch-up. Slow for large subreddits. About 2 days behind. Its hourly bucket labels run early by the Central European offset (2 hours in summer, 1 in winter); the collector corrects this, and leaves the two hours whose labels collide when clocks go forward as a gap. |

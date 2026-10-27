@@ -29,7 +29,7 @@ HOUR, DAY = 3600, 86400
 # has a strong daily cycle, so it is averaged over a full day for change_ref.
 CURRENT_HOURS = {"infrastructure": 3, "community": 24}
 FRESH = 3 * HOUR  # a series with no point this recent counts as stale
-FRESH_BY_PLATFORM = {"x": 26 * HOUR}  # X counts are fetched once a day
+FRESH_BY_PLATFORM = {"x": 26 * HOUR}  # Twitter counts are fetched once a day
 FRESH_ARCHIVE = 4 * DAY  # archive-only series: the archive lags a day or two, filled once a day
 
 
@@ -194,7 +194,7 @@ def robust_cells(grid: list[dict], alpha: float = 0.05) -> int | None:
 
 def is_primary(series: dict) -> bool:
     """The one series per community that group statistics use: comments on Reddit,
-    posts elsewhere (X has five metrics per keyword)."""
+    posts elsewhere (Twitter has five metrics per keyword)."""
     return series["key"].endswith(".comments" if series["platform"] == "reddit" else ".posts")
 
 

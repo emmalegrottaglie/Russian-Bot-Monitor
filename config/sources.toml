@@ -602,8 +602,8 @@ archive_only = true
 # ── Bluesky keyword search ────────────────────────────────────────────────────
 
 [x]
-# Count every Bluesky search below on X as well (X API post counts; see docs/X-SAMPLING.md).
-# A search with `x_only = true` is counted on X only: too quiet on Bluesky to show a change.
+# Count every Bluesky search below on Twitter as well (Twitter API post counts; see docs/X-SAMPLING.md).
+# A search with `x_only = true` is counted on Twitter only: too quiet on Bluesky to show a change.
 mirror_bluesky = true
 
 [[bluesky]]
@@ -782,19 +782,19 @@ tags = ["narratives"]
 
 [[bluesky]]
 # CheckFirst, Operation Overload (June 2024): Italy one of four main targets,
-# with content undermining Ukraine. X only: 11 posts a day on Bluesky over 49 days,
-# below the 20-a-day rule (docs/NARRATIVES.md); about 460 a day on X.
+# with content undermining Ukraine. Twitter only: 11 posts a day on Bluesky over 49 days,
+# below the 20-a-day rule (docs/NARRATIVES.md); about 460 a day on Twitter.
 query = "Zelensky"
 lang = "it"
 region = "IT"
 tags = ["narratives"]
 x_only = true
 
-# Anti-trans rhetoric, X only: on Bluesky each is about 10 posts a day or fewer
+# Anti-trans rhetoric, Twitter only: on Bluesky each is about 10 posts a day or fewer
 # (checked 12 to 18 October 2026), mostly pushback (docs/NARRATIVES.md).
 [[bluesky]]
 # Beth's Anti-Transphobia Library, glossary entry "Tranny / Troon": a slur for
-# transgender people. About 3,300 original posts a day on X.
+# transgender people. About 3,300 original posts a day on Twitter.
 query = "(troon OR troons)"
 label = "troon(s)"
 lang = "en"
@@ -806,7 +806,7 @@ x_only = true
 # The 74 (14 Dec 2023): a New York education council member's "There is no such
 # thing as trans kids", condemned by the city's education department. Both phrasings
 # ("no such thing as trans ...", "no such thing as a trans ..."): about 160 original
-# posts a day on X.
+# posts a day on Twitter.
 query = '("no such thing as trans" OR "no such thing as a trans")'
 label = "no such thing as (a) trans"
 lang = "en"

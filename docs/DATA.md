@@ -21,7 +21,7 @@ How the tracker turns source data into stored points, and a log of the bugs foun
   - It runs about 2 days behind and answers 422 when overloaded.
 - **Bluesky search:** without a login only the first page (100 posts) of any search is returned. History is therefore read one hour at a time. An hour with fewer than 100 posts is an exact count; a busier hour is extrapolated from the newest 100, the same method the live collector uses.
 - **Cloudflare Radar:** refuses hourly data over long ranges ("aggregation interval is too low for date range"). 30 days works, 50 does not, so history is requested a week at a time. Radar labels a bucket by its start; the collector stamps its end.
-- **X API counts:** hourly and per-minute post volumes for a search, with no posts read. Counts include reposts unless excluded, so the tracker counts original posts, reposts and replies separately. X's archive has outages, when every query counts zero: one was 28 September 2026, 15:00 to 24:00 UTC. A probe query that matches about 2 million posts an hour tells these gaps from real zeros. Pay-per-use, with a daily request cap in the collector; see docs/X-SAMPLING.md.
+- **Twitter API counts:** hourly and per-minute post volumes for a search, with no posts read. Counts include reposts unless excluded, so the tracker counts original posts, reposts and replies separately. Twitter's archive has outages, when every query counts zero: one was 28 September 2026, 15:00 to 24:00 UTC. A probe query that matches about 2 million posts an hour tells these gaps from real zeros. Pay-per-use, with a daily request cap in the collector; see docs/X-SAMPLING.md.
 - **IODA:** native bins (5 minutes for BGP, 10 for active probing), labelled by their start; the collector stamps their end.
 - **Reddit API:** the research access request was refused in October 2026. Live Reddit numbers come from the public feeds, which only work from a home connection. A daily catch-up (`scripts/catch-up.cmd`) replaces them with exact archive counts about 2 days later.
 
@@ -77,13 +77,13 @@ How the tracker turns source data into stored points, and a log of the bugs foun
 - **Fix:** history is requested a week at a time, and a refused week is a gap instead of losing everything.
 - **Result:** 1,200 hourly points from August 28, with no gaps.
 
-### 2026-10-18: X archive outage read as zero posts (caught before storing)
+### 2026-10-18: Twitter archive outage read as zero posts (caught before storing)
 
-- **Bug:** while X counts were being added, every search returned zero for 28 September 2026, 15:00 to 24:00 UTC, including a common-word search that normally matches about 2 million posts an hour. Stored as they came, those 9 hours would have been fake zeros.
-- **Fix:** each X pass counts that probe search too; an hour where it is zero gets no points for any keyword, and the outage is reported as an error. Nothing wrong was stored.
+- **Bug:** while Twitter counts were being added, every search returned zero for 28 September 2026, 15:00 to 24:00 UTC, including a common-word search that normally matches about 2 million posts an hour. Stored as they came, those 9 hours would have been fake zeros.
+- **Fix:** each Twitter pass counts that probe search too; an hour where it is zero gets no points for any keyword, and the outage is reported as an error. Nothing wrong was stored.
 
 ### 2026-10-19: group medians from whichever sources were in (caught on the live page)
 
-- **Bug:** a group's daily value was the median of its communities that had that day, needing only two. Sources lag by different amounts: X counts are in the next morning, Bluesky within the hour, the Reddit archive about 2 days late. On 18 October the politics group's value (217% of normal) came from its 5 X searches alone, out of 17 communities, and was shown as the group's latest day.
+- **Bug:** a group's daily value was the median of its communities that had that day, needing only two. Sources lag by different amounts: Twitter counts are in the next morning, Bluesky within the hour, the Reddit archive about 2 days late. On 18 October the politics group's value (217% of normal) came from its 5 Twitter searches alone, out of 17 communities, and was shown as the group's latest day.
 - **Why it mattered:** the median of a different subset of communities describes a different group. Recent days changed composition, which also bent the correlation with Yandex Cloud.
 - **Fix:** a day gets a group value only when at least half the group's communities have it (`analysis.MIN_GROUP_SHARE`), and the tiles say how many communities each median covers ("median of 10 of 17 communities"). Nothing stored changed.

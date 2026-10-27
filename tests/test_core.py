@@ -113,7 +113,7 @@ def test_compose_quotes_control_and_fits_a_post():
     assert len(long) <= 280 and long.endswith("https://example.org")
 
 
-# ── X OAuth 1.0a: the worked example from X's "Creating a signature" docs ────
+# ── Twitter OAuth 1.0a: the worked example from Twitter's "Creating a signature" docs ────
 
 def test_oauth1_signature_matches_documented_example():
     header = oauth1_header(

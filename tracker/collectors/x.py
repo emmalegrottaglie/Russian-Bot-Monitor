@@ -1,4 +1,4 @@
-"""X (Twitter) post volumes for a keyword, via the X API counts endpoints.
+"""Twitter post volumes for a keyword, via the Twitter API counts endpoints.
 
 Counts only: no posts or accounts are read. Per keyword, four requests give
 - original posts per hour (query -is:retweet), the series group statistics use;
@@ -7,9 +7,9 @@ Counts only: no posts or accounts are read. Per keyword, four requests give
 - posts per minute, summarised per hour as the share of the hour's posts that fell in
   its busiest 5 minutes (8.3% if spread evenly; a weak sign of synchronised bursts).
 
-X's archive has outages: on 2026-09-28 from 15:00 to 24:00 UTC every query counts
+Twitter's archive has outages: on 2026-09-28 from 15:00 to 24:00 UTC every query counts
 zero. So each pass also counts a probe query that matches millions of posts an hour;
-an hour where even the probe is zero is a gap in X's data and gets no points at all,
+an hour where even the probe is zero is a gap in Twitter's data and gets no points at all,
 never a zero.
 
 Pay-per-use: $0.005 per recent-counts request, $0.010 per full-archive request (one
@@ -44,7 +44,7 @@ BURST_MIN_POSTS = 60  # hours quieter than this get no burst value: too few post
 log = logging.getLogger(__name__)
 
 PROBE = "(the OR to OR you) lang:en"  # about 2 million posts an hour in October 2026
-PARTIAL = 0.1  # probe below this share of its median: X's coverage of that hour looks partial (logged)
+PARTIAL = 0.1  # probe below this share of its median: Twitter's coverage of that hour looks partial (logged)
 
 # Count queries per keyword, appended to "<query> lang:<lang>".
 VARIANTS = {"orig": " -is:retweet", "rt": " is:retweet", "reply": " is:reply"}
@@ -56,9 +56,9 @@ def batch_key(spec: SeriesSpec) -> tuple[str, str]:
 
 
 def recent_start(stop: int, wall: int) -> int:
-    """First hour of the 7-day recent window. X measures the 7 days from when the request
-    is made, not from the pass's `now`, and a pass can reach X long after it started (a
-    slow Reddit pass, or a laptop that slept: on 21 October 2026 X was reached two hours
+    """First hour of the 7-day recent window. Twitter measures the 7 days from when the request
+    is made, not from the pass's `now`, and a pass can reach Twitter long after it started (a
+    slow Reddit pass, or a laptop that slept: on 21 October 2026 Twitter was reached two hours
     late and the request was refused)."""
     earliest = -(-(wall - 7 * 24 * HOUR + 60) // HOUR) * HOUR  # whole hours, a minute's margin
     return max(stop - 7 * 24 * HOUR + HOUR, earliest)
@@ -81,8 +81,8 @@ def buckets(payload: dict) -> dict[int, int]:
 
 def metrics(orig: dict[int, int], rt: dict[int, int], reply: dict[int, int],
             minutes: dict[int, int], gaps: set[int] = frozenset()) -> dict[str, list[tuple[int, float]]]:
-    """Hourly points per metric, stamped at each hour's end. Hours in `gaps` (X had no
-    data at all) are left out; otherwise X returns zero buckets explicitly, so a zero
+    """Hourly points per metric, stamped at each hour's end. Hours in `gaps` (Twitter had no
+    data at all) are left out; otherwise Twitter returns zero buckets explicitly, so a zero
     here is a real zero."""
     out: dict[str, list[tuple[int, float]]] = defaultdict(list)
     for h in sorted(set(orig) - gaps):
@@ -124,7 +124,7 @@ class _Budget:
         day = time.strftime("%Y-%m-%d", time.gmtime())
         used = self.state.get(day, 0)
         if used >= self.cap:
-            raise SourceSkipped(f"daily X request cap reached ({self.cap})")
+            raise SourceSkipped(f"daily Twitter request cap reached ({self.cap})")
         self.state = {day: used + 1}
         self.path.write_text(json.dumps(self.state), encoding="utf-8")
 
@@ -151,12 +151,12 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
     if not settings.x_bearer_token:
         raise SourceSkipped("X_BEARER_TOKEN not set")
     budget = _Budget(settings.db_path.parent / "x_usage.json", settings.x_max_requests_per_day)
-    # Whole hours only, and X wants end_time at least 10 s in the past.
+    # Whole hours only, and Twitter wants end_time at least 10 s in the past.
     stop = min(now - 15, end if end is not None else now) // HOUR * HOUR
     if start is None:
         url, begin = RECENT, recent_start(stop, int(time.time()))
         if begin >= stop:
-            raise SourceSkipped("the pass is more than 7 days old by the time X is reached")
+            raise SourceSkipped("the pass is more than 7 days old by the time Twitter is reached")
     else:
         url, begin = ALL, start // HOUR * HOUR
     groups: dict[tuple[str, str], list[SeriesSpec]] = defaultdict(list)
@@ -171,16 +171,16 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
         result.errors.append(str(e))
         return result
     except (httpx.HTTPError, ValueError) as e:
-        result.errors.append(f"X probe: {e}")  # without it, gaps can't be told from zeros
+        result.errors.append(f"Twitter probe: {e}")  # without it, gaps can't be told from zeros
         return result
     gaps = {h for h, n in probe.items() if n == 0}
     if gaps:
-        result.errors.append(f"X has no data for {len(gaps)} hours ({_iso(min(gaps))} to {_iso(max(gaps) + HOUR)}): left as gaps")
+        result.errors.append(f"Twitter has no data for {len(gaps)} hours ({_iso(min(gaps))} to {_iso(max(gaps) + HOUR)}): left as gaps")
     if probe:
         typical = sorted(probe.values())[len(probe) // 2]
         thin = sorted(h for h, n in probe.items() if 0 < n < PARTIAL * typical)
         if thin:
-            log.warning("X coverage looks partial in %d hours: %s", len(thin), ", ".join(_iso(h) for h in thin[:10]))
+            log.warning("Twitter coverage looks partial in %d hours: %s", len(thin), ", ".join(_iso(h) for h in thin[:10]))
     for (query, lang), group in groups.items():
         base = f"{query} lang:{lang}" if lang else query
         try:
@@ -191,7 +191,7 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
             result.errors.append(str(e))
             break
         except (httpx.HTTPError, ValueError) as e:
-            result.errors.append(f"X {base!r}: {e}")
+            result.errors.append(f"Twitter {base!r}: {e}")
             continue
         by_metric = metrics(got["orig"], got["rt"], got["reply"], minutes, gaps)
         for s in group:

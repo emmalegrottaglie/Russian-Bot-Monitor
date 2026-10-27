@@ -4,7 +4,7 @@ An open dashboard for one question: **when Yandex data centres go offline, does 
 
 In October 2026, reported strikes on Yandex data centres (Sasovo on Oct 8, Kaluga on Oct 9, Vladimir on Oct 11) coincided with sharp drops in Yandex Cloud reachability. In the same days, people reported lower activity in political subreddits and right-wing social media. This project records both kinds of signal side by side, keeps the history, and makes it downloadable, so the claim can be checked rather than repeated.
 
-It collects data on its own every 15 minutes and logs an alert when a signal moves sharply. It can also post those alerts to an X account.
+It collects data on its own every 15 minutes and logs an alert when a signal moves sharply. It can also post those alerts to an Twitter account.
 
 **Live site: <https://emmalegrottaglie.github.io/Russian-Bot-Monitor/>**. This is a static snapshot, refreshed about every 30 minutes; see [Deploying](#deploying).
 
@@ -12,7 +12,7 @@ It collects data on its own every 15 minutes and logs an alert when a signal mov
 
 As of 21 October 2026. The Reddit history is still being backfilled, so these are first results, not conclusions.
 
-- **No drop in right-wing activity after the strikes.** In the 48 hours after the strikes, the right-wing Reddit communities ran above their normal range in 37 of 49 hours, while the non-political control group ran below its range in 38 ([docs/CHARTS.md](docs/CHARTS.md)). Bluesky and X searches show no drop either.
+- **No drop in right-wing activity after the strikes.** In the 48 hours after the strikes, the right-wing Reddit communities ran above their normal range in 37 of 49 hours, while the non-political control group ran below its range in 38 ([docs/CHARTS.md](docs/CHARTS.md)). Bluesky and Twitter searches show no drop either.
 - **The r/theydidthemath post did not find a drop either.** Its headline was 90 of 968 subreddits declining after all three strikes, but the author found none of them held across every timing check and called it an exploratory screen, not a test. In its own data about 45% of subreddits declined at each strike, so about 95 would decline at all three by chance, and 77 rose at all three ([docs/SYFTEN-CHECK.md](docs/SYFTEN-CHECK.md)).
 - **Independent checks agree.** Graphika (via Texty), Cloudflare and Lawfare each found no measured drop in political activity ([docs/DROP-CLAIMS.md](docs/DROP-CLAIMS.md)).
 - **The data itself checks out.** Its hourly Reddit counts agree with an independent provider (Syften) to within a few percent (median hourly correlation 0.958).
@@ -29,7 +29,7 @@ Correlation is not attribution: a drop after an outage could also come from news
 | Comments and posts per hour in selected subreddits | Reddit API (or public feeds) | OAuth recommended |
 | Historical subreddit activity (backfill) | [Arctic Shift](https://arctic-shift.photon-reddit.com) | no |
 | Posts per hour matching keywords | Bluesky public search | no |
-| Original posts, reposts and replies per hour for the same keywords (counts only) | X API post counts | Bearer Token, pay-per-use |
+| Original posts, reposts and replies per hour for the same keywords (counts only) | Twitter API post counts | Bearer Token, pay-per-use |
 
 Communities are tagged `political-right`, `narratives`, `political`, `regional`, `south-america`, `russia` or `control` in [config/sources.toml](config/sources.toml). The **control** group of non-political communities is the point of the exercise: a drop that also shows up there is not evidence of bot removal. The tags are editorial judgements and are documented on the site.
 
@@ -101,7 +101,7 @@ An alert fires when either of these moves against its 7-day same-hour baseline:
 - an infrastructure signal moves 25% or more
 - a community group's median moves 30% or more (groups with at least 3 communities)
 
-Each signal-direction pair has a 12-hour cooldown. Every alert also quotes the control group's change. Alerts are always logged on the site. To post them to X, set the four `X_*` credentials and `TRACKER_POST_ALERTS=1`. X charges per post, and much more for posts with links, so alerts leave the link out by default and are capped at `TRACKER_MAX_POSTS_PER_DAY`.
+Each signal-direction pair has a 12-hour cooldown. Every alert also quotes the control group's change. Alerts are always logged on the site. To post them to Twitter, set the four `X_*` credentials and `TRACKER_POST_ALERTS=1`. Twitter charges per post, and much more for posts with links, so alerts leave the link out by default and are capped at `TRACKER_MAX_POSTS_PER_DAY`.
 
 ## Community labels
 
@@ -123,7 +123,7 @@ A report is built every day and saved under `data/reports/YYYY-MM-DD/`. Reports 
 See [docs/HOSTING.md](docs/HOSTING.md) for a step-by-step guide in two phases:
 
 1. **Free, now.** Your computer collects every 30 minutes and publishes a static copy of the site to GitHub Pages.
-2. **About $7 a month, later.** A VPS behind a Cloudflare Tunnel and cache, with Litestream backups and X alerts.
+2. **About $7 a month, later.** A VPS behind a Cloudflare Tunnel and cache, with Litestream backups and Twitter alerts.
 
 ## Caveats
 

@@ -78,7 +78,7 @@ class Settings:
         )
 
 
-# X series per keyword. "posts" (original posts) is the one group statistics use.
+# Twitter series per keyword. "posts" (original posts) is the one group statistics use.
 X_METRICS = (("posts", "POSTS / H"), ("reposts", "REPOSTS / H"), ("repost-share", "% REPOSTS"),
              ("replies", "REPLIES / H"), ("burst", "% IN BUSIEST 5 MIN"))
 
@@ -178,7 +178,7 @@ def parse_config(sources: dict, events: dict) -> Config:
         return f"{prefix} {q} {item['lang']}" if item.get("lang") else f"{prefix} {q}"
 
     for item in sources.get("bluesky", []):
-        if item.get("x_only"):  # too quiet on Bluesky to show a change; still counted on X
+        if item.get("x_only"):  # too quiet on Bluesky to show a change; still counted on Twitter
             continue
         lang = item.get("lang", "")
         specs.append(SeriesSpec(
@@ -188,14 +188,14 @@ def parse_config(sources: dict, events: dict) -> Config:
             params={"query": item["query"], "lang": lang},
         ))
 
-    # X: the same searches as Bluesky, counted with the X API (tracker/collectors/x.py).
+    # Twitter: the same searches as Bluesky, counted with the Twitter API (tracker/collectors/x.py).
     if sources.get("x", {}).get("mirror_bluesky"):
         for item in sources.get("bluesky", []):
             lang = item.get("lang", "")
             for metric, unit in X_METRICS:
                 specs.append(SeriesSpec(
                     key=f"x.{slug(item['query'])}{'.' + lang if lang else ''}.{metric}", kind="community",
-                    platform="x", label=search_label("X", item), unit=unit,
+                    platform="x", label=search_label("Twitter", item), unit=unit,
                     region=item["region"], tags=tuple(item["tags"]),
                     params={"query": item["query"], "lang": lang, "metric": metric},
                 ))

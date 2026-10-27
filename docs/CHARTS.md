@@ -1,6 +1,6 @@
 # Chart specs
 
-Status, 2026-10-18: charts 1, 2 and 3 and PNG export (chart 4) are built; chart 5 has its endpoint only. The values that waited on the backfill are settled under [Decisions from the backfill](#decisions-from-the-backfill), using the data loaded by then: 50 days for Bluesky and X, and for Reddit comments; the Reddit post counts and the 8 narratives Bluesky searches were still loading.
+Status, 2026-10-18: charts 1, 2 and 3 and PNG export (chart 4) are built; chart 5 has its endpoint only. The values that waited on the backfill are settled under [Decisions from the backfill](#decisions-from-the-backfill), using the data loaded by then: 50 days for Bluesky and Twitter, and for Reddit comments; the Reddit post counts and the 8 narratives Bluesky searches were still loading.
 
 Charts in build order:
 
@@ -141,7 +141,7 @@ The SVG has the `grid` role pattern. Arrow keys move between cells, and Home/End
 
 **Question it answers:** in one line, is political activity moving differently from non-political activity?
 
-**Audience:** X followers and journalists. It is the one-line summary of chart 1. It goes on Live directly under chart 1.
+**Audience:** Twitter followers and journalists. It is the one-line summary of chart 1. It goes on Live directly under chart 1.
 
 ### Data
 
@@ -170,8 +170,8 @@ No new endpoint: computed in the browser from `/api/correlation`, which already 
 ### Behaviour
 
 - Each chart gets a `▼ PNG` chip next to its data table.
-- **The image is the chart plus a caption block:** title, the caption from the spec above, "Data to 10-12 20:00 UTC", the sources, and the site address as plain text. A link costs extra on X; plain text does not.
-- **Size:** 1200 × 675 (16:9, X's in-feed ratio), drawn at 2× for sharp text.
+- **The image is the chart plus a caption block:** title, the caption from the spec above, "Data to 10-12 20:00 UTC", the sources, and the site address as plain text. A link costs extra on Twitter; plain text does not.
+- **Size:** 1200 × 675 (16:9, Twitter's in-feed ratio), drawn at 2× for sharp text.
 - **Palette:** the viewer's current palette. CRT scanlines are never included.
 - **File name:** `bot-monitor-<chart>-<YYYY-MM-DD>.png`.
 
@@ -183,7 +183,7 @@ This is why every chart must be SVG. An HTML-grid heatmap could not be exported 
 
 ### Out of scope for now
 
-Attaching images to X alerts needs the image rendered on the server, where there is no browser. Revisit in phase 2, when there is a server.
+Attaching images to Twitter alerts needs the image rendered on the server, where there is no browser. Revisit in phase 2, when there is a server.
 
 ### Acceptance
 
@@ -248,7 +248,7 @@ Settled on 2026-10-18 from the data loaded by then (see Status at the top).
 
 **Chart 2, bins.** Daily indices on pre-strike days (2,965 community-days): 5th percentile 47, 25th 74, median 93, 75th 112, 95th 167. Half of ordinary days fall outside 85 to 115, so the draft bins would have coloured most of the map. The neutral bin is now 80 to 125, and the strongest bins hold about 1 in 20 ordinary days on the low side and fewer on the high side.
 
-**What the first look showed** (not a finding until the remaining backfill is in and it has been checked by hand): in the 48 hours after the strikes the right-wing curve sat above its normal range in 37 of 49 hours (median index 116), the control curve below its range in 38 (median 89), and the narratives group, which then held only the X searches, about 80% above normal, driven by Zelensky news. Neither is a drop in right-wing activity.
+**What the first look showed** (not a finding until the remaining backfill is in and it has been checked by hand): in the 48 hours after the strikes the right-wing curve sat above its normal range in 37 of 49 hours (median index 116), the control curve below its range in 38 (median 89), and the narratives group, which then held only the Twitter searches, about 80% above normal, driven by Zelensky news. Neither is a drop in right-wing activity.
 
 ## Not planned
 

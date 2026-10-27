@@ -1,6 +1,6 @@
-"""Posting to X (Twitter) with OAuth 1.0a user context.
+"""Posting to Twitter with OAuth 1.0a user context.
 
-X bills per post under the pay-per-use plan, and a post containing a URL costs
+Twitter bills per post under the pay-per-use plan, and a post containing a URL costs
 far more than a plain one, so alerts leave the link out by default.
 """
 

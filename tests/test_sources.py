@@ -239,13 +239,13 @@ def test_x_counts_become_hourly_metrics():
     assert orig == {h0: 30, h1: 0}
     minutes = {h0 + 60 * i: (20 if i < 5 else 1) for i in range(60)}  # a 5-minute burst: 100 of 155 posts
     out = x.metrics(orig, {h0: 90, h1: 0}, {h0: 6}, minutes)
-    assert out["posts"] == [(h0 + 3600, 30.0), (h1 + 3600, 0.0)]  # stamped at each hour's end; zeros are X's own
+    assert out["posts"] == [(h0 + 3600, 30.0), (h1 + 3600, 0.0)]  # stamped at each hour's end; zeros are Twitter's own
     assert out["reposts"] == [(h0 + 3600, 90.0), (h1 + 3600, 0.0)]
     assert out["repost-share"] == [(h0 + 3600, 75.0)]  # no share for an hour with no posts at all
     assert out["replies"] == [(h0 + 3600, 6.0)]
     assert out["burst"] == [(h0 + 3600, round(100 * 100 / 155, 2))]
     assert "burst" not in x.metrics(orig, {}, {}, {h0 + 60 * i: 0 for i in range(60)})  # too quiet to judge
-    gap = x.metrics(orig, {h0: 90, h1: 0}, {}, minutes, gaps={h1})  # X had no data at all in h1
+    gap = x.metrics(orig, {h0: 90, h1: 0}, {}, minutes, gaps={h1})  # Twitter had no data at all in h1
     assert gap["posts"] == [(h0 + 3600, 30.0)] and gap["reposts"] == [(h0 + 3600, 90.0)]
 
 
@@ -254,7 +254,7 @@ def test_x_recent_window_follows_the_clock_not_the_pass():
 
     stop = int(ts("2026-10-21T20:00:00Z"))
     assert x.recent_start(stop, stop + 600) == stop - 7 * 86400 + 3600  # on time: the usual window
-    late = int(ts("2026-10-21T22:41:00Z"))  # the pass reached X two hours late
+    late = int(ts("2026-10-21T22:41:00Z"))  # the pass reached Twitter two hours late
     begin = x.recent_start(stop, late)
     assert begin >= late - 7 * 86400 and begin % 3600 == 0
 
@@ -278,7 +278,7 @@ def test_x_mirrors_bluesky_searches_and_uses_original_posts_for_groups():
     xs = [s for s in config.series if s.platform == "x"]
     primary = [s for s in xs if analysis.is_primary({"platform": s.platform, "key": s.key})]
     assert len(xs) == 5 * len(primary)
-    # Every Bluesky search is on X too; X also has the x_only searches.
+    # Every Bluesky search is on Twitter too; Twitter also has the x_only searches.
     searched = lambda specs: {(s.params["query"], s.params["lang"]) for s in specs}
     assert searched(bsky) < searched(primary) and all(s.key.endswith(".posts") for s in primary)
 
@@ -305,8 +305,8 @@ def test_search_with_operators_uses_its_label_and_keeps_its_brackets():
     from tracker.config import load_config
 
     troon = next(s for s in load_config().series if s.key == "x.troon-or-troons.en.posts")
-    assert troon.label == 'X "troon(s)" en' and troon.tags == ("anti-trans",)
-    # X applies AND before OR, so the brackets must survive for lang: to cover both words.
+    assert troon.label == 'Twitter "troon(s)" en' and troon.tags == ("anti-trans",)
+    # Twitter applies AND before OR, so the brackets must survive for lang: to cover both words.
     assert troon.params["query"] == "(troon OR troons)"
 
 

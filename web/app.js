@@ -15,8 +15,8 @@ const TAG_SHORT = {
 const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
   'political-left': 'Communities organised around left-wing, liberal or socialist politics: party and campaign communities, socialist and anarchist ones.',
-  narratives: 'Bluesky and X searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
-  'anti-trans': 'X searches for anti-trans rhetoric: the slur "troon" and the claim that there is "no such thing as trans" (kids, people). X only; on Bluesky they are rare. They count everyone using the words, including people quoting them to object. Sources in docs/NARRATIVES.md.',
+  narratives: 'Bluesky and Twitter searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
+  'anti-trans': 'Twitter searches for anti-trans rhetoric: the slur "troon" and the claim that there is "no such thing as trans" (kids, people). Twitter only; on Bluesky they are rare. They count everyone using the words, including people quoting them to object. Sources in docs/NARRATIVES.md.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states, and for European and neighbouring countries.',
   'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
@@ -39,7 +39,7 @@ function groupsPanel() {
       <dd>${esc(TAG_ABOUT[t] || '')} <span class="members">${byTag.get(t).map(esc).join(' · ')}</span></dd>`).join('')}</dl>
     <p class="notes-tail">Groups are editorial labels, open to challenge in <code>config/sources.toml</code>.</p></details>`;
 }
-const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT', bluesky: 'BLUESKY', x: 'X' };
+const PLATFORM_SHORT = { ioda: 'IODA', cloudflare: 'CLOUDFLARE', reddit: 'REDDIT', bluesky: 'BLUESKY', x: 'TWITTER' };
 
 let snap = null;
 const state = { tag: 'all', allMetrics: false, a: null, b: null, days: 30, compare: 'ref',
@@ -199,7 +199,7 @@ const indexTick = (v) => `${Math.round(v)}%`;
 const indexValue = (v) => `${Math.round(v)}% (${pct(v / 100 - 1)})`;
 const ppValue = (v) => { const r = Math.round(v); return `${r > 0 ? '+' : r < 0 ? '−' : ''}${Math.abs(r)} PP`; };
 const refDates = (ref) => `${mmdd(ref.start)} TO ${mmdd(ref.end - 1)}`;
-const SOURCES = { ioda: 'IODA, GEORGIA TECH', cloudflare: 'CLOUDFLARE RADAR', reddit: 'REDDIT FEEDS · ARCTIC SHIFT ARCHIVE', bluesky: 'BLUESKY SEARCH', x: 'X API POST COUNTS' };
+const SOURCES = { ioda: 'IODA, GEORGIA TECH', cloudflare: 'CLOUDFLARE RADAR', reddit: 'REDDIT FEEDS · ARCTIC SHIFT ARCHIVE', bluesky: 'BLUESKY SEARCH', x: 'TWITTER API POST COUNTS' };
 
 // SVG line chart with labeled axes, event markers, reference band and a hover readout.
 // `lines`: [{label, cls, points: [[ts, value], ...], area?}] drawn in order (last on top).
@@ -813,9 +813,9 @@ function showsSection() {
     <div id="shows-table"><p class="note">LOADING…</p></div>
     <h3 class="tiles-title">Findings · checked ${FINDINGS_CHECKED}</h3>
     ${notes([
-      '<b>No drop in political activity that non-political communities did not share.</b> A bot drop would show as many hours below the normal range in the political groups and not in the non-political one. Right-wing communities and the narratives searches ran above their range instead. General politics ran below its range in about half the hours, but the non-political communities ran below theirs in more, so whatever lowered both was not political. Searches on Bluesky and X show no drop either.',
+      '<b>No drop in political activity that non-political communities did not share.</b> A bot drop would show as many hours below the normal range in the political groups and not in the non-political one. Right-wing communities and the narratives searches ran above their range instead. General politics ran below its range in about half the hours, but the non-political communities ran below theirs in more, so whatever lowered both was not political. Searches on Bluesky and Twitter show no drop either.',
       '<b>What did fall and stay low is Yandex Cloud itself.</b> The outage is real and lasting, but the communities did not follow it down. The lower days in the correlation chart after the Vladimir strike fall on a weekend, and the weekends before the strikes were just as low.',
-      `<b>Coded far-right and anti-trans language on X did not drop.</b> Of 20 combinations of term category and measure, one dipped (reposts of racist and white-supremacist terms), no single term caused it, and one dip in 20 is about what chance gives. Anti-trans reposts rose. ${doc('CODED-COMMUNITIES.md', 'Method and results')}.`,
+      `<b>Coded far-right and anti-trans language on Twitter did not drop.</b> Of 20 combinations of term category and measure, one dipped (reposts of racist and white-supremacist terms), no single term caused it, and one dip in 20 is about what chance gives. Anti-trans reposts rose. ${doc('CODED-COMMUNITIES.md', 'Method and results')}.`,
       `<b>The r/theydidthemath post did not find a drop either.</b> Its 90 subreddits that declined after all three strikes did not hold up in the author's own timing checks, and about as many would decline by chance. ${doc('SYFTEN-CHECK.md', 'Our check')}.`,
       `<b>Independent checks agree.</b> Graphika (via Texty), Cloudflare and Lawfare each found no measured drop in political activity. ${doc('DROP-CLAIMS.md', 'Sources')}.`,
       '<b>The data checks out.</b> Hourly Reddit counts agree with an independent provider, Syften (median hourly correlation 0.958).',
@@ -889,7 +889,7 @@ function renderAligned(d, chosen = null) {
     ...ALIGNED_X, start: -span * 3600, end: span * 3600, still: true, unit: 'INDEX', axisTitle: 'INDEX · 100 = NORMAL FOR THAT WEEKDAY AND HOUR',
     events: [{ ts: 0, short: 'STRIKE' }], baseline: 100, baselineLabel: '100 = NORMAL', envelope, maxGap: 1,
     tick: (v) => String(Math.round(v)), value: (v) => String(Math.round(v)), dataTo: snap.now,
-    share: { name: `${g.tag}-strike-aligned`, title: `${label(g.tag)} around the strikes`, caption, sources: 'REDDIT · ARCTIC SHIFT · BLUESKY · X' } });
+    share: { name: `${g.tag}-strike-aligned`, title: `${label(g.tag)} around the strikes`, caption, sources: 'REDDIT · ARCTIC SHIFT · BLUESKY · TWITTER' } });
   const after = (vs) => vs.filter((v, i) => d.offsets[i] >= 0);
   const outside = envelope ? after(g.values).filter((v, i) => {
     const j = d.offsets.indexOf(0) + i, lo = g.band.lo[j], hi = g.band.hi[j];
@@ -973,7 +973,7 @@ function renderHeatmap(d) {
       ${dayTicks}${cells}${strikes}<rect class="hm-cursor" visibility="hidden" width="${Math.max(1, cw - 1).toFixed(1)}" height="${CH - 1}"/></svg></div>
     <div class="hm-legend" role="list" aria-label="Colour key">${HEAT_BINS.map((b) =>
       `<span role="listitem"><i class="${b.cls}"></i>${b.label}</span>`).join('')}<span role="listitem"><i class="hm-none"></i>NO DATA</span></div>
-    <p class="note chart-caption">Each cell is a community's activity that UTC day as % of its pre-strike average (${refDates(snap.reference)}). ▼ and dashed lines: reported strikes. Hatched: no data. Last ${nDays} days. Source: REDDIT · ARCTIC SHIFT · BLUESKY · X.</p>
+    <p class="note chart-caption">Each cell is a community's activity that UTC day as % of its pre-strike average (${refDates(snap.reference)}). ▼ and dashed lines: reported strikes. Hatched: no data. Last ${nDays} days. Source: REDDIT · ARCTIC SHIFT · BLUESKY · Twitter.</p>
     <div class="chart-tools"><details class="data-table"><summary>Show data as a table</summary><div class="table-wrap"></div></details></div>`;
 
   const svg = el.querySelector('svg'), cursor = svg.querySelector('.hm-cursor');
@@ -1356,7 +1356,7 @@ const views = {
       <div class="table-wrap"><table class="table" aria-label="Alert log">
         <thead><tr><th scope="col">TIME UTC</th><th scope="col">ALERT</th><th scope="col">POSTED</th></tr></thead>
         <tbody>${list.map((a) => `<tr><td class="t-key">${esc(stamp(a.ts))}</td><td class="wrap">${esc(a.message)}</td>
-          <td class="${a.posted ? 't-data' : 't-delta'}">${a.posted ? 'X' : esc(a.error ? 'FAILED' : 'LOG ONLY')}</td></tr>`).join('')
+          <td class="${a.posted ? 't-data' : 't-delta'}">${a.posted ? 'TWITTER' : esc(a.error ? 'FAILED' : 'LOG ONLY')}</td></tr>`).join('')
           || '<tr><td colspan="3" class="t-key">NO ALERTS YET</td></tr>'}</tbody>
       </table></div>
       ${notes([
@@ -1485,7 +1485,7 @@ const views = {
     view.innerHTML = `<h2 class="sect">What this is</h2>
       <div class="prose">
         <p>An open monitor for one question: when Yandex data centres go dark, does activity in online political communities change, and does it change more than in non-political ones?</p>
-        <p>It records two kinds of signal side by side. <b>Infrastructure</b>: how much of Yandex's network is reachable (IODA active probing and BGP routing) and, when configured, the share of HTTP requests from Yandex's network that Cloudflare classifies as bots. <b>Communities</b>: comments and posts per hour in selected subreddits, and posts per hour matching keywords on Bluesky and on X (original posts, reposts and replies, from X's post counts, updated once a day). Only timestamps are counted; no usernames or content are stored.</p>
+        <p>It records two kinds of signal side by side. <b>Infrastructure</b>: how much of Yandex's network is reachable (IODA active probing and BGP routing) and, when configured, the share of HTTP requests from Yandex's network that Cloudflare classifies as bots. <b>Communities</b>: comments and posts per hour in selected subreddits, and posts per hour matching keywords on Bluesky and on Twitter (original posts, reposts and replies, from Twitter's post counts, updated once a day). Only timestamps are counted; no usernames or content are stored.</p>
       </div>
       <h2 class="sect">Read this before citing a number</h2>
       <div class="prose"><ul>
@@ -1516,10 +1516,10 @@ const views = {
         It used hourly Syften counts for 968 subreddits and found 90 that declined after all three strikes, none of which held across every timing check. The author disclosed that the calculations were produced with ChatGPT and posted it for review.
         Commenters asked for random-date comparisons and controls; the placebo test, the control group and the robustness grid here answer that.
         In its own data, about 45% of subreddits declined at each strike, so about 95 of 968 would decline at all three by chance: 90 is not more than chance. Its hourly counts agree with this tracker's archive counts to within a few percent (<code>docs/SYFTEN-CHECK.md</code>).</p>
-        <p>Independent checks since then found no measured drop in political activity on social media: <a href="https://texty.org.ua/fragments/118487/chy-zmusyly-udary-po-data-centrax-yandeksu-zamovknuty-rosijskyx-botiv-analiz-graphika/" rel="noopener">Graphika</a> (via Texty, 14 October) on X, Telegram and Reddit, <a href="https://blog.cloudflare.com/yandex-outage/" rel="noopener">Cloudflare</a> (14 October) on its traffic data, and <a href="https://www.lawfaremedia.org/article/the-russian-bots-went-silent.-or-did-they" rel="noopener">Lawfare</a> (Renée DiResta, 14 October). What each found is in <code>docs/DROP-CLAIMS.md</code>.</p></div>
+        <p>Independent checks since then found no measured drop in political activity on social media: <a href="https://texty.org.ua/fragments/118487/chy-zmusyly-udary-po-data-centrax-yandeksu-zamovknuty-rosijskyx-botiv-analiz-graphika/" rel="noopener">Graphika</a> (via Texty, 14 October) on Twitter, Telegram and Reddit, <a href="https://blog.cloudflare.com/yandex-outage/" rel="noopener">Cloudflare</a> (14 October) on its traffic data, and <a href="https://www.lawfaremedia.org/article/the-russian-bots-went-silent.-or-did-they" rel="noopener">Lawfare</a> (Renée DiResta, 14 October). What each found is in <code>docs/DROP-CLAIMS.md</code>.</p></div>
       <h2 class="sect">Anti-trans and anti-LGBTQ rhetoric</h2>
       <div class="prose">
-        <p>Influence operations have used anti-trans topics: a fake LGBTQ+ outlet run by the Russian operation Doppelganger filed stories under "Trans youth" and "Woke Wars" (<a href="https://dfrlab.org/2024/09/18/doppelganger-us-election/" rel="noopener">DFRLab, 2024</a>). How much anti-trans rhetoric online is foreign or inauthentic is hard to tell: accounts can claim any country, and operations use accounts that pass as local. What is documented is that domestic political events drive its spikes, and that it is most common on X:</p>
+        <p>Influence operations have used anti-trans topics: a fake LGBTQ+ outlet run by the Russian operation Doppelganger filed stories under "Trans youth" and "Woke Wars" (<a href="https://dfrlab.org/2024/09/18/doppelganger-us-election/" rel="noopener">DFRLab, 2024</a>). How much anti-trans rhetoric online is foreign or inauthentic is hard to tell: accounts can claim any country, and operations use accounts that pass as local. What is documented is that domestic political events drive its spikes, and that it is most common on Twitter:</p>
         <ul>
           <li><a href="https://counterhate.com/research/digital-hate-lgbtq/" rel="noopener">CCDH and the Human Rights Campaign (2022)</a>: 989,547 tweets in January to July 2022 used slurs such as "groomer" about LGBTQ+ people; "grooming" talk rose 406% in the month after Florida's "Don't Say Gay or Trans" law.</li>
           <li><a href="https://counterhate.com/blog/the-musk-bump-quantifying-the-rise-in-hate-speech-under-elon-musk/" rel="noopener">CCDH (2022)</a>: tweets using one transphobic slur rose 62%, from 3,159 to 5,117 a day, after Twitter changed owner.</li>
@@ -1527,7 +1527,7 @@ const views = {
           <li><a href="https://bethylamine.github.io/" rel="noopener">Beth's Anti-Transphobia Library</a> catalogues the talking points, their code words and how they recycle older homophobic ones, and summarises 52,401 Twitter accounts reported as transphobic.</li>
         </ul>
         <p>On Bluesky this rhetoric is rare, and in a hand check in October 2026 almost none of the matching posts used it: of about 50 recent posts each, "groomer" was mostly pet grooming, "women's sports" and "protect women" were mostly fans and people criticising the framing, and "TRAs" matched the Spanish word "tras". Counting them would measure the pushback, not the rhetoric, so Bluesky is not charted.</p>
-        <p>On X, from October 2026, the <b>anti-trans</b> group counts two searches: the slur "troon" (listed as a slur in Beth's glossary), about 3,300 original posts a day, and the phrase "no such thing as (a) trans", about 160 a day (<a href="https://www.the74million.org/article/in-private-texts-ny-ed-council-reps-congressional-candidate-demean-lgbtq-kids/" rel="noopener">The 74, 2023</a>, documents the claim). Counts include people quoting the words to object; how many has not been checked on X. See <code>docs/NARRATIVES.md</code>.</p>
+        <p>On Twitter, from October 2026, the <b>anti-trans</b> group counts two searches: the slur "troon" (listed as a slur in Beth's glossary), about 3,300 original posts a day, and the phrase "no such thing as (a) trans", about 160 a day (<a href="https://www.the74million.org/article/in-private-texts-ny-ed-council-reps-congressional-candidate-demean-lgbtq-kids/" rel="noopener">The 74, 2023</a>, documents the claim). Counts include people quoting the words to object; how many has not been checked on Twitter. See <code>docs/NARRATIVES.md</code>.</p>
       </div>
       <h2 class="sect">Annotated events</h2>
       <div class="prose"><ul>${ev || '<li>None.</li>'}</ul></div>
@@ -1537,7 +1537,7 @@ const views = {
         <li>Cloudflare Radar — CC BY-NC 4.0.</li>
         <li>Reddit Data API / public feeds; Arctic Shift archive for history.</li>
         <li>Bluesky public AppView search.</li>
-        <li>X API post counts (pay-per-use; counts only, no posts read).</li>
+        <li>Twitter API post counts (pay-per-use; counts only, no posts read).</li>
         <li>All data: <a href="api/export/daily.csv?days=365">daily CSV</a>${STATIC ? '' : ' · <a href="docs">API</a>'} · <a href="#report">dated reports</a>.</li>
       </ul></div>
       <h2 class="sect">Display</h2>

@@ -53,9 +53,9 @@ AMBIGUOUS = {
 NOTES = {
     "dual loyalty": "Kept after review (Emma, 20 Oct 2026)",
     "open borders for Israel": "Kept after review (Emma, 20 Oct 2026)",
-    "troon": "Also counted on X since October 2026 (docs/NARRATIVES.md); listed as a slur in Beth's Transphobia Glossary",
+    "troon": "Also counted on Twitter since October 2026 (docs/NARRATIVES.md); listed as a slur in Beth's Transphobia Glossary",
     "gender ideology": "Erin in the Morning (5 Feb 2026) calls it a far-right dog whistle, citing Human Rights Watch",
-    "surgical wound": "See the 'gaping wound' check in docs/NARRATIVES.md: too rare on X to track",
+    "surgical wound": "See the 'gaping wound' check in docs/NARRATIVES.md: too rare on Twitter to track",
 }
 
 FIELDS = ["term", "variants", "category", "type", "register", "status", "source", "source_url", "note", "precision"]
@@ -66,7 +66,7 @@ EXTRA = [
     ("no such thing as trans", "no such thing as trans; no such thing as a trans; no such thing as trans kids",
      "transphobic", "candidate", "The 74, 14 Dec 2023",
      "https://www.the74million.org/article/in-private-texts-ny-ed-council-reps-congressional-candidate-demean-lgbtq-kids/",
-     "Counted on X since October 2026 (docs/NARRATIVES.md)"),
+     "Counted on Twitter since October 2026 (docs/NARRATIVES.md)"),
     ("transgender ideology", "transgender ideology; trans ideology", "transphobic", "candidate",
      "Erin in the Morning, s. baum, 5 Feb 2026", "https://www.erininthemorning.com/p/republican-senator-attacks-netflix",
      "Called a far-right dog whistle, citing Human Rights Watch"),

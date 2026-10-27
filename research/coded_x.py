@@ -1,8 +1,8 @@
-"""First look: coded anti-trans, anti-LGBTQ and far-right language on X around the strikes.
+"""First look: coded anti-trans, anti-LGBTQ and far-right language on Twitter around the strikes.
 
-Counts only (X counts endpoints): no posts or accounts are read. For each category of
+Counts only (Twitter counts endpoints): no posts or accounts are read. For each category of
 high-specificity terms from config/lexicon.csv, hourly English original posts and
-reposts from 1 September 2026, plus X's general-volume probe so a category can be read
+reposts from 1 September 2026, plus Twitter's general-volume probe so a category can be read
 as a rate. Then the strike-aligned index used on the site: each hour against the same
 weekday-hour 1-3 weeks earlier, the three strikes lined up at hour 0, with a 5-95%
 band from random pre-strike start times.
@@ -10,7 +10,7 @@ band from random pre-strike start times.
 Only terms whose ordinary meaning is rare were chosen, by hand, because no term has a
 measured precision yet. Treat the result as a first look, not a finding.
 
-    python -m research.coded_x fetch      # spends X credits: about $0.01 per request
+    python -m research.coded_x fetch      # spends Twitter credits: about $0.01 per request
     python -m research.coded_x analyze
 
 Results (hourly totals only) go to data/research/coded_x.json. Approved by Emma on
@@ -39,7 +39,7 @@ MAX_REQUESTS = 60  # hard stop for this run: $0.60 at full-archive prices
 QUERY_LIMIT = 1024  # characters, full-archive counts
 
 # Hand-picked from config/lexicon.csv: terms with little ordinary use. Grouped so each
-# query stays under X's length limit.
+# query stays under Twitter's length limit.
 CATEGORIES = {
     "anti-trans slurs and memes": [
         "troon", "troons", "zippertits", "YWNBAW", '"you will never be a woman"', "transtrender", "transtrenders",

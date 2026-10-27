@@ -13,8 +13,8 @@ October 2026. What was claimed to have gone quiet after the Yandex data-centre s
 | Claim | Evidence offered | Status |
 |---|---|---|
 | "Russian bots went silent" | Cloudflare Radar chart of automated traffic from Yandex's network (AS13238): 0.3% of the chart's recent maximum at 02:00 UTC on 11 October, against 88.2% a week earlier | Chart real, reading wrong: the drop was almost all search crawlers. **Checked** (Lawfare, Cloudflare) |
-| MAGA and pro-Trump accounts went quiet | Viral X posts and screenshots. One pointed at accounts with "Veteran, Christian, Father, MAGA" bios; others named "reply guys", Quebec, conspiracy and Polish anti-EU accounts | No account data offered. **Checked** (IBTimes) |
-| AfD bot activity collapsed | Chart posted on X by Czech MEP Tomáš Zdechovský, seen more than 4 million times | Posted 11 October but holds data to 15 October, inconsistent axes, no source. Zdechovský told ZDF he has no verifiable data. **Checked** (ZDFheute) |
+| MAGA and pro-Trump accounts went quiet | Viral Twitter posts and screenshots. One pointed at accounts with "Veteran, Christian, Father, MAGA" bios; others named "reply guys", Quebec, conspiracy and Polish anti-EU accounts | No account data offered. **Checked** (IBTimes) |
+| AfD bot activity collapsed | Chart posted on Twitter by Czech MEP Tomáš Zdechovský, seen more than 4 million times | Posted 11 October but holds data to 15 October, inconsistent axes, no source. Zdechovský told ZDF he has no verifiable data. **Checked** (ZDFheute) |
 | Fewer bots, "a little easier to breathe" | President Zelensky, Warsaw Security Forum, 12 October | No data. Not checked on the original |
 | Russian bot activity "virtually ceased worldwide" | Polish minister Tomasz Siemoniak, 12 October, citing ABW | Traced to an AI-generated graph; he said next day he hadn't known. Not checked (Brussels Signal, Spidersweb) |
 | About 90 of 1,000 subreddits declined | Analysis by the account "Reddit Lies" | Other explanations given for several. Not checked (Coin Edition) |
@@ -30,20 +30,20 @@ October 2026. What was claimed to have gone quiet after the Yandex data-centre s
   - The global bot share of traffic was flat (39.4% before, 39.5% on 13 October).
   - The post's own figures for the Russian bot share disagree with each other (table 50.4% to 42.1%, text 35.8% before), so that figure is not usable.
 - **Graphika (via Texty, 14 October, checked; moderate confidence):**
-  - MAGA mentions on X rose 25% in the 8 hours after the Vladimir strike, compared with the same hours on the previous four Sundays.
-  - AfD communities on X: 40,365 posts from 1,022 accounts on 11 October, against 42,040 from 1,037 a week earlier, about 4% lower, within normal variation.
+  - MAGA mentions on Twitter rose 25% in the 8 hours after the Vladimir strike, compared with the same hours on the previous four Sundays.
+  - AfD communities on Twitter: 40,365 posts from 1,022 accounts on 11 October, against 42,040 from 1,037 a week earlier, about 4% lower, within normal variation.
   - Russian-language Telegram channels posted 5 to 15% less over the two days after the Vladimir strike. Ukrainian, Iranian and Romanian channels barely changed.
   - Reform UK communities and Reddit were also checked; r/askarussian declined.
 - **ZDFheute (13 October, checked):** accounts that repeatedly spread content from the Russian Storm-1516 campaign stayed active.
-- **Second-hand, not checked:** CAT-UA saw no significant drop in about 10,000 daily mentions (via IBTimes, checked page, but the original not read); NASK-PIB found no overall decline among monitored X accounts; Common Consultancy found no unusual change in Facebook comments under 76 AfD politicians and 136 MAGA profiles.
+- **Second-hand, not checked:** CAT-UA saw no significant drop in about 10,000 daily mentions (via IBTimes, checked page, but the original not read); NASK-PIB found no overall decline among monitored Twitter accounts; Common Consultancy found no unusual change in Facebook comments under 76 AfD politicians and 136 MAGA profiles.
 
 ## How this compares with the monitor
 
-The monitor's X counts agree with Graphika. Original posts a day on 8 to 11 October were higher than before the strikes for MAGA (170,372 against 152,844) and AfD (57,884 against 50,224), and the repost share stayed inside its pre-strike range on every strike day (docs/X-SAMPLING.md).
+The monitor's Twitter counts agree with Graphika. Original posts a day on 8 to 11 October were higher than before the strikes for MAGA (170,372 against 152,844) and AfD (57,884 against 50,224), and the repost share stayed inside its pre-strike range on every strike day (docs/X-SAMPLING.md).
 
-The monitor already tracks the other two communities named in the claims, on X and Bluesky:
-- **Reform UK** (one of the three communities Graphika checked): 1,701 and 1,721 original X posts on Saturday 10 and Sunday 11 October, against 1,461 to 2,107 on the three weekends before; 148 and 159 Bluesky posts, against 149 to 254. The X repost share was 84.9% and 83.1%, inside its pre-strike range of 73.7 to 90.1%.
-- **Konfederacja** (the Polish right; "Polish anti-EU accounts" were named in the viral claims without a specific phrase): X posts rose on 8 and 9 October (833 and 696, against a pre-strike median of 480), then returned to normal.
+The monitor already tracks the other two communities named in the claims, on Twitter and Bluesky:
+- **Reform UK** (one of the three communities Graphika checked): 1,701 and 1,721 original Twitter posts on Saturday 10 and Sunday 11 October, against 1,461 to 2,107 on the three weekends before; 148 and 159 Bluesky posts, against 149 to 254. The Twitter repost share was 84.9% and 83.1%, inside its pre-strike range of 73.7 to 90.1%.
+- **Konfederacja** (the Polish right; "Polish anti-EU accounts" were named in the viral claims without a specific phrase): Twitter posts rose on 8 and 9 October (833 and 696, against a pre-strike median of 480), then returned to normal.
 
 Account bios ("Veteran, Christian, Father") cannot be measured with counts and would need post reads.
 

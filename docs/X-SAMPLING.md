@@ -1,8 +1,8 @@
-# X: costed measurement plan
+# Twitter: costed measurement plan
 
-October 2026. How to bring X into the monitor within a small budget, including a sampled version of the coordination prototype (docs/BOT-SIGNALS.md).
+October 2026. How to bring Twitter into the monitor within a small budget, including a sampled version of the coordination prototype (docs/BOT-SIGNALS.md).
 
-## Prices and limits (X API pay-per-use, checked October 2026)
+## Prices and limits (Twitter API pay-per-use, checked October 2026)
 
 | Item | Cost | Notes |
 |---|---|---|
@@ -12,7 +12,7 @@ October 2026. How to bring X into the monitor within a small budget, including a
 | User read | $0.010 per user | Probably charged for author details attached to search results. Not yet confirmed |
 | Monthly cap | 3 million post reads | |
 
-Source: [X API pricing](https://docs.x.com/x-api/getting-started/pricing), [counts](https://docs.x.com/x-api/posts/counts/introduction), [search](https://docs.x.com/x-api/posts/search/introduction).
+Source: [Twitter API pricing](https://docs.x.com/x-api/getting-started/pricing), [counts](https://docs.x.com/x-api/posts/counts/introduction), [search](https://docs.x.com/x-api/posts/search/introduction).
 
 ## Measured volumes, 20 September to 16 October 2026
 
@@ -57,10 +57,10 @@ Reading every post in a block, rather than random posts, keeps clusters of near-
 | weather | about 250 | about 760 |
 
 - **Posts:** about 1,200 to 1,600 a day, so $6 to $8 a day, or **about $100 to $130 for the 16 days**.
-- **Account age without paying for user details.** X account IDs created since about 2015 encode their creation time, so a post's author ID gives the account's age without a user read. Before relying on this, a $0.10 check compares 10 decoded IDs with X's own creation dates. If it fails, user details would add up to $10 to $14 a day, roughly tripling the cost. The pilot would then measure coordination only, not new-account share.
+- **Account age without paying for user details.** Twitter account IDs created since about 2015 encode their creation time, so a post's author ID gives the account's age without a user read. Before relying on this, a $0.10 check compares 10 decoded IDs with Twitter's own creation dates. If it fails, user details would add up to $10 to $14 a day, roughly tripling the cost. The pilot would then measure coordination only, not new-account share.
 - **Storage:** as on Bluesky, text and IDs stay in memory, and only hourly totals are written.
 
-Also set a spending limit in the X Developer Console at, say, $150, as a hard stop.
+Also set a spending limit in the Twitter Developer Console at, say, $150, as a hard stop.
 
 ## Tier 3: daily sampling (not yet)
 
