@@ -21,7 +21,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import analysis, db, report
+from . import analysis, db, pause, report
 from .config import ROOT, Config, Settings
 
 log = logging.getLogger(__name__)
@@ -66,7 +66,7 @@ def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Pa
     (out / ".nojekyll").write_text("", encoding="utf-8")  # serve files as-is on GitHub Pages
 
     api = out / "api"
-    _json(api / "snapshot.json", analysis.snapshot(conn, config, now))
+    _json(api / "snapshot.json", {**analysis.snapshot(conn, config, now), "paused": pause.state(settings)})
     _json(api / "correlation.json", analysis.correlation_view(conn, config, now))
     _json(api / "strike-aligned.json", analysis.strike_aligned(conn, config, now))
     _json(api / "heatmap.json", analysis.heatmap(conn, config, now))

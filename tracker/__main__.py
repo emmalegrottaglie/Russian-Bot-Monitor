@@ -1,4 +1,4 @@
-"""Command line: python -m tracker {serve,collect,backfill,refetch,report,publish}"""
+"""Command line: python -m tracker {serve,collect,backfill,refetch,report,publish,pause,resume,watch}"""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import logging
 import time
 from datetime import datetime, timezone
 
-from . import alerts, analysis, collectors, db, report, static
+from . import alerts, analysis, collectors, db, pause, report, static
 from .config import Settings, load_config
 
 
@@ -78,6 +78,12 @@ def main() -> None:
     p.add_argument("--branch", default="gh-pages")
     p.add_argument("--no-push", action="store_true", help="only write the static site to <db dir>/site")
 
+    p = sub.add_parser("pause", help="stop collecting until Yandex Cloud recovers (see tracker/pause.py)")
+    p.add_argument("--reason", required=True, help="shown on the site")
+    p = sub.add_parser("resume", help="collect again and fill the paused period from history")
+    p.add_argument("--reason", required=True, help="recorded as an alert")
+    sub.add_parser("watch", help="daily check while paused: refresh Yandex data, resume if it has recovered")
+
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     config, settings = load_config(), Settings.from_env()
@@ -102,6 +108,14 @@ def main() -> None:
             static.export(conn, config, settings, out)
         if not args.no_push:
             static.push(out, args.remote or static.default_remote(), args.branch)
+    elif args.cmd == "pause":
+        print(pause.pause(settings, args.reason))
+    elif args.cmd == "resume":
+        if pause.state(settings) is None:
+            parser.error("collection is not paused")
+        pause.resume(config, settings, args.reason)
+    elif args.cmd == "watch":
+        print(pause.watch(config, settings))
     elif args.cmd == "backfill":
         platforms = tuple(args.platform or collectors.BACKFILL)
         start = int(time.time()) - args.days * 86400

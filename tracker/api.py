@@ -16,7 +16,7 @@ from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import alerts, analysis, collectors, db, report
+from . import alerts, analysis, collectors, db, pause, report
 from .config import ROOT, Config, Settings
 
 log = logging.getLogger(__name__)
@@ -108,7 +108,7 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
 
     @app.get("/api/snapshot")
     def get_snapshot() -> dict:
-        return cache.get()
+        return {**cache.get(), "paused": pause.state(settings)}
 
     @app.get("/api/correlation")
     def get_correlation() -> dict:

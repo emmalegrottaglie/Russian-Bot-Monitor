@@ -80,6 +80,25 @@ Do phase 1 now. Phase 2 can wait until there is money for it. Nothing in phase 1
 
 Checklist: the repository is public, Pages serves `gh-pages`, both scheduled tasks exist, `data\publish.log` shows a push every 30 minutes, and the site's REPORT tab lists today's report.
 
+### Pausing between developments
+
+Collection can be paused when nothing is happening (Emma, 29 October 2026: no news on the Yandex data centres, and Twitter costs about $0.56 a day). Everything except Twitter keeps its history, so a pause loses nothing that cannot be reloaded.
+
+- **Pause:** `python -m tracker pause --reason "No new developments on the Yandex data centres."` It writes `data\pause.json`, disables `BotTrafficMonitor` and `BotTrafficMonitorCatchUp`, and the site shows a notice that data after that date is a gap. Run `python -m tracker publish` afterwards to put the notice up.
+- **While paused:** the task `BotTrafficMonitorWatch` runs `scripts\watch.cmd` once a day (06:41, or at the next start if the computer was off). It reloads the last 3 days of IODA and Cloudflare Radar, republishes the site, and resumes collection once Yandex Cloud reachability has been at 50% or more of its pre-strike level for 2 complete UTC days in a row. Output goes to `data\watch.log`. While collection is running the check is skipped and only the publish runs.
+- **News:** a scheduled Claude task (`bot-monitor-news-check`, daily, in the Claude app) searches for news on the Yandex data centres and resumes collection after a major event: a new strike, restored capacity, or a measured change in influence activity reported by a named source. Its verdicts go to `data
+ews-watch.log`.
+- **Resume by hand:** `python -m tracker resume --reason "..."`. Resuming re-enables the two tasks, records an alert, and reloads the paused period (from 2 days before the pause) for every platform: Reddit from the archive, Bluesky, IODA and Cloudflare for free, Twitter from its full archive (one request per query and metric for up to 31 days, about 113 requests or $1.13; approved by Emma on 29 October 2026). The Reddit reload takes hours.
+
+To create the watch task, run once in PowerShell:
+
+   ```powershell
+   $action = New-ScheduledTaskAction -Execute 'conhost.exe' -Argument '--headless cmd.exe /c "C:\Russian bot tracker\scripts\watch.cmd"'
+   $trigger = New-ScheduledTaskTrigger -Daily -At '06:41'
+   $set = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries -StartWhenAvailable -ExecutionTimeLimit (New-TimeSpan -Days 3) -MultipleInstances IgnoreNew
+   Register-ScheduledTask -TaskName 'BotTrafficMonitorWatch' -Action $action -Trigger $trigger -Settings $set
+   ```
+
 ## Phase 2: paid, about $7 a month
 
 ### What changes

@@ -1644,6 +1644,16 @@ function route(moveFocus = false) {
     .catch((e) => toast(`VIEW FAILED: ${e.message}`));
 }
 
+// Collection paused between developments (tracker/pause.py): say so above every view, so
+// the gap after that date is not read as a fall to zero.
+function showHalt() {
+  const p = snap.paused, el = $('halt');
+  el.hidden = !p;
+  if (!p) return;
+  const day = new Date(p.since * 1000).toISOString().slice(0, 10);
+  el.innerHTML = `<b>COLLECTION PAUSED SINCE ${day}</b> · ${esc(p.reason)} Community data after that date is a gap, not a zero, and will be filled from the archives when collection resumes. Yandex Cloud reachability is still checked daily; collection restarts on its own once it is back to ${p.resume_level}% of its pre-strike level for ${p.resume_days} days in a row, or after major news.`;
+}
+
 // Changes only when a collection run finished: the newest run time across sources.
 const dataVersion = (sn) => (sn ? Math.max(0, ...sn.runs.map((r) => r.ts)) : null);
 
@@ -1651,6 +1661,7 @@ async function refresh() {
   try {
     const before = dataVersion(snap);
     snap = await api('/api/snapshot');
+    showHalt();
     setState(STATIC ? 'SNAPSHOT' : paused ? 'PAUSED' : 'LIVE');
     $('updated').textContent = `UPDATED ${hhmm(snap.now)} UTC`;
     // Never redraw under someone: not while paused, not while focus is inside the view,
@@ -1712,6 +1723,7 @@ async function start() {
     await api('/api/health'); boot.ok();
     boot.line('fetch /api/snapshot · compute baselines');
     snap = await api('/api/snapshot'); boot.ok();
+    showHalt();
   } catch (e) {
     setState('OFFLINE');
     $('boot-pct').textContent = 'API UNREACHABLE';

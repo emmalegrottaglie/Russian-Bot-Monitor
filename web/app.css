@@ -337,3 +337,7 @@ html:not([data-mode="light"])[data-palette="term-phosphor"] { --term-muted: #8cc
 }
 /* A click or drag focuses the chart (so its keys work); only keyboard focus draws the ring */
 .chart-svg:focus:not(:focus-visible) { outline: none; }
+
+/* Collection paused (tracker/pause.py): a plain bordered notice, no colour alarm. */
+.halt { margin: 0; padding: 10px var(--gutter); border-bottom: 1px solid var(--term-line); color: var(--term-ink); font-size: 11px; line-height: 1.55; }
+.halt b { color: var(--a3); letter-spacing: .1em; }
