@@ -101,6 +101,8 @@ On Bluesky these counts measure pushback and unrelated uses, not the rhetoric, s
 
 Both are tracked on Twitter as the **anti-trans** group (the two phrasings as one search), with `x_only = true`, so Bluesky does not count them. On Twitter, as on Bluesky, a count includes people quoting the words to object. How large that share is on Twitter has not been checked: it needs reading a sample of posts (about $0.50 for 50 each), which the counts-only plan does not cover.
 
+**The UK single-sex framing** ("single-sex spaces", "single-sex rights", "biology-based rights") is tracked on Twitter as its own **framing** group from 29 October 2026, at Emma's request, in two searches (the space phrasings; the rights phrasings). It is kept apart from the anti-trans group and from the coded-language score: these are also terms of UK equality law, so legal, policy and news discussion uses the same words, and no source we found calls the bare phrases dog whistles (docs/CODED-COMMUNITIES.md). The campaign phrases "protect single-sex spaces" and "defending sex-based rights", which are documented as dog whistles, stay in the coded-language list. Bluesky does not count them: its search ignores OR, and on 27 to 28 October 2026 it had about 2 posts a day for "single-sex spaces" and none for the others. Twitter cost: 8 count requests a day, about $0.04.
+
 **Checked and not tracked: the "wound" framing of vaginoplasty.** The claim that bottom surgery leaves a wound the body keeps trying to close is documented as a myth by LGBTQ Nation (Gwendolyn Smith, 11 April 2019, reporting Christine Burns MBE). Counts for 13 to 20 October 2026, English, original posts:
 
 | Search | Posts a day |

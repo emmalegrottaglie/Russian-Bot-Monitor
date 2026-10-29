@@ -11,8 +11,8 @@ Yandex Cloud recovers or something major happens. While paused:
 - a daily news check (a scheduled Claude task) can also resume it after a major event.
 
 Resuming re-enables the tasks and fills the gap from history: Reddit (Arctic Shift),
-Bluesky, IODA and Cloudflare for free, Twitter from its full archive (about 113
-requests, roughly $1.13, approved by Emma on 29 October 2026). Nothing is invented for
+Bluesky, IODA and Cloudflare for free, Twitter from its full archive (about 121
+requests, roughly $1.21, approved by Emma on 29 October 2026). Nothing is invented for
 the paused period: what history cannot supply stays a gap.
 
 The pause is a small JSON file next to the database. Its absence means collecting.

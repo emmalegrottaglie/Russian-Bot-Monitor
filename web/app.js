@@ -7,7 +7,7 @@ const REFRESH_MS = 60_000;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TAG_SHORT = {
-  'political-right': 'RIGHT-WING', 'political-left': 'LEFT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', political: 'POLITICS', regional: 'REGIONAL',
+  'political-right': 'RIGHT-WING', 'political-left': 'LEFT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', framing: 'SINGLE-SEX FRAMING', political: 'POLITICS', regional: 'REGIONAL',
   'south-america': 'SOUTH AMERICA', russia: 'RUSSIA', control: 'NON-POLITICAL',
 };
 // One line per group for the "who is in each group" panels. The tags themselves
@@ -17,6 +17,7 @@ const TAG_ABOUT = {
   'political-left': 'Communities organised around left-wing, liberal or socialist politics: party and campaign communities, socialist and anarchist ones.',
   narratives: 'Bluesky and Twitter searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
   'anti-trans': 'Twitter searches for anti-trans rhetoric: the slur "troon" and the claim that there is "no such thing as trans" (kids, people). Twitter only; on Bluesky they are rare. They count everyone using the words, including people quoting them to object. Sources in docs/NARRATIVES.md.',
+  framing: 'Twitter searches for the UK single-sex framing: "single-sex spaces", "single-sex rights" and "biology-based rights". Kept apart from the anti-trans group: legal, policy and news discussion of the Equality Act uses the same words, so a rise is a rise in that debate, not by itself in hostility. Sources in docs/NARRATIVES.md.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states, and for European and neighbouring countries.',
   'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
@@ -53,7 +54,7 @@ const groupDesc = (tag, name) => TAG_ABOUT[tag] ? `<b>${esc(name)}:</b> ${esc(TA
 const TAG_LINE = {
   'political-right': 'l-a3', narratives: 'l-a3 l-dash', 'anti-trans': 'l-a3 l-dot',
   'political-left': 'l-a2', political: 'l-a2 l-dash', 'south-america': 'l-a2 l-dot',
-  russia: 'l-a1', regional: 'l-a1 l-dash', control: 'l-muted',
+  russia: 'l-a1', regional: 'l-a1 l-dash', framing: 'l-a1 l-dot', control: 'l-muted',
 };
 const MAX_LINES = 4;  // group lines on one chart at once; more turns into a tangle
 

@@ -813,3 +813,25 @@ lang = "en"
 region = "EN-LANG"
 tags = ["anti-trans"]
 x_only = true
+
+# The UK single-sex framing (Emma, 29 October 2026; config/lexicon.csv, status
+# "framing"). Counted on its own, never as coded language: legal, policy and news
+# discussion of the Equality Act uses the same words. Twitter only: Bluesky search
+# ignores OR, and on 27 to 28 October 2026 it had about 2 posts a day for
+# "single-sex spaces" and none for the other phrases. Two searches, so the group
+# has the two members its median needs (docs/NARRATIVES.md).
+[[bluesky]]
+query = '("single-sex spaces" OR "single sex spaces" OR "single-sex space" OR "single sex space")'
+label = "single-sex space(s)"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+query = '("single-sex rights" OR "single sex rights" OR "biology-based rights" OR "biology based rights")'
+label = "single-sex / biology-based rights"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
