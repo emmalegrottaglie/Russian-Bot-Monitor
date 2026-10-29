@@ -61,7 +61,10 @@ NOTES = {
 FIELDS = ["term", "variants", "category", "type", "register", "status", "source", "source_url", "note", "precision"]
 
 # Terms from other checked sources. "proposed" means suggested by Emma and still
-# needing a documenting source before it is used.
+# needing a documenting source before it is used. "framing" (Emma, 29 October 2026)
+# marks the UK single-sex framing: counted on its own to show how often it comes up,
+# never part of the coded-language score, because legal, policy and news discussion
+# uses the same words.
 EXTRA = [
     ("no such thing as trans", "no such thing as trans; no such thing as a trans; no such thing as trans kids",
      "transphobic", "candidate", "The 74, 14 Dec 2023",
@@ -88,12 +91,12 @@ EXTRA = [
      "Framing of trans identity as an ideology"),
     ("zippertits", "zippertits", "transphobic", "candidate",
      "Beth's Transphobia Glossary", "https://bethylamine.github.io/library/glossary/", "Slur for trans men"),
-    ("single-sex spaces", "single-sex spaces; single sex spaces; single-sex space", "transphobic", "proposed",
-     "Emma, 20 Oct 2026", "", "The campaign phrase 'protect single-sex spaces' is documented (Edinburgh SPN, Transvox) and listed separately; the bare legal term is not"),
-    ("single-sex rights", "single-sex rights; single sex rights", "transphobic", "proposed",
-     "Emma, 20 Oct 2026", "", "Related to 'sex-based rights' (Mendelsohn); needs a documenting source"),
-    ("biology-based rights", "biology-based rights; biology based rights", "transphobic", "proposed",
-     "Emma, 20 Oct 2026", "", "Related to 'sex-based rights' (Mendelsohn); needs a documenting source"),
+    ("single-sex spaces", "single-sex spaces; single sex spaces; single-sex space", "transphobic", "framing",
+     "Emma, 20 Oct 2026; framing since 29 Oct 2026", "", "Framing: counted on its own, never part of the coded-language score; legal, policy and news discussion uses the same words. The campaign phrase 'protect single-sex spaces' is documented (Edinburgh SPN, Transvox) and listed separately as a candidate; the bare legal term is not"),
+    ("single-sex rights", "single-sex rights; single sex rights", "transphobic", "framing",
+     "Emma, 20 Oct 2026; framing since 29 Oct 2026", "", "Framing: counted on its own, never part of the coded-language score; legal, policy and news discussion uses the same words. Related to 'sex-based rights' (Mendelsohn), which is a candidate"),
+    ("biology-based rights", "biology-based rights; biology based rights", "transphobic", "framing",
+     "Emma, 20 Oct 2026; framing since 29 Oct 2026", "", "Framing: counted on its own, never part of the coded-language score; legal, policy and news discussion uses the same words. Related to 'sex-based rights' (Mendelsohn), which is a candidate"),
 ]
 
 GLAAD = "GLAAD Guide to Anti-LGBTQ Online Hate and Disinformation (read 21 Oct 2026)"
