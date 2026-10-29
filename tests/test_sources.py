@@ -352,12 +352,14 @@ def test_lexicon_terms_are_sourced_and_israel_speech_is_not_counted():
         rows = list(csv.DictReader(f))
     assert len({r["term"] for r in rows}) == len(rows)
     for r in rows:
-        assert r["status"] in ("candidate", "ambiguous", "excluded", "out of scope", "proposed")
+        assert r["status"] in ("candidate", "ambiguous", "excluded", "out of scope", "proposed", "framing")
         assert r["source"], r["term"]
-        if r["status"] != "proposed":
+        if r["status"] not in ("proposed", "framing"):  # Emma's own suggestions have no link
             assert r["source_url"].startswith(("https://", "http://")), r["term"]
     status = {r["term"]: r["status"] for r in rows}
     for term in ("Zionist", "Israel Lobby", "deadly exchange", "dual citizen"):
         assert status[term] == "excluded"
     assert status["dual loyalty"] == status["open borders for Israel"] == "candidate"
     assert status["bankers"] == status["Federal Reserve"] == "ambiguous"
+    # The UK single-sex framing is counted on its own, never as coded language.
+    assert {t for t, s in status.items() if s == "framing"} == {"single-sex spaces", "single-sex rights", "biology-based rights"}
