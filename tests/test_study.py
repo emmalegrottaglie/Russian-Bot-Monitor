@@ -61,3 +61,34 @@ def test_build_is_fixed_at_the_window_end(tmp_path, monkeypatch, frozen_dir):
     assert built["infra"]["before"] == pytest.approx(100, abs=1) and built["infra"]["after"] == pytest.approx(20, abs=1)
     assert json.dumps(built["infra"]) == json.dumps(later["infra"])  # new days do not move a closed study
     assert built["days"][0] == f["start"] and built["days"][-1] == f["end"] - D + 1
+
+
+
+def test_open_study_adds_a_sourced_event_and_a_study(tmp_path):
+    for name in ("events.toml", "studies.toml", "sources.toml"):
+        (tmp_path / name).write_text((study.CONFIG_DIR / name).read_text(encoding="utf-8"), encoding="utf-8")
+    event = {"date": "2026-11-20", "short": "recovery", "label": "Yandex Cloud back", "status": "confirmed",
+             "source": "IODA, measured by this tracker"}
+    sid = study.open_study(event, "Did it change?", tmp_path)
+    assert sid == "recovery-2026-11-20" and study.get(directory=tmp_path).id == sid
+    assert study.open_study(event, "Did it change?", tmp_path) == sid  # running it twice adds nothing
+    config = load_config(tmp_path)
+    assert [e.short for e in study.frame(study.get(directory=tmp_path), config)["events"]] == ["RECOVERY"]
+    assert config.events[-1].status == "confirmed" and config.events[-1].source == "IODA, measured by this tracker"
+    later = study.open_study({**event, "date": "2027-01-05"}, "Again?", tmp_path)
+    assert study.get(later, tmp_path).events == ("RECOVERY 01-05",)  # shorts stay unique
+    with pytest.raises(ValueError):
+        study.open_study({**event, "source": ""}, "No source", tmp_path)
+
+
+def test_close_if_done_waits_for_the_after_period(tmp_path, monkeypatch, frozen_dir):
+    monkeypatch.setenv("TRACKER_DB", str(tmp_path / "s.db"))
+    settings, config = Settings.from_env(), load_config()
+    s = study.get()
+    end = study.frame(s, config)["end"]
+    with db.session(settings.db_path) as conn:
+        db.init(conn, config.series)
+        assert study.close_if_done(conn, config, now=end + D) is None  # the archive is still behind
+        assert study.close_if_done(conn, config, now=end + 4 * D)["id"] == s.id
+        assert study.latest(s.id)["note"].startswith("Frozen automatically")
+        assert study.close_if_done(conn, config, now=end + 5 * D) is None  # frozen already

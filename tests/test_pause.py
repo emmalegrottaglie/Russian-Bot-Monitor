@@ -1,9 +1,10 @@
 import time
+from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
 
-from tracker import collectors, db, pause
+from tracker import collectors, db, pause, study
 from tracker.api import create_app
 from tracker.config import Settings, load_config
 
@@ -22,8 +23,9 @@ def test_resumes_only_after_enough_complete_days_at_the_level():
 def setup(tmp_path, monkeypatch):
     monkeypatch.setenv("TRACKER_DB", str(tmp_path / "p.db"))
     settings, config = Settings.from_env(), load_config()
-    calls = {"tasks": [], "gap": []}
+    calls = {"tasks": [], "gap": [], "study": []}
     monkeypatch.setattr(pause, "_set_tasks", lambda enabled: calls["tasks"].append(enabled) or [])
+    monkeypatch.setattr(study, "open_study", lambda event, question: calls["study"].append(event) or "new")
     monkeypatch.setattr(pause, "fill_gap", lambda config, settings, start: calls["gap"].append(start))
 
     async def no_network(*args, **kwargs):
@@ -45,7 +47,7 @@ def _recent(settings, value: float, now: int) -> None:
 def test_watch_does_nothing_while_collecting(setup):
     settings, config, calls = setup
     assert pause.watch(config, settings) == "not paused"
-    assert calls == {"tasks": [], "gap": []}
+    assert calls == {"tasks": [], "gap": [], "study": []}
 
 
 def test_watch_stays_paused_below_the_level(setup):
@@ -67,6 +69,9 @@ def test_watch_resumes_and_fills_the_gap(setup):
     assert pause.state(settings) is None
     assert calls["tasks"] == [False, True]
     assert calls["gap"] == [since - pause.GAP_MARGIN_DAYS * D]
+    (event,) = calls["study"]  # a study opens around the recovery, with a source and a status
+    assert event["short"] == "RECOVERY" and event["status"] == "confirmed" and "IODA" in event["source"]
+    assert event["date"] == datetime.fromtimestamp(now - now % D - 2 * D, timezone.utc).strftime("%Y-%m-%d")
     with db.session(settings.db_path) as conn:
         assert "Collection resumed" in db.recent_alerts(conn, limit=1)[0]["message"]
 
@@ -77,3 +82,13 @@ def test_snapshot_says_when_collection_is_paused(setup):
         assert c.get("/api/snapshot").json()["paused"] is None
         pause.pause(settings, "No news.")
         assert c.get("/api/snapshot").json()["paused"]["reason"] == "No news."
+
+
+def test_a_finished_study_is_frozen_and_collection_pauses(setup, tmp_path, monkeypatch):
+    settings, config, calls = setup
+    monkeypatch.setattr(study, "STUDIES_DIR", tmp_path / "studies")
+    end = study.frame(study.get(), config)["end"]
+    assert pause.close_study(config, settings, end + D) is None  # the window's data is still arriving
+    assert pause.close_study(config, settings, end + 4 * D).startswith("froze study")
+    assert "Study complete" in pause.state(settings)["reason"] and calls["tasks"] == [False]
+    assert study.latest(study.get().id)["version"] == 1

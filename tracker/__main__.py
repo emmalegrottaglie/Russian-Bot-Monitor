@@ -44,6 +44,9 @@ def collect_once(config, settings) -> None:
         snap = analysis.snapshot(conn, config, int(time.time()))
         asyncio.run(alerts.run(conn, snap, settings))
         report.ensure_today(conn, config, settings, int(time.time()))
+    closed = pause.close_study(config, settings)
+    if closed:
+        logging.info(closed)
 
 
 def main() -> None:
@@ -82,6 +85,12 @@ def main() -> None:
     p.add_argument("--reason", required=True, help="shown on the site")
     p = sub.add_parser("resume", help="collect again and fill the paused period from history")
     p.add_argument("--reason", required=True, help="recorded as an alert")
+    p.add_argument("--event-date", help="open a study around this event (UTC date, YYYY-MM-DD); "
+                                        "needs --event-short, --event-label and --event-source")
+    p.add_argument("--event-short", help="chart label for the event, e.g. STRIKE")
+    p.add_argument("--event-label", help="one line describing the event")
+    p.add_argument("--event-source", help="who reported it, with the date and URL")
+    p.add_argument("--event-status", default="reported", choices=["reported", "confirmed"])
     sub.add_parser("watch", help="daily check while paused: refresh Yandex data, resume if it has recovered")
 
     p = sub.add_parser("study", help="build a study (a fixed window around an event, config/studies.toml)")
@@ -119,7 +128,16 @@ def main() -> None:
     elif args.cmd == "resume":
         if pause.state(settings) is None:
             parser.error("collection is not paused")
-        pause.resume(config, settings, args.reason)
+        event = None
+        if args.event_date or args.event_short or args.event_label or args.event_source:
+            event = {"date": args.event_date, "short": args.event_short, "label": args.event_label,
+                     "source": args.event_source, "status": args.event_status}
+            missing = [k for k, v in event.items() if not v]
+            if missing:
+                parser.error("an event needs " + ", ".join(f"--event-{k}" for k in missing))
+        opened = pause.resume(config, settings, args.reason, event=event)
+        if opened:
+            print(f"opened study {opened}")
     elif args.cmd == "watch":
         print(pause.watch(config, settings))
     elif args.cmd == "study":

@@ -25,4 +25,8 @@ The site shows the newest frozen version, or a provisional build marked as such 
 
 ## Collection around studies
 
-Emma, 2 November 2026: collection should pause when a study's window has its data and analysis, and come back when a major event that fits the research happens. The pause and resume machinery is in `tracker/pause.py` (docs/HOSTING.md, "Pausing between developments"); opening a new study when it resumes is the next step.
+Emma, 2 November 2026: collection should pause when a study's window has its data and analysis, and come back when a major event that fits the research happens. The machinery is in `tracker/pause.py` and `tracker/study.py` (docs/HOSTING.md, "Pausing between developments"):
+
+- **Opening.** Resuming with an event (the daily watch when Yandex Cloud recovers, the daily news check after a major event, or `tracker resume --event-...` by hand) appends the event to `config/events.toml` with its source and status, and a study around it to `config/studies.toml`: 14 days each side, 21-day reference, so the newest study becomes the main page. The paused period, including the study's before-days, is reloaded from history.
+- **Closing.** After each collection pass, `close_if_done` looks at the newest study. Once its window has ended and 3 more days have passed (the Reddit archive runs about 2 days behind), it builds the study; if every group that has its before-period also has its after-period (one missing day allowed), it freezes version 1 with an automatic note and collection pauses with the reason "Study complete". If some groups are still short, it waits, and 10 days after the window it freezes anyway, naming those groups in the note.
+- A resume without an event re-enables collection only. The newest study is then closed by the same rule, so if it is still unfrozen it will be frozen and collection paused again at the next pass.

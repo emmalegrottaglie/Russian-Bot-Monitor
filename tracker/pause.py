@@ -10,6 +10,11 @@ Yandex Cloud recovers or something major happens. While paused:
   RESUME_DAYS complete UTC days in a row;
 - a daily news check (a scheduled Claude task) can also resume it after a major event.
 
+Resuming for an event opens a study around it (tracker/study.py). After each
+collection pass, close_study freezes the newest study once its data is in and pauses
+again (Emma, 2 November 2026: pause when a window has its data and analysis, come
+back when a major event that fits the research happens).
+
 Resuming re-enables the tasks and fills the gap from history: Reddit (Arctic Shift),
 Bluesky, IODA and Cloudflare for free, Twitter from its full archive (about 121
 requests, roughly $1.21, approved by Emma on 29 October 2026). Nothing is invented for
@@ -29,7 +34,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import analysis, collectors, db
+from . import analysis, collectors, db, study
 from .config import Config, Settings
 
 log = logging.getLogger(__name__)
@@ -39,6 +44,8 @@ RESUME_DAYS = 2
 WATCH_DAYS = 3  # IODA and Cloudflare history reloaded by each watch
 GAP_MARGIN_DAYS = 2  # the Reddit archive runs about 2 days behind; reload a little before the pause
 TASKS = ("BotTrafficMonitor", "BotTrafficMonitorCatchUp")  # Windows Task Scheduler, see docs/HOSTING.md
+STUDY_QUESTION = ("Did political activity, or activity likely to be run by bots, change before and after "
+                  "this development at Yandex?")
 
 
 def path(settings: Settings) -> Path:
@@ -91,9 +98,13 @@ def should_resume(levels: list[tuple[int, float]], days: int = RESUME_DAYS, leve
     return len(levels) == days and all(v >= level for _, v in levels)
 
 
-def resume(config: Config, settings: Settings, reason: str, now: int | None = None) -> None:
-    """Re-enable collection, record why, and fill the paused period from history."""
+def resume(config: Config, settings: Settings, reason: str, now: int | None = None,
+           event: dict | None = None) -> str | None:
+    """Re-enable collection, record why, and fill the paused period from history. With an
+    `event` (date, short, label, status, source), also open a study around it; returns
+    the study's id."""
     now = now or int(time.time())
+    opened = study.open_study(event, STUDY_QUESTION) if event else None
     record = state(settings)
     since = record["since"] if record else now
     failed = _set_tasks(True)
@@ -106,6 +117,20 @@ def resume(config: Config, settings: Settings, reason: str, now: int | None = No
         conn.commit()
     log.info("collection resumed: %s%s", reason, f" (tasks not re-enabled: {', '.join(failed)})" if failed else "")
     fill_gap(config, settings, since - GAP_MARGIN_DAYS * DAY)
+    return opened
+
+
+def close_study(config: Config, settings: Settings, now: int | None = None) -> str | None:
+    """After a collection pass: freeze the newest study once its data is in, then pause
+    until the next event. Returns what happened, or None."""
+    if state(settings) is not None:
+        return None
+    with db.session(settings.db_path) as conn:
+        done = study.close_if_done(conn, config, now)
+    if done is None:
+        return None
+    pause(settings, f"Study complete: {done['title']}. Waiting for the next event.", now)
+    return f"froze study {done['id']} ({done['note']}) and paused collection"
 
 
 def fill_gap(config: Config, settings: Settings, start: int) -> None:
@@ -133,7 +158,11 @@ def watch(config: Config, settings: Settings, now: int | None = None) -> str:
         levels = recovery(conn, config, now)
     shown = ", ".join(f"{datetime.fromtimestamp(d, timezone.utc):%d %b} {v:.0f}%" for d, v in levels) or "no complete days"
     if should_resume(levels):
+        event = {"date": datetime.fromtimestamp(levels[0][0], timezone.utc).strftime("%Y-%m-%d"),
+                 "short": "RECOVERY", "status": "confirmed",
+                 "label": f"Yandex Cloud reachability back to {RESUME_LEVEL:.0f}% of its pre-strike level",
+                 "source": f"IODA active probing of Yandex Cloud (AS200350), daily index measured by this tracker: {shown}"}
         resume(config, settings, f"Yandex Cloud reachability back to {RESUME_LEVEL:.0f}% or more of its "
-                                 f"pre-strike level for {RESUME_DAYS} days ({shown})", now)
+                                 f"pre-strike level for {RESUME_DAYS} days ({shown})", now, event)
         return f"resumed: {shown}"
     return f"still paused: Yandex Cloud {shown} (resumes at {RESUME_LEVEL:.0f}% for {RESUME_DAYS} days)"

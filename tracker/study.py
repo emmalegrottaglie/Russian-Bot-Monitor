@@ -21,7 +21,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from . import analysis, db
-from .config import CONFIG_DIR, ROOT, Config
+from .config import CONFIG_DIR, ROOT, Config, slug
 
 DAY = 86400
 STUDIES_DIR = ROOT / "studies"
@@ -172,3 +172,68 @@ def current(conn, config: Config, now: int | None = None) -> dict | None:
 
 def listing() -> list[dict]:
     return [{"id": s.id, "title": s.title, "versions": len(versions(s.id))} for s in load()]
+
+
+# Lifecycle (Emma, 2 November 2026): collection pauses once a study's window has its
+# data, and comes back when a major event that fits the research happens. Resuming
+# with an event opens a new study around it (open_study); after each collection pass,
+# close_if_done freezes the newest study once its data is in.
+
+ARCHIVE_LAG_DAYS = 3  # the Reddit archive runs about 2 days behind; wait a day more
+MAX_WAIT_DAYS = 10  # after this, freeze anyway and record which groups are incomplete
+
+
+def _toml_str(text: str) -> str:
+    return json.dumps(text, ensure_ascii=False)  # TOML basic strings use the same escapes
+
+
+def open_study(event: dict, question: str, directory: Path = CONFIG_DIR) -> str:
+    """Add an event (date, short, label, status, source; `at` optional) to events.toml
+    and a study around it to studies.toml. Returns the study id. Every event needs a
+    source and a status (CLAUDE.md). A `short` already used by another event gets the
+    date appended, since studies name their events by `short`."""
+    for key in ("date", "short", "label", "status", "source"):
+        if not event.get(key):
+            raise ValueError(f"an event needs a {key}")
+    events_path = directory / "events.toml"
+    existing = tomllib.loads(events_path.read_text(encoding="utf-8")).get("event", []) if events_path.exists() else []
+    short = event["short"].upper()
+    study_id = f"{slug(short)}-{event['date']}"
+    if get(study_id, directory):
+        return study_id  # opened already, e.g. a resume that was run twice
+    if any(e.get("short") == short for e in existing):
+        short = f"{short} {event['date'][5:]}"
+    event = {**event, "short": short}
+    lines = ["", "[[event]]"] + [f"{k} = {_toml_str(str(event[k]))}"
+                                 for k in ("date", "short", "at", "label", "status", "source") if event.get(k)]
+    with events_path.open("a", encoding="utf-8") as f:
+        f.write("\n".join(lines) + "\n")
+    with (directory / "studies.toml").open("a", encoding="utf-8") as f:
+        f.write("\n".join(["", "[[study]]", f"id = {_toml_str(study_id)}", f"title = {_toml_str(event['label'])}",
+                           f"events = [{_toml_str(short)}]", "pre_days = 14", "post_days = 14",
+                           "reference_days = 21", f"question = {_toml_str(question)}"]) + "\n")
+    return study_id
+
+
+def close_if_done(conn, config: Config, now: int | None = None) -> dict | None:
+    """Freeze the newest study once its window has ended and its data has arrived, and
+    return the frozen build; None while there is nothing to freeze. The data has arrived
+    when every group with a full before-period also has its after-period (one missing
+    day allowed), or once MAX_WAIT_DAYS have passed since the window ended."""
+    now = now or int(time.time())
+    s = get()
+    if s is None or latest(s.id):
+        return None
+    f = frame(s, config)
+    if now < f["end"] + ARCHIVE_LAG_DAYS * DAY:
+        return None
+    built = build(conn, config, s, now)
+    short = [g["tag"] for g in built["groups"]
+             if g["days"]["before"] >= s.pre_days - 1 and g["days"]["after"] < s.post_days - 1]
+    if short and now < f["end"] + MAX_WAIT_DAYS * DAY:
+        return None
+    note = ("Frozen automatically: every group's data for the window had arrived." if not short else
+            f"Frozen automatically {MAX_WAIT_DAYS} days after the window ended; "
+            f"after-period incomplete for: {', '.join(short)}.")
+    freeze(built, note)
+    return {**built, "note": note}
