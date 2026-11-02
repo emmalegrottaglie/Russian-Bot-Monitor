@@ -341,3 +341,41 @@ html:not([data-mode="light"])[data-palette="term-phosphor"] { --term-muted: #8cc
 /* Collection paused (tracker/pause.py): a plain bordered notice, no colour alarm. */
 .halt { margin: 0; padding: 10px var(--gutter); border-bottom: 1px solid var(--term-line); color: var(--term-ink); font-size: 11px; line-height: 1.55; }
 .halt b { color: var(--a3); letter-spacing: .1em; }
+
+/* Study page (docs/STUDIES.md). */
+.study-head { padding: 4px 0 6px; }
+.study-head .note a { color: inherit; }
+.study-title { margin: 0; padding: 8px var(--gutter) 6px; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--term-ink); }
+.tile-unit { font-size: .5em; margin-left: 2px; }
+/* Before, during, after: one row per group on a 0 to 200 scale. Dots are told apart by
+   fill as well as colour (hollow, half, full), as charts are (design guide §11). */
+.phases, .ph-head { display: grid; gap: 2px; padding: 0 var(--gutter); }
+.ph-head, .ph-row { grid-template-columns: minmax(96px, 22%) 1fr 92px; align-items: center; column-gap: 10px; }
+.ph-head { display: grid; font-size: 8px; letter-spacing: .14em; color: var(--term-muted); margin-bottom: 4px; }
+.ph-scale { position: relative; height: 12px; }
+.ph-scale span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.ph-scale span:first-child { transform: none; } .ph-scale span:last-child { transform: translateX(-100%); }
+.ph-row { display: grid; min-height: 26px; border-bottom: 1px solid var(--term-line); }
+.ph-label { font-size: 10px; font-weight: 800; letter-spacing: .1em; color: var(--term-ink); }
+.ph-label span { color: var(--term-muted); font-weight: 400; font-size: 8px; }
+.ph-track { position: relative; height: 18px; }
+.ph-norm { position: absolute; left: 50%; top: 0; bottom: 0; border-left: 1px dashed var(--term-muted); }
+.ph-range, .ph-range-key { position: absolute; top: 5px; height: 8px; background: color-mix(in srgb, var(--a2) 22%, transparent); }
+.ph-range-key { position: static; display: inline-block; width: 18px; }
+.ph-dot { position: absolute; top: 4px; width: 10px; height: 10px; margin-left: -5px; border: 2px solid; box-sizing: border-box; }
+.ph-before { color: var(--term-muted); } .ph-during { color: var(--a2); } .ph-after { color: var(--a3); }
+.ph-dot.ph-before { border-color: var(--term-muted); background: var(--term-bg); }
+.ph-dot.ph-during { border-color: var(--a2); background: linear-gradient(90deg, var(--a2) 50%, var(--term-bg) 50%); }
+.ph-dot.ph-after { border-color: var(--a3); background: var(--a3); }
+.ph-vals { font-size: 10px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ph-vals span { display: inline-block; min-width: 26px; }
+.ph-cause .ph-after { color: var(--term-ink); }
+.ph-cause .ph-dot.ph-after { border-color: var(--term-ink); background: var(--term-ink); }
+.ph-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 0 var(--gutter) 8px; font-size: 8px; letter-spacing: .14em; color: var(--term-muted); }
+.ph-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+.ph-legend .ph-dot { position: static; margin: 0; }
+.multiples .spark { display: block; width: 100%; height: 48px; margin: 6px 0; }
+.spark-event { fill: color-mix(in srgb, var(--a3) 16%, transparent); }
+.spark-norm { stroke: var(--term-muted); stroke-dasharray: 3 3; stroke-width: 1; vector-effect: non-scaling-stroke; }
+.spark-line { fill: none; stroke: var(--a2); stroke-width: 1.5; vector-effect: non-scaling-stroke; }
+

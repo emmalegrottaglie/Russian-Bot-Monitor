@@ -731,7 +731,7 @@ function seriesLabel(s) { return `${s.label} · ${s.unit}`; }
 function byKey(key) { return snap?.series.find((s) => s.key === key); }
 
 function renderCorrelation(c, chosen = null) {
-  const start = c.days[0], end = snap.now;
+  const start = c.days[0], end = c.end ?? snap.now;
   const pts = (vals) => c.days.map((d, i) => [d + 43200, vals[i]]).filter((p) => p[1] != null);  // plot at midday
   const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
   const shown = c.groups.filter((g) => state.corrTags.has(g.tag));
@@ -889,7 +889,7 @@ function renderAligned(d, chosen = null) {
   chart($('aligned-chart'), $('aligned-readout'), lines, {
     ...ALIGNED_X, start: -span * 3600, end: span * 3600, still: true, unit: 'INDEX', axisTitle: 'INDEX · 100 = NORMAL FOR THAT WEEKDAY AND HOUR',
     events: [{ ts: 0, short: 'STRIKE' }], baseline: 100, baselineLabel: '100 = NORMAL', envelope, maxGap: 1,
-    tick: (v) => String(Math.round(v)), value: (v) => String(Math.round(v)), dataTo: snap.now,
+    tick: (v) => String(Math.round(v)), value: (v) => String(Math.round(v)), dataTo: d.dataTo ?? snap.now,
     share: { name: `${g.tag}-strike-aligned`, title: `${label(g.tag)} around the strikes`, caption, sources: 'REDDIT · ARCTIC SHIFT · BLUESKY · TWITTER' } });
   const after = (vs) => vs.filter((v, i) => d.offsets[i] >= 0);
   const outside = envelope ? after(g.values).filter((v, i) => {
@@ -1049,7 +1049,7 @@ function renderDiff(c, chosen = null) {
   const caption = DIFF_CAPTION(label(g.tag));
   chart($('diff-chart'), $('diff-readout'),
     [{ label: `${label(g.tag)} − CONTROL`, cls: 'l-a3', points: c.days.map((d, i) => [mid(d), diffs[i]]).filter((p) => p[1] != null) }],
-    { start: c.days[0], end: snap.now, unit: 'VS CONTROL', axisTitle: 'PERCENTAGE POINTS · GROUP MINUS CONTROL',
+    { start: c.days[0], end: c.end ?? snap.now, unit: 'VS CONTROL', axisTitle: 'PERCENTAGE POINTS · GROUP MINUS CONTROL',
       events: c.events, baseline: 0, baselineLabel: '0 = NO DIFFERENCE', band, maxGap: 1, tick: ppValue, value: ppValue,
       share: { name: `${g.tag}-minus-control`, title: `${label(g.tag)} minus control`, caption, sources: 'REDDIT FEEDS · ARCTIC SHIFT · BLUESKY' } });
   $('diff-note').innerHTML = notes([
@@ -1060,7 +1060,130 @@ function renderDiff(c, chosen = null) {
 }
 
 // ── Views ───────────────────────────────────────────────────────────────────
+// The strike-aligned, correlation and difference sections, shared by the study page
+// (fixed window) and the latest-data page (rolling). `reference` is the period that
+// counts as normal; `maxDays` the most days a correlation can cover.
+function analysisBlocks(reference, maxDays) {
+  return `<h2 class="sect">Around the strikes · index · 100 = normal</h2>
+      <div class="switch" id="aligned-switch" role="group" aria-label="Group shown around the strikes"></div>
+      <p class="group-desc" id="aligned-desc" aria-live="polite"></p>
+      <div class="readout" id="aligned-readout"></div>
+      <div class="chart" id="aligned-chart"><p class="note">LOADING…</p></div>
+      <div id="aligned-note"></div>
+      <h2 class="sect">Correlation · activity vs Yandex Cloud · % of pre-strike</h2>
+      <div class="legend" id="corr-legend" role="group" aria-label="Lines shown on the correlation chart"></div>
+      ${groupsPanel()}
+      <div class="readout" id="corr-readout"></div>
+      <div class="chart" id="corr-chart"><p class="note">LOADING…</p></div>
+      <h3 class="tiles-title">How closely each group follows Yandex Cloud</h3>
+      <div class="tiles" role="list" id="corr-tiles"></div>
+      ${notes([
+        'Each line is a group\'s daily activity as a % of its usual level before the strikes: 100 means normal.',
+        'The Yandex Cloud line is the share of its network still answering, against the same pre-strike level.',
+        'The big number on each tile is a correlation from −1 to +1, over the days both lines have data (up to ${maxDays}). Near +1: the group rises and falls with Yandex. Near 0: no link. Near −1: it moves the opposite way.',
+        'Yandex Cloud fell at the strikes and stayed low. The claim that bots went quiet with it predicts a positive number. A negative number means the group tended to be busier on the days Yandex was down.',
+        `The last line is the group's latest complete UTC day: the median community's activity that day as a % of its own average over ${refDates(reference).toLowerCase()}. "119% of normal" means the typical community in the group was 19% busier than usual. Half the group's communities were busier than that, half quieter.`,
+        'A group gets a value for a day only when at least half its communities have that day. Reddit history arrives about 2 days late, so groups made mostly of Reddit communities show an older date.',
+        'A drop in the non-political group as well means the cause is probably not political.',
+        'These daily values are not adjusted for the day of the week, and most groups are quieter at weekends. A dip on a Saturday or Sunday is usually the weekend, not the strikes: compare it with the weekends before. The strike-aligned chart above compares each hour with the same weekday and hour, so it does not have this problem.',
+        `The chart shows up to ${MAX_LINES} groups at once so the lines stay readable. Switching on another turns off the first one switched on.`,
+        'Correlation is not proof of cause. Methods are on the About tab.',
+      ])}
+      <h2 class="sect">Difference · group minus non-political · percentage points</h2>
+      <div class="switch" id="diff-switch" role="group" aria-label="Group compared with the control group"></div>
+      <p class="group-desc" id="diff-desc" aria-live="polite"></p>
+      <div class="readout" id="diff-readout"></div>
+      <div class="chart" id="diff-chart"><p class="note">LOADING…</p></div>
+      <div id="diff-note"></div>`;
+}
+
 const views = {
+  async study() {
+    $('prompt').textContent = 'monitor --study';
+    const s = await api('/api/study');
+    if (!s) { view.innerHTML = '<p class="note">NO STUDY YET</p>'; return; }
+    const day = (ts) => new Date(ts * 1000).toISOString().slice(0, 10);
+    const label = (tag) => TAG_SHORT[tag] || tag.toUpperCase();
+    const n0 = (v) => (v == null ? '—' : String(Math.round(v)));
+    const yc = byKey(snap.correlation_ref);
+    const ycNow = yc && yc.change_ref != null ? Math.round((1 + yc.change_ref) * 100) : null;
+    const version = s.provisional
+      ? `PROVISIONAL · NOT YET FROZEN · DATA AS OF ${day(s.as_of)}`
+      : `VERSION ${s.version} · FROZEN ${day(s.built_at)}${s.note ? ` · ${esc(s.note)}` : ''}`;
+    const phaseDays = `BEFORE ${day(s.window.start)} TO ${day(s.event_days.start - 86400)} · DURING ${day(s.event_days.start)} TO ${day(s.event_days.end)} · AFTER ${day(s.event_days.end + 1)} TO ${day(s.window.end)}`;
+
+    const tile = (name, v, sub) => `<div class="tile" role="listitem"><div class="tile-value${name === 'AFTER' ? ' hl' : ''}">${n0(v)}${v == null ? '' : '<span class="tile-unit">%</span>'}</div>
+      <div class="tile-label">${name} · YANDEX CLOUD REACHABILITY</div><div class="tile-sub">${sub}</div></div>`;
+    const i = s.infra;
+
+    // Before, during and after, one row per group, on one scale (0 to 200, 100 = normal).
+    const MAX = 200;
+    const at = (v) => `${Math.max(0, Math.min(100, (v / MAX) * 100)).toFixed(1)}%`;
+    const row = (name, g, cls = '') => {
+      const vals = [['before', g.before], ['during', g.during], ['after', g.after]];
+      const range = g.before_range ? `<span class="ph-range" style="left:${at(g.before_range[0])};width:calc(${at(g.before_range[1])} - ${at(g.before_range[0])})"></span>` : '';
+      const dots = vals.filter(([, v]) => v != null).map(([k, v]) => `<span class="ph-dot ph-${k}" style="left:${at(v)}"></span>`).join('');
+      const sr = `${name}: before ${n0(g.before)}, during ${n0(g.during)}, after ${n0(g.after)}${g.before_range ? `; ordinary days before ranged from ${n0(g.before_range[0])} to ${n0(g.before_range[1])}` : ''}`;
+      return `<div class="ph-row ${cls}" role="listitem"><div class="ph-label">${esc(name)}${g.members ? ` <span>${g.members}</span>` : ''}</div>
+        <div class="ph-track" aria-hidden="true"><span class="ph-norm"></span>${range}${dots}</div>
+        <div class="ph-vals" aria-hidden="true"><span class="ph-before">${n0(g.before)}</span> <span class="ph-during">${n0(g.during)}</span> <span class="ph-after">${n0(g.after)}</span></div>
+        <span class="sr-only">${esc(sr)}</span></div>`;
+    };
+    const phases = `<div class="ph-head" aria-hidden="true"><span></span><span class="ph-scale"><span style="left:0">0</span><span style="left:50%">100 = NORMAL</span><span style="left:100%">200</span></span><span class="ph-vals"><span class="ph-before">BEF</span> <span class="ph-during">DUR</span> <span class="ph-after">AFT</span></span></div>
+      <div class="phases" role="list" aria-label="Mean daily activity before, during and after the events, by group">
+      ${row('YANDEX CLOUD', i, 'ph-cause')}${s.groups.map((g) => row(label(g.tag), g)).join('')}</div>`;
+
+    // Small multiples: each group's daily index across the window.
+    const spark = (values) => {
+      const W = 200, H = 48, xs = (k) => (k / Math.max(1, s.days.length - 1)) * W, ys = (v) => H - Math.max(0, Math.min(MAX, v)) / MAX * H;
+      const e0 = s.days.findIndex((d) => d >= s.event_days.start), e1 = s.days.findIndex((d) => d > s.event_days.end);
+      let path = '', pen = false;
+      values.forEach((v, k) => { if (v == null) { pen = false; return; } path += `${pen ? 'L' : 'M'}${xs(k).toFixed(1)},${ys(v).toFixed(1)}`; pen = true; });
+      return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+        <rect class="spark-event" x="${xs(e0)}" y="0" width="${Math.max(2, xs((e1 < 0 ? s.days.length : e1) - 1) - xs(e0))}" height="${H}"/>
+        <line class="spark-norm" x1="0" x2="${W}" y1="${ys(100)}" y2="${ys(100)}"/><path class="spark-line" d="${path}"/></svg>`;
+    };
+    const multiples = s.groups.filter((g) => s.daily[g.tag]).map((g) => `<div class="tile" role="listitem">
+      <div class="tile-label">${esc(label(g.tag))} · ${g.members} IN GROUP</div>${spark(s.daily[g.tag].values)}
+      <div class="tile-sub">AFTER <span>${n0(g.after)}</span> · BEFORE <span>${n0(g.before)}</span> · % OF NORMAL</div></div>`).join('');
+
+    view.innerHTML = `<div class="study-head">
+        <h2 class="study-title">${esc(s.title)}</h2>
+        <p class="group-desc">${esc(s.question)}</p>
+        <p class="note">${version}</p>
+        <p class="note">${phaseDays} · NORMAL = MEAN OF ${day(s.reference.start)} TO ${day(s.reference.end)} (${s.reference.days} DAYS BEFORE)</p>
+        <p class="note">NOW: YANDEX CLOUD ${ycNow == null ? 'NOT MEASURED IN THE LAST 24 H' : ycNow + '% OF PRE-STRIKE LEVEL'} · COLLECTION ${snap.paused ? `PAUSED SINCE ${day(snap.paused.since)}` : 'RUNNING'} · <a href="#live">LATEST DATA</a></p>
+      </div>
+      <h2 class="sect">Yandex Cloud · reachability · % of normal</h2>
+      <div class="tiles" role="list">${tile('BEFORE', i.before, `${i.days.before} DAYS`)}${tile('DURING', i.during, `${i.days.during} DAYS`)}${tile('AFTER', i.after, `${i.days.after} DAYS`)}</div>
+      <div class="readout" id="study-yandex-readout"></div>
+      <div class="chart" id="study-yandex"><p class="note">LOADING…</p></div>
+      ${notes(['Share of Yandex Cloud\'s network (AS200350) still answering IODA\'s pings, each day, as a % of its mean over the normal period. Dashed lines: reported strikes.'])}
+      <h2 class="sect">Before, during, after · mean daily activity · % of normal</h2>
+      <div class="ph-legend" aria-hidden="true"><span><span class="ph-dot ph-before"></span>BEFORE</span><span><span class="ph-dot ph-during"></span>DURING</span><span><span class="ph-dot ph-after"></span>AFTER</span><span><span class="ph-range-key"></span>RANGE OF ORDINARY DAYS BEFORE</span></div>
+      ${phases}
+      ${notes([
+        'Each dot is the mean of a group\'s daily activity in that phase, where 100 is its mean over the normal period. The shaded bar is the lowest to highest single day in the 14 days before: an after-dot inside it is within ordinary variation.',
+        'A drop caused by bots going quiet would show political groups falling after the strikes while the non-political group does not. Yandex Cloud is the cause being tested: it fell and stayed down.',
+        'Daily means are not adjusted for the day of the week, and phases contain different numbers of weekend days. The hour-by-hour chart further down is.',
+      ])}
+      <h2 class="sect">Every group across the window · daily % of normal</h2>
+      <div class="tiles multiples" role="list">${multiples}</div>
+      ${notes(['Each line runs from the first to the last day of the window. Shaded: the days of the strikes. Flat line: 100 = normal. Scale 0 to 200.'])}
+      ${analysisBlocks(s.reference, s.days.length)}
+      ${showsSection()}`;
+
+    const pts = (vals) => s.days.map((d, k) => [d + 43200, vals[k]]).filter((q) => q[1] != null);
+    chart($('study-yandex'), $('study-yandex-readout'), [{ label: 'YANDEX CLOUD', cls: 'l-cause', area: true, points: pts(i.values) }],
+      { start: s.window.start, end: s.window.end, unit: '% OF NORMAL', events: s.events, ref: s.reference, baseline: 100, maxGap: 1,
+        tick: indexTick, value: indexValue,
+        share: { name: `${s.id}-yandex`, title: `Yandex Cloud reachability · ${s.title}`, sources: 'IODA',
+          caption: `Daily share of Yandex Cloud (AS200350) answering IODA's pings, as a % of its mean from ${day(s.reference.start)} to ${day(s.reference.end)}. Dashed: reported strikes.` } });
+    renderAligned({ ...s.aligned, dataTo: s.as_of });
+    renderShows(s.aligned);
+    renderCorrelation({ days: s.days, reference: s.reference, infra: s.infra, events: s.events, end: s.as_of,
+      groups: s.groups.filter((g) => s.daily[g.tag]).map((g) => ({ ...g, values: s.daily[g.tag].values, n: s.daily[g.tag].n })) });
+  },
   live() {
     $('prompt').textContent = 'monitor --live --interval 15m';
     const ref = byKey(snap.correlation_ref) || snap.series.find((s) => s.kind === 'infrastructure');
@@ -1118,37 +1241,7 @@ const views = {
     const stale = snap.series.filter((s) => !s.fresh && !snap.runs.find((r) => r.platform === s.platform && (r.error || '').startsWith('not configured')));
 
     view.innerHTML = `${hero}
-      <h2 class="sect">Around the strikes · index · 100 = normal</h2>
-      <div class="switch" id="aligned-switch" role="group" aria-label="Group shown around the strikes"></div>
-      <p class="group-desc" id="aligned-desc" aria-live="polite"></p>
-      <div class="readout" id="aligned-readout"></div>
-      <div class="chart" id="aligned-chart"><p class="note">LOADING…</p></div>
-      <div id="aligned-note"></div>
-      <h2 class="sect">Correlation · activity vs Yandex Cloud · % of pre-strike</h2>
-      <div class="legend" id="corr-legend" role="group" aria-label="Lines shown on the correlation chart"></div>
-      ${groupsPanel()}
-      <div class="readout" id="corr-readout"></div>
-      <div class="chart" id="corr-chart"><p class="note">LOADING…</p></div>
-      <h3 class="tiles-title">How closely each group follows Yandex Cloud</h3>
-      <div class="tiles" role="list" id="corr-tiles"></div>
-      ${notes([
-        'Each line is a group\'s daily activity as a % of its usual level before the strikes: 100 means normal.',
-        'The Yandex Cloud line is the share of its network still answering, against the same pre-strike level.',
-        'The big number on each tile is a correlation from −1 to +1, over the days both lines have data (up to 45). Near +1: the group rises and falls with Yandex. Near 0: no link. Near −1: it moves the opposite way.',
-        'Yandex Cloud fell at the strikes and stayed low. The claim that bots went quiet with it predicts a positive number. A negative number means the group tended to be busier on the days Yandex was down.',
-        `The last line is the group's latest complete UTC day: the median community's activity that day as a % of its own average over ${refDates(snap.reference).toLowerCase()}. "119% of normal" means the typical community in the group was 19% busier than usual. Half the group's communities were busier than that, half quieter.`,
-        'A group gets a value for a day only when at least half its communities have that day. Reddit history arrives about 2 days late, so groups made mostly of Reddit communities show an older date.',
-        'A drop in the non-political group as well means the cause is probably not political.',
-        'These daily values are not adjusted for the day of the week, and most groups are quieter at weekends. A dip on a Saturday or Sunday is usually the weekend, not the strikes: compare it with the weekends before. The strike-aligned chart above compares each hour with the same weekday and hour, so it does not have this problem.',
-        `The chart shows up to ${MAX_LINES} groups at once so the lines stay readable. Switching on another turns off the first one switched on.`,
-        'Correlation is not proof of cause. Methods are on the About tab.',
-      ])}
-      <h2 class="sect">Difference · group minus non-political · percentage points</h2>
-      <div class="switch" id="diff-switch" role="group" aria-label="Group compared with the control group"></div>
-      <p class="group-desc" id="diff-desc" aria-live="polite"></p>
-      <div class="readout" id="diff-readout"></div>
-      <div class="chart" id="diff-chart"><p class="note">LOADING…</p></div>
-      <div id="diff-note"></div>
+      ${analysisBlocks(snap.reference, 45)}
       <div class="chips" style="margin-top:14px" role="list" aria-label="Source status">${chips}</div>
       <h2 class="sect">Infrastructure · latest value</h2>
       <div class="tiles" role="list">${tiles}</div>
@@ -1604,8 +1697,8 @@ const views = {
 };
 
 // ── Routing, refresh, clock ─────────────────────────────────────────────────
-const TITLES = { live: 'BOT MONITOR', communities: 'GROUPS', history: 'HISTORY', report: 'REPORT', alerts: 'ALERTS', about: 'ABOUT' };
-const PAGE_TITLES = { live: 'Live', communities: 'Groups', history: 'History', report: 'Report', alerts: 'Alerts', about: 'About' };
+const TITLES = { study: 'BOT MONITOR', live: 'LATEST DATA', communities: 'GROUPS', history: 'HISTORY', report: 'REPORT', alerts: 'ALERTS', about: 'ABOUT' };
+const PAGE_TITLES = { study: 'Study', live: 'Latest data', communities: 'Groups', history: 'History', report: 'Report', alerts: 'Alerts', about: 'About' };
 let paused = false;
 
 // Redraw the current view in place, after a filter or option changed or new data
@@ -1615,8 +1708,8 @@ let paused = false;
 // and `from`, the chip or select that was used, stays where it was on screen and keeps
 // focus: a rebuilt view creates a new copy of it.
 function redraw(from = null) {
-  const name = (location.hash.slice(1) || 'live').split('?')[0];
-  const key = views[name] ? name : 'live';
+  const name = (location.hash.slice(1) || 'study').split('?')[0];
+  const key = views[name] ? name : 'study';
   const heights = new Map([...view.querySelectorAll('[id]')].map((el) => [el.id, el.offsetHeight]));
   const viewHeight = view.offsetHeight;
   const anchor = from && anchorOf(from);
@@ -1663,13 +1756,13 @@ function setChips(group, items, current, chosen = null) {
 // moveFocus: true when the visitor switched tabs, so focus lands on the new
 // view's heading instead of staying on the nav link while content swaps silently.
 function route(moveFocus = false) {
-  const name = (location.hash.slice(1) || 'live').split('?')[0];
-  const key = views[name] ? name : 'live';
+  const name = (location.hash.slice(1) || 'study').split('?')[0];
+  const key = views[name] ? name : 'study';
   document.querySelectorAll('.nav a').forEach((a) => {
     if (a.getAttribute('href') === `#${key}`) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
   });
   $('title').innerHTML = `${glyph('// ')}${TITLES[key]}`;
-  document.title = key === 'live' ? 'Bot Traffic Monitor' : `${PAGE_TITLES[key]} · Bot Traffic Monitor`;
+  document.title = key === 'study' ? 'Bot Traffic Monitor' : `${PAGE_TITLES[key]} · Bot Traffic Monitor`;
   if (!snap) return;
   Promise.resolve(views[key]())
     .then(() => { if (moveFocus) $('title').focus(); })
@@ -1699,7 +1792,7 @@ async function refresh() {
     // Never redraw under someone: not while paused, not while focus is inside the view,
     // and not when nothing new was collected (most minutes: collection runs every 30).
     if (paused || view.contains(document.activeElement) || dataVersion(snap) === before) return;
-    const name = (location.hash.slice(1) || 'live');
+    const name = (location.hash.slice(1) || 'study');
     if (name === 'live' || name === 'communities') redraw();
   } catch {
     setState('OFFLINE');
