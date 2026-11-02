@@ -77,16 +77,38 @@ None of these sources shows an influence operation hosted on Yandex Cloud or Yan
 - US Department of Justice press release on Doppelganger (4 September 2024): justice.gov returned empty pages. The affidavit is read above.
 - NewsGuard's Pravda audit: refused.
 - EEAS 2025 FIMI activity report (June 2026): agent-checked only; not used yet.
-- EUvsDisinfo database, case by case: after a few automated page loads the site asked to confirm we are not a robot, so automated reading stopped. Access options are under "Next" below.
+- EUvsDisinfo database, case by case: after a few automated page loads the site asked to confirm we are not a robot, so automated reading stopped. Cases to November 2022 come from an open copy instead (below).
 
 ## Topics for the narratives group
 
 The topics these sources document (Ukraine and Western support for it, NATO, elections and party boosting, migration, cost of living, "globalists", the West as decadent, LGBTQ+ people and children, sport) overlap the narratives group already tracked (docs/NARRATIVES.md). Any new keyword still needs a source checked on the original page and at least 20 posts a day.
 
-## Next: the EUvsDisinfo cases on LGBTQ+ people
+## EUvsDisinfo cases about LGBTQ+ people, 2015 to 2022
 
-Emma, 2 November 2026: catalogue every EUvsDisinfo case tagged "LGBTIQ+" or "Gender issues", or mentioning transgender people, by year, target country and theme (children, sport, Western decline, Britain), and compare the themes with the phrases this project counts. Ways in:
+Emma, 2 November 2026: catalogue the pro-Kremlin disinformation cases about LGBTQ+ people, by year, target country and theme, and compare the themes with the phrases this project counts.
 
-1. The EUvsDisinfo MCP server, available on request by email to the EUvsDisinfo team (Emma to request).
-2. [Barbaro and Skumanich, *Euvsdisinfo dataset*, version 3](https://data.mendeley.com/datasets/yhdtkszvgp/3), Mendeley Data, 8 May 2023, CC BY 4.0: 14,497 cases from January 2015 to November 2022 with the disinformation text and target countries, but no tags. Cases from 2023 on would still need the database.
-3. Reading the database by hand in a browser.
+**Data.** [Barbaro and Skumanich, *Euvsdisinfo dataset*, version 3](https://data.mendeley.com/datasets/yhdtkszvgp/3) (Mendeley Data, 8 May 2023, doi:10.17632/yhdtkszvgp.3, CC BY 4.0): 14,497 cases from the EUvsDisinfo database (EEAS East StratCom Task Force), 6 January 2015 to 22 November 2022, each with its date, title, outlets, target countries and a summary of the claim. Downloaded 2 November 2026 (checksum matches the publisher's). It has no tags, so cases were found by words in the title and summary: LGBT, gay, homosexual, lesbian, transgender, queer, same-sex, sodomy, "gender ideology", "gender-neutral", sex change and similar. All 51 cases matched only by "gay", "pride" or "sodomy" were read by title and use the word about LGBTQ+ people. Themes were tagged by words too, so they are approximate. Script: `research/euvsdisinfo_lgbtq.py`; the 206 cases (date, link, title, outlets, countries, themes) are in [euvsdisinfo-lgbtq-cases.csv](euvsdisinfo-lgbtq-cases.csv).
+
+**What it shows.** 206 of 14,497 cases (1.4%) are about LGBTQ+ people.
+
+| Year | Cases | Share of that year's cases |
+|---|---|---|
+| 2015 | 2 | 0.6% |
+| 2016 | 26 | 1.3% |
+| 2017 | 25 | 1.9% |
+| 2018 | 18 | 1.8% |
+| 2019 | 55 | 2.1% |
+| 2020 | 47 | 1.4% |
+| 2021 | 31 | 1.1% |
+| 2022 (to 22 November) | 2 | 0.2% |
+
+- **Themes** (a case can have several): imposed by the West, NATO, Brussels, Soros or "globalists" 74; family, marriage, church and traditional values 68; children, schools and paedophilia 58; Western decline, decadence and "perversion" 40; Ukraine 31; elections and politics 25; transgender people 21; sport 3.
+- **Target countries**: the US 53, Russia 39, Georgia 39, Ukraine 25, Belarus 20, Armenia 14, the UK 12, the EU 12, France 10, Sweden 10.
+- **Outlets** most often cited: Geopolitica.ru (17, and 7 more in Italian), RT Arabic (9), geworld.ge (8), and Belarusian, Armenian and Russian television and sites.
+- **About transgender people** (21 cases): the West introducing "sex change" in Georgian schools (2016), Soros funding "transgender propaganda" in Armenia (2020), the EU imposing "gender neutrality" on Georgian kindergartens (2019).
+- **About Britain** (12 cases), including claims that the British government wants to replace "pregnant women" with "pregnant people" (2017), bans "what a beautiful girl" (2018), and deprives children of "breast milk" and "mothers" (2021): the same language-erasure framing found in British anti-trans debate.
+- **2022**: almost no LGBTQ+ cases in a year dominated by the invasion of Ukraine.
+
+**What it cannot show.** The database is what EUvsDisinfo's analysts chose to catalogue, mostly from Russian-language and regional outlets, not a sample of everything published, so counts show where the monitors looked as well as what was said. It records outlets, not social media accounts, and says nothing about reach. Cases after November 2022 are not in this copy.
+
+**Next.** Cases from December 2022 on are only in the live database, which asks automated readers to confirm they are not robots. Its MCP server gives proper access on request; Emma is asking for it (2 November 2026). The themes above (children, imposed by the West, family, decline, language) are candidates for new searches, each still needing a checked source and at least 20 posts a day.
