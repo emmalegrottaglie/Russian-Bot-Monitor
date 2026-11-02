@@ -1,4 +1,4 @@
-"""Command line: python -m tracker {serve,collect,backfill,refetch,report,publish,pause,resume,watch}"""
+"""Command line: python -m tracker {serve,collect,backfill,refetch,report,publish,pause,resume,watch,study}"""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ import logging
 import time
 from datetime import datetime, timezone
 
-from . import alerts, analysis, collectors, db, pause, report, static
+from . import alerts, analysis, collectors, db, pause, report, static, study
 from .config import Settings, load_config
 
 
@@ -84,6 +84,12 @@ def main() -> None:
     p.add_argument("--reason", required=True, help="recorded as an alert")
     sub.add_parser("watch", help="daily check while paused: refresh Yandex data, resume if it has recovered")
 
+    p = sub.add_parser("study", help="build a study (a fixed window around an event, config/studies.toml)")
+    p.add_argument("action", choices=["build", "list"])
+    p.add_argument("id", nargs="?", help="study id (default: the newest study)")
+    p.add_argument("--freeze", action="store_true", help="store the build as the study's next version")
+    p.add_argument("--note", default="", help="what this version changes (required with --freeze)")
+
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
     config, settings = load_config(), Settings.from_env()
@@ -116,6 +122,26 @@ def main() -> None:
         pause.resume(config, settings, args.reason)
     elif args.cmd == "watch":
         print(pause.watch(config, settings))
+    elif args.cmd == "study":
+        if args.action == "list":
+            for s in study.listing():
+                print(f"{s['id']}: {s['title']} ({s['versions']} frozen versions)")
+            return
+        chosen = study.get(args.id)
+        if chosen is None:
+            parser.error(f"no study {args.id!r} in config/studies.toml")
+        if args.freeze and not args.note:
+            parser.error("--freeze needs --note saying what this version is or changes")
+        with db.session(settings.db_path) as conn:
+            built = study.build(conn, config, chosen)
+        print(f"{chosen.id}: {len(built['groups'])} groups, {'complete' if built['complete'] else 'window still open'}")
+        for g in built["groups"]:
+            print(f"  {g['tag']:16} before {g['before']}  during {g['during']}  after {g['after']}  "
+                  f"(days {g['days']['before']}/{g['days']['during']}/{g['days']['after']}, range before {g['before_range']})")
+        i = built["infra"]
+        print(f"  Yandex Cloud     before {i['before']}  during {i['during']}  after {i['after']}")
+        if args.freeze:
+            print(f"frozen: {study.freeze(built, args.note)}")
     elif args.cmd == "backfill":
         platforms = tuple(args.platform or collectors.BACKFILL)
         start = int(time.time()) - args.days * 86400

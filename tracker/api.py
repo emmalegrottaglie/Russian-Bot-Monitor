@@ -16,7 +16,7 @@ from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
-from . import alerts, analysis, collectors, db, pause, report
+from . import alerts, analysis, collectors, db, pause, report, study
 from .config import ROOT, Config, Settings
 
 log = logging.getLogger(__name__)
@@ -86,12 +86,13 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
     correlation = SnapshotCache(config, settings, analysis.correlation_view)
     aligned = SnapshotCache(config, settings, analysis.strike_aligned)
     heat = SnapshotCache(config, settings, analysis.heatmap)
+    studies = SnapshotCache(config, settings, study.current)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
         with db.session(settings.db_path) as conn:
             db.init(conn, config.series)
-        task = asyncio.create_task(collection_loop(config, settings, cache, correlation, aligned, heat)) if collect else None
+        task = asyncio.create_task(collection_loop(config, settings, cache, correlation, aligned, heat, studies)) if collect else None
         yield
         if task:
             task.cancel()
@@ -109,6 +110,15 @@ def create_app(config: Config, settings: Settings, collect: bool = False) -> Fas
     @app.get("/api/snapshot")
     def get_snapshot() -> dict:
         return {**cache.get(), "paused": pause.state(settings)}
+
+    @app.get("/api/study")
+    def get_study() -> dict:
+        """The current study: its newest frozen version, or a provisional build."""
+        return studies.get()
+
+    @app.get("/api/studies")
+    def get_studies() -> list:
+        return study.listing()
 
     @app.get("/api/correlation")
     def get_correlation() -> dict:

@@ -1,0 +1,22 @@
+# Studies: one per event, each a fixed window around it (Emma, 2 November 2026).
+#
+# A study's window runs from `pre_days` before the UTC day of its first event to
+# `post_days` after the UTC day of its last. Its reference, the "normal" every index
+# is measured against (100 = normal), is the `reference_days` before the first event's
+# day, so the hour-by-hour index (each hour against the same weekday-hour 1 to 3 weeks
+# earlier) has its full comparison period. `events` names entries in events.toml by
+# their `short` label.
+#
+# A study is built with `python -m tracker study build <id>` and frozen with
+# `--freeze`, which writes studies/<id>/v<N>.json. The site shows the newest frozen
+# version, or a provisional build while a study has none. Rebuilding is deliberate:
+# freeze a new version with a note saying what changed (docs/STUDIES.md).
+
+[[study]]
+id = "strikes-2026-10"
+title = "Strikes on Yandex data centres, 8 to 11 October 2026"
+events = ["SASOVO", "KALUGA", "VLADIMIR"]
+pre_days = 14
+post_days = 14
+reference_days = 21
+question = "Did political activity, or activity likely to be run by bots, drop after the strikes on Yandex data centres?"

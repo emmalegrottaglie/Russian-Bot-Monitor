@@ -21,7 +21,7 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from . import analysis, db, pause, report
+from . import analysis, db, pause, report, study
 from .config import ROOT, Config, Settings
 
 log = logging.getLogger(__name__)
@@ -71,6 +71,8 @@ def export(conn: sqlite3.Connection, config: Config, settings: Settings, out: Pa
     _json(api / "strike-aligned.json", analysis.strike_aligned(conn, config, now))
     _json(api / "heatmap.json", analysis.heatmap(conn, config, now))
     _json(api / "alerts.json", db.recent_alerts(conn, limit=100))
+    _json(api / "study.json", study.current(conn, config, now))
+    _json(api / "studies.json", study.listing())
 
     event_ts = [e.ts for e in config.events if e.ts <= now - 24 * 3600]
     daily_rows = []
