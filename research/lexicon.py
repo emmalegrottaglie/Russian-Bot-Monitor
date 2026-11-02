@@ -95,6 +95,8 @@ EXTRA = [
      "Emma, 20 Oct 2026; framing since 29 Oct 2026", "", "Framing: counted on its own, never part of the coded-language score; legal, policy and news discussion uses the same words. The campaign phrase 'protect single-sex spaces' is documented (Edinburgh SPN, Transvox) and listed separately as a candidate; the bare legal term is not"),
     ("single-sex rights", "single-sex rights; single sex rights", "transphobic", "framing",
      "Emma, 20 Oct 2026; framing since 29 Oct 2026", "", "Framing: counted on its own, never part of the coded-language score; legal, policy and news discussion uses the same words. Related to 'sex-based rights' (Mendelsohn), which is a candidate"),
+    ("single-sex services", "single-sex services; single sex services; single-sex service; single sex service", "transphobic", "framing",
+     "Emma, 2 Nov 2026 (Equality Act 2010 wording)", "", "Framing: counted on its own, never part of the coded-language score; the Equality Act 2010 and the EHRC code of practice use the term. Tracked on Twitter with 'single-sex spaces'"),
     ("biology-based rights", "biology-based rights; biology based rights", "transphobic", "framing",
      "Emma, 20 Oct 2026; framing since 29 Oct 2026", "", "Framing: counted on its own, never part of the coded-language score; legal, policy and news discussion uses the same words. Related to 'sex-based rights' (Mendelsohn), which is a candidate"),
 ]

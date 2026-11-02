@@ -819,7 +819,9 @@ x_only = true
 # discussion of the Equality Act uses the same words. Twitter only: Bluesky search
 # ignores OR, and on 27 to 28 October 2026 it had about 2 posts a day for
 # "single-sex spaces" and none for the other phrases. Two searches, so the group
-# has the two members its median needs (docs/NARRATIVES.md).
+# has the two members its median needs (docs/NARRATIVES.md). "Single-sex / biology-
+# based rights" was tried first: about 1 post a day on Twitter, too few, so it was
+# replaced by "single-sex services", the Equality Act wording (Emma, 2 November 2026).
 [[bluesky]]
 query = '("single-sex spaces" OR "single sex spaces" OR "single-sex space" OR "single sex space")'
 label = "single-sex space(s)"
@@ -829,8 +831,8 @@ tags = ["framing"]
 x_only = true
 
 [[bluesky]]
-query = '("single-sex rights" OR "single sex rights" OR "biology-based rights" OR "biology based rights")'
-label = "single-sex / biology-based rights"
+query = '("single-sex services" OR "single sex services" OR "single-sex service" OR "single sex service")'
+label = "single-sex service(s)"
 lang = "en"
 region = "EN-LANG"
 tags = ["framing"]

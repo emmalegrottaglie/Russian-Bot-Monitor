@@ -362,4 +362,4 @@ def test_lexicon_terms_are_sourced_and_israel_speech_is_not_counted():
     assert status["dual loyalty"] == status["open borders for Israel"] == "candidate"
     assert status["bankers"] == status["Federal Reserve"] == "ambiguous"
     # The UK single-sex framing is counted on its own, never as coded language.
-    assert {t for t, s in status.items() if s == "framing"} == {"single-sex spaces", "single-sex rights", "biology-based rights"}
+    assert {t for t, s in status.items() if s == "framing"} == {"single-sex spaces", "single-sex services", "single-sex rights", "biology-based rights"}
