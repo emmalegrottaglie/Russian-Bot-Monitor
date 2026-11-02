@@ -7,23 +7,41 @@ the words in their title and disinformation summary, tags each with the themes i
 uses, and writes docs/euvsdisinfo-lgbtq-cases.csv (date, link, title, outlets,
 target countries, themes) plus counts by year, theme and country.
 
+With --mcp it reads instead the full database downloaded through EUvsDisinfo's MCP
+server (research/euvsdisinfo_mcp.py: every case from 2015 to now, with EUvsDisinfo's
+own keyword tags) and writes docs/euvsdisinfo-lgbtq-cases-mcp.csv. A case then counts
+if its words match or EUvsDisinfo tagged it with one of TAGS; the `tags` column shows
+which tags it has, so the two ways of finding cases can be compared.
+
 Matching is by words, so it is checked by hand: every matched case's title is
 printed, and cases whose only match is ambiguous are listed separately.
 
-    python -m research.euvsdisinfo_lgbtq
+    python -m research.euvsdisinfo_lgbtq          # Mendeley copy, 2015 to 2022
+    python -m research.euvsdisinfo_lgbtq --mcp    # MCP download, 2015 to now
 """
 
 from __future__ import annotations
 
 import csv
+import html
+import json
 import re
 import sys
 from collections import Counter
+from datetime import datetime, timezone
 from pathlib import Path
+from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "data" / "external" / "euvsdisinfo" / "euvsdisinfo_all_texts_rename.csv"
 OUT = ROOT / "docs" / "euvsdisinfo-lgbtq-cases.csv"
+MCP_SRC = ROOT / "data" / "external" / "euvsdisinfo" / "mcp" / "cases.jsonl"
+MCP_OUT = ROOT / "docs" / "euvsdisinfo-lgbtq-cases-mcp.csv"
+# EUvsDisinfo's own keyword tag for cases about LGBTQ+ people. Of its 619 tags (MCP
+# download, 2 November 2026) the others that come close are not counted: of 45 cases
+# tagged "Perversion", 27 neither carry LGBTIQ+ nor name LGBTQ+ people, and most of those
+# are about paedophilia or incest; "Gender issues" (9 cases) is about men and women.
+TAGS = {"lgbtiq+"}
 BASE = "https://euvsdisinfo.eu"
 
 # A case is about LGBTQ+ people if its title or disinformation summary uses one of these.
@@ -50,32 +68,73 @@ AMBIGUOUS = re.compile(r"^(gay\w*|pride (?:parade|march|month)|sodom\w*)$", re.I
 
 
 def year(date: str) -> str:
-    return date.split(".")[-1]
+    return date[:4]
+
+
+def mendeley_cases() -> list[dict]:
+    """The Mendeley copy, in the common shape: date (YYYY-MM-DD), link, title, text,
+    outlets, countries, tags."""
+    if not SRC.exists():
+        sys.exit(f"missing {SRC}: download it from doi:10.17632/yhdtkszvgp.3")
+    out = []
+    for r in csv.DictReader(SRC.open(encoding="utf-8")):
+        d, m, y = r["Date"].split(".")
+        out.append({"date": f"{y}-{int(m):02}-{int(d):02}", "link": BASE + r["Links"], "title": r["Title"],
+                    "text": f"{r['Title']} {r['Disinformation']}", "outlets": r["Outlets"],
+                    "countries": r["Country"], "tags": []})
+    return out
+
+
+def _plain(markup: str) -> str:
+    return html.unescape(re.sub(r"<[^>]+>", " ", markup or ""))
+
+
+def mcp_cases() -> list[dict]:
+    """The MCP download, in the same shape. The disinformation summary is the case's
+    `claim`; outlets are the web domains of its links to the disinformation."""
+    if not MCP_SRC.exists():
+        sys.exit(f"missing {MCP_SRC}: run python -m research.euvsdisinfo_mcp first")
+    out = []
+    for line in MCP_SRC.read_text(encoding="utf-8").splitlines():
+        c = json.loads(line)
+        domains = []
+        for link in c.get("linksToDisinformation") or []:
+            host = urlparse(link.get("url") or link.get("link") or "").netloc.removeprefix("www.")
+            if host and host not in domains:
+                domains.append(host)
+        out.append({"date": datetime.fromtimestamp(c["date"], timezone.utc).strftime("%Y-%m-%d"), "link": c["url"],
+                    "title": c["title"], "text": f"{c['title']} {_plain(c.get('claim'))}",
+                    "outlets": ", ".join(domains), "countries": ", ".join(k["title"] for k in c.get("countries") or []),
+                    "tags": [k["title"] for k in c.get("keywords") or []]})
+    return out
 
 
 def main() -> None:
-    if not SRC.exists():
-        sys.exit(f"missing {SRC}: download it from doi:10.17632/yhdtkszvgp.3")
-    rows = list(csv.DictReader(SRC.open(encoding="utf-8")))
+    use_mcp = "--mcp" in sys.argv[1:]
+    rows = mcp_cases() if use_mcp else mendeley_cases()
+    out_path = MCP_OUT if use_mcp else OUT
     hits = []
     for r in rows:
-        text = f"{r['Title']} {r['Disinformation']}"
-        words = {m.group(0).lower() for m in LGBTQ.finditer(text)}
-        if not words:
+        words = {m.group(0).lower() for m in LGBTQ.finditer(r["text"])}
+        tagged = [t for t in r["tags"] if t.lower() in TAGS]
+        if not words and not tagged:
             continue
-        themes = [k for k, rx in THEMES.items() if rx.search(text)]
-        hits.append({"date": r["Date"], "link": BASE + r["Links"], "title": r["Title"], "outlets": r["Outlets"],
-                     "countries": r["Country"], "themes": "; ".join(themes), "matched": "; ".join(sorted(words)),
-                     "_ambiguous": all(AMBIGUOUS.match(w) for w in words)})
-    hits.sort(key=lambda h: h["date"].split(".")[::-1])
-    with OUT.open("w", encoding="utf-8", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=["date", "link", "title", "outlets", "countries", "themes", "matched"],
-                           lineterminator="\n", extrasaction="ignore")
+        themes = [k for k, rx in THEMES.items() if rx.search(r["text"])]
+        hits.append({**r, "themes": "; ".join(themes), "matched": "; ".join(sorted(words)),
+                     "tags": "; ".join(tagged), "_ambiguous": not tagged and all(AMBIGUOUS.match(w) for w in words)})
+    hits.sort(key=lambda h: h["date"])
+    fields = ["date", "link", "title", "outlets", "countries", "themes", "matched"] + (["tags"] if use_mcp else [])
+    with out_path.open("w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fields, lineterminator="\n", extrasaction="ignore")
         w.writeheader()
         w.writerows(hits)
 
-    print(f"{len(hits)} of {len(rows)} cases ({100 * len(hits) / len(rows):.1f}%) mention LGBTQ+ people; written to {OUT.relative_to(ROOT)}")
-    by_year, all_year = Counter(year(h["date"]) for h in hits), Counter(year(r["Date"]) for r in rows)
+    print(f"{len(hits)} of {len(rows)} cases ({100 * len(hits) / len(rows):.1f}%) are about LGBTQ+ people; written to {out_path.relative_to(ROOT)}")
+    if use_mcp:
+        both = sum(1 for h in hits if h["matched"] and h["tags"])
+        print(f"found by words and by tag: {both}; by words only: {sum(1 for h in hits if not h['tags'])}; "
+              f"by tag only: {sum(1 for h in hits if not h['matched'])}")
+    by_year, all_year = Counter(year(h["date"]) for h in hits), Counter(year(r["date"]) for r in rows)
     print("by year (cases, share of all cases that year):")
     for y in sorted(all_year):
         print(f"  {y}: {by_year[y]:4} ({100 * by_year[y] / all_year[y]:.1f}%)")

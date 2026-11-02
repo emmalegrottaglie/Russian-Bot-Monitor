@@ -35,7 +35,7 @@ Rules, as elsewhere in this repository: each claim is what the named source foun
 | [EEAS, "FIMI targeting LGBTIQ+ people"](https://www.eeas.europa.eu/sites/default/files/documents/2023/EEAS-LGBTQ-Report-03-Digital%201.pdf), October 2023 | 31 cases of foreign information manipulation targeting LGBTIQ+ people from June 2022 to July 2023; over half attributed to Russia. Methods: impersonating media, forged documents, reused media. Narratives: children need protecting from LGBTIQ+ people, LGBTIQ+ people get preferential treatment in sport, and the overarching story that the West is in decline. The EEAS warns the cases are illustrative, not a measure of trends. Nothing specific to trans people | Rechecked |
 | RFE/RL 2024 and ISD 2026 above | LGBT rights as harmful to children (Social Design Agency plans); LGBTQ+ people among Matryoshka's targets | Rechecked |
 | Pamment and Tsurtsumia (Lund University, May 2025), pages 80 to 81 | **The rights of transgender people named in an operation's plan.** From May 2023 the Social Design Agency's campaign before the 2024 European Parliament elections aimed to discredit "liberal globalists" and help parties such as the AfD and National Rally in Germany, France, Spain, Italy and Poland. One of its four initial "thematic lines" (translated from Russian in the report) says abstract values are being imposed and children are "going crazy", and lists gender equality, the rights of transgender people and sexual minorities among the things "liberal globalists" would start wars for, against "true values" such as family. The report notes these lines appear in the initial proposal and were later changed and tied to measurable targets, such as raising the AfD's poll rating to 20% | Rechecked (full report) |
-| [EUvsDisinfo database](https://euvsdisinfo.eu/disinformation-cases/?text=transgender) (EEAS East StratCom) | Catalogued cases of pro-Kremlin disinformation, each dated and attributed to an outlet. A search for "transgender" on 2 November 2026 returned two pages of cases from 2017 to 2025, including stories that calling a trans person by their sex at birth leads to jail in Scotland (April 2024), that Russia was unfairly accused over the Olympic women's boxing (August 2024) and that "transgenders are preparing a coup" in France (January 2025). The database also has "LGBTIQ+" and "Gender issues" tags. Not yet counted or read case by case; WebFetch is refused (403), the in-app browser works | Seen (search page) |
+| [EUvsDisinfo database](https://euvsdisinfo.eu/disinformation-cases/?text=transgender) (EEAS East StratCom) | Catalogued cases of pro-Kremlin disinformation, each dated and attributed to an outlet. A search for "transgender" on 2 November 2026 returned two pages of cases from 2017 to 2025, including stories that calling a trans person by their sex at birth leads to jail in Scotland (April 2024), that Russia was unfairly accused over the Olympic women's boxing (August 2024) and that "transgenders are preparing a coup" in France (January 2025). The database also has "LGBTIQ+" and "Gender issues" tags. Counted in full: 287 of 19,828 cases (2015 to October 2026) are about LGBTQ+ people, see "EUvsDisinfo cases about LGBTQ+ people" below | Read (database, via its MCP server) |
 
 | [US Department of Justice, affidavit for the seizure of 32 Doppelganger domains](../library/2024-09-04_US-DOJ_Doppelganger-domain-seizure-affidavit.pdf), 4 September 2024 | Among the domains leased by an operator persona was mypride[.]press, "My Pride Press", which the affidavit describes as an English-language site focused on the LGBTQ community, with topics including trans youth, athletes, health and "woke wars". The affidavit also quotes Recorded Future (5 December 2023): Doppelganger's US-focused fake outlets aimed to exploit divisions before the 2024 election by fuelling anti-LGBTQ+ sentiment, among other themes | Read in full (2 November 2026) |
 | [VIGINUM, Storm-1516 technical report](../library/2025-05-07_VIGINUM_Storm-1516-technical-report.pdf), 7 May 2025 | Storm-1516 narratives accuse President Zelensky alternately of being a neo-Nazi, a drug addict or a homosexual. In December 2023 it amplified a fake Twitter post promoting a "pro-transgender" Ukrainian site, which VIGINUM attributes with high confidence to Project Lakhta, and in January 2024 a story that Zelensky "supports a pro-transgender initiative" | Read in full |
@@ -77,7 +77,7 @@ None of these sources shows an influence operation hosted on Yandex Cloud or Yan
 - US Department of Justice press release on Doppelganger (4 September 2024): justice.gov returned empty pages. The affidavit is read above.
 - NewsGuard's Pravda audit: refused.
 - EEAS 2025 FIMI activity report (June 2026): agent-checked only; not used yet.
-- EUvsDisinfo database, case by case: after a few automated page loads the site asked to confirm we are not a robot, so automated reading stopped. Cases to November 2022 come from an open copy instead (below).
+- EUvsDisinfo database, case by case: after a few automated page loads the site asked to confirm we are not a robot, so automated reading stopped. Cases to November 2022 come from an open copy, and the full database from EUvsDisinfo's MCP server (both below).
 
 ## Topics for the narratives group
 
@@ -111,4 +111,33 @@ Emma, 2 November 2026: catalogue the pro-Kremlin disinformation cases about LGBT
 
 **What it cannot show.** The database is what EUvsDisinfo's analysts chose to catalogue, mostly from Russian-language and regional outlets, not a sample of everything published, so counts show where the monitors looked as well as what was said. It records outlets, not social media accounts, and says nothing about reach. Cases after November 2022 are not in this copy.
 
-**Next.** Cases from December 2022 on are only in the live database, which asks automated readers to confirm they are not robots. Its MCP server gives proper access on request; Emma is asking for it (2 November 2026). The themes above (children, imposed by the West, family, decline, language) are candidates for new searches, each still needing a checked source and at least 20 posts a day.
+**Next.** The themes above (children, imposed by the West, family, decline, language) are candidates for new searches, each still needing a checked source and at least 20 posts a day. Cases from December 2022 on are in the next section.
+
+## EUvsDisinfo cases about LGBTQ+ people, 2015 to 2026 (full database)
+
+**Data.** The whole EUvsDisinfo database, downloaded on 2 November 2026 through its MCP server (`https://mcp.euvsd.info/mcp`, with an API key EUvsDisinfo gave Emma on request): 19,828 of the 19,832 cases it reported, from 2015 to 20 October 2026. The server could not return the other 4 (it fails on an empty field in each). Unlike the Mendeley copy, each case carries EUvsDisinfo's own keyword tags. A case counts if EUvsDisinfo tagged it `LGBTIQ+` or if its title or claim uses the words listed in the previous section. Of the 287 cases found, 167 were found both ways, 37 by the tag alone and 83 by words alone. Two near tags are not counted: of the 45 cases tagged `Perversion`, 27 neither carry `LGBTIQ+` nor name LGBTQ+ people, and most of those are about paedophilia or incest; `Gender issues` (9 cases) is about men and women. Scripts: `research/euvsdisinfo_mcp.py` (download, not in git) and `research/euvsdisinfo_lgbtq.py --mcp`. The cases (date, link, title, outlet web domains, countries, themes, matched words, tags) are in [euvsdisinfo-lgbtq-cases-mcp.csv](euvsdisinfo-lgbtq-cases-mcp.csv).
+
+**What it shows.** 287 of 19,828 cases (1.4%) are about LGBTQ+ people.
+
+| Year | Cases | Share of that year's cases |
+|---|---|---|
+| 2015 | 3 | 0.9% |
+| 2016 | 19 | 1.0% |
+| 2017 | 18 | 1.4% |
+| 2018 | 18 | 1.8% |
+| 2019 | 62 | 2.3% |
+| 2020 | 60 | 1.8% |
+| 2021 | 35 | 1.2% |
+| 2022 | 2 | 0.1% |
+| 2023 | 12 | 0.8% |
+| 2024 | 40 | 2.0% |
+| 2025 | 18 | 1.5% |
+| 2026 (to 20 October) | 0 | 0.0% |
+
+- **After 2022** (70 cases): the themes are the same as before. Imposed by the West 34, family and traditional values 33, Western decline 19, elections and politics 16, Ukraine 16, sport 15, children 14, transgender people 14. Sport appears mostly in 2024, the year of the Paris Olympics. France becomes a main target (24 cases, after 10 in 2015 to 2022). Russia (29), the US (19), the EU (18) and Ukraine (15) remain targets, and Kazakhstan (9) and Moldova (5) are new ones. Recent examples: Moldova as "a dictatorship under a rainbow flag" (June 2025) and claims about Brigitte Macron's sex (2024 and 2025).
+- **None in 2026** among the 274 cases catalogued to 20 October. This is a fact about the catalogue, not about what was published: the database depends on where its analysts look.
+- **Overall** (2015 to 2026, a case can have several themes): imposed by the West 118, family and traditional values 100, children 75, Western decline 60, Ukraine 45, elections and politics 41, transgender people 32, sport 18. The target countries are the US 81, Russia 71, Ukraine 39, France 34, Georgia 32 and the EU 31.
+
+**The two copies disagree on 20 cases.** 185 of the Mendeley copy's 206 cases are also in the MCP download, and all 185 are counted there too. The other 20 (from 2016 to 2019, such as "The prosecution of gay men in Chechnya is fake news", June 2017, and two cases titled "Carl Bildt: Orthodoxy is the main enemy of the West") do not appear in the download, and the server's search does not find them either. EUvsDisinfo may have removed or merged them since 2022. This is unconfirmed: checking it needs the case pages, which ask automated readers to prove they are not robots. Until it is checked, the count for 2015 to 2022 is given from each copy separately, not added together.
+
+**What it cannot show.** The same as for the Mendeley copy: the database records what EUvsDisinfo's analysts chose to catalogue and which outlets published it, not reach or social media accounts. Matching by words also finds cases that mention LGBTQ+ people only in passing (the 21 cases found only by "gay", "pride" or "sodomy" are listed by the script for checking).
