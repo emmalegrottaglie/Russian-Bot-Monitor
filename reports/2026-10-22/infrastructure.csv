@@ -1,0 +1,6 @@
+signal,series,unit,latest,latest_utc,pre_strike_mean,change_vs_pre_strike,strike_window_change,strike_window_p
+Yandex AS13238,cloudflare.asn13238.bot-pct,% HTTP REQUESTS FROM BOTS,99.843049,2026-10-22T00:00:00Z,99.4963,0.0037,-0.0173,0.002
+Yandex AS13238,ioda.asn13238.bgp,PREFIXES ROUTED,753.0,2026-10-22T00:00:00Z,753.0,0.0,0.0,1.0
+Yandex Cloud AS200350,ioda.asn200350.bgp,PREFIXES ROUTED,889.0,2026-10-22T00:00:00Z,858.0,0.0361,-0.0001,0.002
+Yandex Cloud AS200350,ioda.asn200350.merit-nt,TELESCOPE SOURCES,1.0,2026-10-21T13:00:00Z,0.7967,,,
+Yandex Cloud AS200350,ioda.asn200350.ping-slash24,/24 BLOCKS ANSWERING,120.0,2026-10-22T00:00:00Z,508.679,-0.7634,-0.483,0.002
