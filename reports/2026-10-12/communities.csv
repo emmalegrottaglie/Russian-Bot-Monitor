@@ -1,0 +1,57 @@
+community,series,platform,region,groups,unit,main_metric,pre_strike_mean,last_7d_mean,change_vs_pre_strike,change_vs_7d,strike_window_change,strike_window_p,robust_cells,r_vs_infrastructure,r_days,first_data_utc,hours_of_data
+"BSKY ""AfD""",bluesky.afd.de.posts,bluesky,DE,political-right,POSTS / H,yes,,72.0,,,,,,,1,2026-10-12T16:58:32Z,1
+"BSKY ""Konfederacja""",bluesky.konfederacja.pl.posts,bluesky,PL,political-right,POSTS / H,yes,,0.0,,,,,,,1,2026-10-12T16:58:32Z,1
+"BSKY ""MAGA""",bluesky.maga.en.posts,bluesky,US,political-right,POSTS / H,yes,,415.22,,,,,,,1,2026-10-12T16:58:32Z,1
+"BSKY ""Reform UK""",bluesky.reform-uk.en.posts,bluesky,UK,political-right,POSTS / H,yes,,14.0,,,,,,,1,2026-10-12T16:58:32Z,1
+r/asktrumpsupporters,reddit.asktrumpsupporters.comments,reddit,US,political-right,COMMENTS / H,yes,,,,,,,,,0,,0
+r/Conservative,reddit.conservative.comments,reddit,US,political-right,COMMENTS / H,yes,,58.0,,,,,,,1,2026-10-12T16:58:32Z,1
+r/conservatives,reddit.conservatives.comments,reddit,US,political-right,COMMENTS / H,yes,,,,,,,,,0,,0
+r/Republican,reddit.republican.comments,reddit,US,political-right,COMMENTS / H,yes,,,,,,,,,0,,0
+"BSKY ""Bundestag""",bluesky.bundestag.de.posts,bluesky,DE,political,POSTS / H,yes,,4.0,,,,,,,1,2026-10-12T16:58:32Z,1
+r/irishpolitics,reddit.irishpolitics.comments,reddit,IE,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/neoliberal,reddit.neoliberal.comments,reddit,US,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/news,reddit.news.comments,reddit,US,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/politics,reddit.politics.comments,reddit,US,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/spainpolitics,reddit.spainpolitics.comments,reddit,ES,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/ukpolitics,reddit.ukpolitics.comments,reddit,UK,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/worldnews,reddit.worldnews.comments,reddit,US,political,COMMENTS / H,yes,,,,,,,,,0,,0
+r/alabama,reddit.alabama.comments,reddit,US,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/czech,reddit.czech.comments,reddit,CZ,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/de,reddit.de.comments,reddit,DE,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/illinois,reddit.illinois.comments,reddit,US,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/kansas,reddit.kansas.comments,reddit,US,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/maryland,reddit.maryland.comments,reddit,US,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/newjersey,reddit.newjersey.comments,reddit,US,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/Polska,reddit.polska.comments,reddit,PL,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/sweden,reddit.sweden.comments,reddit,SE,regional,COMMENTS / H,yes,,,,,,,,,0,,0
+r/AskARussian,reddit.askarussian.comments,reddit,RU,russia,COMMENTS / H,yes,,,,,,,,,0,,0
+"BSKY ""weather""",bluesky.weather.en.posts,bluesky,GLOBAL,control,POSTS / H,yes,,165.44,,,,,,,1,2026-10-12T16:58:32Z,1
+r/aww,reddit.aww.comments,reddit,GLOBAL,control,COMMENTS / H,yes,,,,,,,,,0,,0
+r/Cooking,reddit.cooking.comments,reddit,GLOBAL,control,COMMENTS / H,yes,,,,,,,,,0,,0
+r/gardening,reddit.gardening.comments,reddit,GLOBAL,control,COMMENTS / H,yes,,,,,,,,,0,,0
+r/personalfinance,reddit.personalfinance.comments,reddit,GLOBAL,control,COMMENTS / H,yes,,,,,,,,,0,,0
+r/asktrumpsupporters,reddit.asktrumpsupporters.posts,reddit,US,political-right,POSTS / H,no,,,,,,,,,0,,0
+r/Conservative,reddit.conservative.posts,reddit,US,political-right,POSTS / H,no,,,,,,,,,0,,0
+r/conservatives,reddit.conservatives.posts,reddit,US,political-right,POSTS / H,no,,,,,,,,,0,,0
+r/Republican,reddit.republican.posts,reddit,US,political-right,POSTS / H,no,,,,,,,,,0,,0
+r/irishpolitics,reddit.irishpolitics.posts,reddit,IE,political,POSTS / H,no,,,,,,,,,0,,0
+r/neoliberal,reddit.neoliberal.posts,reddit,US,political,POSTS / H,no,,,,,,,,,0,,0
+r/news,reddit.news.posts,reddit,US,political,POSTS / H,no,,,,,,,,,0,,0
+r/politics,reddit.politics.posts,reddit,US,political,POSTS / H,no,,,,,,,,,0,,0
+r/spainpolitics,reddit.spainpolitics.posts,reddit,ES,political,POSTS / H,no,,,,,,,,,0,,0
+r/ukpolitics,reddit.ukpolitics.posts,reddit,UK,political,POSTS / H,no,,,,,,,,,0,,0
+r/worldnews,reddit.worldnews.posts,reddit,US,political,POSTS / H,no,,,,,,,,,0,,0
+r/alabama,reddit.alabama.posts,reddit,US,regional,POSTS / H,no,,,,,,,,,0,,0
+r/czech,reddit.czech.posts,reddit,CZ,regional,POSTS / H,no,,,,,,,,,0,,0
+r/de,reddit.de.posts,reddit,DE,regional,POSTS / H,no,,,,,,,,,0,,0
+r/illinois,reddit.illinois.posts,reddit,US,regional,POSTS / H,no,,,,,,,,,0,,0
+r/kansas,reddit.kansas.posts,reddit,US,regional,POSTS / H,no,,,,,,,,,0,,0
+r/maryland,reddit.maryland.posts,reddit,US,regional,POSTS / H,no,,,,,,,,,0,,0
+r/newjersey,reddit.newjersey.posts,reddit,US,regional,POSTS / H,no,,,,,,,,,0,,0
+r/Polska,reddit.polska.posts,reddit,PL,regional,POSTS / H,no,,,,,,,,,0,,0
+r/sweden,reddit.sweden.posts,reddit,SE,regional,POSTS / H,no,,,,,,,,,0,,0
+r/AskARussian,reddit.askarussian.posts,reddit,RU,russia,POSTS / H,no,,,,,,,,,0,,0
+r/aww,reddit.aww.posts,reddit,GLOBAL,control,POSTS / H,no,,,,,,,,,0,,0
+r/Cooking,reddit.cooking.posts,reddit,GLOBAL,control,POSTS / H,no,,,,,,,,,0,,0
+r/gardening,reddit.gardening.posts,reddit,GLOBAL,control,POSTS / H,no,,,,,,,,,0,,0
+r/personalfinance,reddit.personalfinance.posts,reddit,GLOBAL,control,POSTS / H,no,,,,,,,,,0,,0

@@ -1,0 +1,184 @@
+date_utc,series,kind,platform,unit,groups,daily_mean
+2026-08-28,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-29,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-30,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-31,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-01,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-02,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-03,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-04,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-05,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-06,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-07,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-08,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-09,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-10,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-11,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-12,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-13,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-14,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-15,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-16,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-17,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-18,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-19,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-20,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-21,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-22,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-23,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-24,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-25,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-26,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-27,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-28,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-29,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-09-30,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-01,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-02,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-03,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-04,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-05,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-06,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-07,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-08,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-09,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-10,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-11,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-10-12,ioda.asn13238.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,753.0
+2026-08-28,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,857.8889
+2026-08-29,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-08-30,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-08-31,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-01,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-02,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-03,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-04,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-05,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-06,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-07,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-08,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-09,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-10,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-11,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-12,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-13,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-14,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-15,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-16,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-17,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-18,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-19,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-20,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-21,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-22,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-23,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-24,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-25,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-26,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-27,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-28,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-29,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-09-30,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-01,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-02,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-03,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-04,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-05,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-06,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-07,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-08,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-09,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-10,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-10-11,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,857.8646
+2026-10-12,ioda.asn200350.bgp,infrastructure,ioda,PREFIXES ROUTED,infrastructure,858.0
+2026-08-30,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.2
+2026-09-01,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.0833
+2026-09-02,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.1976
+2026-09-03,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,8.3969
+2026-09-04,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,4.9167
+2026-09-06,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.0
+2026-09-07,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.9936
+2026-09-08,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.8759
+2026-09-09,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.9506
+2026-09-10,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.0
+2026-09-11,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.0388
+2026-09-12,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.9674
+2026-09-13,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.4369
+2026-09-16,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.1418
+2026-09-17,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.1104
+2026-09-18,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.1579
+2026-09-19,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.0771
+2026-09-22,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.3
+2026-09-23,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.6781
+2026-09-24,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.5369
+2026-09-25,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.7108
+2026-09-26,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.0083
+2026-09-27,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.7571
+2026-09-28,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.0387
+2026-09-29,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.5451
+2026-09-30,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.2103
+2026-10-01,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.2565
+2026-10-02,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.1987
+2026-10-03,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.972
+2026-10-04,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,1.0576
+2026-10-05,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.9937
+2026-10-06,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.8431
+2026-10-07,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.2432
+2026-10-08,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.1875
+2026-10-09,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.2896
+2026-10-10,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.3725
+2026-10-11,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.3105
+2026-10-12,ioda.asn200350.merit-nt,infrastructure,ioda,TELESCOPE SOURCES,infrastructure,0.4176
+2026-08-28,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,521.1778
+2026-08-29,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,520.375
+2026-08-30,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,520.7222
+2026-08-31,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,520.1806
+2026-09-01,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,520.0417
+2026-09-02,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.2917
+2026-09-03,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.0764
+2026-09-04,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,516.8403
+2026-09-05,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.5278
+2026-09-06,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.6736
+2026-09-07,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.1597
+2026-09-08,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.1806
+2026-09-09,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7708
+2026-09-10,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,516.0208
+2026-09-11,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,515.4583
+2026-09-12,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,515.4722
+2026-09-13,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,509.9514
+2026-09-14,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,517.7292
+2026-09-15,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7639
+2026-09-16,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.9792
+2026-09-17,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.4097
+2026-09-18,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.2083
+2026-09-19,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7222
+2026-09-20,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,516.4167
+2026-09-21,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.2361
+2026-09-22,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,517.1528
+2026-09-23,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.7222
+2026-09-24,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.6528
+2026-09-25,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.25
+2026-09-26,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.3472
+2026-09-27,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,403.8889
+2026-09-28,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,408.5972
+2026-09-29,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.6667
+2026-09-30,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.0764
+2026-10-01,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,519.1042
+2026-10-02,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.2917
+2026-10-03,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.0833
+2026-10-04,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,517.7986
+2026-10-05,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.2431
+2026-10-06,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,518.7639
+2026-10-07,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,516.2431
+2026-10-08,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,341.0208
+2026-10-09,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,341.2292
+2026-10-10,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,341.7708
+2026-10-11,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,130.4097
+2026-10-12,ioda.asn200350.ping-slash24,infrastructure,ioda,/24 BLOCKS ANSWERING,infrastructure,112.1485
+2026-10-12,bluesky.afd.de.posts,community,bluesky,POSTS / H,political-right,72.0
+2026-10-12,bluesky.bundestag.de.posts,community,bluesky,POSTS / H,political,4.0
+2026-10-12,bluesky.konfederacja.pl.posts,community,bluesky,POSTS / H,political-right,0.0
+2026-10-12,bluesky.maga.en.posts,community,bluesky,POSTS / H,political-right,415.22
+2026-10-12,bluesky.reform-uk.en.posts,community,bluesky,POSTS / H,political-right,14.0
+2026-10-12,bluesky.weather.en.posts,community,bluesky,POSTS / H,control,165.44
+2026-10-12,reddit.conservative.comments,community,reddit,COMMENTS / H,political-right,58.0
