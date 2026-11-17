@@ -16,6 +16,7 @@ CANONICAL = Path(r"C:/Russian bot tracker/terminal-design-system")
 COPIES = [
     Path(r"C:/MeteoCat Redesign/terminal-design-system"),
     Path(r"C:/speed test html5 retro terminal/terminal-design-system"),
+    Path(r"C:/USMidterms-Transphobia/terminal-design-system"),
 ]
 IGNORE = shutil.ignore_patterns("__pycache__", "*.pyc")
 

@@ -2,17 +2,18 @@
 
 Instructions for anyone, human or agent, who changes this folder or makes a design decision in an app that uses it.
 
-This folder is the one design system shared by three products:
+This folder is the one design system shared by four products:
 
 | Product | Repo | Role of this folder |
 |---|---|---|
 | Russian bot tracker | `C:\Russian bot tracker` | **Canonical copy.** The tracker serves `terminal.css` live at `/design/terminal.css`. |
 | Weather Terminal (Android app) | `C:\MeteoCat Redesign` | Copy, for reference. The app implements the rules natively in `meteocat-app/src`. |
 | Retro speed test | `C:\speed test html5 retro terminal` | Copy. The app ships its own `web/css/terminal.css`, copied from this one. |
+| Anti-trans rhetoric monitor | `C:\USMidterms-Transphobia` | Copy. The site serves its own copy of `terminal.css`. |
 
 ## The rule
 
-**A design decision is not finished until it is written here.** If a choice made in any of the three apps adds, changes or contradicts a rule or piece of advice in `DESIGN_GUIDE.md`, update the guide in the same piece of work. Examples: a new component or layout pattern, a change of size, spacing or colour role, a new way of showing data, missing data or status, a navigation change, a new screen size the apps support, or something the guide says that turned out to be wrong.
+**A design decision is not finished until it is written here.** If a choice made in any of the four apps adds, changes or contradicts a rule or piece of advice in `DESIGN_GUIDE.md`, update the guide in the same piece of work. Examples: a new component or layout pattern, a change of size, spacing or colour role, a new way of showing data, missing data or status, a navigation change, a new screen size the apps support, or something the guide says that turned out to be wrong.
 
 If you aren't sure whether a decision touches the guide, read the relevant section and check. Don't leave the guide describing something the apps no longer do.
 
@@ -23,7 +24,7 @@ If you aren't sure whether a decision touches the guide, read the relevant secti
 3. If the decision needs CSS, add it to `terminal.css`. **Keep changes backward compatible**, because the bot tracker serves this file live: add new classes or variables; don't rename or remove existing ones, and change an existing value only when every product should get the change.
 4. If the change is visible, update `specimen.html` or `palettes.html` so they still show every component correctly.
 5. If the decision came from research (as §11 did), add or update the source notes in `research-dataviz/` or a sibling folder, and link it from the guide.
-6. **Sync every copy.** Replace each copy with the canonical folder, so all three are byte-identical. From any shell with Python:
+6. **Sync every copy.** Replace each copy with the canonical folder, so all copies are byte-identical. From any shell with Python:
 
    ```bash
    python "C:/Russian bot tracker/terminal-design-system/sync_copies.py"
