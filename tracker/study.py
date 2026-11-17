@@ -72,6 +72,13 @@ def frame(study: Study, config: Config) -> dict:
     }
 
 
+def data_range(study: Study, config: Config) -> tuple[int, int]:
+    """The hours a study reads: its reference and window, plus the three weeks before
+    the window that the hour-by-hour index compares its first hours with."""
+    f = frame(study, config)
+    return min(f["reference"][0], f["start"] - 21 * DAY), f["end"] + 1
+
+
 def _phase_summary(days: list[int], values: list[float | None], f: dict) -> dict:
     """Mean daily index before, during and after the events, and the range of the
     ordinary days before them (the lowest and highest daily value)."""

@@ -16,13 +16,13 @@ def test_run_writes_points_and_isolates_failures(tmp_path, monkeypatch):
     with db.session(settings.db_path) as conn:
         db.init(conn, config.series)
 
-    async def ok(client, specs, settings, now, start=None):
+    async def ok(client, specs, settings, now, start=None, end=None):
         return Result(points={s.key: [(now, 1.0)] for s in specs})
 
-    async def boom(client, specs, settings, now, start=None):
+    async def boom(client, specs, settings, now, start=None, end=None):
         raise RuntimeError("upstream changed")
 
-    async def skipped(client, specs, settings, now, start=None):
+    async def skipped(client, specs, settings, now, start=None, end=None):
         raise SourceSkipped("no token")
 
     monkeypatch.setattr(collectors, "_modules", lambda: {
@@ -59,3 +59,12 @@ def test_backfill_order_interleaves_groups_quietest_first(tmp_path, monkeypatch)
     assert comments[0].key == quiet.key  # control group first, quietest community first
     first_round = [s.tags[0] for s in comments[:5]]
     assert len(set(first_round)) == 5  # one community from each group before any group repeats
+
+
+def test_missing_hours_are_grouped_into_windows():
+    from tracker.__main__ import missing_hours
+    h = 3600
+    have = {2 * h, 3 * h, 6 * h}
+    # Hours 1, 4-5 and 7 are missing between 0 and 7 h.
+    assert missing_hours(have, 0, 7 * h) == [(0, h), (3 * h, 5 * h), (6 * h, 7 * h)]
+    assert missing_hours({h, 2 * h}, 0, 2 * h) == []

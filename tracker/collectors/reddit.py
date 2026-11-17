@@ -95,8 +95,8 @@ async def _get_with_retry(client: httpx.AsyncClient, settings, subreddit: str, m
 
 
 async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, now: int,
-                  start: int | None = None) -> Result:
-    result = Result()
+                  start: int | None = None, end: int | None = None) -> Result:
+    result = Result()  # live feeds only: start and end are ignored, history comes from Arctic Shift
     oauth = bool(settings.reddit_client_id and settings.reddit_client_secret)
     delay = DELAY_OAUTH if oauth else DELAY_FEED
     if not oauth:

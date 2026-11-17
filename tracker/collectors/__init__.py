@@ -46,7 +46,7 @@ BACKFILL = {"ioda": "ioda", "cloudflare": "cloudflare", "reddit": "arctic_shift"
 
 
 async def run(config: Config, settings: Settings, platforms=LIVE, start: int | None = None,
-              backfill: bool = False) -> dict[str, Result]:
+              backfill: bool = False, end: int | None = None) -> dict[str, Result]:
     """One pass over the given platforms. Writes points and a run record per platform."""
     modules = _modules()
     now = int(time.time())
@@ -85,7 +85,7 @@ async def run(config: Config, settings: Settings, platforms=LIVE, start: int | N
             result, n = Result(), 0
             for batch in batches:
                 try:
-                    part = await modules[name].collect(client, batch, settings, now, start=start)
+                    part = await modules[name].collect(client, batch, settings, now, start=start, end=end)
                 except SourceSkipped as e:
                     log.info("%s skipped: %s", platform, e)
                     if not backfill:

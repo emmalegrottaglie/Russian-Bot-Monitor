@@ -66,12 +66,19 @@ def main() -> None:
                    help="limit to one platform (repeatable)")
     p.add_argument("--missing-only", action="store_true",
                    help="skip series that already reach back to the start date (resume an interrupted run)")
+    p.add_argument("--study", metavar="ID",
+                   help="load only what this study reads: its hours instead of --days, and on Reddit only comments")
 
     p = sub.add_parser("refetch", help="collect stored history again from its source and replace it (for repairs)")
     p.add_argument("--platform", action="append", required=True, choices=sorted(collectors.BACKFILL))
     p.add_argument("--series", action="append", help="limit to these series keys (repeatable)")
     p.add_argument("--from", dest="start", help="UTC date or time to start at (default: each series' first point)")
     p.add_argument("--to", dest="end", help="UTC date or time to end at (default: now)")
+    p.add_argument("--gaps-only", action="store_true",
+                   help="refetch only the missing hours between --from and --to (windows the source refused), "
+                        "for hourly series")
+    p.add_argument("--study", metavar="ID",
+                   help="only what this study reads: its hours as --from and --to, and on Reddit only comments")
 
     sub.add_parser("report", help="build (or rebuild) today's shareable report under <db dir>/reports/")
 
@@ -162,7 +169,9 @@ def main() -> None:
             print(f"frozen: {study.freeze(built, args.note)}")
     elif args.cmd == "backfill":
         platforms = tuple(args.platform or collectors.BACKFILL)
-        start = int(time.time()) - args.days * 86400
+        start, end = int(time.time()) - args.days * 86400, None
+        if args.study:
+            start, end, config = _study_scope(parser, config, args.study)
         if args.missing_only:
             with db.session(settings.db_path) as conn:
                 done = {s.key for s in config.series
@@ -172,11 +181,17 @@ def main() -> None:
         with db.session(settings.db_path) as conn:
             ordered = backfill_order(config.series, conn, int(time.time()))
         config = dataclasses.replace(config, series=tuple(ordered))
-        asyncio.run(collectors.run(config, settings, platforms=platforms, start=start, backfill=True))
+        asyncio.run(collectors.run(config, settings, platforms=platforms, start=start, end=end, backfill=True))
     elif args.cmd == "refetch":
         unknown = set(args.series or ()) - {s.key for s in config.series}
         if unknown:
             parser.error(f"unknown series: {', '.join(sorted(unknown))}")
+        if args.study:
+            study_start, study_end, config = _study_scope(parser, config, args.study)
+            args.start = args.start or datetime.fromtimestamp(study_start, timezone.utc).isoformat()
+            args.end = args.end or datetime.fromtimestamp(study_end, timezone.utc).isoformat()
+        if args.gaps_only and not (args.start and args.end):
+            parser.error("--gaps-only needs --from and --to, or --study")
         now = int(time.time())
         windows = {}
         with db.session(settings.db_path) as conn:
@@ -188,9 +203,43 @@ def main() -> None:
                     continue
                 # Start a day before the first point so the bin or hour it closes is re-read too.
                 start = _utc(args.start) if args.start else stored[0] - 86400
-                windows[s.key] = (start, _utc(args.end) if args.end else now)
-        for key, outcome in asyncio.run(collectors.refetch(config, settings, windows)).items():
-            print(f"{key}: {outcome}")
+                end = _utc(args.end) if args.end else now
+                if args.gaps_only:
+                    have = {t for t, _ in db.points(conn, s.key, start + 1, end)}
+                    windows[s.key] = missing_hours(have, start, end)
+                else:
+                    windows[s.key] = [(start, end)]
+        # One window per series at a time: refetch takes a single window for each series.
+        while any(windows.values()):
+            batch = {key: ws.pop(0) for key, ws in windows.items() if ws}
+            for key, outcome in asyncio.run(collectors.refetch(config, settings, batch)).items():
+                print(f"{key} {datetime.fromtimestamp(batch[key][0], timezone.utc):%Y-%m-%d %H:%M} to "
+                      f"{datetime.fromtimestamp(batch[key][1], timezone.utc):%Y-%m-%d %H:%M}: {outcome}")
+
+
+def _study_scope(parser, config, study_id: str):
+    """A study's data range, and the config narrowed to the series it reads:
+    infrastructure, and one series per community (comments on Reddit)."""
+    s = study.get(study_id)
+    if s is None:
+        parser.error(f"unknown study: {study_id}")
+    start, end = study.data_range(s, config)
+    series = tuple(sp for sp in config.series
+                   if sp.kind != "community" or analysis.is_primary({"key": sp.key, "platform": sp.platform}))
+    return start, end, dataclasses.replace(config, series=series)
+
+
+def missing_hours(have: set[int], start: int, end: int) -> list[tuple[int, int]]:
+    """The runs of hours in (start, end] with no point, as (after, until) windows."""
+    out: list[tuple[int, int]] = []
+    for h in range(start // 3600 * 3600 + 3600, end + 1, 3600):
+        if h in have:
+            continue
+        if out and out[-1][1] == h - 3600:
+            out[-1] = (out[-1][0], h)
+        else:
+            out.append((h - 3600, h))
+    return out
 
 
 def _utc(text: str) -> int:
