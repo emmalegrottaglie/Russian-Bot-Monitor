@@ -7,7 +7,7 @@ const REFRESH_MS = 60_000;
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const TAG_SHORT = {
-  'political-right': 'RIGHT-WING', 'political-left': 'LEFT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', framing: 'SINGLE-SEX FRAMING', political: 'POLITICS', regional: 'REGIONAL',
+  'political-right': 'RIGHT-WING', 'political-left': 'LEFT-WING', narratives: 'NARRATIVES', 'anti-trans': 'ANTI-TRANS', framing: 'FRAMING', political: 'POLITICS', regional: 'REGIONAL',
   'south-america': 'SOUTH AMERICA', russia: 'RUSSIA', control: 'NON-POLITICAL',
 };
 // One line per group for the "who is in each group" panels. The tags themselves
@@ -16,8 +16,8 @@ const TAG_ABOUT = {
   'political-right': 'Communities organised around right-wing or conservative politics.',
   'political-left': 'Communities organised around left-wing, liberal or socialist politics: party and campaign communities, socialist and anarchist ones.',
   narratives: 'Bluesky and Twitter searches for talking points documented in Russian influence operations (Ukraine aid, Zelensky, "woke", "trans youth", Habeck). They count everyone using the words, critics included: they measure the topic, not the operation. Sources in docs/NARRATIVES.md.',
-  'anti-trans': 'Twitter searches for anti-trans rhetoric: the slur "troon" and the claim that there is "no such thing as trans" (kids, people). Twitter only; on Bluesky they are rare. They count everyone using the words, including people quoting them to object. Sources in docs/NARRATIVES.md.',
-  framing: 'Twitter searches for the UK single-sex framing: "single-sex spaces", "single-sex rights" and "biology-based rights". Kept apart from the anti-trans group: legal, policy and news discussion of the Equality Act uses the same words, so a rise is a rise in that debate, not by itself in hostility. Sources in docs/NARRATIVES.md.',
+  'anti-trans': 'Twitter searches for anti-trans slurs and memes: "troon", "tranny", "you will never be a (real) woman", "no such thing as (a) trans", "trans identified male", "autogynephilia", "womanface" and "Trantifa". Each was hand-checked on 50 posts: 78% to 96% used it against trans people; the rest were mostly people objecting. Twitter only; on Bluesky they are rare. Sources and checks in docs/NARRATIVES.md.',
+  framing: 'Twitter searches for anti-trans framing: phrases such as "transgenderism", "trans ideology", "trans agenda", "biological male", "adult human female", "men in women’s sports", "child mutilation" and "transing kids", and the UK single-sex framing ("single-sex spaces", "single-sex services"). Kept apart from the anti-trans group: news, legal and policy discussion uses the same words, so a rise is a rise in that debate, not by itself in hostility. The new phrases were hand-checked on 50 posts each (70% to 86% used the framing); the single-sex phrases have not been checked. Sources in docs/NARRATIVES.md.',
   political: 'General news and politics communities, across the spectrum.',
   regional: 'Local communities for US states, and for European and neighbouring countries.',
   'south-america': 'Country communities across South America. Nobody has reported an effect there; this group checks.',
@@ -1652,7 +1652,7 @@ const views = {
           <li><a href="https://bethylamine.github.io/" rel="noopener">Beth's Anti-Transphobia Library</a> catalogues the talking points, their code words and how they recycle older homophobic ones, and summarises 52,401 Twitter accounts reported as transphobic.</li>
         </ul>
         <p>On Bluesky this rhetoric is rare, and in a hand check in October 2026 almost none of the matching posts used it: of about 50 recent posts each, "groomer" was mostly pet grooming, "women's sports" and "protect women" were mostly fans and people criticising the framing, and "TRAs" matched the Spanish word "tras". Counting them would measure the pushback, not the rhetoric, so Bluesky is not charted.</p>
-        <p>On Twitter, from October 2026, the <b>anti-trans</b> group counts two searches: the slur "troon" (listed as a slur in Beth's glossary), about 3,300 original posts a day, and the phrase "no such thing as (a) trans", about 160 a day (<a href="https://www.the74million.org/article/in-private-texts-ny-ed-council-reps-congressional-candidate-demean-lgbtq-kids/" rel="noopener">The 74, 2023</a>, documents the claim). Counts include people quoting the words to object; how many has not been checked on Twitter. See <code>docs/NARRATIVES.md</code>.</p>
+        <p>On Twitter the <b>anti-trans</b> group counts slurs and memes: "troon", "tranny", "you will never be a (real) woman", "no such thing as (a) trans" (<a href="https://www.the74million.org/article/in-private-texts-ny-ed-council-reps-congressional-candidate-demean-lgbtq-kids/" rel="noopener">The 74, 2023</a>), "trans identified male", "autogynephilia", "womanface" and "Trantifa". The <b>framing</b> group counts phrases that news, legal and policy discussion also use, such as "transgenderism", "trans ideology" and "biological male" (<a href="https://glaad.org/smsi/anti-lgbtq-online-hate-speech-disinformation-guide/" rel="noopener">GLAAD guide</a>). Each term was hand-checked on 50 posts in November 2026; the share that used it against trans people is in <code>docs/NARRATIVES.md</code>. Counts include people quoting the words to object.</p>
       </div>
       <h2 class="sect">Annotated events</h2>
       <div class="prose"><ul>${ev || '<li>None.</li>'}</ul></div>

@@ -1,0 +1,343 @@
+{
+ "date": "2026-11-16",
+ "method": "Twitter recent search, English original posts, about 25 posts ending ~1 day and ~4 days before 16 Nov 2026; usernames and links stripped; coded A (anti-trans use), P (pushback), N (neutral/news), O (other meaning), ? (unclear) by four coding agents; troon(s) also coded independently (39 of 47, same). Post text deleted after coding.",
+ "cost_usd": 5.88,
+ "terms": [
+  {
+   "term": "trans identified male",
+   "n": 50,
+   "A": 47,
+   "P": 2,
+   "N": 0,
+   "O": 0,
+   "unclear": 1,
+   "precision": 0.94,
+   "ci95": [
+    0.838,
+    0.979
+   ]
+  },
+  {
+   "term": "autogynephilia",
+   "n": 49,
+   "A": 41,
+   "P": 2,
+   "N": 3,
+   "O": 1,
+   "unclear": 2,
+   "precision": 0.837,
+   "ci95": [
+    0.71,
+    0.915
+   ]
+  },
+  {
+   "term": "gender ideology",
+   "n": 50,
+   "A": 32,
+   "P": 9,
+   "N": 2,
+   "O": 0,
+   "unclear": 7,
+   "precision": 0.64,
+   "ci95": [
+    0.501,
+    0.759
+   ]
+  },
+  {
+   "term": "transgenderism",
+   "n": 49,
+   "A": 37,
+   "P": 1,
+   "N": 5,
+   "O": 0,
+   "unclear": 6,
+   "precision": 0.755,
+   "ci95": [
+    0.619,
+    0.854
+   ]
+  },
+  {
+   "term": "trans/transgender ideology",
+   "n": 49,
+   "A": 38,
+   "P": 5,
+   "N": 1,
+   "O": 0,
+   "unclear": 5,
+   "precision": 0.776,
+   "ci95": [
+    0.641,
+    0.87
+   ]
+  },
+  {
+   "term": "super straight",
+   "n": 45,
+   "A": 1,
+   "P": 1,
+   "N": 1,
+   "O": 39,
+   "unclear": 3,
+   "precision": 0.022,
+   "ci95": [
+    0.004,
+    0.116
+   ]
+  },
+  {
+   "term": "womanface",
+   "n": 49,
+   "A": 39,
+   "P": 6,
+   "N": 0,
+   "O": 0,
+   "unclear": 4,
+   "precision": 0.796,
+   "ci95": [
+    0.664,
+    0.885
+   ]
+  },
+  {
+   "term": "Trantifa",
+   "n": 50,
+   "A": 43,
+   "P": 1,
+   "N": 0,
+   "O": 0,
+   "unclear": 6,
+   "precision": 0.86,
+   "ci95": [
+    0.738,
+    0.93
+   ]
+  },
+  {
+   "term": "adult human female",
+   "n": 48,
+   "A": 40,
+   "P": 4,
+   "N": 1,
+   "O": 0,
+   "unclear": 3,
+   "precision": 0.833,
+   "ci95": [
+    0.704,
+    0.913
+   ]
+  },
+  {
+   "term": "biological male/man",
+   "n": 49,
+   "A": 42,
+   "P": 1,
+   "N": 4,
+   "O": 0,
+   "unclear": 2,
+   "precision": 0.857,
+   "ci95": [
+    0.733,
+    0.929
+   ]
+  },
+  {
+   "term": "trans agenda",
+   "n": 50,
+   "A": 35,
+   "P": 8,
+   "N": 0,
+   "O": 0,
+   "unclear": 7,
+   "precision": 0.7,
+   "ci95": [
+    0.562,
+    0.809
+   ]
+  },
+  {
+   "term": "groomer",
+   "n": 50,
+   "A": 6,
+   "P": 2,
+   "N": 0,
+   "O": 29,
+   "unclear": 13,
+   "precision": 0.12,
+   "ci95": [
+    0.056,
+    0.238
+   ]
+  },
+  {
+   "term": "men in women's sports",
+   "n": 50,
+   "A": 36,
+   "P": 5,
+   "N": 8,
+   "O": 0,
+   "unclear": 1,
+   "precision": 0.72,
+   "ci95": [
+    0.583,
+    0.825
+   ]
+  },
+  {
+   "term": "trans/gender cult",
+   "n": 50,
+   "A": 43,
+   "P": 4,
+   "N": 0,
+   "O": 0,
+   "unclear": 3,
+   "precision": 0.86,
+   "ci95": [
+    0.738,
+    0.93
+   ]
+  },
+  {
+   "term": "child mutilation",
+   "n": 50,
+   "A": 40,
+   "P": 0,
+   "N": 1,
+   "O": 3,
+   "unclear": 6,
+   "precision": 0.8,
+   "ci95": [
+    0.67,
+    0.888
+   ]
+  },
+  {
+   "term": "social contagion",
+   "n": 46,
+   "A": 20,
+   "P": 2,
+   "N": 1,
+   "O": 9,
+   "unclear": 14,
+   "precision": 0.435,
+   "ci95": [
+    0.302,
+    0.578
+   ]
+  },
+  {
+   "term": "trans shooter",
+   "n": 50,
+   "A": 24,
+   "P": 9,
+   "N": 9,
+   "O": 4,
+   "unclear": 4,
+   "precision": 0.48,
+   "ci95": [
+    0.348,
+    0.615
+   ]
+  },
+  {
+   "term": "tranny",
+   "n": 46,
+   "A": 38,
+   "P": 1,
+   "N": 0,
+   "O": 0,
+   "unclear": 7,
+   "precision": 0.826,
+   "ci95": [
+    0.693,
+    0.909
+   ]
+  },
+  {
+   "term": "transing kids",
+   "n": 50,
+   "A": 39,
+   "P": 6,
+   "N": 3,
+   "O": 0,
+   "unclear": 2,
+   "precision": 0.78,
+   "ci95": [
+    0.648,
+    0.872
+   ]
+  },
+  {
+   "term": "gender critical",
+   "n": 50,
+   "A": 16,
+   "P": 21,
+   "N": 3,
+   "O": 0,
+   "unclear": 10,
+   "precision": 0.32,
+   "ci95": [
+    0.208,
+    0.458
+   ]
+  },
+  {
+   "term": "rare slurs and memes (pooled)",
+   "n": 50,
+   "A": 24,
+   "P": 8,
+   "N": 3,
+   "O": 5,
+   "unclear": 10,
+   "precision": 0.48,
+   "ci95": [
+    0.348,
+    0.615
+   ]
+  },
+  {
+   "term": "troon(s) (tracked)",
+   "n": 47,
+   "A": 39,
+   "P": 4,
+   "N": 0,
+   "O": 0,
+   "unclear": 4,
+   "precision": 0.83,
+   "ci95": [
+    0.699,
+    0.911
+   ]
+  },
+  {
+   "term": "no such thing as (a) trans (tracked)",
+   "n": 50,
+   "A": 48,
+   "P": 0,
+   "N": 0,
+   "O": 0,
+   "unclear": 2,
+   "precision": 0.96,
+   "ci95": [
+    0.865,
+    0.989
+   ]
+  },
+  {
+   "term": "you will never be a (real) woman (tracked)",
+   "n": 50,
+   "A": 41,
+   "P": 5,
+   "N": 1,
+   "O": 0,
+   "unclear": 3,
+   "precision": 0.82,
+   "ci95": [
+    0.692,
+    0.902
+   ]
+  }
+ ]
+}

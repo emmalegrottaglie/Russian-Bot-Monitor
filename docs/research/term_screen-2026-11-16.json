@@ -1,0 +1,399 @@
+{
+ "window": [
+  "2026-11-10T00:00:00Z",
+  "2026-11-16T00:00:00Z"
+ ],
+ "filters": "lang:en -is:retweet",
+ "terms": {
+  "zippertits": {
+   "query": "zippertits lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    1,
+    5,
+    3,
+    3,
+    3,
+    4
+   ],
+   "errors": null
+  },
+  "transtrender": {
+   "query": "(transtrender OR transtrenders) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    9,
+    7,
+    4,
+    10,
+    3,
+    6
+   ],
+   "errors": null
+  },
+  "transvestigation": {
+   "query": "(transvestigation OR transvestigations OR transvestigator OR transvestigators) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    15,
+    5,
+    6,
+    6,
+    11,
+    15
+   ],
+   "errors": null
+  },
+  "trans identified male": {
+   "query": "(\"trans identified male\" OR \"trans identified males\" OR \"trans-identified male\" OR \"trans-identified males\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    53,
+    53,
+    34,
+    31,
+    39,
+    48
+   ],
+   "errors": null
+  },
+  "trans identified female": {
+   "query": "(\"trans identified female\" OR \"trans identified females\" OR \"trans-identified female\" OR \"trans-identified females\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    6,
+    7,
+    4,
+    1,
+    3,
+    7
+   ],
+   "errors": null
+  },
+  "autogynephilia": {
+   "query": "(autogynephilia OR autogynephile OR autogynephiles OR autogynephilic) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    80,
+    103,
+    116,
+    91,
+    157,
+    146
+   ],
+   "errors": null
+  },
+  "ROGD": {
+   "query": "(\"rapid onset gender dysphoria\" OR ROGD) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    14,
+    15,
+    11,
+    22,
+    11,
+    23
+   ],
+   "errors": null
+  },
+  "gender ideology": {
+   "query": "\"gender ideology\" lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    259,
+    276,
+    233,
+    224,
+    215,
+    254
+   ],
+   "errors": null
+  },
+  "transgenderism": {
+   "query": "transgenderism lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    404,
+    396,
+    345,
+    375,
+    348,
+    420
+   ],
+   "errors": null
+  },
+  "trans/transgender ideology": {
+   "query": "(\"transgender ideology\" OR \"trans ideology\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    242,
+    263,
+    239,
+    232,
+    188,
+    199
+   ],
+   "errors": null
+  },
+  "super straight": {
+   "query": "(\"super straight\" OR superstraight) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    106,
+    105,
+    86,
+    98,
+    108,
+    101
+   ],
+   "errors": null
+  },
+  "womanface": {
+   "query": "womanface lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    39,
+    53,
+    20,
+    26,
+    27,
+    28
+   ],
+   "errors": null
+  },
+  "Trantifa": {
+   "query": "Trantifa lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    42,
+    40,
+    33,
+    43,
+    26,
+    32
+   ],
+   "errors": null
+  },
+  "trans terrorism": {
+   "query": "(\"trans terrorism\" OR \"trans terrorist\" OR \"trans terrorists\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    21,
+    21,
+    10,
+    9,
+    6,
+    4
+   ],
+   "errors": null
+  },
+  "adult human female": {
+   "query": "\"adult human female\" lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    223,
+    258,
+    205,
+    158,
+    182,
+    188
+   ],
+   "errors": null
+  },
+  "biological male/man": {
+   "query": "(\"biological male\" OR \"biological males\" OR \"biological man\" OR \"biological men\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    821,
+    598,
+    683,
+    538,
+    396,
+    475
+   ],
+   "errors": null
+  },
+  "trans agenda": {
+   "query": "\"trans agenda\" lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    50,
+    55,
+    54,
+    49,
+    42,
+    61
+   ],
+   "errors": null
+  },
+  "groomer": {
+   "query": "(groomer OR groomers) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    1986,
+    1980,
+    1632,
+    1512,
+    1539,
+    1586
+   ],
+   "errors": null
+  },
+  "erasing women": {
+   "query": "(\"erasing women\" OR \"erasure of women\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    21,
+    12,
+    12,
+    12,
+    17,
+    19
+   ],
+   "errors": null
+  },
+  "men in women's sports": {
+   "query": "(\"men in women's sports\" OR \"boys in girls' sports\" OR \"males in women's sports\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    318,
+    291,
+    372,
+    210,
+    184,
+    181
+   ],
+   "errors": null
+  },
+  "trans/gender cult": {
+   "query": "(\"trans cult\" OR \"gender cult\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    74,
+    81,
+    84,
+    59,
+    60,
+    72
+   ],
+   "errors": null
+  },
+  "child mutilation": {
+   "query": "(\"mutilating children\" OR \"child mutilation\" OR \"mutilate children\" OR \"mutilating kids\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    183,
+    170,
+    152,
+    139,
+    153,
+    112
+   ],
+   "errors": null
+  },
+  "social contagion": {
+   "query": "\"social contagion\" lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    89,
+    106,
+    97,
+    83,
+    63,
+    107
+   ],
+   "errors": null
+  },
+  "trans shooter": {
+   "query": "(\"trans shooter\" OR \"trans shooters\" OR \"transgender shooter\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    41,
+    51,
+    39,
+    39,
+    26,
+    13
+   ],
+   "errors": null
+  },
+  "join the 41": {
+   "query": "(\"join the 41\" OR \"join the 41%\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    14,
+    8,
+    3,
+    6,
+    8,
+    5
+   ],
+   "errors": null
+  },
+  "tranny": {
+   "query": "(tranny OR trannies OR trannys) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    4263,
+    4419,
+    3865,
+    4092,
+    3694,
+    3684
+   ],
+   "errors": null
+  },
+  "transing kids": {
+   "query": "(\"transing kids\" OR \"transing children\" OR \"transing the kids\" OR \"trans the kids\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    96,
+    73,
+    107,
+    58,
+    76,
+    77
+   ],
+   "errors": null
+  },
+  "uterus haver": {
+   "query": "(\"uterus haver\" OR \"uterus-haver\" OR \"uterus havers\") lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    1,
+    2,
+    3,
+    3,
+    3,
+    4
+   ],
+   "errors": null
+  },
+  "gender critical": {
+   "query": "\"gender critical\" lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    179,
+    125,
+    146,
+    159,
+    157,
+    192
+   ],
+   "errors": null
+  },
+  "TIM/TIMs": {
+   "query": "(TIM OR TIMs) (trans OR women OR woman OR men) lang:en -is:retweet",
+   "status": 200,
+   "daily": [
+    581,
+    598,
+    624,
+    704,
+    522,
+    572
+   ],
+   "errors": null
+  }
+ }
+}

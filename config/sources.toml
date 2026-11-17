@@ -814,6 +814,162 @@ region = "EN-LANG"
 tags = ["anti-trans"]
 x_only = true
 
+[[bluesky]]
+# Know Your Meme, "You Will Never Be A Real Woman" (checked 16 Nov 2026): a 4chan
+# copypasta, first seen in March 2011, meant to demean trans women. Also in the
+# Mendelsohn et al. 2023 dog-whistle glossary (config/lexicon.csv). Both the plain
+# and "real woman" phrasings, contracted or not, and the acronyms: 142 to 251
+# original posts a day on Twitter (10 to 15 November 2026).
+query = '''("you will never be a woman" OR "you'll never be a woman" OR "you will never be a real woman" OR "you'll never be a real woman" OR YWNBAW OR YWNBARW)'''
+label = "you will never be a (real) woman"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+# Added 16 November 2026 at Emma's request: every candidate whose hand-checked
+# precision on Twitter was 70% or more (50 posts each, docs/research/
+# precision-2026-11-16.json, docs/NARRATIVES.md). Slurs and memes go in the
+# anti-trans group; phrases with heavy news, legal and policy use go in framing.
+# Volumes are median original posts a day, 10 to 15 November 2026.
+
+[[bluesky]]
+# GLAAD, Guide to Anti-LGBTQ Online Hate and Disinformation (checked 16 Nov 2026):
+# "tranny" is a slur, sometimes reclaimed. Precision 83%; about 4,100 a day.
+query = "(tranny OR trannies OR trannys)"
+label = "tranny / trannies"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+[[bluesky]]
+# TIDEs codebook (Lameiro et al., FAccT 2025; "TIMs"); Mendelsohn et al. 2023
+# glossary. The full phrase, never "TIM", which matches the name Tim. Precision 94%;
+# about 48 a day.
+query = '("trans identified male" OR "trans identified males" OR "trans-identified male" OR "trans-identified males")'
+label = "trans identified male(s)"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+[[bluesky]]
+# Mendelsohn et al. 2023 glossary (cites the RationalWiki TERF glossary): a
+# pseudo-scientific label for trans women. Precision 84%; about 116 a day.
+query = "(autogynephilia OR autogynephile OR autogynephiles OR autogynephilic)"
+label = "autogynephilia"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026): "womanface" casts trans women as men mocking
+# women. Precision 80%; about 28 a day.
+query = "womanface"
+label = "womanface"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+[[bluesky]]
+# Transitics, Aleksandra Vaca, 11 Feb 2026 (config/lexicon.csv): a label casting
+# trans people as violent militants. Precision 86%; about 40 a day.
+query = "Trantifa"
+label = "Trantifa"
+lang = "en"
+region = "EN-LANG"
+tags = ["anti-trans"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026): "gender ideology", "transgender ideology" and
+# "trans agenda" falsely cast trans people as an ideological movement.
+# Precision 78%; about 239 a day.
+query = '("transgender ideology" OR "trans ideology")'
+label = "trans / transgender ideology"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026), entry "Transgenderism". Precision 76%;
+# about 396 a day.
+query = "transgenderism"
+label = "transgenderism"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026), as for "trans ideology". Precision 70%;
+# about 54 a day.
+query = '"trans agenda"'
+label = "trans agenda"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026), entry "Biological Male": used to misgender
+# trans women and men. Also common in news and court reporting. Precision 86%;
+# about 600 a day.
+query = '("biological male" OR "biological males" OR "biological man" OR "biological men")'
+label = "biological male / man"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# Mendelsohn et al. 2023 glossary (cites the RationalWiki TERF glossary and Robert
+# Court, University of Edinburgh Staff Pride Network blog). Precision 83%;
+# about 205 a day.
+query = '"adult human female"'
+label = "adult human female"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# Erin in the Morning, Erin Reed, 11 Oct 2024 (config/lexicon.csv, "boys in girls'
+# sports"); the sports trope in the 2026 midterm ads (docs/MIDTERM-ADS.md).
+# Precision 72%; about 290 a day.
+query = '''("men in women's sports" OR "boys in girls' sports" OR "males in women's sports")'''
+label = "men in women's sports"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026): "chemical mutilation" and "surgical
+# mutilation" are misleading terms for gender-affirming care; US official documents
+# use the same word, so news quoting it is counted too. Precision 80%;
+# about 153 a day.
+query = '("mutilating children" OR "child mutilation" OR "mutilate children" OR "mutilating kids")'
+label = "child mutilation"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
+[[bluesky]]
+# GLAAD guide (checked 16 Nov 2026): "transing" is an anti-trans trope. Precision
+# 78%; about 77 a day.
+query = '("transing kids" OR "transing children" OR "transing the kids" OR "trans the kids")'
+label = "transing kids"
+lang = "en"
+region = "EN-LANG"
+tags = ["framing"]
+x_only = true
+
 # The UK single-sex framing (Emma, 29 October 2026; config/lexicon.csv, status
 # "framing"). Counted on its own, never as coded language: legal, policy and news
 # discussion of the Equality Act uses the same words. Twitter only: Bluesky search

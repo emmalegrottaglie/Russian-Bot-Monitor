@@ -99,7 +99,40 @@ On Bluesky these counts measure pushback and unrelated uses, not the rhetoric, s
 | "no such thing as trans" | about 100 (43 to 189) | about 10 | about 1 | The 74, 14 December 2023: an NYC education council member's "There is no such thing as trans kids" |
 | "no such thing as a trans" | about 60 (32 to 109) | not counted | under 1 | as above |
 
-Both are tracked on Twitter as the **anti-trans** group (the two phrasings as one search), with `x_only = true`, so Bluesky does not count them. On Twitter, as on Bluesky, a count includes people quoting the words to object. How large that share is on Twitter has not been checked: it needs reading a sample of posts (about $0.50 for 50 each), which the counts-only plan does not cover.
+Both are tracked on Twitter as the **anti-trans** group (the two phrasings as one search), with `x_only = true`, so Bluesky does not count them.
+
+**Precision checks on Twitter (16 November 2026).** Emma approved reading posts to check what each term measures. For 24 searches, about 25 English original posts ending about 1 day before 16 November and 25 ending about 4 days before were read through the recent-search endpoint (1,177 posts, about $5.88). Usernames and links were stripped, nothing was stored, and the text was deleted after coding. Each post was coded as anti-trans use, pushback, neutral or news, another meaning, or unclear. Four coding agents shared the work; "troon(s)" was also coded independently and gave the same 39 of 47. Tallies with 95% Wilson intervals are in `docs/research/precision-2026-11-16.json`. With 50 posts the intervals are wide (80% observed means roughly 67% to 89%). The coders split on one rule: some counted news-style headlines and AI-assistant replies that repeat the framing as anti-trans use, others as neutral, which moves a few terms by up to about 12 points.
+
+| Search | Posts a day | Anti-trans use | Main other uses | Decision |
+|---|---|---|---|---|
+| "no such thing as (a) trans" | about 160 | 48 of 50 (96%) | | tracked |
+| "trans identified male" | about 48 | 47 of 50 (94%) | | added, anti-trans |
+| Trantifa | about 40 | 43 of 50 (86%) | truncated posts | added, anti-trans |
+| "trans cult" / "gender cult" | about 74 | 43 of 50 (86%) | pushback | held: no source checked yet |
+| "biological male/man" | about 600 | 42 of 49 (86%) | court and ballot reporting | added, framing |
+| autogynephilia | about 116 | 41 of 49 (84%) | clinical explanations | added, anti-trans |
+| "adult human female" | about 205 | 40 of 48 (83%) | pushback | added, framing |
+| troon(s) | about 3,300 | 39 of 47 (83%) | people objecting to the slur | tracked |
+| tranny | about 4,100 | 38 of 46 (83%) | reclaimed self-use | added, anti-trans |
+| "you will never be a (real) woman" | about 190 | 41 of 50 (82%) | trans people objecting | tracked |
+| "child mutilation" | about 153 | 40 of 50 (80%) | abortion, circumcision or FGM | added, framing |
+| womanface | about 28 | 39 of 49 (80%) | pushback | added, anti-trans |
+| "transing kids" | about 77 | 39 of 50 (78%) | pushback | added, framing |
+| "trans/transgender ideology" | about 239 | 38 of 49 (78%) | pushback | added, framing |
+| transgenderism | about 396 | 37 of 49 (76%) | neutral uses | added, framing |
+| "men in women's sports" | about 290 | 36 of 50 (72%) | one AI-style answer posted 6 times | added, framing |
+| "trans agenda" | about 54 | 35 of 50 (70%) | pushback, reclaimed jokes | added, framing |
+| "gender ideology" | about 254 | 32 of 50 (64%) | pushback | not added |
+| rare slurs and memes, pooled | about 80 | 24 of 50 (48%) | "erasing women" in other contexts | not added |
+| "trans shooter" | about 39 | 24 of 50 (48%) | pushback, statistics | not added |
+| "social contagion" | about 97 | 20 of 46 (43%) | anorexia, ADHD and other topics | not added |
+| "gender critical" | about 159 | 16 of 50 (32%) | criticism of the movement | not added |
+| groomer | about 1,630 | 6 of 50 (12%) | pet grooming, abuse survivors | not added |
+| "super straight" | about 105 | 1 of 45 (2%) | betting-slip spam | not added |
+
+Emma set the rule: add every term at 70% or more. Slurs and memes go in the **anti-trans** group; phrases that news, legal and policy discussion also use go in the **framing** group with the UK single-sex phrases, whose precision has not been checked. Sources for the added terms are in `config/sources.toml`: the [GLAAD guide to anti-LGBTQ online hate](https://glaad.org/smsi/anti-lgbtq-online-hate-speech-disinformation-guide/) (read in full on 16 November 2026), the Mendelsohn et al. 2023 glossary, the TIDEs codebook (Lameiro et al., FAccT 2025), Transitics and Erin in the Morning. "Trans cult" is held: the Dangerous Speech Project report said to list "the transgender cult" (May 2024) could not be opened. Volumes are median original posts a day from 10 to 15 November 2026 (`docs/research/term_screen-2026-11-16.json`).
+
+**"You will never be a (real) woman"** was added to the group on 16 November 2026 at Emma's request. Source: [Know Your Meme](https://knowyourmeme.com/memes/you-will-never-be-a-real-woman), checked on the page: a 4chan copypasta first seen in March 2011, meant to demean trans women. It is also in the Mendelsohn et al. 2023 dog-whistle glossary as "YWNBAW" (config/lexicon.csv); the glossary site and the RationalWiki page it cites could not be reached on 16 November 2026. One search covers "you will never be a woman", "you'll never be a woman", the same with "real woman", and the acronyms YWNBAW and YWNBARW: 142 to 251 original posts a day on Twitter from 10 to 15 November 2026 (one recent-counts request, $0.005). Before that it was counted only inside the one-off coded-language check (docs/CODED-COMMUNITIES.md). On Twitter, as on Bluesky, a count includes people quoting the words to object. How large that share is on Twitter has not been checked: it needs reading a sample of posts (about $0.50 for 50 each), which the counts-only plan does not cover.
 
 **The UK single-sex framing** ("single-sex spaces", "single-sex rights", "biology-based rights") is tracked on Twitter as its own **framing** group from 29 October 2026, at Emma's request, in two searches: the space phrasings, and from 2 November 2026 "single-sex services" (the Equality Act wording), which replaced the rights phrasings (about 1 post a day). It is kept apart from the anti-trans group and from the coded-language score: these are also terms of UK equality law, so legal, policy and news discussion uses the same words, and no source we found calls the bare phrases dog whistles (docs/CODED-COMMUNITIES.md). The campaign phrases "protect single-sex spaces" and "defending sex-based rights", which are documented as dog whistles, stay in the coded-language list. Bluesky does not count them: its search ignores OR, and on 27 to 28 October 2026 it had about 2 posts a day for "single-sex spaces" and none for the others. Twitter cost: 8 count requests a day, about $0.04.
 
