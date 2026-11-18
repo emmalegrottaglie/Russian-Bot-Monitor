@@ -2,11 +2,12 @@
 
 import json
 import multiprocessing
+import os
 import time
 
 import pytest
 
-from tracker.collectors import SourceSkipped
+from tracker.collectors import SourceSkipped, x
 from tracker.collectors.x import _Budget
 
 
@@ -21,8 +22,9 @@ def test_take_counts_per_utc_day_and_stops_at_cap(tmp_path):
     assert not (tmp_path / "usage.json.lock").exists()  # the lock is released after a refusal too
 
 
-def _worker(path, cap, calls, queue):
+def _worker(path, cap, calls, barrier, queue):
     budget = _Budget(path, cap)
+    barrier.wait(timeout=60)  # both workers start together, so the takes really overlap
     ok = 0
     for _ in range(calls):
         try:
@@ -36,16 +38,51 @@ def _worker(path, cap, calls, queue):
 def test_two_processes_never_exceed_cap(tmp_path):
     path = tmp_path / "usage.json"
     ctx = multiprocessing.get_context("spawn")
-    queue = ctx.Queue()
-    procs = [ctx.Process(target=_worker, args=(path, 12, 10, queue)) for _ in range(2)]
+    queue, barrier = ctx.Queue(), ctx.Barrier(2)
+    procs = [ctx.Process(target=_worker, args=(path, 300, 200, barrier, queue)) for _ in range(2)]
     for p in procs:
         p.start()
-    results = [queue.get(timeout=60) for _ in procs]
+    results = [queue.get(timeout=120) for _ in procs]
     for p in procs:
         p.join(timeout=60)
-    assert sum(results) == 12
+    assert sum(results) == 300
     day = time.strftime("%Y-%m-%d", time.gmtime())
-    assert json.loads(path.read_text(encoding="utf-8")) == {day: 12}
+    assert json.loads(path.read_text(encoding="utf-8")) == {day: 300}
+
+
+def test_held_lock_blocks_take_and_is_left_alone(tmp_path, monkeypatch):
+    path = tmp_path / "usage.json"
+    day = time.strftime("%Y-%m-%d", time.gmtime())
+    path.write_text(json.dumps({day: 1}), encoding="utf-8")
+    lock = tmp_path / "usage.json.lock"
+    lock.write_bytes(b"")  # fresh mtime: another process holds it
+    monkeypatch.setattr(x, "LOCK_WAIT", 0.3)
+    with pytest.raises(SourceSkipped, match="lock"):
+        _Budget(path, cap=100).take()
+    assert json.loads(path.read_text(encoding="utf-8")) == {day: 1}
+    assert lock.exists()
+
+
+def test_stale_lock_is_removed(tmp_path):
+    path = tmp_path / "usage.json"
+    lock = tmp_path / "usage.json.lock"
+    lock.write_bytes(b"")
+    old = time.time() - x.LOCK_STALE - 5
+    os.utime(lock, (old, old))
+    _Budget(path, cap=100).take()
+    day = time.strftime("%Y-%m-%d", time.gmtime())
+    assert json.loads(path.read_text(encoding="utf-8")) == {day: 1}
+    assert not lock.exists()
+
+
+def test_usage_path_follows_env_then_db_folder(tmp_path, monkeypatch):
+    from types import SimpleNamespace
+
+    settings = SimpleNamespace(db_path=tmp_path / "data" / "bot.db")
+    monkeypatch.delenv("TWITTER_USAGE_FILE", raising=False)
+    assert x.usage_path(settings) == tmp_path / "data" / "x_usage.json"
+    monkeypatch.setenv("TWITTER_USAGE_FILE", str(tmp_path / "shared.json"))
+    assert x.usage_path(settings) == tmp_path / "shared.json"
 
 
 def test_unreadable_file_counts_as_cap_reached(tmp_path):

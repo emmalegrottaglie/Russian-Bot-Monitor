@@ -79,7 +79,7 @@ async def fetch() -> None:
     settings = Settings.from_env()
     if not settings.x_bearer_token:
         sys.exit("X_BEARER_TOKEN not set")
-    path = settings.db_path.parent / "x_usage.json"
+    path = x.usage_path(settings)
     used = x._Budget(path, 0).state.get(time.strftime("%Y-%m-%d", time.gmtime()), 0)
     budget = x._Budget(path, used + MAX_REQUESTS)  # today's live use plus this run's ceiling
     stop = (int(time.time()) - 15) // HOUR * HOUR
@@ -104,7 +104,7 @@ async def breakdown(category: str, variant: str = "rt") -> None:
     full-archive requests per term (approved by Emma on 22 October 2026, about $0.26)."""
     settings = Settings.from_env()
     data = json.loads(OUT.read_text(encoding="utf-8"))
-    path = settings.db_path.parent / "x_usage.json"
+    path = x.usage_path(settings)
     used = x._Budget(path, 0).state.get(time.strftime("%Y-%m-%d", time.gmtime()), 0)
     budget = x._Budget(path, used + 2 * len(CATEGORIES[category]) + 2)
     stop = data["end"]

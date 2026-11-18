@@ -116,6 +116,11 @@ LOCK_RETRY = 0.1   # seconds between attempts
 LOCK_STALE = 30.0  # a lock older than this is left over from a crashed process
 
 
+def usage_path(settings) -> Path:
+    """The shared request-counter file: TWITTER_USAGE_FILE, else next to the database."""
+    return Path(os.environ.get("TWITTER_USAGE_FILE") or settings.db_path.parent / "x_usage.json")
+
+
 class _Budget:
     """Requests made per UTC day, kept in a small JSON file that other projects (the
     transphobia monitor) share, so one cap covers them all. Every take() holds an exclusive
@@ -156,7 +161,7 @@ class _Budget:
             try:
                 os.close(os.open(self.lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
                 return
-            except FileExistsError:
+            except (FileExistsError, PermissionError):  # Windows: a lock being deleted refuses opens
                 pass
             try:
                 if time.time() - self.lock_path.stat().st_mtime > LOCK_STALE:
@@ -184,8 +189,12 @@ class _Budget:
             if used >= self.cap:
                 raise SourceSkipped(f"daily Twitter request cap reached ({self.cap})")
             tmp = self.path.with_name(self.path.name + ".tmp")
-            tmp.write_text(json.dumps({day: used + 1}), encoding="utf-8")
-            os.replace(tmp, self.path)
+            try:
+                tmp.write_text(json.dumps({day: used + 1}), encoding="utf-8")
+                os.replace(tmp, self.path)
+            except BaseException:
+                tmp.unlink(missing_ok=True)
+                raise
         finally:
             self._release()
 
@@ -211,8 +220,7 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
                   start: int | None = None, end: int | None = None) -> Result:
     if not settings.x_bearer_token:
         raise SourceSkipped("X_BEARER_TOKEN not set")
-    budget = _Budget(Path(os.environ.get("TWITTER_USAGE_FILE") or settings.db_path.parent / "x_usage.json"),
-                     settings.x_max_requests_per_day)
+    budget = _Budget(usage_path(settings), settings.x_max_requests_per_day)
     # Whole hours only, and Twitter wants end_time at least 10 s in the past.
     stop = min(now - 15, end if end is not None else now) // HOUR * HOUR
     if start is None:
