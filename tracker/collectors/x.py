@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 from collections import defaultdict
 from datetime import datetime, timezone
@@ -110,23 +111,83 @@ def metrics(orig: dict[int, int], rt: dict[int, int], reply: dict[int, int],
 _probe_cache: dict[tuple[str, int, int], dict[int, int]] = {}  # one probe per window per process
 
 
+LOCK_WAIT = 10.0   # seconds to wait for the usage-file lock
+LOCK_RETRY = 0.1   # seconds between attempts
+LOCK_STALE = 30.0  # a lock older than this is left over from a crashed process
+
+
 class _Budget:
-    """Requests made per UTC day, kept in a small file next to the database."""
+    """Requests made per UTC day, kept in a small JSON file that other projects (the
+    transphobia monitor) share, so one cap covers them all. Every take() holds an exclusive
+    lock file and reads the count fresh. A missing file means nothing used yet; a file that
+    exists but cannot be read or parsed counts as the cap reached, never as zero used."""
 
     def __init__(self, path: Path, cap: int):
         self.path, self.cap = path, cap
+        self.lock_path = path.with_name(path.name + ".lock")
+
+    @property
+    def state(self) -> dict:
+        """Counts by day as last written; {} when the file is missing or unreadable."""
         try:
-            self.state = json.loads(path.read_text(encoding="utf-8"))
-        except (OSError, ValueError):
-            self.state = {}
+            return self._read()
+        except SourceSkipped:
+            return {}
+
+    def _read(self) -> dict:
+        try:
+            raw = self.path.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            return {}
+        except OSError as e:
+            raise SourceSkipped(f"Twitter usage file unreadable: {e}") from e
+        try:
+            state = json.loads(raw)
+        except ValueError as e:
+            raise SourceSkipped("Twitter usage file is not valid JSON") from e
+        if not isinstance(state, dict):
+            raise SourceSkipped("Twitter usage file is not a JSON object")
+        return state
+
+    def _acquire(self) -> None:
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        deadline = time.monotonic() + LOCK_WAIT
+        while True:
+            try:
+                os.close(os.open(self.lock_path, os.O_CREAT | os.O_EXCL | os.O_WRONLY))
+                return
+            except FileExistsError:
+                pass
+            try:
+                if time.time() - self.lock_path.stat().st_mtime > LOCK_STALE:
+                    self.lock_path.unlink()
+                    continue
+            except OSError:
+                continue  # the lock vanished between the attempt and the check
+            if time.monotonic() >= deadline:
+                raise SourceSkipped("could not lock the Twitter usage file")
+            time.sleep(LOCK_RETRY)
+
+    def _release(self) -> None:
+        try:
+            self.lock_path.unlink()
+        except OSError:
+            pass
 
     def take(self) -> None:
-        day = time.strftime("%Y-%m-%d", time.gmtime())
-        used = self.state.get(day, 0)
-        if used >= self.cap:
-            raise SourceSkipped(f"daily Twitter request cap reached ({self.cap})")
-        self.state = {day: used + 1}
-        self.path.write_text(json.dumps(self.state), encoding="utf-8")
+        self._acquire()
+        try:
+            day = time.strftime("%Y-%m-%d", time.gmtime())
+            used = self._read().get(day, 0)
+            if not isinstance(used, int) or isinstance(used, bool):
+                raise SourceSkipped("Twitter usage file holds a bad count")
+            if used >= self.cap:
+                raise SourceSkipped(f"daily Twitter request cap reached ({self.cap})")
+            tmp = self.path.with_name(self.path.name + ".tmp")
+            tmp.write_text(json.dumps({day: used + 1}), encoding="utf-8")
+            os.replace(tmp, self.path)
+        finally:
+            self._release()
 
 
 async def _counts(client: httpx.AsyncClient, budget: _Budget, token: str, url: str, query: str,
@@ -150,7 +211,8 @@ async def collect(client: httpx.AsyncClient, specs: list[SeriesSpec], settings, 
                   start: int | None = None, end: int | None = None) -> Result:
     if not settings.x_bearer_token:
         raise SourceSkipped("X_BEARER_TOKEN not set")
-    budget = _Budget(settings.db_path.parent / "x_usage.json", settings.x_max_requests_per_day)
+    budget = _Budget(Path(os.environ.get("TWITTER_USAGE_FILE") or settings.db_path.parent / "x_usage.json"),
+                     settings.x_max_requests_per_day)
     # Whole hours only, and Twitter wants end_time at least 10 s in the past.
     stop = min(now - 15, end if end is not None else now) // HOUR * HOUR
     if start is None:
