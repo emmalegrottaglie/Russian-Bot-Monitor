@@ -101,3 +101,19 @@ def test_unreadable_file_counts_as_cap_reached(tmp_path):
         _Budget(path, cap=100).take()
     assert path.read_bytes() == b"not json"
     assert not (tmp_path / "usage.json.lock").exists()
+
+
+def test_lock_refused_by_the_folder_gives_up_at_the_deadline(tmp_path, monkeypatch):
+    real_open = os.open
+
+    def refuse_lock(path, *args, **kwargs):
+        if str(path).endswith(".lock"):
+            raise PermissionError("read-only folder")
+        return real_open(path, *args, **kwargs)
+
+    monkeypatch.setattr(os, "open", refuse_lock)
+    monkeypatch.setattr(x, "LOCK_WAIT", 0.3)
+    started = time.monotonic()
+    with pytest.raises(SourceSkipped, match="lock"):
+        _Budget(tmp_path / "usage.json", cap=100).take()
+    assert time.monotonic() - started < 5  # waits for the deadline, never spins forever
