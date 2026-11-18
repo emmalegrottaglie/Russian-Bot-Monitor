@@ -26,12 +26,16 @@ def _worker(path, cap, calls, barrier, queue):
     budget = _Budget(path, cap)
     barrier.wait(timeout=60)  # both workers start together, so the takes really overlap
     ok = 0
-    for _ in range(calls):
-        try:
-            budget.take()
-            ok += 1
-        except SourceSkipped:
-            pass
+    try:
+        for _ in range(calls):
+            try:
+                budget.take()
+                ok += 1
+            except SourceSkipped:
+                pass
+    except Exception as exc:  # report a crash to the test instead of leaving it waiting
+        queue.put(repr(exc))
+        return
     queue.put(ok)
 
 
@@ -40,11 +44,16 @@ def test_two_processes_never_exceed_cap(tmp_path):
     ctx = multiprocessing.get_context("spawn")
     queue, barrier = ctx.Queue(), ctx.Barrier(2)
     procs = [ctx.Process(target=_worker, args=(path, 300, 200, barrier, queue)) for _ in range(2)]
-    for p in procs:
-        p.start()
-    results = [queue.get(timeout=120) for _ in procs]
-    for p in procs:
-        p.join(timeout=60)
+    try:
+        for p in procs:
+            p.start()
+        results = [queue.get(timeout=30) for _ in procs]
+    finally:
+        for p in procs:
+            p.join(timeout=5)
+            if p.is_alive():
+                p.terminate()
+    assert all(isinstance(r, int) for r in results), results  # a worker crashed
     assert sum(results) == 300
     day = time.strftime("%Y-%m-%d", time.gmtime())
     assert json.loads(path.read_text(encoding="utf-8")) == {day: 300}
