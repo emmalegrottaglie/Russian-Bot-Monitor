@@ -363,3 +363,20 @@ def test_lexicon_terms_are_sourced_and_israel_speech_is_not_counted():
     assert status["bankers"] == status["Federal Reserve"] == "ambiguous"
     # The UK single-sex framing is counted on its own, never as coded language.
     assert {t for t, s in status.items() if s == "framing"} == {"single-sex spaces", "single-sex services", "single-sex rights", "biology-based rights"}
+
+
+def test_anti_trans_group_is_the_original_three():
+    from tracker.config import load_config
+
+    primary = [s for s in load_config().series if s.platform == "x" and s.key.endswith(".posts")]
+    queries = lambda tag: {s.params["query"] for s in primary if tag in s.tags}
+    assert queries("anti-trans") == {
+        "(troon OR troons)",
+        '("no such thing as trans" OR "no such thing as a trans")',
+        '("you will never be a woman" OR "you\'ll never be a woman" OR "you will never be a real woman"'
+        ' OR "you\'ll never be a real woman" OR YWNBAW OR YWNBARW)',
+    }
+    # The framing group is only the UK single-sex phrases; the newer framing terms moved
+    # to the transphobia monitor.
+    assert len(queries("framing")) == 2
+    assert all("single" in q for q in queries("framing"))
