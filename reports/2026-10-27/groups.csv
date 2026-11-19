@@ -1,0 +1,10 @@
+group,communities,median_change_vs_pre_strike,median_strike_window_change,share_p_below_0_05,share_robust,r_vs_infrastructure,r_days,latest_index
+anti-trans,2,0.2217,-0.0287,0.0,0.0,-0.41,39,122.55
+control,12,-0.0062,-0.1439,0.333,0.333,0.41,40,95.27
+narratives,15,0.1912,0.893,0.067,0.067,-0.749,39,121.84
+political,55,0.0982,-0.0529,0.412,0.235,-0.309,40,115.3
+political-left,16,,,,,,0,
+political-right,25,0.2908,0.1389,0.045,0.045,-0.673,40,138.5
+regional,90,0.065,0.0029,0.083,0.083,0.033,39,86.04
+russia,3,-0.0054,-0.1261,0.333,0.333,0.193,39,91.63
+south-america,18,0.6679,0.1612,0.056,0.0,-0.445,39,117.15
