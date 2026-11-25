@@ -1,0 +1,241 @@
+community,series,platform,region,groups,unit,main_metric,pre_strike_mean,last_7d_mean,change_vs_pre_strike,change_vs_7d,strike_window_change,strike_window_p,robust_cells,r_vs_infrastructure,r_days,first_data_utc,hours_of_data
+"X ""Meloni""",x.meloni.it.posts,x,IT,political-right,POSTS / H,yes,133.9576,131.006,0.0292,0.4194,-0.2839,0.012,9,0.089,29,2026-08-29T01:00:00Z,1191
+"X ""Le Pen""",x.le-pen.fr.posts,x,FR,political-right,POSTS / H,yes,98.0313,172.5389,1.626,3.3358,-0.1581,0.1717,0,-0.554,29,2026-08-29T01:00:00Z,1191
+r/conservatives,reddit.conservatives.comments,reddit,US,political-right,COMMENTS / H,yes,7.8949,8.8864,,-0.2381,-0.1301,0.1038,2,-0.067,28,2026-08-23T01:00:00Z,1214
+"X ""Milei""",x.milei.es.posts,x,AR,political-right|south-america,POSTS / H,yes,599.081,614.0479,-0.1038,-0.0275,-0.0886,0.1996,2,0.071,29,2026-08-29T01:00:00Z,1191
+"X ""Reform UK""",x.reform-uk.en.posts,x,UK,political-right,POSTS / H,yes,80.221,102.8862,0.2124,-0.1328,-0.0419,0.6008,0,-0.45,29,2026-08-29T01:00:00Z,1191
+"BSKY ""Reform UK""",bluesky.reform-uk.en.posts,bluesky,UK,political-right,POSTS / H,yes,10.9837,15.003,-0.1028,0.0,-0.0299,0.8263,0,-0.437,30,2026-08-28T22:00:00Z,1204
+"BSKY ""MAGA""",bluesky.maga.en.posts,bluesky,US,political-right,POSTS / H,yes,88.1286,95.5668,0.4511,2.4345,0.0604,1.0,0,-0.413,30,2026-08-28T22:00:00Z,1204
+r/asktrumpsupporters,reddit.asktrumpsupporters.comments,reddit,US,political-right,COMMENTS / H,yes,21.6123,22.1667,,-0.7368,0.064,0.3733,0,-0.041,28,2026-08-23T01:00:00Z,1214
+"X ""Konfederacja""",x.konfederacja.pl.posts,x,PL,political-right,POSTS / H,yes,22.1786,19.1916,-0.1884,1.4,0.1256,0.6267,0,0.078,29,2026-08-29T01:00:00Z,1191
+"X ""MAGA""",x.maga.en.posts,x,US,political-right,POSTS / H,yes,2348.9797,2867.1018,0.1054,-0.1147,0.1521,1.0,0,-0.796,29,2026-08-29T01:00:00Z,1191
+"BSKY ""AfD""",bluesky.afd.de.posts,bluesky,DE,political-right,POSTS / H,yes,59.5798,52.2823,-0.273,0.25,0.1595,0.9062,0,0.214,30,2026-08-28T22:00:00Z,1204
+"X ""AfD""",x.afd.de.posts,x,DE,political-right,POSTS / H,yes,709.2762,584.521,-0.2878,-0.125,0.2414,0.978,0,0.309,29,2026-08-29T01:00:00Z,1191
+"BSKY ""Bolsonaro""",bluesky.bolsonaro.pt.posts,bluesky,BR,political-right|south-america,POSTS / H,yes,50.703,69.3987,0.3793,-0.1901,0.3823,0.3992,0,-0.432,30,2026-08-28T22:00:00Z,1204
+"X ""Vox""",x.vox.es.posts,x,ES,political-right,POSTS / H,yes,647.8913,804.5629,0.2632,0.0107,0.4226,0.8443,0,-0.234,29,2026-08-29T01:00:00Z,1191
+"BSKY ""Konfederacja""",bluesky.konfederacja.pl.posts,bluesky,PL,political-right,POSTS / H,yes,0.1646,0.125,-0.4937,,0.6667,0.8822,0,0.019,27,2026-08-30T01:00:00Z,1105
+"X ""Bolsonaro""",x.bolsonaro.pt.posts,x,BR,political-right|south-america,POSTS / H,yes,2870.8858,4034.8263,0.5611,0.1266,0.686,0.5888,0,-0.252,29,2026-08-29T01:00:00Z,1191
+r/Conservative,reddit.conservative.comments,reddit,US,political-right,COMMENTS / H,yes,70.7609,74.6136,,-0.7303,0.716,1.0,0,-0.141,28,2026-08-23T01:00:00Z,1213
+r/Republican,reddit.republican.comments,reddit,US,political-right,COMMENTS / H,yes,2.2663,3.9773,,-0.2,2.1934,0.976,0,-0.541,28,2026-08-23T01:00:00Z,1214
+"BSKY ""Le Pen""",bluesky.le-pen.fr.posts,bluesky,FR,political-right,POSTS / H,yes,,11.0,,,,,,,0,2026-10-17T21:43:02Z,4
+"BSKY ""Meloni""",bluesky.meloni.it.posts,bluesky,IT,political-right,POSTS / H,yes,,1.125,,,,,,,0,2026-10-17T21:43:02Z,4
+"BSKY ""Milei""",bluesky.milei.es.posts,bluesky,AR,political-right|south-america,POSTS / H,yes,,8.375,,,,,,,0,2026-10-17T21:43:02Z,4
+"BSKY ""Vox""",bluesky.vox.es.posts,bluesky,ES,political-right,POSTS / H,yes,,21.375,,,,,,,0,2026-10-17T21:43:02Z,4
+"X """"trans youth""""",x.trans-youth.en.posts,x,EN-LANG,narratives,POSTS / H,yes,1.709,1.8024,-0.1096,-0.2,-0.2206,0.1238,0,-0.094,29,2026-08-29T01:00:00Z,1191
+"X ""woke""",x.woke.en.posts,x,EN-LANG,narratives,POSTS / H,yes,1816.3425,1622.0539,-0.1193,0.0026,-0.0753,0.01,9,0.783,29,2026-08-29T01:00:00Z,1191
+"X ""Habeck""",x.habeck.de.posts,x,DE,narratives,POSTS / H,yes,29.7735,15.0299,-0.6875,-0.2,-0.0401,0.4491,0,0.239,29,2026-08-29T01:00:00Z,1191
+"X ""Ukraine aid""",x.ukraine-aid.en.posts,x,EN-LANG,narratives,POSTS / H,yes,29.8785,85.485,2.0908,-0.0282,0.5828,0.996,0,-0.838,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.fr.posts,x,FR,narratives,POSTS / H,yes,38.7127,112.3054,1.8662,-0.211,0.893,1.0,0,-0.702,29,2026-08-29T01:00:00Z,1191
+"X ""Selenskyj""",x.selenskyj.de.posts,x,DE,narratives,POSTS / H,yes,12.7109,41.1976,2.3043,0.2143,0.9998,1.0,0,-0.772,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.it.posts,x,IT,narratives,POSTS / H,yes,16.8785,51.3114,2.1298,0.15,1.1562,1.0,0,-0.728,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.en.posts,x,EN-LANG,narratives,POSTS / H,yes,170.663,1027.479,3.8145,-0.2848,2.4373,1.0,0,-0.816,29,2026-08-29T01:00:00Z,1191
+"BSKY ""Habeck""",bluesky.habeck.de.posts,bluesky,DE,narratives,POSTS / H,yes,,0.75,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY ""Selenskyj""",bluesky.selenskyj.de.posts,bluesky,DE,narratives,POSTS / H,yes,,2.5,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY """"trans youth""""",bluesky.trans-youth.en.posts,bluesky,EN-LANG,narratives,POSTS / H,yes,,0.75,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY ""Ukraine aid""",bluesky.ukraine-aid.en.posts,bluesky,EN-LANG,narratives,POSTS / H,yes,,4.0,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY ""woke""",bluesky.woke.en.posts,bluesky,EN-LANG,narratives,POSTS / H,yes,,69.25,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY ""Zelensky""",bluesky.zelensky.en.posts,bluesky,EN-LANG,narratives,POSTS / H,yes,,38.25,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY ""Zelensky""",bluesky.zelensky.fr.posts,bluesky,FR,narratives,POSTS / H,yes,,1.25,,,,,,,0,2026-10-17T23:13:02Z,2
+"BSKY ""Zelensky""",bluesky.zelensky.it.posts,bluesky,IT,narratives,POSTS / H,yes,,0.75,,,,,,,0,2026-10-17T23:13:02Z,2
+r/irishpolitics,reddit.irishpolitics.comments,reddit,IE,political,COMMENTS / H,yes,12.8388,9.9023,,-0.75,-0.4473,0.024,4,0.26,28,2026-08-24T01:00:00Z,1215
+r/news,reddit.news.comments,reddit,US,political,COMMENTS / H,yes,404.6594,325.4802,,-0.269,-0.2532,0.1417,0,0.291,28,2026-08-23T01:00:00Z,1208
+r/worldnews,reddit.worldnews.comments,reddit,US,political,COMMENTS / H,yes,638.5712,564.0253,,-0.1187,-0.2262,0.0319,2,0.227,27,2026-08-24T01:00:00Z,1191
+"X ""governo""",x.governo.it.posts,x,IT,political,POSTS / H,yes,160.0516,156.1078,0.3257,2.2333,-0.172,0.0379,7,0.043,29,2026-08-29T01:00:00Z,1191
+r/ukpolitics,reddit.ukpolitics.comments,reddit,UK,political,COMMENTS / H,yes,298.3913,220.2677,,-0.2893,-0.1192,0.0399,5,0.394,28,2026-08-24T01:00:00Z,1215
+"X ""Bundestag""",x.bundestag.de.posts,x,DE,political,POSTS / H,yes,46.7201,47.1557,-0.088,-0.1923,-0.0941,0.4152,0,0.056,29,2026-08-29T01:00:00Z,1191
+"X ""Macron""",x.macron.fr.posts,x,FR,political,POSTS / H,yes,490.0405,584.5808,2.0095,6.4042,-0.0912,0.002,7,-0.116,29,2026-08-29T01:00:00Z,1191
+r/spainpolitics,reddit.spainpolitics.comments,reddit,ES,political,COMMENTS / H,yes,10.4293,8.1203,,0.0,-0.0845,0.1357,0,0.228,28,2026-08-24T01:00:00Z,1215
+r/neoliberal,reddit.neoliberal.comments,reddit,US,political,COMMENTS / H,yes,456.6444,429.385,,-0.3583,-0.0529,0.0599,5,0.207,26,2026-08-23T01:00:00Z,1203
+r/politics,reddit.politics.comments,reddit,US,political,COMMENTS / H,yes,1033.1142,987.0927,,-0.0273,0.1161,0.8244,0,0.117,26,2026-08-23T01:00:00Z,1184
+"BSKY ""Bundestag""",bluesky.bundestag.de.posts,bluesky,DE,political,POSTS / H,yes,5.5236,5.6369,-0.042,0.75,0.3763,0.7046,0,0.009,30,2026-08-28T22:00:00Z,1204
+"X ""Lula""",x.lula.pt.posts,x,BR,political|south-america,POSTS / H,yes,8721.2781,15424.1317,1.3857,2.2213,0.4917,0.3353,0,-0.514,29,2026-08-29T01:00:00Z,1191
+"X ""PSOE""",x.psoe.es.posts,x,ES,political,POSTS / H,yes,814.6759,1294.1257,1.1132,0.4268,0.7561,0.8244,0,-0.444,29,2026-08-29T01:00:00Z,1191
+"BSKY ""governo""",bluesky.governo.it.posts,bluesky,IT,political,POSTS / H,yes,,2.75,,,,,,,0,2026-10-17T21:43:02Z,4
+"BSKY ""Lula""",bluesky.lula.pt.posts,bluesky,BR,political|south-america,POSTS / H,yes,,388.7317,,,,,,,0,2026-10-17T22:13:02Z,3
+"BSKY ""Macron""",bluesky.macron.fr.posts,bluesky,FR,political,POSTS / H,yes,,37.375,,,,,,,0,2026-10-17T21:43:02Z,4
+"BSKY ""PSOE""",bluesky.psoe.es.posts,bluesky,ES,political,POSTS / H,yes,,47.125,,,,,,,0,2026-10-17T21:43:02Z,4
+r/kansas,reddit.kansas.comments,reddit,US,regional,COMMENTS / H,yes,19.8207,23.6617,,-0.0137,-0.4671,0.002,8,-0.052,28,2026-08-26T01:00:00Z,1215
+r/alabama,reddit.alabama.comments,reddit,US,regional,COMMENTS / H,yes,5.0181,7.0,,-0.931,-0.3655,0.1098,0,-0.251,28,2026-08-24T01:00:00Z,1215
+r/newjersey,reddit.newjersey.comments,reddit,US,regional,COMMENTS / H,yes,58.4982,64.5206,,-0.2748,-0.2336,0.0659,2,-0.179,27,2026-08-28T23:00:00Z,1162
+r/illinois,reddit.illinois.comments,reddit,US,regional,COMMENTS / H,yes,35.4801,29.9624,,-0.7297,-0.1797,0.2914,0,0.019,28,2026-08-24T01:00:00Z,1215
+r/italy,reddit.italy.comments,reddit,IT,regional,COMMENTS / H,yes,62.7935,71.2437,,0.4615,-0.0309,0.6587,2,-0.232,28,2026-08-28T23:00:00Z,1154
+r/Polska,reddit.polska.comments,reddit,PL,regional,COMMENTS / H,yes,137.4764,146.7072,,0.4329,0.2112,0.9641,0,-0.259,28,2026-08-24T01:00:00Z,1214
+r/spain,reddit.spain.comments,reddit,ES,regional,COMMENTS / H,yes,10.8895,9.0168,,-0.7143,0.391,0.5848,0,0.12,28,2026-08-28T23:00:00Z,1154
+r/maryland,reddit.maryland.comments,reddit,US,regional,COMMENTS / H,yes,37.5399,49.113,,-0.4585,0.3919,0.9202,0,-0.278,28,2026-08-28T01:00:00Z,1190
+r/czech,reddit.czech.comments,reddit,CZ,regional,COMMENTS / H,yes,,213.4879,,-0.2078,,,,,5,2026-10-10T22:00:00Z,136
+r/de,reddit.de.comments,reddit,DE,regional,COMMENTS / H,yes,,191.39,,0.638,,,,,5,2026-10-10T22:00:00Z,137
+r/france,reddit.france.comments,reddit,FR,regional,COMMENTS / H,yes,,218.6859,,1.2343,,,,,5,2026-10-10T22:00:00Z,122
+r/sweden,reddit.sweden.comments,reddit,SE,regional,COMMENTS / H,yes,,222.1031,,0.266,,,,,5,2026-10-10T22:00:00Z,136
+r/vzla,reddit.vzla.comments,reddit,VE,south-america,COMMENTS / H,yes,9.7319,7.0168,,-0.1111,-0.1904,0.2934,0,0.325,28,2026-08-28T23:00:00Z,1154
+r/BOLIVIA,reddit.bolivia.comments,reddit,BO,south-america,COMMENTS / H,yes,8.9801,8.7059,,1.3889,-0.0847,0.1956,1,0.117,28,2026-08-28T23:00:00Z,1154
+r/ecuador,reddit.ecuador.comments,reddit,EC,south-america,COMMENTS / H,yes,1.8533,1.5546,,-0.3333,1.2079,0.996,0,0.047,28,2026-08-28T23:00:00Z,1154
+r/argentina,reddit.argentina.comments,reddit,AR,south-america,COMMENTS / H,yes,,118.062,,0.2138,,,,,5,2026-10-10T22:00:00Z,122
+r/brasil,reddit.brasil.comments,reddit,BR,south-america,COMMENTS / H,yes,,307.3899,,0.136,,,,,5,2026-10-10T22:00:00Z,122
+r/brasilivre,reddit.brasilivre.comments,reddit,BR,south-america,COMMENTS / H,yes,,91.6695,,-0.0722,,,,,5,2026-10-10T22:00:00Z,122
+r/chile,reddit.chile.comments,reddit,CL,south-america,COMMENTS / H,yes,,160.7661,,-0.1092,,,,,5,2026-10-10T22:00:00Z,122
+r/colombia,reddit.colombia.comments,reddit,CO,south-america,COMMENTS / H,yes,,46.0847,,0.0175,,,,,5,2026-10-10T22:00:00Z,122
+r/Paraguay,reddit.paraguay.comments,reddit,PY,south-america,COMMENTS / H,yes,,29.8475,,-0.6316,,,,,5,2026-10-10T22:00:00Z,122
+r/PERU,reddit.peru.comments,reddit,PE,south-america,COMMENTS / H,yes,,17.7542,,-0.5789,,,,,5,2026-10-10T22:00:00Z,122
+r/Republica_Argentina,reddit.republica_argentina.comments,reddit,AR,south-america,COMMENTS / H,yes,,10.661,,0.1,,,,,5,2026-10-10T22:00:00Z,122
+r/uruguay,reddit.uruguay.comments,reddit,UY,south-america,COMMENTS / H,yes,,28.7373,,-0.2414,,,,,5,2026-10-10T22:00:00Z,122
+r/AskARussian,reddit.askarussian.comments,reddit,RU,russia,COMMENTS / H,yes,12.7717,9.1439,,-0.25,-0.4834,0.014,6,0.263,28,2026-08-24T01:00:00Z,1214
+r/Pikabu,reddit.pikabu.comments,reddit,RU,russia,COMMENTS / H,yes,25.279,22.5076,,-0.3333,-0.1261,0.2994,0,0.321,28,2026-08-28T01:00:00Z,1189
+r/tjournal_refugees,reddit.tjournal_refugees.comments,reddit,RU,russia,COMMENTS / H,yes,45.971,50.7444,,2.2308,0.2027,0.9421,0,-0.155,28,2026-08-28T23:00:00Z,1168
+r/Cooking,reddit.cooking.comments,reddit,GLOBAL,control,COMMENTS / H,yes,170.1886,173.1655,,-0.2939,-0.3478,0.004,9,0.032,27,2026-08-24T01:00:00Z,1208
+"X ""futebol""",x.futebol.pt.posts,x,PT-LANG,control,POSTS / H,yes,690.7882,477.4012,-0.3413,0.4404,-0.3404,0.02,6,0.381,29,2026-08-29T01:00:00Z,1191
+r/gardening,reddit.gardening.comments,reddit,GLOBAL,control,COMMENTS / H,yes,84.7736,56.9318,,-0.0469,-0.2546,0.0938,0,0.6,28,2026-08-24T01:00:00Z,1214
+"BSKY ""fútbol""",bluesky.futbol.es.posts,bluesky,ES-LANG,control,POSTS / H,yes,8.1268,7.7292,0.2997,0.4643,-0.2419,0.022,8,0.079,30,2026-08-28T22:00:00Z,1204
+"BSKY ""futebol""",bluesky.futebol.pt.posts,bluesky,PT-LANG,control,POSTS / H,yes,13.9112,9.7083,-0.2722,0.3095,-0.2062,0.0719,2,0.31,30,2026-08-28T22:00:00Z,1204
+"X ""fútbol""",x.futbol.es.posts,x,ES-LANG,control,POSTS / H,yes,1287.4494,1226.8683,-0.044,-0.0483,-0.1833,0.004,9,0.136,29,2026-08-29T01:00:00Z,1191
+"BSKY ""météo""",bluesky.meteo.fr.posts,bluesky,FR-LANG,control,POSTS / H,yes,2.7754,2.2887,-0.2418,2.25,-0.1044,0.3812,1,0.474,30,2026-08-28T22:00:00Z,1204
+r/personalfinance,reddit.personalfinance.comments,reddit,GLOBAL,control,COMMENTS / H,yes,148.1795,123.8601,,-0.2231,-0.0294,0.3214,0,0.362,28,2026-08-24T01:00:00Z,1208
+"X ""weather""",x.weather.en.posts,x,GLOBAL,control,POSTS / H,yes,1495.6317,1430.4491,0.0051,-0.0429,-0.0106,0.2834,0,0.404,29,2026-08-29T01:00:00Z,1191
+"X ""météo""",x.meteo.fr.posts,x,FR-LANG,control,POSTS / H,yes,21.9319,17.4491,-0.2249,0.1333,-0.0054,0.3313,0,0.414,29,2026-08-29T01:00:00Z,1191
+"BSKY ""weather""",bluesky.weather.en.posts,bluesky,GLOBAL,control,POSTS / H,yes,112.4673,119.2723,0.2596,0.9621,0.0439,0.7685,0,-0.215,30,2026-08-28T22:00:00Z,1204
+r/aww,reddit.aww.comments,reddit,GLOBAL,control,COMMENTS / H,yes,57.0308,64.2504,,-0.5,0.3546,0.9381,0,-0.208,28,2026-08-24T01:00:00Z,1214
+"X ""Meloni""",x.meloni.it.reposts,x,IT,political-right,REPOSTS / H,no,263.4254,292.4551,0.2521,1.9573,-0.4066,0.0659,1,-0.075,29,2026-08-29T01:00:00Z,1191
+"X ""Le Pen""",x.le-pen.fr.reposts,x,FR,political-right,REPOSTS / H,no,459.3315,785.4551,1.4938,1.9251,-0.2875,0.0719,0,-0.411,29,2026-08-29T01:00:00Z,1191
+"X ""Meloni""",x.meloni.it.replies,x,IT,political-right,REPLIES / H,no,89.0184,87.4431,0.0379,1.0851,-0.2714,0.016,9,0.098,29,2026-08-29T01:00:00Z,1191
+"X ""Le Pen""",x.le-pen.fr.replies,x,FR,political-right,REPLIES / H,no,67.5267,123.0719,1.8762,3.581,-0.1821,0.1417,0,-0.57,29,2026-08-29T01:00:00Z,1191
+"X ""Milei""",x.milei.es.reposts,x,AR,political-right|south-america,REPOSTS / H,no,2639.6133,2738.9581,-0.0845,-0.092,-0.1268,0.2894,0,0.059,29,2026-08-29T01:00:00Z,1191
+"X ""Vox""",x.vox.es.burst,x,ES,political-right,% IN BUSIEST 5 MIN,no,12.3013,11.2026,-0.0849,-0.0758,-0.0851,0.0459,6,0.549,29,2026-08-29T01:00:00Z,1190
+"X ""Reform UK""",x.reform-uk.en.replies,x,UK,political-right,REPLIES / H,no,51.8103,66.9162,0.2798,-0.2022,-0.0754,0.4591,0,-0.434,29,2026-08-29T01:00:00Z,1191
+"X ""Konfederacja""",x.konfederacja.pl.repost-share,x,PL,political-right,% REPOSTS,no,62.6669,58.9718,-0.245,-0.7121,-0.0706,0.4491,0,0.153,29,2026-08-29T01:00:00Z,1189
+"X ""Konfederacja""",x.konfederacja.pl.reposts,x,PL,political-right,REPOSTS / H,no,41.8343,30.497,-0.4918,-0.7,-0.0599,0.6028,0,0.109,29,2026-08-29T01:00:00Z,1191
+"X ""Meloni""",x.meloni.it.burst,x,IT,political-right,% IN BUSIEST 5 MIN,no,17.3595,15.751,-0.1041,-0.1487,-0.0594,0.1277,0,0.482,27,2026-08-29T04:00:00Z,1085
+"X ""Bolsonaro""",x.bolsonaro.pt.burst,x,BR,political-right|south-america,% IN BUSIEST 5 MIN,no,10.0053,9.7782,-0.0237,-0.0076,-0.0486,0.0978,1,0.238,29,2026-08-29T01:00:00Z,1191
+"X ""Milei""",x.milei.es.replies,x,AR,political-right|south-america,REPLIES / H,no,398.9098,425.4371,-0.03,0.042,-0.0393,0.2355,2,-0.026,29,2026-08-29T01:00:00Z,1191
+"X ""Le Pen""",x.le-pen.fr.repost-share,x,FR,political-right,% REPOSTS,no,82.1422,80.5727,0.0128,-0.098,-0.0368,0.0639,0,0.194,29,2026-08-29T01:00:00Z,1191
+"X ""MAGA""",x.maga.en.repost-share,x,US,political-right,% REPOSTS,no,65.1814,67.8778,0.0275,0.039,-0.029,0.0319,0,-0.543,29,2026-08-29T01:00:00Z,1191
+"X ""MAGA""",x.maga.en.burst,x,US,political-right,% IN BUSIEST 5 MIN,no,10.3491,10.0108,-0.0243,0.0062,-0.0268,0.0339,0,0.808,29,2026-08-29T01:00:00Z,1190
+"X ""AfD""",x.afd.de.burst,x,DE,political-right,% IN BUSIEST 5 MIN,no,12.1856,12.2338,0.0422,0.0694,-0.0216,0.1238,1,-0.023,29,2026-08-29T01:00:00Z,1190
+"X ""Reform UK""",x.reform-uk.en.burst,x,UK,political-right,% IN BUSIEST 5 MIN,no,16.682,14.8664,-0.1187,-0.0159,-0.0213,0.1038,0,0.668,29,2026-08-29T01:00:00Z,1172
+"X ""Meloni""",x.meloni.it.repost-share,x,IT,political-right,% REPOSTS,no,65.2007,68.406,0.0876,0.1036,-0.0149,0.5709,0,-0.263,29,2026-08-29T01:00:00Z,1191
+"X ""Milei""",x.milei.es.repost-share,x,AR,political-right|south-america,% REPOSTS,no,81.4623,82.0709,0.0138,-0.0217,-0.0016,0.6008,0,-0.065,29,2026-08-29T01:00:00Z,1191
+"X ""AfD""",x.afd.de.repost-share,x,DE,political-right,% REPOSTS,no,67.6838,66.7495,-0.1241,-0.2188,-0.0014,0.6128,0,0.17,29,2026-08-29T01:00:00Z,1191
+"X ""Milei""",x.milei.es.burst,x,AR,political-right|south-america,% IN BUSIEST 5 MIN,no,11.1105,11.0354,-0.0196,0.0082,0.0068,0.6846,0,-0.086,29,2026-08-29T01:00:00Z,1190
+"X ""Bolsonaro""",x.bolsonaro.pt.repost-share,x,BR,political-right|south-america,% REPOSTS,no,87.5919,91.9368,0.0647,0.0057,0.0396,1.0,0,-0.818,29,2026-08-29T01:00:00Z,1191
+"X ""Reform UK""",x.reform-uk.en.repost-share,x,UK,political-right,% REPOSTS,no,80.0204,84.4549,0.0419,0.0593,0.0533,1.0,0,-0.584,29,2026-08-29T01:00:00Z,1191
+"X ""Le Pen""",x.le-pen.fr.burst,x,FR,political-right,% IN BUSIEST 5 MIN,no,15.1548,13.9195,-0.1859,-0.1702,0.0612,0.8663,0,0.296,29,2026-08-29T01:00:00Z,1162
+"X ""MAGA""",x.maga.en.reposts,x,US,political-right,REPOSTS / H,no,4269.4715,5968.8503,0.2148,0.0061,0.0616,0.5329,0,-0.79,29,2026-08-29T01:00:00Z,1191
+"X ""Konfederacja""",x.konfederacja.pl.replies,x,PL,political-right,REPLIES / H,no,16.3831,14.1737,-0.1136,2.0,0.0784,0.5409,0,0.062,29,2026-08-29T01:00:00Z,1191
+"X ""Vox""",x.vox.es.repost-share,x,ES,political-right,% REPOSTS,no,70.6487,77.3724,0.0366,0.0148,0.1215,0.978,0,-0.551,29,2026-08-29T01:00:00Z,1191
+"X ""MAGA""",x.maga.en.replies,x,US,political-right,REPLIES / H,no,1865.0184,2289.5808,0.1173,-0.1104,0.1604,0.992,0,-0.814,29,2026-08-29T01:00:00Z,1191
+"X ""AfD""",x.afd.de.reposts,x,DE,political-right,REPOSTS / H,no,1429.1326,1136.8503,-0.4944,-0.5108,0.1796,0.9441,0,0.301,29,2026-08-29T01:00:00Z,1191
+"X ""Reform UK""",x.reform-uk.en.reposts,x,UK,political-right,REPOSTS / H,no,330.5249,584.5689,0.4784,0.2768,0.2418,0.98,0,-0.713,29,2026-08-29T01:00:00Z,1191
+"X ""AfD""",x.afd.de.replies,x,DE,political-right,REPLIES / H,no,568.8435,474.3892,-0.2627,-0.0824,0.2623,0.9701,0,0.295,29,2026-08-29T01:00:00Z,1191
+"X ""Vox""",x.vox.es.replies,x,ES,political-right,REPLIES / H,no,435.7201,568.5988,0.3489,0.0332,0.4881,0.8263,0,-0.274,29,2026-08-29T01:00:00Z,1191
+"X ""Bolsonaro""",x.bolsonaro.pt.replies,x,BR,political-right|south-america,REPLIES / H,no,1805.5396,2516.509,0.52,0.0325,0.6352,0.6168,0,-0.29,29,2026-08-29T01:00:00Z,1191
+"X ""Vox""",x.vox.es.reposts,x,ES,political-right,REPOSTS / H,no,1892.8324,3036.3473,0.3182,-0.0326,0.8731,0.8862,0,-0.413,29,2026-08-29T01:00:00Z,1191
+"X ""Bolsonaro""",x.bolsonaro.pt.reposts,x,BR,political-right|south-america,REPOSTS / H,no,20207.1529,45989.3892,1.9926,-0.0369,1.5919,0.9142,0,-0.648,29,2026-08-29T01:00:00Z,1191
+r/asktrumpsupporters,reddit.asktrumpsupporters.posts,reddit,US,political-right,POSTS / H,no,,0.7414,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Conservative,reddit.conservative.posts,reddit,US,political-right,POSTS / H,no,,3.0431,,,,,,,5,2026-10-10T22:00:00Z,120
+r/conservatives,reddit.conservatives.posts,reddit,US,political-right,POSTS / H,no,,4.1293,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Republican,reddit.republican.posts,reddit,US,political-right,POSTS / H,no,,0.3362,,,,,,,5,2026-10-10T22:00:00Z,120
+"X ""Konfederacja""",x.konfederacja.pl.burst,x,PL,political-right,% IN BUSIEST 5 MIN,no,25.6776,28.9362,,,,,0,,0,2026-08-30T08:00:00Z,565
+"X """"trans youth""""",x.trans-youth.en.reposts,x,EN-LANG,narratives,REPOSTS / H,no,9.2007,1.4072,-0.5794,-1.0,-0.8426,0.024,6,0.127,29,2026-08-29T01:00:00Z,1191
+"X """"trans youth""""",x.trans-youth.en.repost-share,x,EN-LANG,narratives,% REPOSTS,no,54.5533,33.411,0.1503,-1.0,-0.6194,0.0699,5,0.4,24,2026-08-29T01:00:00Z,1022
+"X ""Habeck""",x.habeck.de.reposts,x,DE,narratives,REPOSTS / H,no,54.6188,29.7784,-0.7031,-0.8,-0.3501,0.2255,1,0.246,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.fr.burst,x,FR,narratives,% IN BUSIEST 5 MIN,no,19.0581,14.1548,-0.2642,0.1132,-0.3218,0.002,5,0.834,19,2026-08-29T06:00:00Z,1015
+"X """"trans youth""""",x.trans-youth.en.replies,x,EN-LANG,narratives,REPLIES / H,no,1.1897,1.2994,0.0598,-0.3333,-0.1817,0.1717,0,-0.12,29,2026-08-29T01:00:00Z,1191
+"X ""woke""",x.woke.en.reposts,x,EN-LANG,narratives,REPOSTS / H,no,3721.9632,3280.2156,-0.0988,0.2401,-0.1262,0.024,8,0.401,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.en.burst,x,EN-LANG,narratives,% IN BUSIEST 5 MIN,no,13.6837,10.2349,-0.2412,0.0188,-0.0824,0.1038,3,0.704,29,2026-08-29T01:00:00Z,1190
+"X ""Zelensky""",x.zelensky.fr.repost-share,x,FR,narratives,% REPOSTS,no,73.8161,83.5341,0.1354,-0.0741,-0.0816,0.3613,0,-0.362,29,2026-08-29T01:00:00Z,1190
+"X ""Habeck""",x.habeck.de.replies,x,DE,narratives,REPLIES / H,no,24.1308,12.7665,-0.6721,-0.0769,-0.0549,0.4232,0,0.272,29,2026-08-29T01:00:00Z,1191
+"X ""Habeck""",x.habeck.de.repost-share,x,DE,narratives,% REPOSTS,no,62.1172,64.9625,-0.0439,-0.5204,-0.0497,0.479,0,-0.029,29,2026-08-29T01:00:00Z,1191
+"X ""woke""",x.woke.en.replies,x,EN-LANG,narratives,REPLIES / H,no,1122.1639,1030.4551,-0.1115,-0.0465,-0.0406,0.0279,2,0.593,29,2026-08-29T01:00:00Z,1191
+"X ""Ukraine aid""",x.ukraine-aid.en.burst,x,EN-LANG,narratives,% IN BUSIEST 5 MIN,no,22.2929,18.8264,-0.2402,-0.1897,-0.0255,0.1677,0,0.513,15,2026-08-29T12:00:00Z,808
+"X ""woke""",x.woke.en.repost-share,x,EN-LANG,narratives,% REPOSTS,no,67.0657,66.9105,0.0094,0.0719,-0.015,0.1737,0,0.025,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.it.repost-share,x,IT,narratives,% REPOSTS,no,72.1232,75.9116,0.0284,-0.0794,-0.0001,0.4032,0,-0.175,29,2026-08-29T01:00:00Z,1189
+"X ""woke""",x.woke.en.burst,x,EN-LANG,narratives,% IN BUSIEST 5 MIN,no,10.2677,10.3051,-0.0015,0.0119,0.0024,0.6347,0,-0.144,29,2026-08-29T01:00:00Z,1190
+"X ""Zelensky""",x.zelensky.en.repost-share,x,EN-LANG,narratives,% REPOSTS,no,79.851,82.0812,-0.0038,-0.0809,0.0237,0.6846,0,-0.185,29,2026-08-29T01:00:00Z,1191
+"X ""Ukraine aid""",x.ukraine-aid.en.repost-share,x,EN-LANG,narratives,% REPOSTS,no,57.2491,52.5726,0.0446,0.2217,0.2086,0.9361,0,0.103,29,2026-08-29T01:00:00Z,1190
+"X ""Selenskyj""",x.selenskyj.de.repost-share,x,DE,narratives,% REPOSTS,no,61.4724,83.8603,0.4148,0.0161,0.2246,0.9641,0,-0.581,29,2026-08-29T01:00:00Z,1188
+"X ""Zelensky""",x.zelensky.fr.reposts,x,FR,narratives,REPOSTS / H,no,145.2836,544.7365,2.8961,-0.5877,0.7631,0.9661,0,-0.761,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.fr.replies,x,FR,narratives,REPLIES / H,no,27.4125,75.1497,1.9485,-0.2152,0.9165,1.0,0,-0.673,29,2026-08-29T01:00:00Z,1191
+"X ""Ukraine aid""",x.ukraine-aid.en.replies,x,EN-LANG,narratives,REPLIES / H,no,20.6427,68.6647,2.6922,-0.0608,0.9621,1.0,0,-0.84,29,2026-08-29T01:00:00Z,1191
+"X ""Selenskyj""",x.selenskyj.de.replies,x,DE,narratives,REPLIES / H,no,8.2652,24.988,2.393,0.3529,1.0091,1.0,0,-0.732,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.it.replies,x,IT,narratives,REPLIES / H,no,11.0,32.2934,2.1225,0.3462,1.2129,1.0,0,-0.707,29,2026-08-29T01:00:00Z,1191
+"X ""Ukraine aid""",x.ukraine-aid.en.reposts,x,EN-LANG,narratives,REPOSTS / H,no,56.733,106.9162,1.4332,1.8675,1.7598,0.992,0,-0.463,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.it.reposts,x,IT,narratives,REPOSTS / H,no,61.9208,143.7725,1.1296,-0.1807,2.379,0.9281,0,-0.428,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.en.replies,x,EN-LANG,narratives,REPLIES / H,no,123.9448,803.0599,4.3309,-0.2632,2.7598,1.0,0,-0.82,29,2026-08-29T01:00:00Z,1191
+"X ""Zelensky""",x.zelensky.en.reposts,x,EN-LANG,narratives,REPOSTS / H,no,782.768,4846.5269,3.0527,-0.5104,3.5134,1.0,0,-0.789,29,2026-08-29T01:00:00Z,1191
+"X ""Selenskyj""",x.selenskyj.de.reposts,x,DE,narratives,REPOSTS / H,no,29.8029,205.9341,7.5445,0.092,4.0836,1.0,0,-0.878,29,2026-08-29T01:00:00Z,1191
+"X ""Habeck""",x.habeck.de.burst,x,DE,narratives,% IN BUSIEST 5 MIN,no,22.0114,23.4953,,,,,,,1,2026-08-29T07:00:00Z,513
+"X ""Selenskyj""",x.selenskyj.de.burst,x,DE,narratives,% IN BUSIEST 5 MIN,no,22.6457,17.4084,-0.2943,-0.0917,,,,0.543,8,2026-08-29T16:00:00Z,429
+"X """"trans youth""""",x.trans-youth.en.burst,x,EN-LANG,narratives,% IN BUSIEST 5 MIN,no,,,,,,,,,0,2026-09-20T21:00:00Z,19
+"X ""Zelensky""",x.zelensky.it.burst,x,IT,narratives,% IN BUSIEST 5 MIN,no,21.6528,18.4854,-0.1651,0.0471,,,0,0.361,12,2026-08-29T06:00:00Z,642
+"X ""Bundestag""",x.bundestag.de.reposts,x,DE,political,REPOSTS / H,no,115.291,119.1617,0.2294,0.2444,-0.3343,0.3134,0,-0.002,29,2026-08-29T01:00:00Z,1191
+"X ""governo""",x.governo.it.replies,x,IT,political,REPLIES / H,no,118.0018,117.2814,0.3953,2.5493,-0.1689,0.0419,4,-0.014,29,2026-08-29T01:00:00Z,1191
+"X ""Bundestag""",x.bundestag.de.replies,x,DE,political,REPLIES / H,no,33.8343,32.6467,-0.0761,-0.2609,-0.1332,0.3752,0,0.121,29,2026-08-29T01:00:00Z,1191
+"X ""governo""",x.governo.it.reposts,x,IT,political,REPOSTS / H,no,192.558,190.0359,0.1177,1.7514,-0.0913,0.6068,0,0.031,29,2026-08-29T01:00:00Z,1191
+"X ""governo""",x.governo.it.burst,x,IT,political,% IN BUSIEST 5 MIN,no,17.1525,16.392,-0.1374,-0.2455,-0.0744,0.0419,4,0.309,28,2026-08-29T01:00:00Z,1081
+"X ""PSOE""",x.psoe.es.burst,x,ES,political,% IN BUSIEST 5 MIN,no,11.4953,10.7246,-0.1035,-0.0527,-0.0683,0.1058,2,0.584,29,2026-08-29T01:00:00Z,1190
+"X ""Macron""",x.macron.fr.replies,x,FR,political,REPLIES / H,no,340.2431,421.3114,2.0028,6.16,-0.0506,0.014,3,-0.169,29,2026-08-29T01:00:00Z,1191
+"X ""Lula""",x.lula.pt.burst,x,BR,political|south-america,% IN BUSIEST 5 MIN,no,9.7103,9.7412,0.0177,0.0677,-0.0405,0.0639,0,-0.288,29,2026-08-29T01:00:00Z,1191
+"X ""Macron""",x.macron.fr.burst,x,FR,political,% IN BUSIEST 5 MIN,no,11.8166,11.9233,-0.0974,-0.1519,-0.02,0.9481,0,-0.283,29,2026-08-29T01:00:00Z,1190
+"X ""Macron""",x.macron.fr.reposts,x,FR,political,REPOSTS / H,no,1788.3149,1931.6407,2.393,7.4984,-0.0163,0.02,1,-0.005,29,2026-08-29T01:00:00Z,1191
+"X ""Bundestag""",x.bundestag.de.repost-share,x,DE,political,% REPOSTS,no,66.7133,69.6465,0.1631,0.1517,0.0154,0.4591,0,-0.174,29,2026-08-29T01:00:00Z,1191
+"X ""Macron""",x.macron.fr.repost-share,x,FR,political,% REPOSTS,no,78.7205,75.4921,0.0256,0.0493,0.0236,0.2455,0,0.354,29,2026-08-29T01:00:00Z,1191
+"X ""governo""",x.governo.it.repost-share,x,IT,political,% REPOSTS,no,56.0324,56.8853,-0.102,-0.0651,0.0243,0.8643,0,-0.078,29,2026-08-29T01:00:00Z,1191
+"X ""PSOE""",x.psoe.es.repost-share,x,ES,political,% REPOSTS,no,77.7645,80.4165,0.0235,0.0036,0.0264,0.6986,0,-0.242,29,2026-08-29T01:00:00Z,1191
+"X ""Lula""",x.lula.pt.repost-share,x,BR,political|south-america,% REPOSTS,no,81.8962,86.1372,0.0385,-0.0768,0.0464,0.8204,0,-0.725,29,2026-08-29T01:00:00Z,1191
+"X ""Bundestag""",x.bundestag.de.burst,x,DE,political,% IN BUSIEST 5 MIN,no,19.1568,19.1079,-0.0807,0.267,0.0863,0.6906,0,0.02,13,2026-08-29T08:00:00Z,911
+"X ""Lula""",x.lula.pt.replies,x,BR,political|south-america,REPLIES / H,no,5304.7293,9715.4431,1.4525,2.037,0.6599,0.5489,0,-0.591,29,2026-08-29T01:00:00Z,1191
+"X ""PSOE""",x.psoe.es.replies,x,ES,political,REPLIES / H,no,587.5801,962.7725,1.2309,0.5288,0.8227,0.8363,0,-0.464,29,2026-08-29T01:00:00Z,1191
+"X ""PSOE""",x.psoe.es.reposts,x,ES,political,REPOSTS / H,no,2708.9687,5222.9341,1.3632,0.4507,0.9934,0.9601,0,-0.609,29,2026-08-29T01:00:00Z,1191
+"X ""Lula""",x.lula.pt.reposts,x,BR,political|south-america,REPOSTS / H,no,39288.9816,89579.2695,1.5984,0.9436,1.0317,0.5749,0,-0.689,29,2026-08-29T01:00:00Z,1191
+r/irishpolitics,reddit.irishpolitics.posts,reddit,IE,political,POSTS / H,no,,0.5345,,,,,,,5,2026-10-10T22:00:00Z,120
+r/neoliberal,reddit.neoliberal.posts,reddit,US,political,POSTS / H,no,,1.9397,,,,,,,5,2026-10-10T22:00:00Z,120
+r/news,reddit.news.posts,reddit,US,political,POSTS / H,no,,3.4655,,,,,,,5,2026-10-10T22:00:00Z,120
+r/politics,reddit.politics.posts,reddit,US,political,POSTS / H,no,,11.8793,,,,,,,5,2026-10-10T22:00:00Z,120
+r/spainpolitics,reddit.spainpolitics.posts,reddit,ES,political,POSTS / H,no,,0.7759,,,,,,,5,2026-10-10T22:00:00Z,120
+r/ukpolitics,reddit.ukpolitics.posts,reddit,UK,political,POSTS / H,no,,3.9052,,,,,,,5,2026-10-10T22:00:00Z,120
+r/worldnews,reddit.worldnews.posts,reddit,US,political,POSTS / H,no,,6.7931,,,,,,,5,2026-10-10T22:00:00Z,120
+r/alabama,reddit.alabama.posts,reddit,US,regional,POSTS / H,no,,0.431,,,,,,,5,2026-10-10T22:00:00Z,120
+r/czech,reddit.czech.posts,reddit,CZ,regional,POSTS / H,no,,3.9741,,,,,,,5,2026-10-10T22:00:00Z,120
+r/de,reddit.de.posts,reddit,DE,regional,POSTS / H,no,,3.6379,,,,,,,5,2026-10-10T22:00:00Z,120
+r/france,reddit.france.posts,reddit,FR,regional,POSTS / H,no,,5.7931,,,,,,,5,2026-10-10T22:00:00Z,120
+r/illinois,reddit.illinois.posts,reddit,US,regional,POSTS / H,no,,0.6293,,,,,,,5,2026-10-10T22:00:00Z,120
+r/italy,reddit.italy.posts,reddit,IT,regional,POSTS / H,no,,1.4569,,,,,,,5,2026-10-10T22:00:00Z,120
+r/kansas,reddit.kansas.posts,reddit,US,regional,POSTS / H,no,,0.9569,,,,,,,5,2026-10-10T22:00:00Z,120
+r/maryland,reddit.maryland.posts,reddit,US,regional,POSTS / H,no,,1.681,,,,,,,5,2026-10-10T22:00:00Z,120
+r/newjersey,reddit.newjersey.posts,reddit,US,regional,POSTS / H,no,,2.7155,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Polska,reddit.polska.posts,reddit,PL,regional,POSTS / H,no,,3.0172,,,,,,,5,2026-10-10T22:00:00Z,120
+r/spain,reddit.spain.posts,reddit,ES,regional,POSTS / H,no,,1.1207,,,,,,,5,2026-10-10T22:00:00Z,120
+r/sweden,reddit.sweden.posts,reddit,SE,regional,POSTS / H,no,,3.9741,,,,,,,5,2026-10-10T22:00:00Z,120
+r/argentina,reddit.argentina.posts,reddit,AR,south-america,POSTS / H,no,,4.0431,,,,,,,5,2026-10-10T22:00:00Z,120
+r/BOLIVIA,reddit.bolivia.posts,reddit,BO,south-america,POSTS / H,no,,0.7155,,,,,,,5,2026-10-10T22:00:00Z,120
+r/brasil,reddit.brasil.posts,reddit,BR,south-america,POSTS / H,no,,14.9483,,,,,,,5,2026-10-10T22:00:00Z,120
+r/brasilivre,reddit.brasilivre.posts,reddit,BR,south-america,POSTS / H,no,,7.0259,,,,,,,5,2026-10-10T22:00:00Z,120
+r/chile,reddit.chile.posts,reddit,CL,south-america,POSTS / H,no,,4.4569,,,,,,,5,2026-10-10T22:00:00Z,120
+r/colombia,reddit.colombia.posts,reddit,CO,south-america,POSTS / H,no,,3.3534,,,,,,,5,2026-10-10T22:00:00Z,120
+r/ecuador,reddit.ecuador.posts,reddit,EC,south-america,POSTS / H,no,,0.181,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Paraguay,reddit.paraguay.posts,reddit,PY,south-america,POSTS / H,no,,1.5431,,,,,,,5,2026-10-10T22:00:00Z,120
+r/PERU,reddit.peru.posts,reddit,PE,south-america,POSTS / H,no,,1.2931,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Republica_Argentina,reddit.republica_argentina.posts,reddit,AR,south-america,POSTS / H,no,,0.8793,,,,,,,5,2026-10-10T22:00:00Z,120
+r/uruguay,reddit.uruguay.posts,reddit,UY,south-america,POSTS / H,no,,1.7241,,,,,,,5,2026-10-10T22:00:00Z,120
+r/vzla,reddit.vzla.posts,reddit,VE,south-america,POSTS / H,no,,0.8017,,,,,,,5,2026-10-10T22:00:00Z,120
+r/AskARussian,reddit.askarussian.posts,reddit,RU,russia,POSTS / H,no,,1.0431,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Pikabu,reddit.pikabu.posts,reddit,RU,russia,POSTS / H,no,,1.1552,,,,,,,5,2026-10-10T22:00:00Z,120
+r/tjournal_refugees,reddit.tjournal_refugees.posts,reddit,RU,russia,POSTS / H,no,,1.9224,,,,,,,5,2026-10-10T22:00:00Z,120
+"X ""futebol""",x.futebol.pt.reposts,x,PT-LANG,control,REPOSTS / H,no,1809.8766,831.7784,-0.3668,1.3952,-0.5117,0.014,9,0.296,29,2026-08-29T01:00:00Z,1191
+"X ""futebol""",x.futebol.pt.replies,x,PT-LANG,control,REPLIES / H,no,382.5046,251.1317,-0.3407,0.3196,-0.4282,0.002,9,0.429,29,2026-08-29T01:00:00Z,1191
+"X ""fútbol""",x.futbol.es.replies,x,ES-LANG,control,REPLIES / H,no,723.2928,680.6228,-0.0864,-0.032,-0.1704,0.006,9,0.159,29,2026-08-29T01:00:00Z,1191
+"X ""fútbol""",x.futbol.es.reposts,x,ES-LANG,control,REPOSTS / H,no,1616.3849,1468.491,-0.2734,-0.1755,-0.1631,0.1996,0,0.107,29,2026-08-29T01:00:00Z,1191
+"X ""météo""",x.meteo.fr.replies,x,FR-LANG,control,REPLIES / H,no,7.1621,5.8982,-0.1198,1.0,-0.1183,0.1437,0,0.389,29,2026-08-29T01:00:00Z,1191
+"X ""weather""",x.weather.en.burst,x,GLOBAL,control,% IN BUSIEST 5 MIN,no,12.1117,12.1644,-0.0204,0.0196,-0.02,0.509,0,-0.169,29,2026-08-29T01:00:00Z,1190
+"X ""futebol""",x.futebol.pt.repost-share,x,PT-LANG,control,% REPOSTS,no,66.7018,64.3147,0.0661,0.1221,0.0034,0.0898,0,0.118,29,2026-08-29T01:00:00Z,1191
+"X ""fútbol""",x.futbol.es.burst,x,ES-LANG,control,% IN BUSIEST 5 MIN,no,11.211,11.5506,0.0704,0.0459,0.0202,0.9381,0,-0.44,29,2026-08-29T01:00:00Z,1190
+"X ""fútbol""",x.futbol.es.repost-share,x,ES-LANG,control,% REPOSTS,no,55.547,54.9249,-0.0932,-0.0824,0.021,0.6846,0,-0.009,29,2026-08-29T01:00:00Z,1191
+"X ""weather""",x.weather.en.replies,x,GLOBAL,control,REPLIES / H,no,500.8453,505.7126,0.056,-0.0778,0.0385,0.3194,0,0.066,29,2026-08-29T01:00:00Z,1191
+"X ""futebol""",x.futebol.pt.burst,x,PT-LANG,control,% IN BUSIEST 5 MIN,no,12.2665,13.134,0.0446,-0.069,0.0553,0.9701,0,-0.453,29,2026-08-29T01:00:00Z,1190
+"X ""météo""",x.meteo.fr.repost-share,x,FR-LANG,control,% REPOSTS,no,48.5778,42.6861,-0.3399,0.008,0.0757,0.4471,0,0.246,29,2026-08-29T01:00:00Z,1190
+"X ""weather""",x.weather.en.repost-share,x,GLOBAL,control,% REPOSTS,no,47.6264,44.7346,-0.0632,-0.0531,0.0845,0.507,0,0.347,29,2026-08-29T01:00:00Z,1191
+"X ""weather""",x.weather.en.reposts,x,GLOBAL,control,REPOSTS / H,no,1406.1363,1162.8323,-0.1528,-0.1481,0.1405,0.3493,0,0.422,29,2026-08-29T01:00:00Z,1191
+"X ""météo""",x.meteo.fr.reposts,x,FR-LANG,control,REPOSTS / H,no,27.0074,14.3533,-0.7456,0.25,0.2394,0.4551,0,0.407,29,2026-08-29T01:00:00Z,1191
+r/aww,reddit.aww.posts,reddit,GLOBAL,control,POSTS / H,no,,5.5345,,,,,,,5,2026-10-10T22:00:00Z,120
+r/Cooking,reddit.cooking.posts,reddit,GLOBAL,control,POSTS / H,no,,3.0603,,,,,,,5,2026-10-10T22:00:00Z,120
+r/gardening,reddit.gardening.posts,reddit,GLOBAL,control,POSTS / H,no,,4.3362,,,,,,,5,2026-10-10T22:00:00Z,120
+r/personalfinance,reddit.personalfinance.posts,reddit,GLOBAL,control,POSTS / H,no,,6.6552,,,,,,,5,2026-10-10T22:00:00Z,120
+"X ""météo""",x.meteo.fr.burst,x,FR-LANG,control,% IN BUSIEST 5 MIN,no,22.9637,25.668,,,,,,,0,2026-08-29T07:00:00Z,208
